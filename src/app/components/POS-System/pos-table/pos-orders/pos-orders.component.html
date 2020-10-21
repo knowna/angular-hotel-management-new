@@ -1,0 +1,176 @@
+<div class="card" *ngIf="orders">
+    <div class="card-header no-radius">
+        <div class="row">
+            <div class="col-md-3">
+                <strong>
+                   Bill No. {{ ticket ? '#' + ticket?.TicketId : '' }}
+                </strong>
+            </div>
+            <div class="col-md-5">
+                <strong>
+                    {{ selectedCustomerId ? 'Cust#: ' + (customer$ | async)?.CustomerName : 'Table: ' + table ? table.Name : '' }}
+                </strong>
+            </div>
+            <div class="col-md-4">
+                <strong>
+                    Status: {{ orders.length ? orders[0].OrderStatus : 'Un Settled' }}
+                </strong>
+            </div>
+        </div>
+    </div>
+    <div class="card-sub-header no-radius">
+        <div class="row">
+            <div class="col-md-6 text-left">
+                <strong>Item</strong>
+            </div>
+            <div class="col-md-1 text-center">
+                <strong>Qty</strong>
+            </div>
+            <div class="col-md-2 text-right">
+                <strong>Unit (Rs.)</strong>
+            </div>
+            <div class="col-md-3 text-right">
+                <strong>Amount (Rs.)</strong>
+            </div>
+        </div>
+    </div>
+    <div class="card-body orders__container scrollbar" id="style-2">
+        
+            <div class="order-item" *ngFor="let order of orders">
+                <div class="row new-orders__label" style="color: darkgrey;">
+                    <strong>Order No: {{ order.OrderNumber }}, {{ order.UserId + '-' }} {{ order.OrderOpeningTime }}</strong>
+                    <hr>
+                </div>
+                <div class="row order" *ngFor="let item of order.OrderItems" [ngClass]="{
+                        'active': item.IsSelected,
+                        'submitted': item.Tags.indexOf('Submitted') !== -1,
+                        'void': item.IsVoid
+                    }" (click)="selectOrderItem.emit(item)">
+                    <div class="col-md-6 text-left">
+                        <p>
+                            <span>
+                                <strong>{{ getProductById(products,item.ItemId)?.Name }}</strong>
+                                <br />
+                                <small>{{ item.Tags.join(', ') }}</small>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-md-1 text-center">
+                        <p>
+                            <span>
+                                <strong>{{ item.Qty }}</strong>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-md-2 text-right">
+                        <p>
+                            <span>
+                                <strong>{{CurrentUnitPrice(item.UnitPrice)}}</strong>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-md-3 text-right" style="padding-right:20px;">
+                        <p>
+                            <strong>{{ProductPrice(item.UnitPrice, item.Qty)}}</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        
+    </div>
+    <div class="card-sub-header">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <small><strong>Order opening time:</strong></small>
+                <div class="row"><small>{{ getDate(ticket?.TicketOpeningTime) }}</small></div>
+            </div>
+            <div class="col-md-4 text-center"><small><strong>Last Order time:</strong></small><div class="row"><small>{{ getLastOrderTime(orders) }}</small></div></div>
+            <div class="col-md-4">
+                <small *ngIf="ticket?.PaymentHistory.length">Last Payment time:</small>
+                <div *ngIf="ticket?.PaymentHistory.length" class="row"><small>{{ getLastPaymentTime(ticket) }}</small></div>
+            </div>
+        </div>
+    </div>
+    <div class="order-footer">
+        <div class="row">
+            <div class="col-md-6 text-left">
+                <strong>Ticket Total: </strong>
+            </div>
+            <div class="col-md-6 text-right">
+                <strong>Rs. {{ calculateSum().toFixed(2) }}</strong>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 text-left">
+                <strong>Discount: </strong>
+            </div>
+            <div class="col-md-6 text-right">
+                <strong>Rs. {{ calculateDiscount() }}</strong>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 text-left">
+                <strong>Service Charge: </strong>
+            </div>
+            <div class="col-md-6 text-right">
+                <strong>Rs. {{ calculateServiceCharge() }}</strong>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 text-left">
+                <strong>VAT (13%): </strong>
+            </div>
+            <div class="col-md-6 text-right">
+                <strong>Rs. {{ calculateVat() }}</strong>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 text-left">
+                <strong>Grand Total: </strong>
+            </div>
+            <div class="col-md-6 text-right">
+                <strong>Rs. {{ getGrandTotal() }}</strong>
+            </div>
+        </div>
+        <div class="row" *ngIf="ticket?.PaymentHistory.length">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <strong class="pull-left">Payment Total: </strong>
+                        <strong class="pull-right">Rs. {{ getTotalCharged(ticket).toFixed(2) }} </strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <dl class="dl-horizontal" *ngFor="let pay of ticket.PaymentHistory" style="color:green">
+                            <dt>{{ getDate(pay.DateTime) }}</dt>
+                            <dd>{{ pay.PaymentMode }} &nbsp; Rs. {{ pay.AmountPaid.toFixed(2) }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row balance-section">
+            <div class="col-md-6 text-left">
+                <strong>Balance: </strong>
+            </div>
+            <div class="col-md-6 text-right">
+                <strong>Rs. {{ getFinalBalance() }}</strong>
+            </div>
+        </div>
+        <div class="row handler-section">
+            <div class="col-md-6 text-left">
+                <a routerLink="/pos/settle">
+                    <div class="border border-dark text-center style border-radius btn btn-success" style="width:100%; font-size: 35px; cursor: pointer;">
+                        <span class="text-center text-dark style m-0"> Settle </span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 text-right">
+                <div (click)="close()" class="border border-dark bg-danger text-center style border-radius btn btn-danger" style="width:100%; font-size: 35px; cursor: pointer;">
+                    <span class="text-center text-white border border-danger m-0"> Close </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

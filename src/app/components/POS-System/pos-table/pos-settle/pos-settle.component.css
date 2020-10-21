@@ -1,0 +1,134 @@
+/* Styles go here */
+
+  h5 {
+    font-weight: 600;
+    margin: 5px;
+  }
+
+  h3, h4 {
+    margin-top: 0;
+  }
+  
+  .container {
+    margin-top: 25px;;
+  }
+  
+  .tickets-section__body {
+    height: 270px;
+    border-bottom: 2px solid gray;
+  }
+  
+  .ticket-item {
+    border-radius: 3px;
+    height: 100%;
+    margin: 5px 0;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid black;
+  }
+  
+  .tickets-total {
+    padding-top: 5px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  
+  .tickets-discount {
+    color: green;
+  }
+  
+  .tickets-balance {
+    color: red;
+    font-size: 25px;
+    font-weight: 600;
+    margin-top: 5px;
+  }
+  
+  .tickets-total,
+  .tickets-discount,
+  .tickets-balance {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  input {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 3px 0;
+    padding: 0 3px;
+    width: 100% !important;
+  }
+  
+  label {
+    font-size: 20px;
+  }
+
+  div[class^="col-md-"] {
+    margin: 0;
+  } 
+  
+  .col-md-8 [type='button'] {
+    width: 100%;
+    font-size: 42px;
+    height: 75px;
+    margin-bottom: 5px;
+  }
+  
+  .calculations-section__body .actions [type='button'] {
+    background: rgb(83, 55, 240);
+    color: white;
+    font-size: 13px;
+    font-weight:600;
+    height: 59px;
+    margin-bottom: 5px;
+    width: 100%;
+  }
+  
+  .calculations-section__body .col-md-4 {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+  
+  .calculations-section__body .col-md-2,
+  .calculations-section__body .col-md-4,
+  .calculations-section__footer .col-md-12,
+  .calculations-section__header .col-md-8,
+  .calculations-section__header > .row .col-md-4 {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+  
+  .calculations-section__header {
+    margin-bottom: 10px;
+  }
+  
+  .actions-section [type='button'] {
+    width: 100%;
+    font-size: 20px;
+    font-weight: 600;
+    height: 75px;
+    margin-bottom: 5px;
+  }
+  
+  .btn {
+    white-space:normal !important;
+    word-wrap: break-word; 
+  }
+  
+  .calculations-section__footer .col-md-12 [type='button'] {
+    width: 32.7%;
+    font-size: 18px;
+    font-weight: 600;
+    height: 70px;
+    margin-bottom: 5px;
+  }
+
+  .balance-section {
+    color: #dc3545;
+  }
+
+  dl {
+    margin-bottom: 0;
+  }
+  
+  

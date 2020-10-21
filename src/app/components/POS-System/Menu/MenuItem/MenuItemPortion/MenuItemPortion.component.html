@@ -1,0 +1,12 @@
+﻿<div [formGroup]="MenuItemPortionForm">
+    <div class="col-md-3">
+        <input type="number" class="form-control" formControlName="Quantity" (blur)="calculateAmount(MenuItemPortionForm.controls)" />
+    </div>
+    <div class="col-md-3">
+        <input type="number" class="form-control" formControlName="Rate" (blur)="calculateAmount(MenuItemPortionForm.controls)" />
+    </div>
+    <div class="col-md-3">
+        <input type="number" class="form-control" formControlName="TotalAmount" />
+    </div>
+
+</div>

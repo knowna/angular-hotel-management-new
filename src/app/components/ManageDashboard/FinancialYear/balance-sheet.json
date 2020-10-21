@@ -1,0 +1,72 @@
+{
+    "reportType": "Balance Sheet",
+    "company": "D. Cube I.T Solution Pvt. Ltd.",
+    "libalities": {
+        "company": "D. Cube I.T Solution Pvt. Ltd.",
+        "liabilityTotal": 50000,
+        "libalityitems" : [
+            {
+                "name": "Loans (liability)",
+                "subItems": [
+                    {
+                        "name": "Audit Fee Payable",
+                        "debit": 40000,
+                        "credit": 40000
+                    },
+                    {
+                        "name": "Tas Deducted at Source",
+                        "debit": 40000,
+                        "credit": 40000
+                    }
+                ]
+            },
+            {
+                "name": "Loans (liability)",
+                "subItems": [
+                    {
+                        "name": "Audit Fee Payable",
+                        "debit": 40000,
+                        "credit": 40000
+                    }
+                ]
+            }
+        ]
+    },
+    "assets": {
+        "company": "D. Cube I.T Solution Pvt. Ltd.",
+        "liabilityTotal": 50000,
+        "libalityitems" : [
+            {
+                "name": "Capital Account",
+                "subItems": [
+                    {
+                        "name": "Reserves and Supplies",
+                        "debit": 40000,
+                        "credit": 40000
+                    },
+                    {
+                        "name": "Capital Paid up",
+                        "debit": 40000,
+                        "credit": 40000
+                    }
+                ]
+            },
+            {
+                "name": "Fixed Assets",
+                "subItems": [
+                    {
+                        "name": "CPE",
+                        "debit": 40000,
+                        "credit": 40000
+                    
+                    },
+                    {
+                        "name": "DROP WIRE",
+                        "debit": 40000,
+                        "credit": 40000
+                    }
+                ]
+            }
+        ]
+    }
+}

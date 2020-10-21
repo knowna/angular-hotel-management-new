@@ -1,0 +1,26 @@
+<!-- <form [formGroup]='statusCreateForm' #statusNgForm='ngForm' (submit)='handleSubmit($event, statusNgForm, statusCreateForm)'> -->
+<form [formGroup]='statusCreateForm' #statusNgForm='ngForm'>
+  <div class="form-group">
+    <div class="row col-md-12">
+      <div class="input-group c-input-group m-t-20">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="file">
+            <i class=" icon-cloud-upload"></i>
+          </span>
+        </div>
+        <input #fileInput type="file" id="file" (change)="handleFileInput($event.target.files)" class="form-control" aria-label="file" aria-describedby="file" />
+        <div *ngIf="currentFile" class="input-group-prepend">
+          <span class="input-group-text c-input-group-text">
+            <span class="c-close-image"><i class="fa fa-times"></i></span>
+            <img style="width:32px; height:32px; border-radius: 3px;" src="{{ currentFile }}" alt="" />
+          </span>
+        </div>
+        <button type="button" class="btn btn-default">{{ dropMessage ? dropMessage : " Choose file" }}</button>
+        <div class="progress-overlay" [ngStyle]="{ 'width': uploadProgress + '%' }">
+          <span class="drop-message pull-right" *ngIf='uploadProgress > 1'>
+            {{ (uploadProgress < 100) ? "Uploading..." : "Uploaded..." }} {{ uploadProgress }}% </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

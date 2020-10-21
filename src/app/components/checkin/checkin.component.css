@@ -1,0 +1,100 @@
+
+.btn-mar .btn{
+    margin-right:25px;
+    font-size:15px;
+    font-family: 'Raleway',sans-serif;
+    padding:5px 10px;
+    color: #fff!important;
+    border:none!important;
+    margin-top: 10px;
+}
+.firstrow img{
+     width: 60px;
+     height:60px;
+     transition: transform 2s linear;
+}
+.firstrow img:hover{
+         transform:scale(1.05,1.05);
+}
+.btn-mar{
+         padding-left: 26%;
+}
+.btn-mar button{
+                padding: 15px 15px;
+                font-size:18px;
+                width: 80px;
+                height:40px;
+}
+.btn-mar .btn-success{
+                      background:#202264;
+}
+.btn-mar .btn-info{
+          background:#2b8638;
+}
+.btn-mar .btn-primary{
+                      background:#ecbe07;
+}
+.btn-mar .btn-warning{
+                      background:#972323;
+}
+.secondmargin{
+              margin-top:30px;
+              margin-bottom: 30px;
+}
+.secondmargin .padtop{
+                       padding-top:5px;
+                       padding-left: 50px!important;
+}
+.secondmargin input{
+                    padding: 12px 15px;
+                    font-size:18px;
+                    border-radius:5px;
+                    background:#dcdcdc;
+                    color:#212226;
+                    font-family: 'Raleway',sans-serif;
+}
+.secondmargin .btnnn{
+                     width:80%;
+                     padding: 5px 15px;
+                     letter-spacing: 1px;
+                     font-size:18px;
+                     margin-top:2px;
+}
+/* =========== style css of table ============== */
+table td img{
+            height:20px;
+            width:20px;
+}
+table td .firstimg{
+                 padding-right:5px;
+}
+/* ================== css of tab section =========== */
+.marginoftab{
+             margin-top:30px;
+}
+div.wc-date-container{
+                       padding:20px;
+}
+/* css of add button */
+.btnwidth{
+        width:100%;
+        padding:7px 15px;
+        margin-top:30px;
+}
+
+.nav-item a{
+            width:100%;
+            background: #fff;
+            color:#212226!important;
+            border-radius:none!important;
+        
+}
+.nav-item a.active{
+                   background-color: #151a30;
+                   color: #fff!important;
+                   margin-bottom:20px;
+}
+.tab-content{
+             border:none!important;
+}
+

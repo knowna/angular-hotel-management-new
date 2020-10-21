@@ -1,0 +1,92 @@
+.new-orders__label {
+    padding: 5px 0px 0px 15px;
+    font-size: 12px;
+}
+
+hr {
+    margin-top: 2px;
+    margin-bottom: 6px;
+}
+
+.orders__container {
+    height: auto !important;
+}
+
+.order {
+    padding: 5px;
+    cursor: pointer;
+    margin-bottom: 3px;
+}
+
+.active {
+    background: #007bff;
+    color:white !important;
+}
+
+.card-footer {
+    background: #dcdcdc;
+    padding: 10px 5px 5px 5px;
+}
+
+.balance-section {
+    padding: 0;
+}
+
+.handler-section {
+    height: 70px;
+}
+
+.balance-section {
+    color: #dc3545;
+}
+
+.card-header {
+    background: #f7f7f7;
+    border: 1px solid #dfdfdf;
+    border-radius: 3px 3px 0 0;
+    padding: 5px;
+}
+.card-sub-header {
+    background: #dbd9d9;
+    border: 1px solid #c8c3c3;
+    border-radius: 3px 3px 0 0;
+    padding: 3px;
+}
+.card-body {
+    border: 1px solid #dfdfdf;
+    padding: 5px;
+    border-top: 0;
+}
+    
+.submitted {
+    color: #a94442;
+}
+
+.list-group-item.active {
+    background-color: #ffc107 !important;
+    border-color: #ffc107 !important;
+    font-weight:700;
+}
+
+p {
+    margin: 5px 0 5px !important;
+}
+
+.void * {
+    text-decoration: line-through !important;
+}
+
+.settle-button {
+    font-size: 35px; 
+    color: white; 
+    text-decoration: none;
+}
+
+.h1, .h2, .h3, h1, h2, h3 {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+dl {
+    margin-bottom: 0;
+}

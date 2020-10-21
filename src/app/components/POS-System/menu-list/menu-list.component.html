@@ -1,0 +1,11 @@
+<div class="container">
+    <div class="row">
+        <h3>Menu List</h3>
+        <ul class="list-group">
+            <li class="list-group-item" *ngFor="let menu of menuList">
+                <span>{{ menu.name }}</span>
+                <span><a routerLink="/menu/categories" class="btn btn-sm btn-primary"> List Categories</a></span>
+            </li>
+        </ul>
+    </div>
+</div>

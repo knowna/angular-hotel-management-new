@@ -1,0 +1,33 @@
+﻿
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        Menu Category Item
+    </div>
+    <div class='panel-body'>
+        <div class='table-responsive'>
+            <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <div *ngIf='screenmenuitems && screenmenuitems.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table class='table table-striped' *ngIf='screenmenuitems && screenmenuitems.length'>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let screenmenuitem of screenmenuitems">
+                        <td><input type="checkbox" (change)="addMenuToCategories(screenmenuitem.Id,screenmenuitem.categoryId, screenmenuitem.MenuItem_Bool, screenmenuitem.MenuId)" [checked]="screenmenuitem.MenuItem_Bool" [(ngModel)]="screenmenuitem.MenuItem_Bool" /></td>
+                        <td>{{screenmenuitem.Name}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
+    </div>
+</div>
+

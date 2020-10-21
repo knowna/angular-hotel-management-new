@@ -1,0 +1,25 @@
+/* =========== style css of table ============== */
+table td img{
+    height:30px;
+    width:30px;
+}
+table td .firstimg{
+         padding-right:8px;
+}
+.modal-header{
+               background-color:#2874a6!important;
+               border-radius:none!important;
+}
+form{
+      margin:0!important;
+      padding:0!important;
+      border-radius: none!important;
+}
+form .footermodal{
+                   margin-top: 20px;
+}
+form .footermodal .btn-success, .btn-danger{
+                                            width:100%;
+                                            font-size:14px;
+                                            color:#fff;
+}

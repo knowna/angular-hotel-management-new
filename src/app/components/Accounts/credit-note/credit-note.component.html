@@ -1,0 +1,249 @@
+﻿<ng-template #template>
+    <form novalidate (ngSubmit)="onSubmit(cerditNoteFrm, fileUpload)" [formGroup]="cerditNoteFrm" class="panel-primary">
+        <div class="modal-header panel-heading">
+            <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="hidden">
+                <input type="number" class="hidden" formControlName="Id" />
+                <input type="text" class="hidden" formControlName="Amount" />
+                <input type="text" class="hidden" placeholder="Credit Note No" formControlName="AccountTransactionDocumentId" />
+            </div>
+            <div class="row">
+                <label class="control-label col-md-2 text-center">
+                    <strong>Voucher Type:</strong>
+                </label>
+                <div class="form-group col-md-4">
+                    <input type="text" class="form-control" formControlName="Name" readonly="true" />
+                    <div class="text-danger" *ngIf="cerditNoteFrm.get('Name'). hasError('required') && formSubmitAttempt">
+                        <strong>Credit Note is required</strong>
+                    </div>
+                </div>
+                <label class="control-label col-md-2 text-center">
+                    <strong>Date:</strong>
+                </label>
+                <div class="form-group col-md-4">
+                    <input class="form-control" type="text" placeholder="yyyy.mm.dd" formControlName="Date" />
+                    <div class="text-danger" *ngIf="(cerditNoteFrm.get('Date').hasError('InvalidDate') || cerditNoteFrm.get('Date').hasError('required')) && formSubmitAttempt">
+                        {{ cerditNoteFrm.get('Date').getError('InvalidDate') }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <label class="control-label col-md-2 text-center">
+                    <strong>Customer: </strong>
+                </label>
+                <div class="form-group col-md-4">
+                    <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="SourceAccountTypeId" (change)="fillCustomerInvoice($event)" [config]="config" [options]="customeraccount"></ngx-select-dropdown>
+                    <!--<select class="form-control " (change)="fillCustomerInvoice($event)" formControlName="SourceAccountTypeId">
+                        <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option>
+                    </select>-->
+                    <div class="alert alert-danger" *ngIf="cerditNoteFrm.get('SourceAccountTypeId').hasError('required') && formSubmitAttempt">
+                        Select Customer is required
+                    </div>
+                </div>
+                <label class="control-label col-md-2 text-center">
+                    <strong>Ref. No.: </strong>
+                </label>
+                <div class="form-group col-md-4">
+                    <select class="form-control" formControlName="ref_invoice_number">
+                        <option *ngFor="let Dnotes of TicketReferences" [ngValue]="Dnotes.Id">{{Dnotes.Name}}</option>
+                    </select>
+                    <div class="alert alert-danger" *ngIf="cerditNoteFrm.get('ref_invoice_number').hasError('required') && formSubmitAttempt">
+                        Select the Bill No
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="container col-md-12">
+                    <div formArrayName="AccountTransactionValues" class="panel panel-default container-padding">
+                        <div class="col-md-4 custom-padding">
+                            <strong>Account:</strong>
+                        </div>
+                        <div class="col-md-3 custom-padding">
+                            <strong>Debit:</strong>
+                        </div>
+                        <div class="col-md-4 custom-padding">
+                            <strong>Description:</strong>
+                        </div>
+                        <div class="col-md-1 custom-padding">
+                            <strong>&nbsp;</strong>
+                        </div>
+                        <br>
+                        <div class="panel-body" *ngFor="let AccountTransactionValue of cerditNoteFrm.controls.AccountTransactionValues.controls; let i=index" [formGroupName]="i">
+                            <div class="row">
+                                <div class="col-md-4 custom-padding">
+                                    <ngx-select-dropdown (searchChange)="searchChangeAccountId($event)" formControlName="AccountId" [config]="configAccount" [options]="account"></ngx-select-dropdown>
+                                    <div *ngIf="!cerditNoteFrm.controls.AccountTransactionValues.controls[i].controls.AccountId.valid && formSubmitAttempt" class="text-danger">
+                                        Select the Account
+                                    </div>
+                                </div>
+                                <div class="col-md-3 custom-padding">
+                                    <input type="number" class="form-control" placeholder="Debit" formControlName="Debit" />
+                                    <div *ngIf="!cerditNoteFrm.controls.AccountTransactionValues.controls[i].controls.Debit.valid && formSubmitAttempt" class="text-danger">
+                                        Enter the Amount
+                                    </div>
+                                </div>
+                                <div class="hidden">
+                                    <input type="number" class="form-control" placeholder="Credit" formControlName="Credit">
+                                </div>
+                                <div class="col-md-4 custom-padding">
+                                    <textarea class="form-control" name="Description" formControlName="Description" rows="2" placeholder="Credit Note trancacton description here..."></textarea>
+                                    <div class="help-block alert alert-danger" *ngIf="!cerditNoteFrm.controls.AccountTransactionValues.controls[i].controls.Description.valid && formSubmitAttempt">
+                                        Transaction description is required.
+                                    </div>
+                                </div>
+                                <div class="col-md-1 custom-padding text-center" style="padding-top: 7px !important;">
+                                    <span *ngIf="cerditNoteFrm.controls.AccountTransactionValues.controls.length > 1" style="font-size: 30px; margin-right: 15px; margin-top: -5px;" 
+                                         class="fa fa-window-close pull-right" (click)="removeAccount(i)"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="padding:12px">
+                                <button style="margin-right: 15px;" type="button" [disabled]="cerditNoteFrm.controls.AccountTransactionValues.invalid" class="btn btn-success pull-right" (click)="addAccountValues()">Add Row +</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-7">
+                    <textarea class="form-control" name="Description" formControlName="Description" rows="4" placeholder="Add Credit Note description here..."></textarea>
+                    <div class="help-block alert alert-danger" *ngIf="cerditNoteFrm.get('Description').hasError('required') && formSubmitAttempt">
+                        Credit Note description is required.
+                    </div>
+                </div>
+                <div class="col-md-4 row">
+                    <div class="col-md-10 custom-padding">
+                        <input type="number" class="form-control" placeholder="Total" value="{{sumDebit()}}" readonly="true" />
+                    </div>
+                    <div class="hidden">
+                        <input type="number" class="form-control" placeholder="Total" value="{{sumCredit()}}" readonly="true" />
+                    </div>
+                    <div class="col-md-10 custom-padding">
+                        <app-file-upload #fileUpload [extraFormData]="cerditNoteFrm" [uploadUrl]="uploadUrl" [dropMessage]="dropMessage"></app-file-upload>
+                    </div>
+                </div>
+                <div class="col-md-1">&nbsp;</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div>
+                <button type="submit" class="btn btn-success pull-left" [disabled]="cerditNoteFrm.invalid"> {{modalBtnTitle}}</button>
+                <button type="button" class="btn btn-danger pull-right" (click)="reset(); modalRef.hide()" aria-label="Close">Cancel</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        Credit Note
+    </div>
+    <div class='panel-body'>
+        <div class='table' style="min-height: 400px;">
+            <div style="padding-bottom:10px">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div (click)="addCreditNote()" style="cursor: pointer">
+                            <span>
+                                <img src="../../../../assets/images/Add.png" height="60" width="60" />
+                            </span>
+                            Add Credit Note
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="padding-top: 17px;">
+                            <div class="col-md-2">
+                                Filter By Date:
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" value="" [(ngModel)]="sfromDate" placeholder="yyyy.mm.dd">
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-control" type="text" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" placeholder="yyyy.mm.dd" [(ngModel)]="stoDate" />
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-success" (click)="loadCreditNote(sfromDate, stoDate)"> GO</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-primary pull-left" (click)="exportCreditNote()"> Export</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-info" role="alert" *ngIf="indLoading">
+                <img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...
+            </div>
+            <div *ngIf='creditNote && creditNote.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <!-- Voucher list table starts -->
+            <table class='table' *ngIf='creditNote && creditNote.length' style="border: 2px solid #ddd;">
+                <thead>
+                    <tr>
+                        <th colspan="8" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                            <br /> Credit Note
+                            <br /> {{ sfromDate }} - {{ stoDate }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Date</th>
+                        <th>Particular</th>
+                        <th>Voucher Type</th>
+                        <th>Voucher No.</th>
+                        <th>Debit (Rs.)</th>
+                        <th>Credit (Rs.)</th>
+                        <th>File</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let voucher of creditNote">
+                    <tr style="background:#eceaea">
+                        <td>{{ voucher.VDate | date: 'yyyy.MM.dd' }}</td>
+                        <td>{{ voucher.Name }}</td>
+                        <td>{{ voucher.VType }}</td>
+                        <td>{{ voucher.VoucherNo }}</td>
+                        <td colspan="2">&nbsp;</td>
+                        <td>
+                            <img *ngIf="voucher.File" (click)="viewFile(voucher.File,imageView)" [src]="voucher.File" alt="Document" style="height:30px; border-radius:5px;" />
+                            <span *ngIf="voucher.File == ''">Not Added</span>
+                        </td>
+                        <td>
+                            <img src="../../../../assets/images/Edit.png" (click)="editCreditNote(voucher.Id)" title="Edit Voucher" height="32" width="32" />
+                            <img src="../../../../assets/images/Delete.png" (click)="deleteCreditNote(voucher.Id)" title="Delete Voucher" height="32" width="32" />
+                        </td>
+                    </tr>
+                    <tr *ngFor="let transaction of voucher.AccountTransactionValues">
+                        <td>&nbsp;</td>
+                        <td colspan="3">{{ transaction.Name }}</td>
+                        <td>{{ transaction.DebitAmount !== 0 ? transaction.DebitAmount.toFixed(2) : '' }}</td>
+                        <td>{{ transaction.CreditAmount !== 0 ? transaction.CreditAmount.toFixed(2) : '' }}</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- Voucher list table ends -->
+        </div>
+        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
+    </div>
+</div>
+
+<ng-template #templateNested>
+    <div class="modal-body text-center">
+        <p>Data saved sucessfully!</p>
+        <button type="button" class="btn btn-default" (click)="confirm()">Ok</button>
+    </div>
+</ng-template>

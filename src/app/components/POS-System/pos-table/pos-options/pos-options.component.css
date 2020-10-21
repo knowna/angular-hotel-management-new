@@ -1,0 +1,25 @@
+h3 {
+    padding: 0;
+    margin: 0;
+}
+
+.card-bag {
+    border-radius: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
+    border: 2px solid #31708f;
+    width:100%;
+}
+
+.card .div:last-child {
+    margin-bottom: 10px
+}
+
+button {
+    background: white !important;
+}
+
+.disabled {
+    background: rgb(204, 203, 203) !important;
+    cursor: not-allowed !important;
+}

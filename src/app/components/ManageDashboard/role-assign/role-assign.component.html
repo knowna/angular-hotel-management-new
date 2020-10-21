@@ -1,0 +1,124 @@
+﻿<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        Assign User Roles
+    </div>
+    <div class='panel-body'>
+        <div class='table-responsive'>
+            <div class="alert alert-info" role="alert" *ngIf="indLoading">
+                <img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <div *ngIf='user && user.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table  *ngIf='user && user.length'>
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>User Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let use of user">
+                        <td>{{use.FullName}}</td>
+                        <td>{{use.UserName}}</td>
+                        <td><a class="btn btn-sm btn-primary" [routerLink]="['/role-name', use.UserId]">Assign Role Name</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
+    </div>
+</div>
+<!-- <ng-template #template>
+    <form class="panel-primary" novalidate (ngSubmit)="onSubmit(UserRoleFrm)" [formGroup]="UserRoleFrm">
+        <div class="modal-header panel-heading">
+            <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+         <div class="modal-body">
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                     <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="control-label col-md-4">Role:</label>
+                            <div class="col-md-8">
+                                <select class="form-control" formControlName="RoleId">
+                                    <option *ngFor="let roleDatas of roleData" [ngValue]="roleDatas.RoleId">{{roleDatas.RoleName}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label col-md-4">User Name:</label>
+                            <div class="col-md-8">
+                                <select class="form-control " formControlName="UserId">
+                                    <option *ngFor="let userDatas of userData" [ngValue]="userDatas.UserId">{{userDatas.UserName}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row">
+                         <div class="form-group col-md-6">
+                            <label class="control-label col-md-4">Created On:</label>
+                            <div class="col-md-8">
+                                <input type="date" class="form-control" placeholder="CreatedDate" formControlName="CreatedDate">
+                                <div class="alert alert-danger" *ngIf="UserRoleFrm.get('CreatedDate').hasError('required') && formSubmitAttempt">
+                                    Date is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-4">Name: </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="Name" formControlName="CreatedBy">
+                                <div class="alert alert-danger" *ngIf="UserRoleFrm.get('CreatedBy').hasError('required') && formSubmitAttempt">
+                                    Name is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="control-label col-md-4">Last Changed Date:</label>
+                            <div class="col-md-8">
+                                <input type="date" class="form-control" placeholder="LastChangedDate" formControlName="LastChangedDate">
+                                <div class="alert alert-danger" *ngIf="UserRoleFrm.get('LastChangedDate').hasError('required') && formSubmitAttempt">
+                                    Date is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label col-md-4">Last Changed By:</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="LastChangedBy" formControlName="LastChangedBy">
+                                <div class="alert alert-danger" *ngIf="UserRoleFrm.get('LastChangedBy').hasError('required') && formSubmitAttempt">
+                                    Name is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="control-label col-md-4">Is Selected:</label>
+                            <div class="col-md-2">
+                                <input type="checkbox" class="form-control" placeholder="IsSelected" formControlName="IsSelected">
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div>
+                <button type="button" class="btn btn-danger pull-right" [disabled]="buttonDisabled" (click)="reset();modalRef.hide();">Cancel</button>
+                <button type="submit" class="btn btn-success pull-left">{{modalBtnTitle}} </button>
+            </div>
+        </div>
+    </form>
+</ng-template> -->

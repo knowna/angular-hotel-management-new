@@ -1,0 +1,170 @@
+﻿
+<ng-template #template>
+    <form class="panel-primary" novalidate (ngSubmit)="onSubmit(MenuItemForm)" [formGroup]="MenuItemForm">
+        <div class="modal-header panel-heading">
+            <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="control-label col-sm-4 text-right">Name:</label>
+                    <div class="col-sm-8" style="margin: inherit;">
+                        <input type="text" class="form-control" placeholder="Name" formControlName="Name">
+                        <div class="alert alert-danger" *ngIf="MenuItemForm.get('Name').hasError('required') && formSubmitAttempt">
+                            Name is required
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4 text-right">Category:</label>
+                    <div class="col-sm-8" style="margin: inherit;">
+                        <select class="form-control" formControlName="categoryId">
+                            <option *ngFor="let menucategories of menucategory" value={{menucategories.Id}}>{{menucategories.Name}}</option>
+                        </select>
+                        <div class="alert alert-danger" *ngIf="MenuItemForm.get('Name').hasError('required') && formSubmitAttempt">
+                            Category is required
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4 text-right">Bar Code:</label>
+                    <div class="col-sm-8" style="margin: inherit;">
+                        <input type="text" class="form-control" placeholder="Barcode" formControlName="Barcode">
+                        <div class="alert alert-danger" *ngIf="MenuItemForm.get('Name').hasError('required') && formSubmitAttempt">
+                            Code is required
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" style="margin: inherit;">
+                    <label class="control-label col-sm-4 text-right">Tag:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="Tag" formControlName="Tag">
+                        <div class="alert alert-danger" *ngIf="MenuItemForm.get('Name').hasError('required') && formSubmitAttempt">
+                            Tag is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default container-fluid">
+                <div class="panel-heading row">
+                    <div class="container col-md-12 text-right row" style="margin: 0px; margin-top: 15px;">
+                        <button type="button" class="btn btn-success pull-right" [disabled]="MenuItemForm.controls.MenuItemPortions.invalid" (click)="addMenuItemPortions()">Add Portion +</button>
+                    </div>
+                </div>
+                <div class="panel-heading row" style="background-color:cornflowerblue; color:#ffffff">
+                    <div class="col-md-6 text-center">
+                        <h2><label>Name</label></h2>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <h2><label>Quantity</label></h2>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <h2><label>Rate</label></h2>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>&nbsp;</label>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div formArrayName="MenuItemPortions">
+                            <div class="panel-body" *ngFor="let MenuItemPortions of MenuItemForm.controls.MenuItemPortions.controls; let i=index" [formGroupName]="i">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="hidden" formControlName="Id" />
+                                        <input type="hidden" formControlName="MenuItemPortionId" />
+                                        <textarea class="form-control col-md-12" name="Name" formControlName="Name" rows="2" placeholder="Position Item Name..."></textarea>
+                                        <div class="alert alert-danger" *ngIf="MenuItemPortions.get('Name').hasError('required') && formSubmitAttempt">
+                                            PortionName is required
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <input type="number" class="form-control" formControlName="Multiplier" />
+                                        <div class="alert alert-danger" *ngIf="MenuItemPortions.get('Multiplier').hasError('required') && formSubmitAttempt">
+                                            No. of portions is required
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <input type="number" class="form-control" formControlName="Price" />
+                                        <div class="alert alert-danger" *ngIf="MenuItemPortions.get('Price').hasError('required') && formSubmitAttempt">
+                                            Price is required
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <span style="cursor: pointer; font-size: 30px;" *ngIf="MenuItemForm.controls.MenuItemPortions.controls.length > 1" class="fa fa-window-close pull-right" (click)="removeMenuItemPortions(i)"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer row">
+                    <div class="container col-md-12 text-center row" style="margin: 0px; margin-top: 15px;">
+                        <button type="button" class="btn btn-success pull-right" [disabled]="MenuItemForm.controls.MenuItemPortions.invalid" (click)="addMenuItemPortions()">Add Portion +</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success pull-left" [disabled]="MenuItemForm.invalid">{{modalBtnTitle}}</button>
+            <button type="reset" class="btn btn-danger" (click)="cancel()">Cancel</button>
+        </div>
+    </form>
+</ng-template>
+<div class="container">
+    <div class='panel panel-primary'>
+        <div class='panel-heading'>
+            Items
+        </div>
+        <div class='panel-body'>
+            <div class='table-responsive'>
+                <div class="col-md-5"> <div style="padding-bottom:10px"><img src="../../../../assets/images/Add.png (click)="addMenuItems()" height="60" width="60" /></div></div>
+                <div class="col-md-1"> Search: </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" [(ngModel)]="MenuItemName" placeholder="Search by Name">
+                </div>
+                <div class="alert alert-info" role="alert" *ngIf="indLoading">
+                    <img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...
+                </div>
+                <div *ngIf='menuItems && menuItems.length==0' class="alert alert-info" role="alert">No record found!</div>
+                <table class='table table-striped' *ngIf='menuItems && menuItems.length'>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let menuItem of menuItems | FilterMenuItemName: MenuItemName">
+                            <td>{{menuItem.Name}}</td>
+                            <td>
+                                <span>
+                                    <img src="../../../../assets/images/Edit.png" (click)="editMenuItems(menuItem.Id, template)" height="32"
+                                         width="32" />
+                                </span>
+                                <span>
+                                    <img src="../../../../assets/images/Delete.png" (click)="deleteMenuItems(menuItem.Id, template)" height="32"
+                                         width="32" />
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf='menuItems && menuItems.length>=10' style="padding-bottom:10px"><img src="../../../../assets/images/Add.png (click)="addMenuItems()" height="60" width="60" />  </div>
+            </div>
+            <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{msg}}
+            </div>
+        </div>
+    </div>
+</div>

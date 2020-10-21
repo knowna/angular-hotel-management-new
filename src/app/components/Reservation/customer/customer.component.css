@@ -1,0 +1,17 @@
+.btndesign{
+           width:100%;
+           margin-top:7px;
+           padding:10px 15px;
+           margin-bottom:2px;
+           font-size:18px;
+           font-family: 'Raleway',sans-serif;
+           letter-spacing: 1px;
+           border:none!important;
+}
+.input-group-addon{
+                   width: 40px;
+                   text-align: center;
+                   background-color: #2874a6;
+                   padding-top:5px;
+                   color:#fff;
+}

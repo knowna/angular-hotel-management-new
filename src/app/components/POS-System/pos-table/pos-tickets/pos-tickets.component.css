@@ -1,0 +1,27 @@
+.tickets {
+    width: 100%;
+    height: 400px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.tickets__item {
+    background: #dadcda;
+    padding: 13px 0;
+    margin-bottom: 5px;
+    height: 45px;;
+}
+
+.card-header {
+    background: #f7f7f7;
+    border: 1px solid #dfdfdf;
+    border-radius: 3px 3px 0 0;
+    padding: 5px;
+}
+
+.card-body {
+    border: 1px solid #dfdfdf;
+    padding: 5px;
+    border-top: 0;
+}
+    

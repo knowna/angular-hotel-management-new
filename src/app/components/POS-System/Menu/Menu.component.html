@@ -1,0 +1,72 @@
+﻿
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        Menu
+    </div>
+    <div class='panel-body'>
+        <div class='table-responsive'>
+            <div style="padding-bottom:10px">
+                <img src="../../../../assets/images/Add.png (click)="addMenu(template)" height="60" width="60" /> &nbsp; Add New Menu
+            </div>
+            <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <div *ngIf='menus && menus.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table class='table' *ngIf='menus && menus.length'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Action</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let menu of menus">
+                        <td>{{menu.Name}}</td>
+                        <td>
+                            <span><img src="../../../../assets/images/Edit.png" (click)="editMenu(menu.Id, template)" height="32" width="32" /></span>
+                            <span><img src="../../../../assets/images/Delete.png" (click)="deleteMenu(menu.Id, template)" height="32" width="32" /></span>
+                        </td>
+                        <td><a class="btn btn-sm btn-primary" [routerLink]="['/menu-category', menu.Id]">List MenuCategory</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+            </div>
+        </div>
+        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
+    </div>
+</div>
+
+<ng-template #template>
+    <form class="panel-primary" novalidate (ngSubmit)="onSubmit(MenuFrm)" [formGroup]="MenuFrm">
+        <div class="modal-header panel-heading">
+            <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-2 left">Name:</label>
+                    <div class="col-sm-9" required minlength="4">
+                        <input type="text" class="form-control" placeholder="" formControlName="Name">
+                        <div class="alert alert-danger" *ngIf="MenuFrm.get('Name').hasError('required') && formSubmitAttempt">
+                            Name is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div>
+                <button type="submit" class="btn btn-success pull-left">{{modalBtnTitle}}</button>
+                <a class="btn btn-danger pull-right" (click)="modalRef.hide()">Cancel</a>
+            </div>
+        </div>
+    </form>
+</ng-template>

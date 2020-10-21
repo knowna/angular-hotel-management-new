@@ -1,0 +1,83 @@
+﻿<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        User Permission
+    </div>
+    <div class='panel-body'>
+        <div class='table-responsive'>
+            <div style="padding-bottom:10px"><img src="../../../../assets/images/UserAdd.png" (click)="addUserPermission()" height="60" width="60" /></div>
+            <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <div *ngIf='userPer && userPer.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table  *ngIf='userPer && userPer.length'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>UserName</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let usersPer of userPer">
+                        <td>{{usersPer.PermissionName}}</td>
+                        <td>
+                            <span><img src="../../../../assets/images/EditUser.png" (click)="editUserPermission(users.UserId)" height="32" width="32" /></span>
+                            <span><img src="../../../../assets/images/DeleteUser.png" (click)="deleteUserPermission(users.UserId)" height="32" width="32" /></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+            </div>
+        </div>
+        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
+    </div>
+</div>
+
+<ng-template #template>
+    <form class="form-horizontal" novalidate (ngSubmit)="onSubmit(userPermissionFrm)" [formGroup]="userPermissionFrm">
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">User Permission</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="hidden">
+            <input type="number" class="hidden" formControlName="UserPermissionId"><input />
+        </div>
+        <div class="modal-body">
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                    <div class="row">
+                        <label class="control-label col-md-3">Permission Name</label>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" placeholder="Permission Name " formControlName="PermissionName">
+                            <div class="alert alert-danger" *ngIf="userPermissionFrm.get('PermissionName').hasError('required') && formSubmitAttempt">
+                                PermissionName is required
+                            </div>
+                        </div>
+
+                        <label class="control-label col-md-3">UserFullName</label>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" placeholder="UserFullName" formControlName="UserFullName">
+                            <div class="alert alert-danger" *ngIf="userPermissionFrm.get('UserFullName').hasError('required') && formSubmitAttempt">
+                                User FullName is required
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <div>
+                <button class="btn btn-danger pull-right" [disabled]="buttonDisabled" (click)="reset()">Cancel</button>
+                <button type="submit" class="btn btn-success pull-left">Save </button>
+            </div>
+        </div>
+    </form>
+</ng-template>

@@ -1,0 +1,46 @@
+
+.btndesign{
+           width:100%;
+           font-size:14px;
+           padding:6px;
+           margin-top:1px;
+}
+.padfirst{
+    padding-top: 7px;
+    padding-left: 15px;
+}
+.designinput input{
+            border-radius: 5px;
+}
+/* ================== css of tab section =========== */
+.marginoftab{
+             margin-top:30px;
+}
+div.wc-date-container{
+                       padding:20px;
+}
+/* css of add button */
+.btnwidth{
+        width:100%;
+        padding:7px 15px;
+        margin-top:30px;
+}
+
+.nav-item a{
+            width:100%;
+            background: #fff;
+            color:#212226!important;
+            border-radius:none!important;
+}
+.nav-item a.active{
+                   background-color: #151a30;
+                   color: #fff!important;
+                   margin-bottom:20px;
+}
+.tab-content{
+             border:none!important;
+}
+
+.form-control{
+              background:#fff!important;
+}

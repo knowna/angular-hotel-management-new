@@ -1,0 +1,83 @@
+
+.login-form {
+    /* background: #151a30; */
+    background: #364a70;
+    /* background:#3b5998; */
+    padding: 22px;
+    border-radius: 3px;
+    margin-top:95px;
+    transition: all 400ms linear;
+}
+.login-form img {
+    height: 90px;
+    width: 90px;
+    padding:10px;
+    border: 2px solid #ffffff;
+    position:absolute;
+    /* background:#151a30; */
+    background: #364a70;
+    /* background:#3b5998; */
+    margin-left:-45px;
+    border-radius:50%;
+    top:-50px;
+    text-align:center;
+}
+.login-form form{
+                margin-top:20px;
+                padding:10px;
+ }
+.login-form form .title h4{
+                         color: #fff;  
+                         font-size:24px;
+                         padding-top:30px;
+                         padding-bottom:5px;
+                         margin-bottom:25px;
+}
+/* .login-form form .input-group input {
+                                     border:none!important;
+                                     width:100%;
+                                     background:#fff;
+} */
+.input-group .input-group-addon {
+    border:none!important;
+    background-color:#dcdcdc;
+    padding:5px 6px;
+    width:10%;
+    color:#212226;
+}
+.remembering{
+             float: left;
+             display:flex;
+             margin-top: 20px;
+}
+.remembering label{
+                   color:#fff;
+}
+.remembering input{
+                 margin-left:5px;
+                 margin-top: 2px;
+                 height:20px;
+                 width:30px;
+                 color:#5cb85c;
+                 background:#fff;
+}
+.login-form button{
+                   width:100%;
+                   transition:all 400ms linear;
+                   padding:8px;
+                   text-transform:uppercase;
+                   font-size:18px;
+                   border-radius:5px;
+                   border:none!important;
+                  
+}
+
+.field-icon {
+    float: right;
+    margin-left: -25px;
+    margin-top: 7px;
+    position: relative;
+    z-index: 2;
+    margin-right: 5px;
+}
+

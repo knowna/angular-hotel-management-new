@@ -1,0 +1,198 @@
+
+<div class="row">
+    <div class="loading" *ngIf="isLoading">
+        <div class="spinner"></div>
+    </div>
+    <div class="pos-content">
+        <h2 style="color: #4267b2;margin: 10px auto 10px 14px;font-weight: bold;">
+            Settle
+        </h2>
+        <div class="col-md-5">
+            <div class="tickets-section">
+                <div class="tickets-section__header">
+                    <h5>
+                        {{ (ticket) ? '#' + ticket.TicketId : '' }} {{
+ selectedCustomerId ? 'Customer: ' + (customer$ | async)?.CustomerName : 'Table:
+                        ' + (table$ |async)?.TableId
+                        }}
+                    </h5>
+                </div>
+                <div class="tickets-section__body">
+                    
+                        <div *ngFor="let order of parsedOrders">
+                            <div class="row ticket-item" *ngFor="let item of order.OrderItems">
+                                <div class="col-md-6 text-left">
+                                    <p>
+                                        <span>{{ getProductById(products$ | async, item.ItemId)?.Name }}</span>
+                                    </p>
+                                </div>
+                                <div class="col-md-2 text-left">
+                                    <p>
+                                        <span>
+                                            <strong>{{ item.Qty }}</strong>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-md-4 text-right" style="padding-right:20px;">
+                                    <p>
+                                        <strong>Rs.{{ProductPrice(item.UnitPrice, item.Qty)}}</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                </div>
+                <div class="tickets-secton__footer" style="padding-top:10px;">
+                    <div class="row">
+                        <div class="col-md-6 text-left">
+                            <strong>Ticket Total: </strong>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <strong>Rs. {{ calculateSum().toFixed(2) }}</strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 text-left">
+                            <strong>Discount: </strong>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <strong>Rs. {{ calculateDiscount() }}</strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 text-left">
+                            <strong>Service Charge: </strong>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <strong>Rs. {{ calculateServiceCharge() }}</strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 text-left">
+                            <strong>VAT (13%): </strong>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <strong>Rs. {{ calculateVat() }}</strong>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 text-left">
+                            <strong>Grand Total: </strong>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <strong>Rs. {{ getGrandTotal() }}</strong>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="ticket?.PaymentHistory.length">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <strong class="pull-left">Payment Total: </strong>
+                                    <strong class="pull-right">Rs. {{ getTotalCharged(ticket).toFixed(2)}} </strong>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <dl class="dl-horizontal" *ngFor="let pay of ticket.PaymentHistory" style="color:green">
+                                        <dt>{{ getDate(pay.DateTime) }}</dt>
+                                        <dd>{{ pay.PaymentMode }} &nbsp; Rs. {{ pay.AmountPaid }}</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row balance-section">
+                        <div class="col-md-6 text-left" *ngIf="!hasRefundable">
+                            <strong>Balance: </strong>
+                        </div>
+                        <div class="col-md-6 text-left" *ngIf="hasRefundable">
+                            <strong>Refundable Amount: </strong>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <strong>Rs. {{ getFinalBalance().toFixed(2) }}</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="calculation-section">
+                <div class="calculations-section__header">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Total:</label>
+                        </div>
+                        <div class="col-md-8 pull-right text-right">
+                            <input type="text" class="" [(ngModel)]="totalPayable" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Charged:</label>
+                        </div>
+                        <div class="col-md-8 pull-right text-right">
+                            <input type="text" class="" [(ngModel)]="selectedValue" />
+                        </div>
+                    </div>
+                </div>
+                <div class="calculations-section__body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-4" *ngFor="let n of ['1', '2', '3']">
+                                    <button type="button" (click)="selectValue(n)" class="btn btn-default">{{ n }}</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4" *ngFor="let n of ['4', '5', '6']">
+                                    <button type="button" (click)="selectValue(n)" class="btn btn-default">{{ n }}</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4" *ngFor="let n of ['7', '8', '9']">
+                                    <button type="button" (click)="selectValue(n)" class="btn btn-default">{{ n }}</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4" *ngFor="let n of ['.', '0', 'C']">
+                                    <button type="button" (click)="selectValue(n)" class="btn btn-default">{{ n }}</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 actions">
+                            <button type="button" class="btn btn-default" (click)="choose(totalPayableInt.toFixed(2))">All</button>
+                            <button type="button" class="btn btn-default" (click)="choose((totalPayableInt/2).toFixed(2))">1/2</button>
+                            <button type="button" class="btn btn-default" (click)="choose((totalPayableInt/3).toFixed(2))">1/3</button>
+                            <button type="button" class="btn btn-default" (click)="choose(totalPayableInt.toFixed(2))">Ticket</button>
+                            <button type="button" class="btn btn-default" (click)="choose(totalPayableInt.toFixed(2))">
+                                Rs. {{ totalPayableInt.toFixed(2) }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="calculations-section__footer">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-default" (click)="addDiscount()" [disabled]="calculateVoidGiftSum() > 0 || getFinalBalance().toFixed(2) === '0.00' || selectedValue == 0">Discount</button>
+                            <!--<button type="button" class="btn btn-default" (click)="roundTicket(ticket)" [disabled]="selectedValue == 0 || getFinalBalance().toFixed(2) === '0.00'">Round</button>-->
+                            <button type="button" class="btn btn-default" routerLink="/pos/InvoicePrint">Print Bill</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="actions-section">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-default" (click)="payCash(ticket)" [disabled]="selectedValue == 0 || getFinalBalance().toFixed(2) === '0.00'">Cash</button>
+                        <button type="button" class="btn btn-default" (click)="payByCard(ticket)" [disabled]="selectedValue == 0 || getFinalBalance().toFixed(2) === '0.00'">Credit Card</button>
+                        <!--<button type="button" class="btn btn-default" (click)="payVoucher(ticket)" [disabled]="selectedValue == 0 || getFinalBalance().toFixed(2) === '0.00'">Voucher</button>-->
+                        <button type="button" class="btn btn-default" (click)="payCustomerAmount(ticket)" [disabled]="selectedValue === 0 || selectedCustomerId === 0">Customer Account</button>
+                        <button type="button" class="btn btn-danger" (click)="close(ticket)">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

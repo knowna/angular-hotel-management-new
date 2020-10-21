@@ -1,0 +1,12 @@
+@font-face {
+	font-family: "Preeti";
+	src: url("./fonts/preeti-webfont.eot?") format("eot"),
+		 url("./fonts/preeti-webfont.svg#Preeti") format("svg");
+}
+
+.text-nepali,
+input[formControlName="NameNepali"]
+{
+    font-family: 'Preeti';
+    font-size: 20px;
+}

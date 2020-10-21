@@ -1,0 +1,302 @@
+﻿
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+         <h2>Reservation</h2> 
+    </div>
+    <div class='panel-body'>
+        <div class='table-responsive'>
+            <div style="padding-bottom:10px">
+                <div class="row firstrow">
+                    <div class="col-md-2">
+                        <img src="../../../../assets/images/Add.png" (click)="openModal(template)"/>
+                    </div>
+                    <div class="col-md-9 btn-mar">
+                        <button (click)="getData('today')" class="btn btn-success">
+                            <i class="fa fa-clock"></i> Today's Guests
+                        </button>
+                        <button (click)="getData('this_week')" class="btn btn-info">
+                            <i class="fa fa-clock"></i> This Weeks Guests
+                        </button>
+                        <button (click)="getData('this_month')" class="btn btn-primary">
+                            <i class="fa fa-clock"></i> This Month Guests
+                        </button>
+                        <button (click)="getData('all')" class="btn btn-warning">
+                            <i class="fa fa-clock"></i> Old Guests
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="row secondrow">
+                            <div class="col-md-1"></div>
+                            <div class="col-sm-2  padfirst">
+                                Filter By Date:
+                            </div>
+                            <div class="col-sm-3">
+                                <input class="form-control" placeholder="dd/mm/yyyy" bsDatepicker [(ngModel)]="fromDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+                            </div>
+                            <div class="col-sm-3">
+                                <input class="form-control" placeholder="dd/mm/yyyy" bsDatepicker [(ngModel)]="toDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+                            </div>
+                            <div class="col-sm-1">
+                                <button class="btn btn-success" (click)="getDataDateFilter('DateFilter')"> GO</button>
+                            </div>
+                            <div class="col-sm-2">
+                                <button class="btn btn-primary pull-left" (click)="exportTableToExcel('tblReservation')"> Export</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="alert alert-info" role="alert" *ngIf="isLoading">
+                            <img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...
+                        </div>
+                        <div *ngIf='reservations && reservations.length==0' class="alert alert-info" role="alert">No record found!</div>
+                    </div>
+                </div>
+                <table border="1" style="color:#000;border:none;" *ngIf='reservations && reservations.length' id="tblReservation">
+                    <thead class="text-center">
+                        <tr>
+                            <th colspan="8" class="headfirst">
+                                <strong>{{ company?.NameEnglish }}</strong>
+                                <br /> Reservation Status
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Amount Paid</th>
+                            <th>Booking ID</th>
+                            <th>Room Type</th>
+                            <th>Reservation Type</th>
+                            <th>Check In Date</th>
+                            <th>Check Out Date</th>
+                            <th class="export-no-display"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        <tr *ngFor="let reservation of reservations">
+                            <td>{{getCustomer(reservation.CustomerId)?.CustomerName}}</td>
+                            <td>{{reservation.AmountPaid.toFixed(2)}}</td>
+                            <td>{{reservation.BookingId}}</td>
+                            <td>{{getRoomType(reservation.RoomTypeId).Name}}</td>
+                            <td>{{getReservationType(reservation.ReservationType).Name}}</td>
+                            <td>{{reservation.CheckInDate | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{reservation.CheckOutDate | date: 'dd/MM/yyyy'}}</td>
+                            <td class="export-no-display">
+                                <span class="firstimg">
+                                    <img src="../../../../assets/images/Edit.png" (click)="editReservation(reservation.Id,template)"/>
+                                </span>
+                                <span>
+                                    <img src="../../../../assets/images/Delete.png" (click)="deleteReservation(reservation.Id,template)"/>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{msg}}
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #template>
+    <form class="panel-primary" novalidate (ngSubmit)="onSubmit(reservationForm)" [formGroup]="reservationForm">
+        <div class="modal-header panel-heading">
+            <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="reset(); modalRef.hide()">
+                <i class="fa fa-times fa-design"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row well">
+                <div class="form-group col-md-4">
+                        <label class="control-label  text-left">Check In:</label>
+                        <input type="text" class="form-control" placeholder="day/month/year" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" [minDate]="today" formControlName="CheckInDate" setAutoFocus tabindex="1" />
+                        <div class="alert alert-danger" *ngIf="reservationForm.get('CheckInDate').hasError('required') && formSubmitAttempt">
+                            Check In Date field is required
+                        </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label text-left">Check Out:</label>
+                        <input type="text" class="form-control" placeholder="day/month/year" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" [minDate]="today1" formControlName="CheckOutDate" tabindex="2" />
+                        <div class="alert alert-danger" *ngIf="reservationForm.get('CheckOutDate').hasError('required') && formSubmitAttempt">
+                            Check Out Date field is required
+                        </div>
+                </div>
+                <div class="form-group col-md-4">
+                     <label class="control-label">Booking Date:</label>
+                    <input type="text" class="form-control" placeholder="day/month/year" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" formControlName="RDate" tabindex="3" />
+                    <div class="alert alert-danger" *ngIf="reservationForm.get('RDate').hasError('required') && formSubmitAttempt">
+                        Reservation Date field is required
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="row">
+                
+                <div class="form-group col-md-4">
+                    <label class="control-label">Customer:</label>
+                        <select class="form-control" formControlName="CustomerId" tabindex="4">
+                            <option class="form-control" *ngFor="let CType of customers" [ngValue]="CType.Id">{{CType.CustomerName}}</option>
+                        </select>
+                        <div class="alert alert-danger" *ngIf="reservationForm.get('CustomerId').hasError('required') && formSubmitAttempt">
+                            Customer field is required
+                        </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Booking Id:</label>
+            
+                    <input type="text" class="form-control" placeholder="Booking Id" formControlName="BookingId" tabindex="5" />
+                    <div class="alert alert-danger" *ngIf="reservationForm.get('BookingId').hasError('required') && formSubmitAttempt">
+                        Booking Id field is required
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Guest Name:</label>
+                    <input type="text" class="form-control" placeholder="Guest Name" formControlName="GuestName" tabindex="6" />
+                    <div class="alert alert-danger" *ngIf="reservationForm.get('GuestName').hasError('required') && formSubmitAttempt">
+                        Guest Name field is required
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label class="control-label">Room Type:</label>
+                        <select class="form-control" formControlName="RoomTypeId"  tabindex="7">
+                            <option class="form-control" *ngFor="let CType of roomTypes" [ngValue]="CType.Id">{{CType.Name}}</option>
+                        </select>
+                        <div class="alert alert-danger" *ngIf="reservationForm.get('RoomTypeId').hasError('required') && formSubmitAttempt">
+                            Room Type field is required
+                        </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">No. of Rooms:</label>
+                        <input type="number" class="form-control" placeholder="" formControlName="NumberOfRoom" tabindex="8">
+                        <div class="alert alert-danger" *ngIf="reservationForm.get('NumberOfRoom').hasError('required') && formSubmitAttempt">
+                            No of rooms field is required
+                        </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Adult:</label>
+                        <input type="number" class="form-control" placeholder="" formControlName="Adult" tabindex="9">
+                        <div class="alert alert-danger" *ngIf="reservationForm.get('Adult').hasError('required') && formSubmitAttempt">
+                            Adult field is required
+                        </div>
+                </div>
+            </div>
+           
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label class="control-label">Children:</label>
+                        <select class="form-control" formControlName="Children" (change)="addChildrenAge($event.target.value)" tabindex="10">
+                            <option class="form-control" [ngValue]="0">Choose No of Children</option>
+                            <option class="form-control" [ngValue]="1">1 Child</option>
+                            <option class="form-control" [ngValue]="2">2 Children</option>
+                            <option class="form-control" [ngValue]="3">3 Children</option>
+                            <option class="form-control" [ngValue]="4">4 Children</option>
+                            <option class="form-control" [ngValue]="5">5 Children</option>
+                        </select>
+                        <div class="alert alert-danger" *ngIf="reservationForm.get('Children').hasError('required') && formSubmitAttempt">
+                            Children field is required
+                        </div>
+                </div>
+                <div class="form-group col-md-4" *ngIf="reservationForm.controls.ReservationDetails.controls.length">
+                    <label class="control-label">Childern Age:</label>
+                    <div class="row" formArrayName="ReservationDetails" style="width:400px;margin-left:3px;">
+                        <div class="age-field" style="display: flex;" *ngFor="let reservationD of reservationForm.controls.ReservationDetails.controls; let i=index"
+                            [formGroupName]="i">
+                            <input type="number" class="form-control" placeholder="Enter Age" min="0" max="800" formControlName="ChildrenAge" tabindex="11" style="width:200px!important;">
+                            <div class="close-btn" (click)="deleteAge(i)" style="padding-left:5px;padding-top:3px;">
+                                <i class="fa fa-times"></i>
+                            </div>
+                            <div class="alert alert-danger" *ngIf="reservationD.get('ChildrenAge').hasError('required') && formSubmitAttempt">
+                                Children Age field is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-4 padonradio">
+                    <label class="control-label">Advance Paid:</label>
+                        <input type="radio" [value]="true" name="IsAdvancePaid" formControlName="IsAdvancePaid" tabindex="12"> Yes
+                        <input type="radio" [value]="false" name="IsAdvancePaid" formControlName="IsAdvancePaid" tabindex="13"> No
+                        <div class="alert alert-danger" *ngIf="reservationForm.get('IsAdvancePaid').hasError('required') && formSubmitAttempt">
+                            Advance Paid field is required
+                        </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label class="control-label">Amount(Rs.):</label>
+                 
+                        <input type="number" class="form-control" placeholder="" formControlName="AmountPaid" tabindex="14">
+                        <div class="alert alert-danger" *ngIf="reservationForm.get('AmountPaid').hasError('required') && formSubmitAttempt">
+                            Amount Paid field is required
+                        </div>
+          
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Payment Type:</label>
+                        <select class="form-control" formControlName="PaymentType" tabindex="15">
+                            <option class="form-control" *ngFor="let CType of paymentTypes" [ngValue]="CType.Id">{{CType.Name}}</option>
+                        </select>
+                        <div class="alert alert-danger" *ngIf="reservationForm.get('PaymentType').hasError('required') && formSubmitAttempt">
+                            Payment Type field is required
+                        </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Booking Type:</label>
+                        <select class="form-control" formControlName="ReservationType" tabindex="16">
+                            <option class="form-control" *ngFor="let CType of reservationsTypes" [ngValue]="CType.Id">{{CType.Name}}</option>
+                        </select>
+                        <div class="alert alert-danger" *ngIf="reservationForm.get('ReservationType').hasError('required') && formSubmitAttempt">
+                            Reservation Type field is required
+                        </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label class="control-label">Status:</label>
+                    
+                        <select class="form-control" formControlName="Status" tabindex="17">
+                            <option value="Confirmed">Confirmed</option>
+                            <option selected value="Pending">Pending</option>
+                            <option value="Cancel">Cancel</option>
+
+                        </select>
+                        <div class="alert alert-danger" *ngIf="reservationForm.get('Status').hasError('required') && formSubmitAttempt">
+                            Status field is required
+                        </div>
+                  
+                </div>
+                <div class="form-group col-md-8">
+                    <label class="control-label">Special Request:</label>
+                        <textarea class="form-control" rows="1" placeholder="" formControlName="SpecialRequest" tabindex="18"></textarea>
+                        <div class="alert alert-danger" *ngIf="reservationForm.get('SpecialRequest').hasError('required') && formSubmitAttempt">
+                            Special Request field is required
+                        </div>
+                </div>
+            </div>
+            <div class="row footermodal">
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success pull-left" tabindex="19">{{modalBtnTitle}}</button>
+
+                </div>
+                <div class="col-md-8">
+
+                </div>
+                <div class="col-md-2">
+                    <a class="btn btn-danger pull-right" (click)="reset(); modalRef.hide()" tabindex="20">Cancel</a>
+
+                </div>
+            </div>
+        </div>
+        
+    </form>
+</ng-template>

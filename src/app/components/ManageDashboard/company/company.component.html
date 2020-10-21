@@ -1,0 +1,250 @@
+﻿<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        Company Details
+    </div>
+    <div class='panel-body'>
+        <div class='table-responsive'>
+            <div style="padding-bottom:10px">
+                <img *ngIf="companies && companies.length == 0"
+                     src="../../../../assets/images/Add.png" (click)="openModal(template)"
+                     height="60" width="60" />
+                <div class="alert alert-info" role="alert" *ngIf="isLoading">
+                    <img src="../../../../assets/images/loading.gif" width="32" height="32" />
+                    Loading...
+                </div>
+                <div *ngIf='companies && companies.length==0' class="alert alert-info" role="alert">No record found!</div>
+                <table  *ngIf='companies && companies.length'>
+                    <thead>
+                        <tr>
+                            <th>Branch Code</th>
+                            <th>Name(English)</th>
+                            <th>Name(Nepali)</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Vat/Pan</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let company of companies">
+                            <td>{{company.BranchCode}}</td>
+                            <td>{{company.NameEnglish}}</td>
+                            <td class="text-nepali">{{company.NameNepali}}</td>
+                            <td>{{company.Phone}}</td>
+                            <td>{{company.Email}}</td>
+                            <td>{{company.Pan_Vat}}</td>
+                            <td>
+                                <span>
+                                    <img src="../../../../assets/images/Edit.png" (click)="editCompany(company.Id,template)" height="32" width="32" />
+                                </span>
+                                <span>
+                                    <img src="../../../../assets/images/Delete.png" (click)="deleteCompany(company.Id,template)" height="32" width="32" />
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{msg}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #imageView>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <img style="width:100%" [src]="fileUrl" />
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #template>
+    <form class="panel-primary" novalidate (ngSubmit)="onSubmit(companyForm, fileUpload)" [formGroup]="companyForm">
+        <div class="modal-header panel-heading">
+            <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-4">Branch Code:</label>
+                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                        <input type="text" class="form-control" placeholder="" formControlName="BranchCode">
+                        <div class="alert alert-danger" *ngIf="companyForm.get('BranchCode').hasError('required') && formSubmitAttempt">
+                            BranchCode field is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-4">Name(English):</label>
+                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                        <input class="col-md-3 form-control" formControlName="NameEnglish" />
+                        <div class="alert alert-danger" *ngIf="companyForm.get('NameEnglish').hasError('required') && formSubmitAttempt">
+                            English Name field is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-4">Name(Nepali):</label>
+                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                        <input class="col-md-3 form-control" formControlName="NameNepali" />
+                        <div class="alert alert-danger" *ngIf="companyForm.get('NameNepali').hasError('required') && formSubmitAttempt">
+                            Nepali Name field is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-4">Address:</label>
+                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                        <input type="text" class="form-control" placeholder="" formControlName="Address">
+                        <div class="alert alert-danger" *ngIf="companyForm.get('Address').hasError('required') && formSubmitAttempt">
+                            Address field is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-4">Street:</label>
+                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                        <input type="text" class="form-control" placeholder="" formControlName="Street">
+                        <div class="alert alert-danger" *ngIf="companyForm.get('Street').hasError('required') && formSubmitAttempt">
+                            Street field is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-4">City:</label>
+                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                        <input type="text" class="form-control" placeholder="" formControlName="City">
+                        <div class="alert alert-danger" *ngIf="companyForm.get('City').hasError('required') && formSubmitAttempt">
+                            City field is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-4">District:</label>
+                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                        <input type="text" class="form-control" placeholder="" formControlName="District">
+                        <div class="alert alert-danger" *ngIf="companyForm.get('District').hasError('required') && formSubmitAttempt">
+                            District field is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-4">Phone No:</label>
+                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                        <input type="text" class="form-control" placeholder="" formControlName="Phone">
+                        <div class="alert alert-danger" *ngIf="companyForm.get('Phone').hasError('required') && formSubmitAttempt">
+                            Phone No. field is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-4">Email:</label>
+                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                        <input type="text" class="form-control" placeholder="" formControlName="Email">
+                        <div class="alert alert-danger" *ngIf="companyForm.get('Email').hasError('required') && formSubmitAttempt">
+                            Email field is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-4">PAN/VAT:</label>
+                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                        <input type="text" class="form-control" placeholder="" formControlName="Pan_Vat">
+                        <div class="alert alert-danger" *ngIf="companyForm.get('Pan_Vat').hasError('required') && formSubmitAttempt">
+                            PAN/VAT field is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-4">IRD Username:</label>
+                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                        <input type="text" class="form-control" placeholder="" formControlName="IRD_UserName">
+                        <div class="alert alert-danger" *ngIf="companyForm.get('IRD_UserName').hasError('required') && formSubmitAttempt">
+                            IRD Username field is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-4">IRD Password:</label>
+                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                        <input type="text" class="form-control" placeholder="" formControlName="IRD_Password">
+                        <div class="alert alert-danger" *ngIf="companyForm.get('IRD_Password').hasError('required') && formSubmitAttempt">
+                            IDR Password field is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-4">Identity:</label>
+                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <app-file-upload #fileUpload [extraFormData]="companyForm" [uploadUrl]="uploadUrl"></app-file-upload>
+                            </div>
+                            <div class="col-md-4">
+                                <button style="margin-top: 20px;" type="button" class="btn btn-sm btn-default pull-right" (click)="clearFile()">Clear</button>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="company?.File">
+                            <div class="col-md-6">
+                                <img (click)="viewFile(rm.File,imageView)" [src]="company.File" style="height:32px;border-radius:5px;" />
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile(company.Id)">
+                                    <i class="fa fa-times">&nbsp;Delete</i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div>
+                <button type="submit" class="btn btn-success pull-left">{{modalBtnTitle}}</button>
+                <a class="btn btn-danger pull-right" (click)="modalRef.hide()">Cancel</a>
+            </div>
+        </div>
+    </form>
+</ng-template>

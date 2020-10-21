@@ -1,0 +1,96 @@
+
+<!-- <div class="loading" *ngIf="isLoading">
+    <div class="spinner"></div>
+</div> -->
+<div class="row m-0 mt-4">
+    <div class="col-md-2">
+        <h2 style="color: #4267b2;margin: 10px auto 10px 14px;font-weight: bold;"> Order</h2>
+    </div>
+    <div class="col-md-10">
+        <pos-options [selectedItem]="selectedItem" [orders]="orders$" (showTicketNote)="showTicketNote()" (createNewTicket)="createNewTicket()" (printBill)="printBill()" (removeItem)="removeItem($event)" (voidItem)="voidItem($event)" (incrementQty)="incrementQty($event)" (decrementQty)="decrementQty($event)" (toogleGiftItem)="toogleGiftItem($event)" (moveItems)="moveItems($event)"></pos-options>
+    </div>
+</div>
+<div class="row m-0 mt-4">
+    <div class="col-md-2">
+        <div class="row m-0">
+            <div class="card">
+                <div class="card-header no-radius">
+                    Choose Category:
+                </div>
+                
+                    <div class="card-body category-list">
+                        <input type="text" [(ngModel)]="SearchCategory" placeholder="Enter Categories" size="17" style="margin-bottom: 8px;" />
+                        <div>
+                            <!-- <div class="col-md-12 category-item" *ngFor="let category of categories$ | async | search:SearchCategory" -->
+                            <div class="col-md-12 category-item" *ngFor="let category of categories$ | async "
+                                 style="cursor:pointer;" (click)="selectedCategory = category.Id"
+                                 [ngClass]="{ 'active': category.Id === selectedCategory }"
+                                 title="{{ category.Name }}">
+                                {{ category.Name }}
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <p style="margin-top: 4px;">
+                    <strong>Ticket Note:</strong>
+                </p>
+                <div *ngIf="!enableTicketNote">
+                    {{ ticketNote }}
+                </div>
+                <div *ngIf="enableTicketNote">
+                    <textarea [(ngModel)]="ticketNote" placeholder="Enter Note Here..." style="margin-top: 14px;margin-left: -4px; min-height:200px;"></textarea>
+                    <br />
+                    <button class="btn btn-success" (click)="saveTicketNote(ticket.Id)">Save Ticket Note</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card" style="height:640px">
+                    <div class="card-header">
+                        Select Products:
+                    </div>
+                    
+                        <div class="card-body product-list">
+                            <input type="text" [(ngModel)]="SearchProduct" placeholder="Enter Products" size="40" style="margin-bottom: 8px;" />
+                            <div *ngIf="selectedCategory">
+                                <!-- <div *ngFor="let product of products$ | async | filterByCategory:selectedCategory | search:SearchProduct" class="col-md-6 btn badge badge-success product-item" -->
+                                <div *ngFor="let product of products$ | async " class="col-md-6 btn badge badge-success product-item"
+                                     (click)="addOrderItem(product)" title="{{ product.Name }}">
+                                    <strong>{{ product.Name}}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <pos-calculator [output]="qtyFromCalculator" (updateQty)="updateQty($event)"></pos-calculator>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <pos-tickets [table]="table"
+                     [toOpenTicketId]="toOpenTicketId"
+                     *ngIf="checkTicket()">
+        </pos-tickets>
+        <pos-orders *ngIf="selectedTicket"
+                    [table]="table$ | async"
+                    [ticket]="ticket$ | async"
+                    [products]="products$ | async"
+                    [orders]="orders$ | async"
+                    [selectedTable]="selectedTable"
+                    [selectedCustomerId]="selectedCustomerId"
+                    (selectOrderItem)="selectOrderItem($event)"
+                    (printBill)="printBill($event)">
+        </pos-orders>
+    </div>
+</div>

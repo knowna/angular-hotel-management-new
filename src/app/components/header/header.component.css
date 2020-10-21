@@ -1,0 +1,114 @@
+.group {
+    /* background-color:#3b5998!important; */
+    background-color: #364a70 !important;
+    font-size:12px!important;
+    color:grey!important;
+}
+.group:hover{
+background-color:white;
+font-size:1.2em;
+color:black;
+cursor: pointer;
+}
+.treeview a:hover{
+                background:none!important;
+}
+.skin-blue .sidebar-menu > li:hover > a, .skin-blue .sidebar-menu > li.active > a, .skin-blue .sidebar-menu > li.menu-open > a {
+    color: grey;
+    font-size: 12px;
+}
+.treeview a{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    line-height: 1.5rem;
+    color:#fff!important;
+    display:flex;
+    border-bottom:1px solid rgba(0,0,0,.3)!important;
+    cursor: pointer;
+}
+/* ========== style of non branches like pos ============ */
+.treeview .coloring{
+                     /* color:#626b91; */
+                     font-size:14px;
+}
+/* ========= sidebar ========= */
+.main-sidebar{
+              /* background-color: #3b5998!important; */
+              background-color: #364a70 !important;
+              color: #fff!important;
+              font-family: 'Raleway',sans-serif;
+              font-size: 18px;
+              padding-bottom:5px;
+              position: absolute;
+              top:50px;
+              margin-top: 20px;
+              overflow-y: scroll;
+              opacity: 1!important;
+}
+.sidebar{
+         height:90vh;
+}
+/* ========================== css for scrollbar ===========================  */
+/* width */
+::-webkit-scrollbar {
+    width: 9px;
+  }
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #151a30; 
+    border-radius: none;
+  }
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #29335e; 
+    border-radius: none;
+  }
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #171138; 
+  }
+/* style of treeview main icon  */
+.treeview i{
+                      color:grey;
+                      font-size:18px;
+                      padding-top:5px;
+                      padding-right:5px;
+
+}
+/* style of inner of font office */
+.treeview-menu{
+                /* background:#3b5998!important; */
+                background: #364a70 !important;
+}
+.treeview .treeview-menu .textleft{
+                                   padding-bottom:10px;
+                                   padding-top:10px;
+}
+.treeview-menu .flexing {
+                         display: flex;
+                         padding-left: 12%;
+                         width:95%;
+}
+.treeview-menu  .pull-left{
+                           color:grey;
+                           font-size:18px;
+                           padding-top:12px!important;
+                           padding-right:7px;
+}
+/* ============== css of second inner of fontstyle ======== */
+.secondinner{
+             width:95%;
+             padding-bottom:10px;
+             padding-top:10px;
+             padding-left: 5%!important;
+
+}
+/* ====================== css of another second =================== */
+.anothersecond{
+    padding-bottom:10px;
+    padding-top:10px;
+    padding-left: 5%!important;
+    width:100%;
+}

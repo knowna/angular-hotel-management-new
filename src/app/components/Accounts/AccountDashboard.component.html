@@ -1,0 +1,203 @@
+﻿<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar1">
+                <span class="sr-only">Toggle Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" [routerLink]="['/dashboard']">
+                <img src="../../../../assets/images/logo.png" class="pull-left" alt="D Cube Hotel">
+                <div style="padding-top: 1px;width: 200px; text-align: center;">
+                    <h5 style="color: #ffffff; font-weight: 600;">
+                        D Cube Hotel System (V1)
+                    </h5>
+                </div>
+            </a>
+        </div>
+        <div id="navbar1" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-center">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        Master
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a [routerLink]="['/accountdashboard/account']"> Ledger </a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/accountType']"> Group </a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/accounttransType']"> Transaction Type </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        Transaction
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a [routerLink]="['/accountdashboard/journalVoucher']">Journal</a>
+                        </li>
+                        <!--<li>
+                            <a [routerLink]="['/accountdashboard/purchaseOrder']">Purchase Order</a>
+                        </li>-->
+                        <li>
+                            <a [routerLink]="['/accountdashboard/purchase']">Purchase</a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/sales']">Sales</a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/receipt']"> Receipt </a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/payment']"> Payment </a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/contra']"> Cash/Bank </a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/credit-note']"> Credit Note </a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/debit-note']"> Debit Note </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        Report
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a [routerLink]="['/accountdashboard/journalVoucher']">Day Book</a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/AccountLedgerView']">Ledger</a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/TrialBalance']">Trial Balance</a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/SaleBook']">Cash Flow</a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/SaleBook']">Fund Flow</a>
+                        </li>
+                        <li><a [routerLink]="['/accountdashboard/ProfitLoss']">Profit &amp; Loss</a></li>
+                        <li><a [routerLink]="['/accountdashboard/BalanceSheet']">Balance Sheet</a></li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/SaleBook']">Sales Book</a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/SaleBookItem']">Sales Item Wise</a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/SaleBookDatewise']">Sales Date Wise</a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/SaleBookCustomer']">Sales Customer Wise</a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/SaleBook']">Purchase Book</a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/materializedview']">Materialized View</a>
+                        </li>
+                        <li>
+                            <a [routerLink]="['/accountdashboard/BillReturnView']">BillReturn View</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <img style="height: 18px;" src="../../../../assets/images/logo.png" alt="DCube Hotel">&nbsp;Welcome! {{ user.UserName }}
+                        <span class="caret"></span>
+                        S
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="#" (click)="logout()">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+    <!--/.container-fluid -->
+</nav>
+<div class="header-wrapper" [hidden]="!hideElement">
+    <!--<div class="row">
+        <div class="col-md-12">
+            <a routerLink="/reservationdashboardnavcomponent">
+                <div class="dashboard-item col-md-4">
+                    <span><img src="../../../../assets/images/AccountMaster.jpg" /></span>
+                    <h3>Master</h3>
+                </div>
+            </a>
+            <a routerLink="/pos/tables">
+                <div class="dashboard-item col-md-4">
+                    <span><img src="../../../../assets/images/AccountTransaction.jpg" /></span>
+                    <h3>Transaction</h3>
+                </div>
+            </a>
+            <a routerLink="/accountdashboard">
+                <div class="dashboard-item col-md-4">
+                    <span><img src="../../../../assets/images/AccountReport.jpg" /></span>
+                    <h3>Reports</h3>
+                </div>
+            </a>
+        </div>
+    </div>-->
+    <div class="row">
+        <div class="header">
+            <div class="filter"></div>
+            <div class="title-container text-center">
+                <h1>Account / Finance Dashboard </h1>
+            </div>
+        </div>
+        <hr />
+        <div class='panel-body'>
+            <div class='table-responsive'>
+                <div style="padding-bottom:10px">
+                    <div class="alert alert-info" role="alert" *ngIf="inLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+                    <div *ngIf='profitandloss && profitandloss.length==0' class="alert alert-info" role="alert">No record found!</div>
+                    <table id="ProfitLossTable"  *ngIf='profitandloss && profitandloss.length'>
+                        <thead>
+                            <tr>
+                                <th>Particular</th>
+                                <th style="text-align: right;">Amount (Rs.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let PL of profitandloss">
+                                <td *ngIf="PL.Bold =='Yes'"><strong>{{PL.Name}}</strong> </td>
+                                <td *ngIf="PL.Bold =='No'">{{PL.Name}} </td>
+                                <td align="right" *ngIf="PL.Amount !=0">{{PL.Amount.toFixed(2)}}</td>
+                                <td align="right" *ngIf="PL.Amount ==0"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                    </div>
+                </div>
+                <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    {{msg}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
