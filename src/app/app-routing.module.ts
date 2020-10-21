@@ -71,12 +71,13 @@ import { PosTableComponent } from './components/POS-System/pos-table/pos-table.c
 import { PosInvoicePrintComponent } from './components/POS-System/pos-table/pos-invoiceprint/pos-invoiceprint.component';
 import { PosSettleComponent } from './components/POS-System/pos-table/pos-settle/pos-settle.component';
 import { LoginGuard } from './guard/login.guard';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: "/reservation",
+    redirectTo: "/dashboard",
     pathMatch: 'full'
   },
 
@@ -84,6 +85,11 @@ const routes: Routes = [
     path: "login",
     component: LoginComponent,
     canActivate:[LoginGuard]
+  },
+
+   {
+    path: "dashboard",
+    component: DashboardComponent,
   },
   {
     path: "user",
