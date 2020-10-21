@@ -6,7 +6,7 @@
                 <a *ngIf="item.children; else elseBlockk">
                     <i class="text-danger"></i>
 
-                    <i [ngClass]="item.icon" class="fa pull-left"></i><span>{{item.title}}</span>
+                    <i [ngClass]="item.icon" class="fa pull-left"></i><span>{{item?.title}}</span>
 
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
@@ -14,7 +14,7 @@
                 </a>
                 <ng-template #elseBlockk>
                     <a (click)=open(item.link)>
-                        <i class=""></i> <span class="coloring">{{item.title}}</span>
+                        <i class=""></i> <span class="coloring">{{item?.title}}</span>
                         <span class="pull-right-container">
                         </span>
                     </a>
@@ -24,12 +24,12 @@
                         <li class="treeview">
                             <a href="#" class="flexing" *ngIf="child.children; else elseBlock">
                                 <i [ngClass]="child.icon" class="fa  pull-left"></i><span
-                                    class="textleft">{{child.title}}</span><span class="pull-right-container">
+                                    class="textleft">{{child?.title}}</span><span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span></a>
                             <ng-template #elseBlock>
                                 <a (click)=open(child.link)>
-                                    <i class=""></i> <span class="anothersecond">{{child.title}}</span>
+                                    <i class=""></i> <span class="anothersecond">{{child?.title}}</span>
                                     <span class="pull-right-container">
 
                                     </span>
@@ -40,7 +40,7 @@
                                     <a (click)=open(chil.link)>
                                         <li class="treeview secondinner">
 
-                                            <i class=""></i><span>{{chil.title}}</span><span
+                                            <i class=""></i><span>{{chil?.title}}</span><span
                                                 class="pull-right-container">
                                                 <i class=""></i>
                                             </span>

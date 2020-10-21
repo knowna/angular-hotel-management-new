@@ -96,35 +96,43 @@ export const navcomponents=[
         {
           title: 'Customer',
           link: 'pos-dashboard/customers',
+          permission:'Billing:Customer',
         },
         {
           title: 'Billing',
           link: 'pos-dashboard/table/posbilling',
+          permission:'Billing:Billing',
         },
         {
           title: 'Menu',
           icon: 'layout-outline',
+          permission:'Billing:Menu',
           children: [
             {
               title: 'Item',
               link: 'pos-dashboard/table/items',
+              permission:'Billing:Menu:Item',
             },
             {
               title: 'Category',
               link: 'pos-dashboard/table/category',
+              permission:'Billing:Menu:Category',
             },
             {
               title: 'Consumption',
               link: 'pos-dashboard/table/menuconsumption',
+              permission:'Billing:Menu:Consumption',
             },
             {
               title: 'Menu',
               link: 'pos-dashboard/table/menu',
+              permission:'Billing:Menu:Menu',
             },
             {
               title: 'Table and Room Design',
               pathMatch: 'prefix',
               link: 'pos-dashboard/table/table',
+              permission:'Billing:Menu:Table and Room Design',
             },
           ],
         },

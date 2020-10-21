@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
                         localStorage.setItem("userInformation",JSON.stringify(data));
                         localStorage.setItem("userToken",data.Token);
                         this.authService.authenticate();
-                        this.router.navigate(["/reservation"]);
+                        this.router.navigate(["/pos-dashboard/tables"]);
                         this.toastrService.success('You are successfully logged in!');
                         // window.location.reload();
                     } else {

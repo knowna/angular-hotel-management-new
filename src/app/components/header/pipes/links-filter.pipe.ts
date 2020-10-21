@@ -11,17 +11,25 @@ export class LinksFilterPipe implements PipeTransform {
 
 
   permissionList=[
-    'Front Office',
-    'Front Office:Booking',
-    'Front Office:Booking:Booking',
     'POS',
     'Billing',
-    'Billing:Order'
+    'Billing:Order',
+    'Billing:Customer',
+    'Billing:Billing',
+    'Billing:Menu',
+    'Billing:Menu:Item',
+    'Billing:Menu:Category',
+    'Billing:Menu:Consumption',
+    'Billing:Menu:Menu',
+    'Billing:Menu:Table and Room Design'
 
 ];
 
 
   transform(items): any {
+
+  if(!items) return [];
+   
     
     const filteredLinks = items.filter(item => {
       
@@ -29,7 +37,6 @@ export class LinksFilterPipe implements PipeTransform {
         return item.permission;
       }
     });
-    console.log(filteredLinks);
     
     return filteredLinks;
   }

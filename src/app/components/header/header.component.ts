@@ -12,8 +12,10 @@ export class HeaderComponent implements OnInit{
 
     public clicked=false;
 public clickeditem:[];
+
+
 public open(link){
-    console.log(link);
+    console.log('the link is',link);
     this.router.navigate([link])
 
 }
@@ -22,14 +24,15 @@ public open(link){
         console.log(what);
     }
 
+    constructor(public router: Router,@Inject("NAVCOMPONENTS") public  items:any[] ) {
+    }
 
    
     ngOnInit(){
        
     }
     public pageName = 'Job';
-    constructor(public router: Router,@Inject("NAVCOMPONENTS") public  items:any[] ) {
-    }
+  
 
    
     
