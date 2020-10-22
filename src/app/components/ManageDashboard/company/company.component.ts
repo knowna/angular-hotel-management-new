@@ -28,7 +28,7 @@ export class CompanyComponent implements OnInit {
     modalBtnTitle: string;
     modalRef: BsModalRef;
     checkOutModalRef: BsModalRef;
-    private formSubmitAttempt: boolean;
+    formSubmitAttempt: boolean;
     uploadUrl = Global.BASE_FILE_UPLOAD_ENDPOINT;
     fileUrl: string = '';
 

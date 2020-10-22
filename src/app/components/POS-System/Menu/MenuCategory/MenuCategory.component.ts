@@ -26,7 +26,7 @@ export class MenuCategoryComponent implements OnInit {
     menucategory: IMenuCategory;
     msg: string;
     indLoading: boolean = false;
-    private formSubmitAttempt: boolean;
+    public formSubmitAttempt: boolean;
     MenuCategoryFrm: FormGroup;
     dbops: DBOperation;
     modalTitle: string;

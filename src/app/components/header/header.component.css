@@ -47,9 +47,9 @@ cursor: pointer;
               overflow-y: scroll;
               opacity: 1!important;
 }
-.sidebar{
+/* .sidebar{
          height:90vh;
-}
+} */
 /* ========================== css for scrollbar ===========================  */
 /* width */
 ::-webkit-scrollbar {

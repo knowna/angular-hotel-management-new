@@ -71,7 +71,7 @@
                 <div class="panel-body">
                     <div class="row">
                         <div formArrayName="MenuItemPortions">
-                            <div class="panel-body" *ngFor="let MenuItemPortions of MenuItemForm.controls.MenuItemPortions.controls; let i=index" [formGroupName]="i">
+                            <div class="panel-body" *ngFor="let MenuItemPortions of MenuItemForm.controls.MenuItemPortions; let i=index" [formGroupName]="i">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <input type="hidden" formControlName="Id" />
@@ -96,7 +96,7 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-2">
-                                        <span style="cursor: pointer; font-size: 30px;" *ngIf="MenuItemForm.controls.MenuItemPortions.controls.length > 1" class="fa fa-window-close pull-right" (click)="removeMenuItemPortions(i)"></span>
+                                        <!-- <span style="cursor: pointer; font-size: 30px;" *ngIf="MenuItemForm.controls['MenuItemPortions'].length > 1" class="fa fa-window-close pull-right" (click)="removeMenuItemPortions(i)"></span> -->
                                     </div>
                                 </div>
                             </div>
