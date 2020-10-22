@@ -79,34 +79,40 @@ export const navcomponents=[
       title: 'POS',
       permission:'POS',
       group: true,
+      show: false
      
     }, 
     {
       title: 'Billing',
       icon: 'fa fa-shopping-cart-outline',
       permission:'Billing',
+      show: false,
       children: [
         {
           title: 'Order',
           link: 'pos-dashboard/tables',
           permission:'Billing:Order',
           home: true,
+          show: false,
         },
         
         {
           title: 'Customer',
           link: 'pos-dashboard/customers',
           permission:'Billing:Customer',
+          show: false,
         },
         {
           title: 'Billing',
           link: 'pos-dashboard/table/posbilling',
           permission:'Billing:Billing',
+          show: false,
         },
         {
           title: 'Menu',
           icon: 'layout-outline',
           permission:'Billing:Menu',
+          show: false,
           children: [
             {
               title: 'Item',

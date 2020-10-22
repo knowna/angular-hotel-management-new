@@ -112,3 +112,7 @@ cursor: pointer;
     padding-left: 5%!important;
     width:100%;
 }
+
+.icon{
+  float: right;
+}
