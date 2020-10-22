@@ -1,10 +1,9 @@
-<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+<!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet"> -->
 <aside class="main-sidebar">
     <section class="sidebar">
         <ul class="sidebar-menu tree" data-widget="tree" *ngFor="let item of (items | LinksFilter) ">
             <li class="treeview mb-1" [class.group]="item.group">
-                <a *ngIf="item.children; else elseBlockk">
-                    <i class="text-danger"></i>
+                <a  (click)="openChildren =!openChildren">
 
                     <i [ngClass]="item.icon" class="fa pull-left"></i><span>{{item?.title}}</span>
 
@@ -12,7 +11,32 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
-                <ng-template #elseBlockk>
+
+                <ul *ngIf="openChildren">
+                    <li *ngFor="let child of (item.children | LinksFilter)">
+                        <a  (click)="openChild =!openChild">
+                            {{child.title}}
+                            <i [ngClass]="child.icon" class="fa  pull-left"></i>
+                            <i class="fa fa-angle-left pull-right"></i> 
+                            </a>
+
+                        <ul *ngIf="openChild">
+                            <li *ngFor="let chil of (child.children |LinksFilter)">
+                                <a (click)=open(chil.link)>
+                                   
+
+                                    {{chil?.title}}
+
+                                   
+                                </a>
+                               
+        
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <!-- <ng-template #elseBlockk>
                     <a (click)=open(item.link)>
                         <i class=""></i> <span class="coloring">{{item?.title}}</span>
                         <span class="pull-right-container">
@@ -56,9 +80,10 @@
 
                     </div>
 
-                </ul>
+                </ul> -->
 
             </li>
+
         </ul>
 
     </section>

@@ -11,20 +11,20 @@ import * as $ from 'jquery';
 export class HeaderComponent implements OnInit{
 
     public clicked=false;
+    openChild = false;
     public clickeditem:[];
 
 
+    openChildren = false;
+
     public open(link){
-        console.log('the link is',link);
         this.router.navigate([link])
     }
 
     public clickedFunc(what){
-        console.log(what);
     }
 
     constructor(public router: Router,@Inject("NAVCOMPONENTS") public  items:any[] ) {
-        console.log('the nav items are', items);
     }
 
    
@@ -33,6 +33,7 @@ export class HeaderComponent implements OnInit{
     }
     public pageName = 'Job';
   
+    
 
    
     
