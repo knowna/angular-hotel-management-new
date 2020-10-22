@@ -28,9 +28,23 @@ export class HeaderComponent implements OnInit{
     }
 
    
-    ngOnInit(){
-       
+    ngOnInit(){ 
+        this.items.forEach(item => {
+            item.show = false;
+            if(item.children != null) {
+                 item.children.forEach(child => {
+                    child.show = false;
+ 
+                     if(child.children != null) {
+                        child.children?.forEach(c => {
+                            c.show = false;
+                        });
+                     }
+                 });
+            }
+        })
     }
+
     public pageName = 'Job';
   
     
