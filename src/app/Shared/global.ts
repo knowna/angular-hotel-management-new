@@ -41,7 +41,7 @@
     public static BASE_CATEGORIESITEM_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/ScreenMenuItemAPI/';
     public static BASE_TABLEAPI_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/TableAPI/';
     public static BASE_MENUCATEGORYITEM_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/MenuCategoryItemAPI/';
-    public static BASE_MENUCATEGORYNAMES_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/MenuCategoryNames/';
+    public static BASE_MENUCATEGORYNAMES_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/MenuCategoryNa/';
     public static BASE_ORDERINVOICEPRINT_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/OrderInvoice/';
     public static BASE_ORDERS_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/OrderAPI/';
     public static BASE_ORDERSUPDATE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/OrderUpdateAPI/';

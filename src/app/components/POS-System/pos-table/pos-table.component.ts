@@ -101,7 +101,12 @@ export class PosTableComponent implements OnInit {
     ngOnInit() {
         // Init Required data
         this.products$ = this.store.select(ProductSelector.getAllProducts);
+        
+        
         this.categories$ = this.store.select(CategorySelector.getAllCategories);
+        console.log(this.categories$);
+        
+        
         this.ticketsLoading$ = this.store.select(TicketSelector.getLoadingStatus);        
         this.ticket$ = this.store.select(TicketSelector.getCurrentTicket);
         this.customer$ = this.store.select(CustomerSelector.getCurrentCustomerId);
