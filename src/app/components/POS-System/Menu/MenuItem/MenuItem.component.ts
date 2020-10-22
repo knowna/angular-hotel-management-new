@@ -29,7 +29,7 @@ export class MenuItemComponent implements OnInit {
      menucategory;
     msg: string;
     indLoading: boolean = false;
-    private formSubmitAttempt: boolean;
+    formSubmitAttempt: boolean;
     MenuItemForm: FormGroup;
     dbops: DBOperation;
     modalTitle: string;

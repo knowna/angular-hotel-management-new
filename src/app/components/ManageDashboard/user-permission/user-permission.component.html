@@ -19,8 +19,8 @@
                     <tr *ngFor="let usersPer of userPer">
                         <td>{{usersPer.PermissionName}}</td>
                         <td>
-                            <span><img src="../../../../assets/images/EditUser.png" (click)="editUserPermission(users.UserId)" height="32" width="32" /></span>
-                            <span><img src="../../../../assets/images/DeleteUser.png" (click)="deleteUserPermission(users.UserId)" height="32" width="32" /></span>
+                            <span><img src="../../../../assets/images/EditUser.png" (click)="editUserPermission(usersPer.UserId)" height="32" width="32" /></span>
+                            <span><img src="../../../../assets/images/DeleteUser.png" (click)="deleteUserPermission(usersPer.UserId)" height="32" width="32" /></span>
                         </td>
                     </tr>
                 </tbody>

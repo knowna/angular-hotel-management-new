@@ -573,7 +573,7 @@ var PosTableComponent = /** @class */ (function () {
         return servicecharge.toFixed(2);
     };
     __decorate([
-        core_1.HostListener('window:popstate', ['$event'])
+        core_1.HostListener('window:popstate')
     ], PosTableComponent.prototype, "onPopState", null);
     PosTableComponent = __decorate([
         core_1.Component({

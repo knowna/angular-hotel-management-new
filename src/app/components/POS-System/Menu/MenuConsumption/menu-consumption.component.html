@@ -63,7 +63,7 @@
                     </div>
                     <div class="panel-body">
                         <div formArrayName="MenuConsumptionDetails">
-                            <div class="panel-body" *ngFor="let MenuConsumptionDetails of MenuConsumptionForm.controls.MenuConsumptionDetails.controls; let i=index" [formGroupName]="i">
+                            <div class="panel-body" *ngFor="let MenuConsumptionDetails of MenuConsumptionForm.get('MenuConsumptionDetails'); let i=index" [formGroupName]="i">
                                 <div class="row">
                                     <div class="col-md-8">
                                         <input type="hidden" formControlName="Id" />
@@ -82,7 +82,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <span *ngIf="MenuConsumptionForm.controls.MenuConsumptionDetails.controls.length > 1" style="cursor: pointer; font-size: 30px;" class="fa fa-window-close pull-right" (click)="removeMenuConsumptionDetails(i)"></span>
+                                        <!-- <span *ngIf="MenuConsumptionForm.get('MenuConsumptionDetails').length > 1" style="cursor: pointer; font-size: 30px;" class="fa fa-window-close pull-right" (click)="removeMenuConsumptionDetails(i)"></span> -->
                                     </div>
                                 </div>
                             </div>

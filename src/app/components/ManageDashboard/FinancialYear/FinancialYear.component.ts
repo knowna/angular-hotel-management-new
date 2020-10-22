@@ -19,7 +19,7 @@ export class FinancialYearComponent implements OnInit {
     financialyear: IFinancialYear;
     msg: string;
     indLoading: boolean = false;
-    private formSubmitAttempt: boolean;
+    public formSubmitAttempt: boolean;
     FYearFrm: FormGroup;
     dbops: DBOperation;
     modalTitle: string;

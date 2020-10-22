@@ -45,8 +45,8 @@ export class POSDashboardComponent implements OnInit {
     dbops: DBOperation;
     modalTitle: string;
     modalBtnTitle: string;
-    private formSubmitAttempt: boolean;
-    private buttonDisabled: boolean;
+    public formSubmitAttempt: boolean;
+    public buttonDisabled: boolean;
     modalRef: BsModalRef;
     modalRef2: BsModalRef;
     @ViewChild('template',{static:false}) TemplateRef: TemplateRef<any>;

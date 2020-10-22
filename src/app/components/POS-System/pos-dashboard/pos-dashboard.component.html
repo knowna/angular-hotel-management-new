@@ -80,7 +80,7 @@
 </div>
 
 <ng-template #template>
-    <form class="panel-primary" novalidate (ngSubmit)="onSubmit(accountLedgerFrm)" [formGroup]="accountLedgerFrm">
+    <form class="panel-primary" novalidate (ngSubmit)="onSubmit()" [formGroup]="accountLedgerFrm">
         <div class="modal-header panel-heading">
             <h4 class="modal-title pull-left">{{modalTitle}}</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">

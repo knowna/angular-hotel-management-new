@@ -22,7 +22,7 @@ export class TableComponent implements OnInit {
     table: Table;
     msg: string;
     indLoading: boolean = false;
-    private formSubmitAttempt: boolean;
+    public formSubmitAttempt: boolean;
     TableForm: FormGroup;
     dbops: DBOperation;
     modalTitle: string;

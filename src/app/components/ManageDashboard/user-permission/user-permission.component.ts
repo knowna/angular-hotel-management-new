@@ -22,9 +22,9 @@ export class UserPermissionComponent implements OnInit {
     dbops: DBOperation;
     modalTitle: string;
     modalBtnTitle: string;
-    private editingStatus: boolean;
-    private formSubmitAttempt: boolean;
-    private buttonDisabled: boolean;
+    editingStatus: boolean;
+    formSubmitAttempt: boolean;
+    buttonDisabled: boolean;
     modalRef: BsModalRef;
 
     constructor(private fb: FormBuilder, private _userService: UsersService, private modalService: BsModalService) { }

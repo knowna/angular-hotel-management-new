@@ -25,9 +25,9 @@ export class UserComponent implements OnInit {
     dbops: DBOperation;
     modalTitle: string;
     modalBtnTitle: string;
-    private editingStatus: boolean;
-    private formSubmitAttempt: boolean;
-    private buttonDisabled: boolean;
+    editingStatus: boolean;
+    public formSubmitAttempt: boolean;
+    buttonDisabled: boolean;
  
 
     constructor(private fb: FormBuilder, private _userService: UsersService, private modalService: BsModalService) { }

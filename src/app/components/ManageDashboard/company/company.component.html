@@ -228,7 +228,7 @@
                         </div>
                         <div class="row" *ngIf="company?.File">
                             <div class="col-md-6">
-                                <img (click)="viewFile(rm.File,imageView)" [src]="company.File" style="height:32px;border-radius:5px;" />
+                                <img (click)="viewFile(company.File,imageView)" [src]="company.File" style="height:32px;border-radius:5px;" />
                             </div>
                             <div class="col-md-6">
                                 <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile(company.Id)">

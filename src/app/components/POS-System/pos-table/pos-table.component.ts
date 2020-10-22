@@ -104,9 +104,7 @@ export class PosTableComponent implements OnInit {
         
         
         this.categories$ = this.store.select(CategorySelector.getAllCategories);
-        console.log(this.categories$);
-        
-        
+        console.log('the categories', this.products$)
         this.ticketsLoading$ = this.store.select(TicketSelector.getLoadingStatus);        
         this.ticket$ = this.store.select(TicketSelector.getCurrentTicket);
         this.customer$ = this.store.select(CustomerSelector.getCurrentCustomerId);
