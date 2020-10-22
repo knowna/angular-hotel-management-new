@@ -26,8 +26,8 @@ export class RoleComponent implements OnInit {
     dbops: DBOperation;
     modalTitle: string;
     modalBtnTitle: string;
-    private formSubmitAttempt: boolean;
-    private buttonDisabled: boolean;
+    public formSubmitAttempt: boolean;
+    public buttonDisabled: boolean;
     formattedDate: any;
 
     constructor(private fb: FormBuilder, private _roleService: RoleService, private date: DatePipe, private modalService: BsModalService) { }

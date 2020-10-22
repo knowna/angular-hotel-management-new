@@ -73,6 +73,7 @@ export class BillingService {
        
 	}
 	loadTables (): Observable<Table[]> {
+    console.log('the tables are', this._http.get<Table[]>(Global.BASE_SCREENTABLES_ENDPOINT));
 		// Call to API here
         return this._http.get<Table[]>(Global.BASE_SCREENTABLES_ENDPOINT).pipe(
           catchError(this.handleError)

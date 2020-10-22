@@ -38,7 +38,7 @@ export class MenuConsumptionComponent implements OnInit {
     menuconsumptionDetails: MenuConsumptionDetail[];
     msg: string;
     indLoading: boolean = false;
-    private formSubmitAttempt: boolean;
+    formSubmitAttempt: boolean;
     MenuConsumptionForm: FormGroup;
     dbops: DBOperation;
     modalTitle: string;

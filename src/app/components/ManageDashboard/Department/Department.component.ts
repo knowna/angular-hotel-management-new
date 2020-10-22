@@ -20,7 +20,7 @@ export class DepartmentComponent implements OnInit {
     department: IDepartment;
     msg: string;
     indLoading: boolean = false;
-    private formSubmitAttempt: boolean;
+    formSubmitAttempt: boolean;
     DepartFrm : FormGroup;
     dbops: DBOperation;
     modalTitle: string;
