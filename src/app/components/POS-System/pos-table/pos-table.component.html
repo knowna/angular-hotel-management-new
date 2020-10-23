@@ -10,74 +10,42 @@
         <pos-options [selectedItem]="selectedItem" [orders]="orders$" (showTicketNote)="showTicketNote()" (createNewTicket)="createNewTicket()" (printBill)="printBill()" (removeItem)="removeItem($event)" (voidItem)="voidItem($event)" (incrementQty)="incrementQty($event)" (decrementQty)="decrementQty($event)" (toogleGiftItem)="toogleGiftItem($event)" (moveItems)="moveItems($event)"></pos-options>
     </div>
 </div>
-<div class="row m-0 mt-4">
-    <div class="col-md-2">
-        <div class="row m-0">
-            <div class="card">
-                <div class="card-header no-radius">
-                    Choose Category:
+<div [formGroup]="postableForm" class="row m-0">
+    <div class="col-8" formArrayName="AccountTransactionValues">
+
+        <div class="row" *ngFor="let AccountTransactionValue of postableForm.controls.AccountTransactionValues; let i=index" [formGroupName]="i">
+
+                <div class="col-3">
+                    <select class="form-control " formControlName="AccountId">
+                        <option value="water"> water</option>
+                        <option value="coke"> coke</option>
+
+                        <option value="pizza"> pizza</option>
+                        <option value="water"> water</option>
+
+
+                        <!-- <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option> -->
+                    </select>
+                    <small [hidden]="postableForm.controls.AccountTransactionValues.controls[i].controls.AccountId.valid" class="text-danger">
+                        Particular Name is required
+                    </small>
                 </div>
-                
-                    <div class="card-body category-list">
-                        <input type="text" [(ngModel)]="SearchCategory" placeholder="Enter Categories" size="17" style="margin-bottom: 8px;" />
-                        <div>
-                            <!-- <div class="col-md-12 category-item" *ngFor="let category of categories$ | async | search:SearchCategory" -->
-                            <div class="col-md-12 category-item" *ngFor="let category of categories$ | async "
-                                 style="cursor:pointer;" (click)="selectedCategory = category.Id"
-                                 [ngClass]="{ 'active': category.Id === selectedCategory }"
-                                 title="{{ category.Name }}">
-                                {{ category.Name }}
-                            </div>
-                        </div>
+                <div class="col-3">
+                    <input type="number" class="form-control" placeholder="quantity" formControlName="Credit">
+                    <small [hidden]="postableForm.controls.AccountTransactionValues.controls[i].controls.Credit.valid" class="text-danger">
+                        quantity is required
+                    </small>
+                </div>
+                <div class="col-3">
+                    <textarea name="Description" class="form-control" formControlName="Description" rows="4" cols="50"></textarea>
+                    <div class="alert alert-danger" *ngIf="postableForm.get('Description').hasError('required') && formSubmitAttempt">
+                        Description is required
                     </div>
-                
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <p style="margin-top: 4px;">
-                    <strong>Ticket Note:</strong>
-                </p>
-                <div *ngIf="!enableTicketNote">
-                    {{ ticketNote }}
                 </div>
-                <div *ngIf="enableTicketNote">
-                    <textarea [(ngModel)]="ticketNote" placeholder="Enter Note Here..." style="margin-top: 14px;margin-left: -4px; min-height:200px;"></textarea>
-                    <br />
-                    <button class="btn btn-success" (click)="saveTicketNote(ticket.Id)">Save Ticket Note</button>
-                </div>
-            </div>
         </div>
+
     </div>
-    <div class="col-md-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card" style="height:640px">
-                    <div class="card-header">
-                        Select Products:
-                    </div>
-                    
-                        <div class="card-body product-list">
-                            <input type="text" [(ngModel)]="SearchProduct" placeholder="Enter Products" size="40" style="margin-bottom: 8px;" />
-                            <div *ngIf="selectedCategory">
-                                <!-- <div *ngFor="let product of products$ | async | filterByCategory:selectedCategory | search:SearchProduct" class="col-md-6 btn badge badge-success product-item" -->
-                                <div *ngFor="let product of products$ | async " class="col-md-6 btn badge badge-success product-item"
-                                     (click)="addOrderItem(product)" title="{{ product.Name }}">
-                                    <strong>{{ product.Name}}</strong>
-                                </div>
-                            </div>
-                        </div>
-                    
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <pos-calculator [output]="qtyFromCalculator" (updateQty)="updateQty($event)"></pos-calculator>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-5">
+    <div class="col-md-4">
         <pos-tickets [table]="table"
                      [toOpenTicketId]="toOpenTicketId"
                      *ngIf="checkTicket()">

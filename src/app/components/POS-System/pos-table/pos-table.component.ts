@@ -25,6 +25,7 @@ import { TicketStoreService } from '../../../Service/store/ticket.store.service'
 import { OrderStoreService } from '../../../Service/store/order.store.service';
 import { OrderService } from '../../../Service/Billing/order.service';
 import { Category } from 'src/app/Model/category.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-pos-table',
@@ -32,6 +33,9 @@ import { Category } from 'src/app/Model/category.model';
     styleUrls: ['./pos-table.component.css']
 })
 export class PosTableComponent implements OnInit {
+
+    public postableForm: FormGroup;
+
     categories$: Observable<Category[]>
     products$: Observable<Product[]>;
     ticket$: Observable<Ticket>;
@@ -72,7 +76,8 @@ export class PosTableComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private ticketStoreApi: TicketStoreService,
         private orderApi: OrderService,        
-        private orderStoreApi: OrderStoreService
+        private orderStoreApi: OrderStoreService,
+        private fb: FormBuilder, 
     ) {
         // Initialiazation;
         this.selectedTicket = 0;
@@ -99,6 +104,9 @@ export class PosTableComponent implements OnInit {
 
     // Initialize data here
     ngOnInit() {
+
+
+        this.buildForm();
         // Init Required data
         this.products$ = this.store.select(ProductSelector.getAllProducts);
         
@@ -145,6 +153,34 @@ export class PosTableComponent implements OnInit {
             this.isLoading = isLoading;
         });
     }
+
+    buildForm(){
+        this.postableForm = this.fb.group({
+            
+            AccountTransactionValues: this.fb.array([this.buildMenuForm()])
+        });
+    }
+
+    buildMenuForm() {
+        //initialize our vouchers
+        return this.fb.group({
+            AccountId: ['', Validators.required],
+            Description: [''],
+            Credit: ['', Validators.required]
+        });
+    }
+
+
+    addCategory(){
+
+    }
+
+    removeTrackerModel(index){
+
+    }
+
+
+
 
     /**
      * Makes changes in state on clicking the back button
