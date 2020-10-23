@@ -141,6 +141,7 @@ export class POSDashboardComponent implements OnInit {
             .subscribe(
             customers => {
                 this.customers = customers;
+                console.log('the customers are', this.customers)
                 this.indLoading = false;
             },
             error => console.log(error)

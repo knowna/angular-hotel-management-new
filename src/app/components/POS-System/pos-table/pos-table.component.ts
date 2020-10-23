@@ -25,7 +25,7 @@ import { TicketStoreService } from '../../../Service/store/ticket.store.service'
 import { OrderStoreService } from '../../../Service/store/order.store.service';
 import { OrderService } from '../../../Service/Billing/order.service';
 import { Category } from 'src/app/Model/category.model';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 
 @Component({
     selector: 'app-pos-table',
@@ -171,11 +171,12 @@ export class PosTableComponent implements OnInit {
 
 
     addCategory(){
-
+        this.AccountTransactionValues.push(this.buildMenuForm());
     }
 
     removeTrackerModel(index){
-
+        console.log('the index is', index);
+        this.AccountTransactionValues.removeAt(index);
     }
 
     get AccountTransactionValues(): FormArray {
