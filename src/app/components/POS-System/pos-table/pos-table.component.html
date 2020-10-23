@@ -10,20 +10,17 @@
         <pos-options [selectedItem]="selectedItem" [orders]="orders$" (showTicketNote)="showTicketNote()" (createNewTicket)="createNewTicket()" (printBill)="printBill()" (removeItem)="removeItem($event)" (voidItem)="voidItem($event)" (incrementQty)="incrementQty($event)" (decrementQty)="decrementQty($event)" (toogleGiftItem)="toogleGiftItem($event)" (moveItems)="moveItems($event)"></pos-options>
     </div>
 </div>
-<div [formGroup]="postableForm" class="row m-0">
+<div [formGroup]="postableForm" class="row m-0 mt-4">
     <div class="col-8" formArrayName="AccountTransactionValues">
 
-        <div class="row" *ngFor="let AccountTransactionValue of postableForm.controls.AccountTransactionValues; let i=index" [formGroupName]="i">
+        <div class="row" *ngFor="let AccountTransactionValue of AccountTransactionValues.controls; let i=index" [formGroupName]="i">
 
                 <div class="col-3">
                     <select class="form-control " formControlName="AccountId">
                         <option value="water"> water</option>
                         <option value="coke"> coke</option>
-
                         <option value="pizza"> pizza</option>
                         <option value="water"> water</option>
-
-
                         <!-- <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option> -->
                     </select>
                     <small [hidden]="postableForm.controls.AccountTransactionValues.controls[i].controls.AccountId.valid" class="text-danger">
@@ -37,10 +34,7 @@
                     </small>
                 </div>
                 <div class="col-3">
-                    <textarea name="Description" class="form-control" formControlName="Description" rows="4" cols="50"></textarea>
-                    <div class="alert alert-danger" *ngIf="postableForm.get('Description').hasError('required') && formSubmitAttempt">
-                        Description is required
-                    </div>
+                    <textarea name="Description" class="form-control" formControlName="Description" rows="1" cols="20"></textarea>
                 </div>
         </div>
 

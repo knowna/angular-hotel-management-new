@@ -25,7 +25,7 @@ import { TicketStoreService } from '../../../Service/store/ticket.store.service'
 import { OrderStoreService } from '../../../Service/store/order.store.service';
 import { OrderService } from '../../../Service/Billing/order.service';
 import { Category } from 'src/app/Model/category.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 
 @Component({
     selector: 'app-pos-table',
@@ -156,7 +156,6 @@ export class PosTableComponent implements OnInit {
 
     buildForm(){
         this.postableForm = this.fb.group({
-            
             AccountTransactionValues: this.fb.array([this.buildMenuForm()])
         });
     }
@@ -177,6 +176,10 @@ export class PosTableComponent implements OnInit {
 
     removeTrackerModel(index){
 
+    }
+
+    get AccountTransactionValues(): FormArray {
+        return this.postableForm.get('AccountTransactionValues') as FormArray;
     }
 
 
