@@ -82,7 +82,7 @@ export class BillingService {
 	loadCategories (): Observable<Category[]> {
     console.log('loaded in service categories')
 		// Call to API hered
-        return this._http.get<Category[]>(Global.BASE_MENUCATEGORYNAMES_ENDPOINT).pipe(
+        return this._http.get<Category[]>(Global.BASE_MENUCATEGORY_ENDPOINT).pipe(
           catchError(this.handleError)
         )
   }

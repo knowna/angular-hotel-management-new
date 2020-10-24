@@ -64,3 +64,16 @@
         </pos-orders>
     </div>
 </div>
+
+<div class="row m-0 mt-5">
+    <div class="col-md-6">
+        <ngx-select-dropdown 
+            (change)="selectionChanged($event)" 
+            [multiple]="false" 
+            [(ngModel)]="dataModel" 
+            [config]="config" 
+            [options]="options">
+        </ngx-select-dropdown>
+    </div>
+</div>
+
