@@ -25,8 +25,8 @@ import { TicketStoreService } from '../../../Service/store/ticket.store.service'
 import { OrderStoreService } from '../../../Service/store/order.store.service';
 import { OrderService } from '../../../Service/Billing/order.service';
 import { Category } from 'src/app/Model/category.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CategoryStoreService } from 'src/app/Service/store/category.store.service';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { Global } from 'src/app/Shared/global';
 import { BillingService } from 'src/app/Service/Billing/billing.service';
 
 @Component({
@@ -37,6 +37,14 @@ import { BillingService } from 'src/app/Service/Billing/billing.service';
 export class PosTableComponent implements OnInit {
 
     public postableForm: FormGroup;
+
+
+    
+
+    config = {
+        search:true,
+        displayKey:"Name",
+        searchOnKey: 'Name'}
 
     categories$: Observable<Category[]>
     products$: Observable<Product[]>;
@@ -71,7 +79,8 @@ export class PosTableComponent implements OnInit {
     SearchProduct = "";
     SearchCategory = "";
 
-    products:any;
+    productList=[];
+    productNameList=[];
 
     // Constructor
     constructor(
@@ -82,7 +91,7 @@ export class PosTableComponent implements OnInit {
         private orderApi: OrderService,        
         private orderStoreApi: OrderStoreService,
         private fb: FormBuilder, 
-		private api: BillingService,
+        private billService: BillingService
     ) {
         // Initialiazation;
         this.selectedTicket = 0;
@@ -111,15 +120,14 @@ export class PosTableComponent implements OnInit {
     ngOnInit() {
 
 
-        // this.buildForm();
-        this.getCategories();
+        this.buildForm();
+        this.loadProducts();
         // Init Required data
         this.products$ = this.store.select(ProductSelector.getAllProducts);
-
         
-        // this.categories$ = this.store.select(CategorySelector.getAllCategories);
-        console.log(this.categories$);
         
+        this.categories$ = this.store.select(CategorySelector.getAllCategories);
+        console.log('the categories', this.products$)
         this.ticketsLoading$ = this.store.select(TicketSelector.getLoadingStatus);        
         this.ticket$ = this.store.select(TicketSelector.getCurrentTicket);
         this.customer$ = this.store.select(CustomerSelector.getCurrentCustomerId);
@@ -163,50 +171,73 @@ export class PosTableComponent implements OnInit {
 
     buildForm(){
         this.postableForm = this.fb.group({
-            Id: [''],
-            Name: [''],
-            AccountTransactionDocumentId: ['' ],
-            Description: [''],
-            Amount:[''],
-            Date: [''],
-            drTotal: [''],
-            crTotal: [''],
-            SourceAccountTypeId: ['' ],
-            AccountTransactionValues: this.fb.array([
-                this.initAccountValue(),
-            ])
+            AccountTransactionValues: this.fb.array([this.buildMenuForm()]),
+            productId:''
         });
     }
 
-    initAccountValue() {
+    buildMenuForm() {
         //initialize our vouchers
         return this.fb.group({
-            AccountId: ['', Validators.required],
-            Debit: [''],
-            Credit: ['', Validators.required]
+            productId: [''],
+            quantity: [''],
+            description: ['']
         });
     }
-
-
-
-    getCategories(){
-        this.api.loadCategories()
-        .subscribe(data =>{
-            this.products =data;
-            console.log(this.products);
-            
-
-        } );
-}
-    
 
 
     addCategory(){
-
+        this.AccountTransactionValues.push(this.buildMenuForm());
+        console.log(this.postableForm.value.AccountTransactionValues);
+        
     }
 
-    removeTrackerModel(index){
 
+    loadProducts(): void {
+        let prodName;
+        let list=[];
+        this.billService.loadProducts()
+            .subscribe(data => { 
+                this.productList=data;
+                
+                data.forEach(prod => {
+                    prodName = prod.Name;
+                   list.push(prodName)
+                });
+                
+                this.productNameList =list;
+                
+            });
+        }
+
+
+        selectionChanged(event){
+
+            this.postableForm.controls['productId'].setValue(event.value.Id);
+            console.log(this.postableForm.value);
+
+            // this.productList.find(prod=>{
+            //     prod.Name ===event.value;
+            //     // console.log(prod.Name);
+                
+            //     if(prod){
+            // // console.log(prod.ItemId);
+            //     }
+                
+            // })
+            
+        }
+
+
+
+
+    removeTrackerModel(index){
+        console.log('the index is', index);
+        this.AccountTransactionValues.removeAt(index);
+    }
+
+    get AccountTransactionValues(): FormArray {
+        return this.postableForm.get('AccountTransactionValues') as FormArray;
     }
 
 

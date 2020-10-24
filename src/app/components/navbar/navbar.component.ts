@@ -13,12 +13,15 @@ export class NavbarComponent implements OnInit {
 
   userInformation: any;
 
+  company: any;
+
   constructor(public authService:AuthenticationService,
     public store:Store<{auth:authReducer.State}>
     ) { }
   public authenticated:boolean;
   ngOnInit() {
     this.userInformation = JSON.parse(localStorage.getItem("userInformation"));
+    this.company = JSON.parse(localStorage.getItem("company"));
     
     this.store.subscribe(data=>this.authenticated=data.auth.IsAuthenticated)
      
