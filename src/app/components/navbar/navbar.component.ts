@@ -19,10 +19,8 @@ export class NavbarComponent implements OnInit {
   public authenticated:boolean;
   ngOnInit() {
     this.userInformation = JSON.parse(localStorage.getItem("userInformation"));
-    console.log('the info is', this.userInformation);
     
     this.store.subscribe(data=>this.authenticated=data.auth.IsAuthenticated)
-      console.log("from navbar:"+this.authenticated)
      
     }
  logout(){

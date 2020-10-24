@@ -4,6 +4,7 @@ import { ProductAction, ActionTypes }            from '../actions/product.action
 import { State, ProductAdapter, InitialState } 	from '../adapters/product.adapter';
 
 export function ProductsReducer (state: State = InitialState, action: ProductAction) {
+
 	switch (action.type) {
 
         case ActionTypes.LOAD_PRODUCTS_SUCCESS:

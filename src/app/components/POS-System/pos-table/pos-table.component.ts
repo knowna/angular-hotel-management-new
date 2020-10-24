@@ -26,6 +26,8 @@ import { OrderStoreService } from '../../../Service/store/order.store.service';
 import { OrderService } from '../../../Service/Billing/order.service';
 import { Category } from 'src/app/Model/category.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CategoryStoreService } from 'src/app/Service/store/category.store.service';
+import { BillingService } from 'src/app/Service/Billing/billing.service';
 
 @Component({
     selector: 'app-pos-table',
@@ -69,6 +71,8 @@ export class PosTableComponent implements OnInit {
     SearchProduct = "";
     SearchCategory = "";
 
+    products:any;
+
     // Constructor
     constructor(
         private store: Store<any>,
@@ -78,6 +82,7 @@ export class PosTableComponent implements OnInit {
         private orderApi: OrderService,        
         private orderStoreApi: OrderStoreService,
         private fb: FormBuilder, 
+		private api: BillingService,
     ) {
         // Initialiazation;
         this.selectedTicket = 0;
@@ -106,13 +111,15 @@ export class PosTableComponent implements OnInit {
     ngOnInit() {
 
 
-        this.buildForm();
+        // this.buildForm();
+        this.getCategories();
         // Init Required data
         this.products$ = this.store.select(ProductSelector.getAllProducts);
+
         
+        // this.categories$ = this.store.select(CategorySelector.getAllCategories);
+        console.log(this.categories$);
         
-        this.categories$ = this.store.select(CategorySelector.getAllCategories);
-        console.log('the categories', this.products$)
         this.ticketsLoading$ = this.store.select(TicketSelector.getLoadingStatus);        
         this.ticket$ = this.store.select(TicketSelector.getCurrentTicket);
         this.customer$ = this.store.select(CustomerSelector.getCurrentCustomerId);
@@ -156,19 +163,42 @@ export class PosTableComponent implements OnInit {
 
     buildForm(){
         this.postableForm = this.fb.group({
-            
-            AccountTransactionValues: this.fb.array([this.buildMenuForm()])
+            Id: [''],
+            Name: [''],
+            AccountTransactionDocumentId: ['' ],
+            Description: [''],
+            Amount:[''],
+            Date: [''],
+            drTotal: [''],
+            crTotal: [''],
+            SourceAccountTypeId: ['' ],
+            AccountTransactionValues: this.fb.array([
+                this.initAccountValue(),
+            ])
         });
     }
 
-    buildMenuForm() {
+    initAccountValue() {
         //initialize our vouchers
         return this.fb.group({
             AccountId: ['', Validators.required],
-            Description: [''],
+            Debit: [''],
             Credit: ['', Validators.required]
         });
     }
+
+
+
+    getCategories(){
+        this.api.loadCategories()
+        .subscribe(data =>{
+            this.products =data;
+            console.log(this.products);
+            
+
+        } );
+}
+    
 
 
     addCategory(){
