@@ -14,10 +14,10 @@
             <div class="tickets__item" *ngFor="let ticket of tickets">
                 <div class="col-sm-12">
                     <a href="javascript:void(0)" (click)="loadDetailView(ticket.Id ? ticket.Id : 0, customerId ? customerId : 0)">
-                        <div class="ticket">
+                        <div class="ticket text-white">
                             <strong>#{{ ticket.TicketId }} {{ ticket.Name }}</strong>
                         </div>
-                        <div class="price">
+                        <div class="price text-white">
                             <strong>Rs. {{ ticket.TotalAmount }}</strong>
                         </div>
                     </a>
