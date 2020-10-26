@@ -55,6 +55,7 @@ export class PosOrdersComponent implements OnInit {
 
     // On component Init
     ngOnInit() {
+        console.log('the inside of the orders are', this.orders)
         this.user$ = this.userStoreService.user$;
         this.customer$ = this.store.select(CustomerSelector.getCurrentCustomer);
     }

@@ -8,23 +8,24 @@
     </div>
     <div class="col-md-10">
         <pos-options 
-        [selectedItem]="selectedItem" 
-        [orders]="orders$" 
-        (showTicketNote)="showTicketNote()"
-         (createNewTicket)="createNewTicket()"
-          (printBill)="printBill()" 
-          (removeItem)="removeItem($event)" 
-          (voidItem)="voidItem($event)"
-           (incrementQty)="incrementQty($event)"
+            [selectedItem]="selectedItem" 
+            [orders]="orders$" 
+            (showTicketNote)="showTicketNote()"
+            (createNewTicket)="createNewTicket()"
+            (printBill)="printBill()" 
+            (removeItem)="removeItem($event)" 
+            (voidItem)="voidItem($event)"
+            (incrementQty)="incrementQty($event)"
             (decrementQty)="decrementQty($event)"
-             (toogleGiftItem)="toogleGiftItem($event)"
-            (moveItems)="moveItems($event)"></pos-options>
+            (toogleGiftItem)="toogleGiftItem($event)"
+            (moveItems)="moveItems($event)">
+        </pos-options>
     </div>
 </div>
 <div [formGroup]="postableForm" class="row m-0 mt-4">
     <div class="col-7 card" formArrayName="AccountTransactionValues">
         <div class="row m-0 mt-2" *ngFor="let AccountTransactionValue of AccountTransactionValues.controls; let i=index" [formGroupName]="i">
-            <div class="col-3">
+            <div class="col-sm-4">
                 <label>Menu Items</label>
                 <!-- <select class="form-control " formControlName="productId">
                     <option value="water"> water</option>
@@ -34,59 +35,58 @@
                     <!-- <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option> -->
                 <!-- </select> --> 
 
-                <ngx-select-dropdown (change)="selectionChanged($event)" 
-                [multiple]="false" 
-                [config]="config"
-                
-                 [options]="productList">
-                <option>hello </option>
+                <ngx-select-dropdown 
+                    (change)="selectionChanged($event,i)" 
+                    [multiple]="false" 
+                    [config]="config"
+                    formControlName="productId"
+                    [options]="productList">
                 </ngx-select-dropdown>
                 <!-- <small [hidden]="postableForm.controls.AccountTransactionValues.controls[i].controls.productId.valid" class="text-danger">
                     Particular Name is required
                 </small> -->
             </div>
-            <div class="col-3">
+            <div class="col-sm-3">
                 <label>Quantity</label>
                 <input type="number" class="form-control" placeholder="quantity" formControlName="quantity">
-                <small [hidden]="postableForm.controls.AccountTransactionValues.controls[i].controls.quantity.valid" class="text-danger">
+                <!-- <small [hidden]="postableForm.controls.AccountTransactionValues.controls[i].controls.quantity.valid" class="text-danger">
                     quantity is required
-                </small>
+                </small> -->
             </div>
-            <div class="col-5">
+            <div class="col-sm-4">
                 <label>Description</label>
                 <textarea name="description" class="form-control" formControlName="description" rows="1" cols="20"></textarea>
             </div>
-            <div class="col-1 mt-2" *ngIf="AccountTransactionValues.controls.length > 1">
+            <div class="col-sm-1 mt-2" *ngIf="AccountTransactionValues.controls.length > 1">
                 <button class="btn btn-danger" (click)="removeTrackerModel(i)">
                     <i class="fa fa-trash"></i>
                 </button>
             </div>
-        </div>
-        <div class="row m-0 mt-2">
-            <div class="col-sm-12">
+
+            <div class="col-sm-12 mt-2 mb-2">
                 <button
-                class="btn btn-success" (click)="addCategory()">Add</button>
+                class="btn btn-success" (click)="addCategory(i)" [disabled]="!AccountTransactionValues.valid">Add</button>
             </div>
         </div>
     </div>
 
     <div class="col-md-5">
-        <!-- <pos-tickets [table]="table"
+        <pos-tickets [table]="table"
                      [toOpenTicketId]="toOpenTicketId"
                      *ngIf="checkTicket()">
         </pos-tickets>
 
 
 
-        <pos-orders *ngIf="selectedTicket"
-                    [table]="table$ | async"
+        <pos-orders *ngIf="selectedTicket && tableNew && (ordersNew.length > 0) && (productList.length > 0)"
+                    [table]="tableNew"
                     [ticket]="ticket$ | async"
-                    [products]="products$ | async"
-                    [orders]="orders$ | async"
+                    [products]="productList"
+                    [orders]="ordersNew"
                     [selectedTable]="selectedTable"
                     [selectedCustomerId]="selectedCustomerId"
                     (selectOrderItem)="selectOrderItem($event)"
                     (printBill)="printBill()">
-        </pos-orders> -->
+        </pos-orders>
     </div>
 </div>

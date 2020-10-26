@@ -1,6 +1,15 @@
 .table-detail{
-   background: #3b5998;
+   background: #364a70;
    padding: 20px;
    border-radius: 10px;
    text-align: center;
+   cursor: pointer;
+}
+
+.table-item-red {
+   padding: 20px;
+   border-radius: 10px;
+   text-align: center;
+   background: #ac1717;
+   cursor: pointer;
 }

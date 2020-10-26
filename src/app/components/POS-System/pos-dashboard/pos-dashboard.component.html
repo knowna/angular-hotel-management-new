@@ -62,8 +62,8 @@
                 </div>
                 <div id="tables" class="tab-pane" [ngClass]="{ 'active': tabName === 'tables' }">
                     <div class="row">
-                        <div class="col-md-3 mt-3 text-white" style="cursor: pointer;" *ngFor="let table of tables$ | async" (click)="setCurrentTable(table)">
-                            <h3 class="table-detail">{{ table.Name }}</h3>
+                        <div class="col-md-3 mt-3 text-white" *ngFor="let table of tables$ | async" (click)="setCurrentTable(table)">
+                            <h3 class="table-detail" [class.table-item-red]="table.TableStatus">{{ table.Name }}</h3>
                         </div>
                         <!-- <div class="col-md-12">
                             <a href="javascript:void(0)"  *ngFor="let table of tables$ | async" (click)="setCurrentTable(table)">
