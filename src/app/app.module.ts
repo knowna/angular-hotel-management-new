@@ -160,6 +160,7 @@ import { LinksFilterPipe } from './components/header/pipes/links-filter.pipe';
 // import { MaterializedViewComponent } from './components/Report/materialized view/materializedview.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { UserStoreService } from './Service/store/user.store.service';
+import { FilterMenuConsumption } from './filters/FilterMenuConsumption.filter';
 // import { TicketService } from './Service/Billing/ticket.service';
 @NgModule({
   imports: [
@@ -306,6 +307,7 @@ import { UserStoreService } from './Service/store/user.store.service';
     POSSaleBillingComponent,
     PosTableComponent,
     FilterMenuItemName,
+    FilterMenuConsumption,
     FilterPipe,
     LinksFilterPipe,
     PosOptionsComponent,

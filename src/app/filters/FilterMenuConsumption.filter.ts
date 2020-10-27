@@ -5,6 +5,8 @@
 })
 export class FilterMenuConsumption implements PipeTransform {
     transform(ItemNameList: any[], MenuConsumption: string): any[] {
+
+        
         let filteredItemNames: any[] = [];
 
         if (!MenuConsumption) {
@@ -12,7 +14,9 @@ export class FilterMenuConsumption implements PipeTransform {
         }
 
         filteredItemNames = ItemNameList.filter((MenuItemPortion) => {
-            return (MenuItemPortion.Name.toLowerCase().indexOf(MenuConsumption.toLowerCase()) !== -1);
+            console.log(MenuItemPortion);
+            // 
+            // return (MenuItemPortion.Name.toLowerCase().indexOf(MenuConsumption.toLowerCase()) !== -1);
         });
 
         return filteredItemNames;
