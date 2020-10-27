@@ -1,4 +1,4 @@
-<div class="card" *ngIf="orders">
+<div class="card" *ngIf="orders && ticket">
     <div class="card-header no-radius">
         <div class="row">
             <div class="col-md-3">
@@ -82,7 +82,7 @@
         <div class="row">
             <div class="col-md-4 text-center">
                 <small><strong>Order opening time:</strong></small>
-                <div class="row"><small>{{ getDate(ticket?.TicketOpeningTime) }}</small></div>
+                <div class="row m-0"><small>{{ getDate(ticket?.TicketOpeningTime) }}</small></div>
             </div>
             <div class="col-md-4 text-center"><small><strong>Last Order time:</strong></small><div class="row"><small>{{ getLastOrderTime(orders) }}</small></div></div>
             <div class="col-md-4">
@@ -92,7 +92,7 @@
         </div>
     </div>
     <div class="order-footer">
-        <div class="row">
+        <div class="row m-0">
             <div class="col-md-6 text-left">
                 <strong>Ticket Total: </strong>
             </div>
@@ -100,7 +100,7 @@
                 <strong>Rs. {{ calculateSum().toFixed(2) }}</strong>
             </div>
         </div>
-        <div class="row">
+        <div class="row m-0">
             <div class="col-md-6 text-left">
                 <strong>Discount: </strong>
             </div>
@@ -108,7 +108,7 @@
                 <strong>Rs. {{ calculateDiscount() }}</strong>
             </div>
         </div>
-        <div class="row">
+        <div class="row m-0">
             <div class="col-md-6 text-left">
                 <strong>Service Charge: </strong>
             </div>
@@ -116,7 +116,7 @@
                 <strong>Rs. {{ calculateServiceCharge() }}</strong>
             </div>
         </div>
-        <div class="row">
+        <div class="row m-0">
             <div class="col-md-6 text-left">
                 <strong>VAT (13%): </strong>
             </div>
@@ -124,7 +124,7 @@
                 <strong>Rs. {{ calculateVat() }}</strong>
             </div>
         </div>
-        <div class="row">
+        <div class="row m-0">
             <div class="col-md-6 text-left">
                 <strong>Grand Total: </strong>
             </div>
@@ -132,15 +132,15 @@
                 <strong>Rs. {{ getGrandTotal() }}</strong>
             </div>
         </div>
-        <div class="row" *ngIf="ticket?.PaymentHistory.length">
+        <div class="row m-0" *ngIf="ticket?.PaymentHistory.length">
             <div class="col-md-12">
-                <div class="row">
+                <div class="row m-0">
                     <div class="col-md-12">
                         <strong class="pull-left">Payment Total: </strong>
                         <strong class="pull-right">Rs. {{ getTotalCharged(ticket).toFixed(2) }} </strong>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row m-0">
                     <div class="col-md-12">
                         <dl class="dl-horizontal" *ngFor="let pay of ticket.PaymentHistory" style="color:green">
                             <dt>{{ getDate(pay.DateTime) }}</dt>
@@ -150,7 +150,7 @@
                 </div>
             </div>
         </div>
-        <div class="row balance-section">
+        <div class="row m-0 balance-section">
             <div class="col-md-6 text-left">
                 <strong>Balance: </strong>
             </div>
@@ -158,7 +158,7 @@
                 <strong>Rs. {{ getFinalBalance() }}</strong>
             </div>
         </div>
-        <div class="row handler-section">
+        <div class="row m-0 handler-section">
             <div class="col-md-6 text-left">
                 <a routerLink="/pos/settle">
                     <div class="border border-dark text-center style border-radius btn btn-success" style="width:100%; font-size: 35px; cursor: pointer;">
