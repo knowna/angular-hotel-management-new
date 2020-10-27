@@ -1,4 +1,4 @@
-﻿<div class='panel panel-primary'>
+﻿<!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
         Tables and Floor Planning
     </div>
@@ -34,7 +34,57 @@
             </div>
         </div>
     </div>
+</div> -->
+
+<div class="container" style="padding-top: 40px;">
+    <div class="row m-0">
+        <div class="col-sm-12">
+            <h6> Tables and Floor Planning</h6>
+        </div>
+    </div>
+  
+    <div class="row m-0 mt-5">
+        <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="Search by Table Name">
+        </div>
+        <div class="col-md-6">
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-success" (click)="openModal(template)" style="float: right">
+                <strong>Add New Table</strong>
+            </button>
+        </div>
+    </div>
+    <div class="row m-0">
+        <div class="col-sm-12 table-responsive" style="max-height: 600px;overflow-y: scroll;">
+            <table class='table table-bordered' *ngIf='tables && tables.length'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let table of tables">
+                        <td>{{table.Name}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" (click)="editTable(table.Id,template)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteTable(table.Id,template)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <!-- <span><img src="../../../../assets/images/Edit.png" (click)="editTable(table.Id,template)" height="32" width="32" /></span>
+                            <span><img src="../../../../assets/images/Delete.png" (click)="deleteTable(table.Id,template)" height="32" width="32" /></span> -->
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf='tables && tables.length==0' class="alert alert-info" role="alert">No record found!</div>
+        </div>
+    </div>
 </div>
+
 <ng-template #template>
     <form class="panel-primary" novalidate (ngSubmit)="onSubmit(TableForm)" [formGroup]="TableForm">
         <div class="modal-header panel-heading">
