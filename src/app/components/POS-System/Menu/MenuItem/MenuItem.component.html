@@ -116,8 +116,13 @@
         </div>
     </form>
 </ng-template>
-<div class="container" style="padding-top: 40px;">
-    <div class="row m-0 mt-5">
+<div class="container" style="padding-top: 20px;">
+    <div class="row m-0">
+        <div class="col-sm-12">
+            <h4>Items</h4>
+        </div>
+    </div>
+    <div class="row m-0 mt-3">
         <div class="col-md-3">
             <input type="text" class="form-control" [(ngModel)]="MenuItemName" placeholder="Search by Name">
         </div>
@@ -130,7 +135,7 @@
         </div>
     </div>
 
-    <div class="row m-0">
+    <div class="row m-0 mt-2">
         <div class="col-sm-12 table-responsive" style="max-height: 600px;overflow-y: scroll;">
             <table class='table table-bordered' *ngIf='menuItems && menuItems.length'>
                 <thead>

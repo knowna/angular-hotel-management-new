@@ -161,6 +161,7 @@ import { LinksFilterPipe } from './components/header/pipes/links-filter.pipe';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { UserStoreService } from './Service/store/user.store.service';
 import { FilterMenuConsumption } from './filters/FilterMenuConsumption.filter';
+import { CategoryComponent } from './components/InventoryDashboard/category/category.component';
 // import { TicketService } from './Service/Billing/ticket.service';
 @NgModule({
   imports: [
@@ -240,7 +241,7 @@ import { FilterMenuConsumption } from './filters/FilterMenuConsumption.filter';
     UserPermissionComponent,
     RoleNameComponent,
     //INventoryComponents
-    // CategoryComponent,
+    CategoryComponent,
     // InventoryDashboardComponent,
     // InventoryItemComponent,
     // StockInHandComponent,
