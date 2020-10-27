@@ -1,9 +1,9 @@
 <div class="card" *ngIf="orders && ticket">
     <div class="card-header no-radius">
-        <div class="row">
+        <div class="row m-0">
             <div class="col-md-3">
                 <strong>
-                   Bill No. {{ ticket ? '#' + ticket?.TicketId : '' }}
+                   Bill No: {{ ticket ? '#' + ticket?.TicketId : '' }}
                 </strong>
             </div>
             <div class="col-md-5">
@@ -19,17 +19,17 @@
         </div>
     </div>
     <div class="card-sub-header no-radius">
-        <div class="row">
-            <div class="col-md-6 text-left">
+        <div class="row m-0">
+            <div class="col-sm-5 text-left">
                 <strong>Item</strong>
             </div>
-            <div class="col-md-1 text-center">
+            <div class="col-sm-2 text-center">
                 <strong>Qty</strong>
             </div>
-            <div class="col-md-2 text-right">
+            <div class="col-sm-2 text-right">
                 <strong>Unit (Rs.)</strong>
             </div>
-            <div class="col-md-3 text-right">
+            <div class="col-sm-3 text-right">
                 <strong>Amount (Rs.)</strong>
             </div>
         </div>
@@ -46,7 +46,7 @@
                         'submitted': item.Tags.indexOf('Submitted') !== -1,
                         'void': item.IsVoid
                     }" (click)="selectOrderItem.emit(item)">
-                    <div class="col-md-6 text-left">
+                    <div class="col-md-5 text-left">
                         <p>
                             <span>
                                 <strong>{{ getProductById(products,item.ItemId)?.Name }}</strong>
@@ -55,7 +55,7 @@
                             </span>
                         </p>
                     </div>
-                    <div class="col-md-1 text-center">
+                    <div class="col-md-2 text-center">
                         <p>
                             <span>
                                 <strong>{{ item.Qty }}</strong>
@@ -79,7 +79,7 @@
         
     </div>
     <div class="card-sub-header">
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-4 text-center">
                 <small><strong>Order opening time:</strong></small>
                 <div class="row m-0"><small>{{ getDate(ticket?.TicketOpeningTime) }}</small></div>
@@ -89,8 +89,24 @@
                 <small *ngIf="ticket?.PaymentHistory.length">Last Payment time:</small>
                 <div *ngIf="ticket?.PaymentHistory.length" class="row"><small>{{ getLastPaymentTime(ticket) }}</small></div>
             </div>
+        </div> -->
+        <div class="row m-0">
+            <div class="col-sm-12">
+                <small><strong>Order opening time : </strong> {{ getDate(ticket?.TicketOpeningTime) }} </small>
+            </div>
+        </div>
+        <div class="row m-0">
+            <div class="col-sm-12">
+                <small><strong>Last Order time : </strong> {{ getLastOrderTime(orders) }} </small>
+            </div>
+        </div>
+        <div class="row m-0" *ngIf="ticket?.PaymentHistory.length">
+            <div class="col-sm-12">
+                <small><strong>Last Payment time : </strong> {{ getLastPaymentTime(ticket) }} </small>
+            </div>
         </div>
     </div>
+
     <div class="order-footer">
         <div class="row m-0">
             <div class="col-md-6 text-left">
@@ -158,7 +174,10 @@
                 <strong>Rs. {{ getFinalBalance() }}</strong>
             </div>
         </div>
-        <div class="row m-0 handler-section">
+
+
+        <!-- previous settle and close buttons commented -->
+        <!-- <div class="row m-0 handler-section">
             <div class="col-md-6 text-left">
                 <a routerLink="/pos/settle">
                     <div class="border border-dark text-center style border-radius btn btn-success" style="width:100%; font-size: 35px; cursor: pointer;">
@@ -171,6 +190,26 @@
                     <span class="text-center text-white border border-danger m-0"> Close </span>
                 </div>
             </div>
+        </div> -->
+
+
+        <!-- updated settle and close buttons -->
+        <div class="row m-0 mt-3 handler-section">
+            <div class="col-sm-6">
+                <button 
+                    class="btn btn-block btn-success w-100 p-15"
+                    routerLink="/pos/settle">
+                    Settle
+                </button>
+            </div>
+            <div class="col-sm-6">
+                <button 
+                    class="btn btn-block btn-danger w-100 p-15"
+                    (click)="close()">
+                    Close
+                </button>
+            </div>
         </div>
+
     </div>
 </div>

@@ -102,7 +102,8 @@ export class PosTableComponent implements OnInit {
         private fb: FormBuilder, 
         private billService: BillingService,
     ) {
-        
+       
+
         // Initialiazation;
         this.selectedTicket = 0;
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
@@ -123,7 +124,7 @@ export class PosTableComponent implements OnInit {
                             //         item.Tags = item.Tags.split(',');
                             //     });
                             // });
-                            console.log('the new', this.ordersNew)
+                            // console.log('the new', this.ordersNew)
                         }
                     )
             }
@@ -165,10 +166,10 @@ export class PosTableComponent implements OnInit {
         
         
         this.categories$ = this.store.select(CategorySelector.getAllCategories);
-        console.log('the categories', this.products$)
+        // console.log('the categories', this.products$)
         this.ticketsLoading$ = this.store.select(TicketSelector.getLoadingStatus);        
         this.ticket$ = this.store.select(TicketSelector.getCurrentTicket);
-        console.log('ticket in table is', this.ticket$);
+        // console.log('ticket in table is', this.ticket$);
         this.customer$ = this.store.select(CustomerSelector.getCurrentCustomerId);
         this.orders$ = this.store.select(OrderSelector.getAllOrders);   
        
@@ -181,10 +182,10 @@ export class PosTableComponent implements OnInit {
             });
         }
 
-        console.log('the orders are', this.orders$)
+        // console.log('the orders are', this.orders$)
 
         this.table$ = this.store.select(TableSelector.getCurrentTable);
-        console.log('the current table is', this.table$)
+        // console.log('the current table is', this.table$)
         this.customer$.subscribe((customerId: any) => {
             this.customer = customerId;
             this.selectedCustomerId = customerId ? customerId : 0;
@@ -251,7 +252,7 @@ export class PosTableComponent implements OnInit {
         this.billService.loadProducts()
             .subscribe(data => { 
                 this.productList=data;
-                console.log('the products are', this.productList);
+                // console.log('the products are', this.productList);
                 
                 
                 data.forEach(prod => {
@@ -270,9 +271,9 @@ export class PosTableComponent implements OnInit {
             .subscribe(data => {
                 this.tableListNew = data;
                 if(this.tableListNew != null) {
-                    console.log('the table list are', this.tableListNew)
+                    // console.log('the table list are', this.tableListNew)
                     this.tableNew = this.tableListNew.find(t => t.TableId === selectedTable);
-                    console.log('the data of table is', this.tableNew)
+                    // console.log('the data of table is', this.tableNew)
                 }
                
             })
