@@ -153,18 +153,19 @@ import { authReducer } from './reducers/auth.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { OrderService } from './Service/Billing/order.service';
 // import { InventoryDashboardComponent } from './components/InventoryDashboard/InventoryDashboard.Component';
-
+import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { LinksFilterPipe } from './components/header/pipes/links-filter.pipe';
 // import { MasterLedgerComponent } from './components/Accounts/master-ledger/master-ledger.component';
 // import { MaterializedViewComponent } from './components/Report/materialized view/materializedview.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-
+import { UserStoreService } from './Service/store/user.store.service';
 // import { TicketService } from './Service/Billing/ticket.service';
 @NgModule({
   imports: [
     SelectDropDownModule,
     FormsModule,
+    NgbAccordionModule,
     ReactiveFormsModule,
     HttpClientModule,
     BrowserModule,
@@ -331,6 +332,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     DepartmentService,
     LoginService,
     UsersService,
+    UserStoreService,
     AccountTransactionTypeService
     ,
     DatePipe,

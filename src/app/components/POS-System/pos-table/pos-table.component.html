@@ -7,86 +7,82 @@
         <h2 style="color: #4267b2;margin: 10px auto 10px 14px;font-weight: bold;"> Order</h2>
     </div>
     <div class="col-md-10">
-        <pos-options [selectedItem]="selectedItem" [orders]="orders$" (showTicketNote)="showTicketNote()" (createNewTicket)="createNewTicket()" (printBill)="printBill()" (removeItem)="removeItem($event)" (voidItem)="voidItem($event)" (incrementQty)="incrementQty($event)" (decrementQty)="decrementQty($event)" (toogleGiftItem)="toogleGiftItem($event)" (moveItems)="moveItems($event)"></pos-options>
+        <pos-options 
+            [selectedItem]="selectedItem" 
+            [orders]="orders$" 
+            (showTicketNote)="showTicketNote()"
+            (createNewTicket)="createNewTicket()"
+            (printBill)="printBill()" 
+            (removeItem)="removeItem($event)" 
+            (voidItem)="voidItem($event)"
+            (incrementQty)="incrementQty($event)"
+            (decrementQty)="decrementQty($event)"
+            (toogleGiftItem)="toogleGiftItem($event)"
+            (moveItems)="moveItems($event)">
+        </pos-options>
     </div>
 </div>
-<div class="row m-0 mt-4">
-    <div class="col-md-2">
-        <div class="row m-0">
-            <div class="card">
-                <div class="card-header no-radius">
-                    Choose Category:
-                </div>
-                
-                    <div class="card-body category-list">
-                        <input type="text" [(ngModel)]="SearchCategory" placeholder="Enter Categories" size="17" style="margin-bottom: 8px;" />
-                        <div>
-                            <!-- <div class="col-md-12 category-item" *ngFor="let category of categories$ | async | search:SearchCategory" -->
-                            <div class="col-md-12 category-item" *ngFor="let category of categories$ | async "
-                                 style="cursor:pointer;" (click)="selectedCategory = category.Id"
-                                 [ngClass]="{ 'active': category.Id === selectedCategory }"
-                                 title="{{ category.Name }}">
-                                {{ category.Name }}
-                            </div>
-                        </div>
-                    </div>
-                
+<div [formGroup]="postableForm" class="row m-0 mt-4">
+    <div class="col-7 card" formArrayName="AccountTransactionValues">
+        <div class="row m-0 mt-2" *ngFor="let AccountTransactionValue of AccountTransactionValues.controls; let i=index" [formGroupName]="i">
+            <div class="col-sm-4">
+                <label>Menu Items</label>
+                <!-- <select class="form-control " formControlName="productId">
+                    <option value="water"> water</option>
+                    <option value="coke"> coke</option>
+                    <option value="pizza"> pizza</option>
+                    <option value="water"> water</option>
+                    <!-- <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option> -->
+                <!-- </select> --> 
+
+                <ngx-select-dropdown 
+                    (change)="selectionChanged($event,i)" 
+                    [multiple]="false" 
+                    [config]="config"
+                    formControlName="productId"
+                    [options]="productList">
+                </ngx-select-dropdown>
+                <!-- <small [hidden]="postableForm.controls.AccountTransactionValues.controls[i].controls.productId.valid" class="text-danger">
+                    Particular Name is required
+                </small> -->
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <p style="margin-top: 4px;">
-                    <strong>Ticket Note:</strong>
-                </p>
-                <div *ngIf="!enableTicketNote">
-                    {{ ticketNote }}
-                </div>
-                <div *ngIf="enableTicketNote">
-                    <textarea [(ngModel)]="ticketNote" placeholder="Enter Note Here..." style="margin-top: 14px;margin-left: -4px; min-height:200px;"></textarea>
-                    <br />
-                    <button class="btn btn-success" (click)="saveTicketNote(ticket.Id)">Save Ticket Note</button>
-                </div>
+            <div class="col-sm-3">
+                <label>Quantity</label>
+                <input type="number" class="form-control" placeholder="quantity" formControlName="quantity">
+                <!-- <small [hidden]="postableForm.controls.AccountTransactionValues.controls[i].controls.quantity.valid" class="text-danger">
+                    quantity is required
+                </small> -->
             </div>
-        </div>
-    </div>
-    <div class="col-md-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card" style="height:640px">
-                    <div class="card-header">
-                        Select Products:
-                    </div>
-                    
-                        <div class="card-body product-list">
-                            <input type="text" [(ngModel)]="SearchProduct" placeholder="Enter Products" size="40" style="margin-bottom: 8px;" />
-                            <div *ngIf="selectedCategory">
-                                <!-- <div *ngFor="let product of products$ | async | filterByCategory:selectedCategory | search:SearchProduct" class="col-md-6 btn badge badge-success product-item" -->
-                                <div *ngFor="let product of products$ | async " class="col-md-6 btn badge badge-success product-item"
-                                     (click)="addOrderItem(product)" title="{{ product.Name }}">
-                                    <strong>{{ product.Name}}</strong>
-                                </div>
-                            </div>
-                        </div>
-                    
-                </div>
+            <div class="col-sm-4">
+                <label>Description</label>
+                <textarea name="description" class="form-control" formControlName="description" rows="1" cols="20"></textarea>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <pos-calculator [output]="qtyFromCalculator" (updateQty)="updateQty($event)"></pos-calculator>
+            <div class="col-sm-1 mt-2" *ngIf="AccountTransactionValues.controls.length > 1">
+                <button class="btn btn-danger" (click)="removeTrackerModel(i)">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+
+            <div class="col-sm-12 mt-2 mb-2">
+                <button
+                class="btn btn-success" (click)="addCategory(i)" [disabled]="!AccountTransactionValues.valid">Add</button>
             </div>
         </div>
     </div>
+
     <div class="col-md-5">
         <pos-tickets [table]="table"
                      [toOpenTicketId]="toOpenTicketId"
                      *ngIf="checkTicket()">
         </pos-tickets>
-        <pos-orders *ngIf="selectedTicket"
-                    [table]="table$ | async"
+
+
+
+        <pos-orders *ngIf="selectedTicket && tableNew && (ordersNew.length > 0) && (productList.length > 0)"
+                    [table]="tableNew"
                     [ticket]="ticket$ | async"
-                    [products]="products$ | async"
-                    [orders]="orders$ | async"
+                    [products]="productList"
+                    [orders]="ordersNew"
                     [selectedTable]="selectedTable"
                     [selectedCustomerId]="selectedCustomerId"
                     (selectOrderItem)="selectOrderItem($event)"

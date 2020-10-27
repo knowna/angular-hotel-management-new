@@ -25,6 +25,8 @@ export class LoginComponent implements OnInit {
     private formSubmitAttempt: boolean;
     showPassword = false;
 
+    company:any;
+
     constructor(
         private fb: FormBuilder,
         private loginService: LoginService,
@@ -37,6 +39,7 @@ export class LoginComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.company = JSON.parse(localStorage.getItem("company"));
         this.form = this.fb.group({
             UserName: ['', Validators.required],
             Password: ['', Validators.required],

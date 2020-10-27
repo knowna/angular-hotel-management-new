@@ -3,14 +3,13 @@
     <section class="sidebar">
         <ul class="sidebar-menu tree" data-widget="tree" *ngFor="let item of (items | LinksFilter) ">
             <li class="treeview mb-1" [class.group]="item.group">
-                <a>
+                <a  (click)="item.show = !item.show">
                     <span>{{item?.title}}</span>
                     <i 
                         class="fa icon"
                         [class.fa-chevron-left]="!item.show"
                         [class.fa-chevron-down]="item.show"
-                        *ngIf="item.children?.length>0"
-                        (click)="item.show = !item.show">
+                        *ngIf="item.children?.length>0">
                     </i>
 
                     <!-- <i [ngClass]="item.icon" class="fa pull-left"></i>
@@ -22,14 +21,13 @@
 
                 <ul *ngIf="item.show" class="sidebar-menu tree">
                     <li class="treeview mb-1 ml-2" *ngFor="let child of (item.children | LinksFilter)">
-                        <a>
+                        <a (click)="child.show = !child.show">
                             <span (click)="open(child.link)"> {{child.title}}</span>
                             <i 
                                 class="fa icon"
                                 [class.fa-chevron-left]="!child.show"
                                 [class.fa-chevron-down]="child.show"
-                                *ngIf="child.children?.length > 0"
-                                (click)="child.show = !child.show">
+                                *ngIf="child.children?.length > 0">
                             </i>
                             <!-- <i [ngClass]="child.icon" class="fa  pull-left"></i>
                             <i class="fa fa-angle-left pull-right"></i>  -->

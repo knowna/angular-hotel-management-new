@@ -24,7 +24,11 @@ export class HeaderComponent implements OnInit{
     public clickedFunc(what){
     }
 
-    constructor(public router: Router,@Inject("NAVCOMPONENTS") public  items:any[] ) {
+    constructor(public router: Router, @Inject("NAVCOMPONENTS") public  items:any[] ) {
+        
+       
+    
+        
     }
 
    

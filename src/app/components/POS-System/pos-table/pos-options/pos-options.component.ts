@@ -67,11 +67,11 @@ export class PosOptionsComponent implements OnInit {
 
     // Redirects to tables view
     goToTablesView() {
-        this.router.navigate(['/pos/tables']);
+        this.router.navigate(['/pos-dashboard/tables']);
     }
 
     // Redirects to cuatomers view
     goToCustomerView() {
-        this.router.navigate(['/pos/customers']);
+        this.router.navigate(['/pos-dashboard/customers']);
     }
 }

@@ -6,7 +6,8 @@
 }
 
 .tickets__item {
-    background: #dadcda;
+    /* background: #dadcda; */
+    background: gray;
     padding: 13px 0;
     margin-bottom: 5px;
     height: 45px;;
@@ -23,5 +24,13 @@
     border: 1px solid #dfdfdf;
     padding: 5px;
     border-top: 0;
+}
+
+.ticket {
+    float: left;
+}
+
+.price {
+    float: right;
 }
     

@@ -12,14 +12,24 @@
     <div class="card-body" style="min-height: 330px;">
         <div class="tickets" *ngIf="isTicketEmpty !== true">
             <div class="tickets__item" *ngFor="let ticket of tickets">
-                <a href="javascript:void(0)" (click)="loadDetailView(ticket.Id ? ticket.Id : 0, customerId ? customerId : 0)">
+                <div class="col-sm-12">
+                    <a href="javascript:void(0)" (click)="loadDetailView(ticket.Id ? ticket.Id : 0, customerId ? customerId : 0)">
+                        <div class="ticket text-white">
+                            <strong>#{{ ticket.TicketId }} {{ ticket.Name }}</strong>
+                        </div>
+                        <div class="price text-white">
+                            <strong>Rs. {{ ticket.TotalAmount }}</strong>
+                        </div>
+                    </a>
+                </div>
+                <!-- <a href="javascript:void(0)" (click)="loadDetailView(ticket.Id ? ticket.Id : 0, customerId ? customerId : 0)">
                     <div class="col-md-7 pull-left">
                         <strong>#{{ ticket.TicketId }} {{ ticket.Name }}</strong>
                     </div>
                     <div class="col-md-5 pull-right text-right">
                         <strong>Rs. {{ ticket.TotalAmount }}</strong>
                     </div>
-                </a>
+                </a> -->
             </div>
         </div>
     </div>
