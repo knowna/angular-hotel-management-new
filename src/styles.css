@@ -190,3 +190,16 @@ form{
     padding:0!important;
     border-radius: none!important;
 }
+
+
+
+/* for removing scrollbar */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* dynamic heigh of scrollable items */
+.scroll {
+    max-height: calc(100vh - 250px);
+    overflow-y: scroll;
+}

@@ -59,6 +59,7 @@ export class PosOrdersComponent implements OnInit {
 
     // On component Init
     ngOnInit() {
+        console.log('the orders are', this.orders);
         this.activatedRoute.params.subscribe(params => {
             this.selectedTicket = (params['ticketId']) ? params['ticketId'] : 0;
         });

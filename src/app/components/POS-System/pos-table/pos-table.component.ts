@@ -608,8 +608,8 @@ export class PosTableComponent implements OnInit {
 	 * Calls the API to create an new ticket on the current table
 	 */
     createNewTicket() {
-        if (this.table.TableId) {
-            this.router.navigate(['pos/table/' + this.table.TableId + '/empty-ticket']);
+        if (this.selectedTable) {
+            this.router.navigate(['pos/table/' + this.selectedTable + '/empty-ticket']);
         }
 
         if (this.selectedCustomerId) {
@@ -727,6 +727,9 @@ export class PosTableComponent implements OnInit {
         OrderObject.TicketId = this.selectedTicket || 0;
         OrderObject.TableId = this.selectedTable || '0';
         OrderObject.CustomerId = this.selectedCustomerId || 0;
+
+
+        console.log('the added order item is', OrderObject);
 
         return OrderObject;
     }
