@@ -159,7 +159,7 @@ import { LinksFilterPipe } from './components/header/pipes/links-filter.pipe';
 // import { MasterLedgerComponent } from './components/Accounts/master-ledger/master-ledger.component';
 // import { MaterializedViewComponent } from './components/Report/materialized view/materializedview.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-
+import { UserStoreService } from './Service/store/user.store.service';
 // import { TicketService } from './Service/Billing/ticket.service';
 @NgModule({
   imports: [
@@ -332,6 +332,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     DepartmentService,
     LoginService,
     UsersService,
+    UserStoreService,
     AccountTransactionTypeService
     ,
     DatePipe,

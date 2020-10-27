@@ -95,6 +95,7 @@ table td{
   font-weight:200;
   padding:8px;
   border: 1px solid #2874a6!important;
+  color: #000;
 }
 
 
@@ -164,11 +165,17 @@ box-sizing: border-box;
      margin-top:25px;
 
 }
-.footermodal button,a{
+.footermodal button{
              width:80%;
              color:#fff!important;
              border:none;
              padding:8px;
+}
+
+a {
+    width:80%;
+    border:none;
+    padding:8px;
 }
 .fa-design{
     background-color:#fff!important;

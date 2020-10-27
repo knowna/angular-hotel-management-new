@@ -24,7 +24,7 @@ export class CategoriesPayLoad {
 // Load action for category
 export class LoadCategoriesAction implements Action {
 	// Variables
-	type = ActionTypes.LOAD_CATEGORIES;
+	readonly type = ActionTypes.LOAD_CATEGORIES;
 
 	// Constructor
 	constructor (public payload: any = null) {}
@@ -33,7 +33,7 @@ export class LoadCategoriesAction implements Action {
 // On successful load of categories
 export class LoadCategoriesSuccessAction implements Action {
 	// Variables
-	type = ActionTypes.LOAD_CATEGORIES_SUCCESS;
+	readonly type = ActionTypes.LOAD_CATEGORIES_SUCCESS;
 
 	// Constructor
 	constructor (public payload: CategoriesPayLoad) {}
@@ -42,7 +42,7 @@ export class LoadCategoriesSuccessAction implements Action {
 // On unsuccessful load of categories
 export class LoadErrorAction implements Action {
 	// Variables
-	type = ActionTypes.LOAD_ERROR;
+	readonly type = ActionTypes.LOAD_ERROR;
 
 	// Constructor
 	constructor (public payload: string) {}

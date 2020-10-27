@@ -24,7 +24,6 @@ export class NavbarComponent implements OnInit {
     this.company = JSON.parse(localStorage.getItem("company"));
     
     this.store.subscribe(data=>this.authenticated=data.auth.IsAuthenticated)
-      console.log("from navbar:"+this.authenticated)
      
     }
  logout(){

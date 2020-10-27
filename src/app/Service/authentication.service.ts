@@ -28,7 +28,6 @@ export class AuthenticationService {
         const user = localStorage.getItem('userToken');
         if (user)
         {
-            console.log("Token",jwt_decode(user))
             return true;
         }
         else

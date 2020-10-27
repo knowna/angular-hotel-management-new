@@ -73,14 +73,12 @@ export class BillingService {
        
 	}
 	loadTables (): Observable<Table[]> {
-    console.log('loaded in service tables')
 		// Call to API here
         return this._http.get<Table[]>(Global.BASE_SCREENTABLES_ENDPOINT).pipe(
           catchError(this.handleError)
         )
   }
 	loadCategories (): Observable<Category[]> {
-    console.log('loaded in service categories')
 		// Call to API hered
         return this._http.get<Category[]>(Global.BASE_MENUCATEGORY_ENDPOINT).pipe(
           catchError(this.handleError)

@@ -4,57 +4,71 @@
         <div class="col-md-12">
             <div class="tab-content" style="padding-top: 40px;">
                 <div id="customer-search" class="tab-pane" [ngClass]="{ 'active': tabName === 'customers' }">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-1"> Search: </div>
-                                <div class="col-md-9">
+                    <div class="row m-0 mt-5">
+                        <!-- <div class="col-md-12">
+                            <div class="row m-0"> -->
+                                <!-- <div class="col-md-1"> Search: </div> -->
+                                <div class="col-md-3">
                                     <input type="text" class="form-control" [(ngModel)]="customerName" placeholder="Search customer by name">
                                 </div>
-                                <div class="col-md-2">
-                                    <button style="margin-bottom: 10px; margin-left: 55px;" class="btn btn-primary" (click)="addAccounts()"><strong>New Customer</strong></button>
+                                <div class="col-md-6">
+
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-success" (click)="addAccounts()" style="float: right">
+                                        <strong>Add New Customer</strong>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="row">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Customer Name</th>
-                                            <th>Email</th>
-                                            <th>Address</th>
-                                            <th>Telephone</th>
-                                            <th align="center">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let customer of customers ">
-                                            <td>
-                                                <a href="javascript:void(0)" (click)="setCurrentCustomer(customer)">
-                                                    {{ customer.Title }}
-                                                    {{ customer.FirstName }}
-                                                    {{ customer.MiddleName }}
-                                                    {{ customer.LastName }}
-                                                </a>
-                                            </td>
-                                            <td>
-                                                {{ customer.Email }}
-                                            </td>
-                                            <td>
-                                                {{ customer.Address }}
-                                            </td>
-                                            <td>
-                                                {{ customer.Telephone }}
-                                            </td>
-                                            <td class="export-no-display">
-                                                <img src="../../../../assets/images/Edit.png" (click)="editAccounts(customer.Id)" title="Edit customer" height="32" width="32" />
-                                                <img src="../../../../assets/images/Delete.png" (click)="deleteAccounts(customer.Id)" title="Delete customer" height="32" width="32" />
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="row m-0">
+                                <div class="col-sm-12 table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Customer Name</th>
+                                                <th>Email</th>
+                                                <th>Address</th>
+                                                <th>Telephone</th>
+                                                <th align="center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let customer of customers ">
+                                                <td>
+                                                    <a href="javascript:void(0)" (click)="setCurrentCustomer(customer)">
+                                                        {{ customer.Title }}
+                                                        {{ customer.FirstName }}
+                                                        {{ customer.MiddleName }}
+                                                        {{ customer.LastName }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    {{ customer.Email }}
+                                                </td>
+                                                <td>
+                                                    {{ customer.Address }}
+                                                </td>
+                                                <td>
+                                                    {{ customer.Telephone }}
+                                                </td>
+                                                <td class="export-no-display">
+                                                    <button class="btn btn-primary btn-sm" (click)="editAccounts(customer.Id)">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-danger btn-sm ml-2" (click)="deleteAccounts(customer.Id)">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                   
+                                                    <!-- <img src="../../../../assets/images/Edit.png" (click)="editAccounts(customer.Id)" title="Edit customer" height="32" width="32" />
+                                                    <img src="../../../../assets/images/Delete.png" (click)="deleteAccounts(customer.Id)" title="Delete customer" height="32" width="32" /> -->
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        <!-- </div> -->
+                    <!-- </div> -->
                 </div>
                 <div id="customer-tickets" class="tab-pane" [ngClass]="{ 'active': tabName === 'tickets' }">
                     <h3>Billing</h3>
@@ -62,8 +76,8 @@
                 </div>
                 <div id="tables" class="tab-pane" [ngClass]="{ 'active': tabName === 'tables' }">
                     <div class="row">
-                        <div class="col-md-3 mt-3 text-white" style="cursor: pointer;" *ngFor="let table of tables$ | async" (click)="setCurrentTable(table)">
-                            <h3 class="table-detail">{{ table.Name }}</h3>
+                        <div class="col-md-3 mt-3 text-white" *ngFor="let table of tables$ | async" (click)="setCurrentTable(table)">
+                            <h3 class="table-detail" [class.table-item-red]="table.TableStatus">{{ table.Name }}</h3>
                         </div>
                         <!-- <div class="col-md-12">
                             <a href="javascript:void(0)"  *ngFor="let table of tables$ | async" (click)="setCurrentTable(table)">

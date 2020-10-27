@@ -26,6 +26,8 @@ import { OrderStoreService } from '../../../Service/store/order.store.service';
 import { OrderService } from '../../../Service/Billing/order.service';
 import { Category } from 'src/app/Model/category.model';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { Global } from 'src/app/Shared/global';
+import { BillingService } from 'src/app/Service/Billing/billing.service';
 
 @Component({
     selector: 'app-pos-table',
@@ -35,6 +37,16 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@ang
 export class PosTableComponent implements OnInit {
 
     public postableForm: FormGroup;
+
+
+    
+
+    config = {
+        search:true,
+        displayKey:"Name",
+        searchOnKey: 'Name',
+        height: '300px'
+    }
 
     categories$: Observable<Category[]>
     products$: Observable<Product[]>;
@@ -69,6 +81,16 @@ export class PosTableComponent implements OnInit {
     SearchProduct = "";
     SearchCategory = "";
 
+    productList=[];
+    productNameList=[];
+
+    tableListNew = [];
+    tableNew: Table;
+    ordersNew : Order[] = [];
+
+    tables$: Observable<Table[]>
+    dummyTable : Table = {"Id":1,"TableId":"1","Name":"101","Description":null,"OrderOpeningTime":"2020-10-26T02:51:50.3495623-07:00","TicketOpeningTime":"2020-10-26T02:51:50.3495623-07:00","LastOrderTime":"2020-10-26T02:51:50.3495623-07:00","TableStatus":"true"};
+
     // Constructor
     constructor(
         private store: Store<any>,
@@ -78,16 +100,34 @@ export class PosTableComponent implements OnInit {
         private orderApi: OrderService,        
         private orderStoreApi: OrderStoreService,
         private fb: FormBuilder, 
+        private billService: BillingService,
     ) {
+        
         // Initialiazation;
         this.selectedTicket = 0;
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
-        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        this.currentUser = JSON.parse(localStorage.getItem('userInformation'));
 
         // Actual work logic
         this.activatedRoute.params.subscribe(params => {
             this.selectedTable = (params['tableId']) ? params['tableId'] : '';
+            
             this.selectedTicket = (params['ticketId']) ? params['ticketId'] : 0;
+            if(this.selectedTicket){
+                this.orderApi.loadOrdersNew(this.selectedTicket.toString())
+                    .subscribe(
+                        data => {
+                            this.ordersNew = data;
+                            // this.ordersNew.forEach((order: Order) => {
+                            //     order.OrderItems.forEach((item: any) => {
+                            //         item.Tags = item.Tags.split(',');
+                            //     });
+                            // });
+                            console.log('the new', this.ordersNew)
+                        }
+                    )
+            }
+
             this.selectedCustomerId = (params['customerId']) ? params['customerId'] : 0;
             
             if (this.router.url.indexOf('move') !== -1) {
@@ -100,6 +140,18 @@ export class PosTableComponent implements OnInit {
                 this.ticketStoreApi.clearAllTickets();
             }
         });
+
+        this.billService.loadTables()
+            .subscribe(data => {
+                this.tableListNew = data;
+                if(this.tableListNew != null) {
+                    this.tableNew = this.tableListNew.find(t => t.TableId == this.selectedTable);
+                }
+        });
+
+        
+        
+        
     }
 
     // Initialize data here
@@ -107,6 +159,7 @@ export class PosTableComponent implements OnInit {
 
 
         this.buildForm();
+        this.loadProducts();
         // Init Required data
         this.products$ = this.store.select(ProductSelector.getAllProducts);
         
@@ -115,26 +168,34 @@ export class PosTableComponent implements OnInit {
         console.log('the categories', this.products$)
         this.ticketsLoading$ = this.store.select(TicketSelector.getLoadingStatus);        
         this.ticket$ = this.store.select(TicketSelector.getCurrentTicket);
+        console.log('ticket in table is', this.ticket$);
         this.customer$ = this.store.select(CustomerSelector.getCurrentCustomerId);
         this.orders$ = this.store.select(OrderSelector.getAllOrders);   
+       
         this.ordersLoading$ = this.store.select(OrderSelector.getLoadingStatus);
         
         if (this.selectedTicket) {
+            this.orders$ = this.store.select(OrderSelector.getAllOrders);
             this.orders$.subscribe((orders: Order[]) => {
                 this.parsedOrders = orders;
             });
         }
 
-        this.table$ = this.store.select(TableSelector.getCurrentTable)
+        console.log('the orders are', this.orders$)
+
+        this.table$ = this.store.select(TableSelector.getCurrentTable);
+        console.log('the current table is', this.table$)
         this.customer$.subscribe((customerId: any) => {
             this.customer = customerId;
             this.selectedCustomerId = customerId ? customerId : 0;
         });
 
-        this.table$.subscribe((table: Table) => {
-            this.selectedTable = table.TableId || '';
-            this.table = table;
-        });
+        // this.table$.subscribe((table: Table) => {
+        //     this.selectedTable = table.TableId || '';
+        //     this.table = table;
+        //     console.log('the table is', this.table)
+        // });
+        
 
         this.ticket$.subscribe((ticket: Ticket) => {
             this.isLoading = false;
@@ -152,27 +213,94 @@ export class PosTableComponent implements OnInit {
         this.ordersLoading$.subscribe((isLoading: boolean) => {
             this.isLoading = isLoading;
         });
+
+
+        
     }
 
     buildForm(){
         this.postableForm = this.fb.group({
-            AccountTransactionValues: this.fb.array([this.buildMenuForm()])
+            AccountTransactionValues: this.fb.array([this.buildMenuForm()]),
         });
     }
 
     buildMenuForm() {
         //initialize our vouchers
         return this.fb.group({
-            AccountId: ['', Validators.required],
-            Description: [''],
-            Credit: ['', Validators.required]
+            productId: ['',Validators.required],
+            quantity: [1,Validators.required],
+            description: ['',Validators.required]
         });
     }
 
 
-    addCategory(){
+    addCategory(index){
+        let product = this.postableForm.value.AccountTransactionValues[index].productId;
+        product.Qty = this.postableForm.value.AccountTransactionValues[index].quantity;
+        console.log('the product is', product)
+        console.log('the index of current added data is', index);
+        this.addOrderItem(product);
         this.AccountTransactionValues.push(this.buildMenuForm());
+        
     }
+
+
+    loadProducts(): void {
+        let prodName;
+        let list=[];
+        this.billService.loadProducts()
+            .subscribe(data => { 
+                this.productList=data;
+                console.log('the products are', this.productList);
+                
+                
+                data.forEach(prod => {
+                    prodName = prod.Name;
+                   list.push(prodName)
+                });
+                
+                this.productNameList =list;
+                
+        });
+    }
+
+    loadTables(selectedTable): void {
+        console.log('the uf id', selectedTable)
+        this.billService.loadTables()
+            .subscribe(data => {
+                this.tableListNew = data;
+                if(this.tableListNew != null) {
+                    console.log('the table list are', this.tableListNew)
+                    this.tableNew = this.tableListNew.find(t => t.TableId === selectedTable);
+                    console.log('the data of table is', this.tableNew)
+                }
+               
+            })
+    }
+
+
+    selectionChanged(event,i){
+        console.log('the index is', i);
+        // this.postableForm.value.AccountTransactionValues[i].productId = event.value.Id;
+        // this.postableForm.controls['AccountTransactionValues'].setValue(this.postableForm.value.AccountTransactionValues)
+        // this.addOrderItem(event.value);
+        // this.postableForm.controls['productId'].setValue(event.value.Id);
+        console.log(this.postableForm.value);
+
+        // this.productList.find(prod=>{
+        //     prod.Name ===event.value;
+        //     // console.log(prod.Name);
+            
+        //     if(prod){
+        // // console.log(prod.ItemId);
+        //     }
+            
+        // })
+        
+    }
+
+
+
 
     removeTrackerModel(index){
         console.log('the index is', index);
@@ -422,7 +550,7 @@ export class PosTableComponent implements OnInit {
             "Qty": TempQty,
             "UnitPrice": unitprice,
             "TotalAmount": ProductTotal,
-            "Tags": ["New Order"],
+            "Tags": "New Order",
             "IsSelected": false,
             "IsVoid": false
         };

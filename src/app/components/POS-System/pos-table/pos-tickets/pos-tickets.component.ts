@@ -54,7 +54,6 @@ export class PosTicketsComponent {
     // Initialize data here
     ngOnInit() {
         this.customer$ = this.store.select(CustomerSelector.getCurrentCustomer);   
-        console.log(this.customer$)    
         this.store.select(TicketSelector.getAllTickets)
             .subscribe((tickets: Ticket[]) => {
                 
