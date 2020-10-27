@@ -191,7 +191,7 @@ export class PosOrdersComponent implements OnInit {
 
     // Go back to last page
     close() {
-        this.router.navigate(['/pos/tables']);
+        this.router.navigate(['/pos-dashboard/tables']);
     }
 
     /**
