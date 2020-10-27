@@ -313,7 +313,6 @@ export class PosTableComponent implements OnInit {
 
 
 
-
     /**
      * Makes changes in state on clicking the back button
      */
