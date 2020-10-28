@@ -146,7 +146,7 @@ table td .firstimg{
                  height:100px!important;
 }
 .modal-body{
-   background-color: #dcdcdc;
+   /* background-color: #dcdcdc; */
    color:#212226;
 }
 .modal{
