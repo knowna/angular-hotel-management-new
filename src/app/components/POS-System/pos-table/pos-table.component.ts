@@ -235,12 +235,16 @@ export class PosTableComponent implements OnInit {
     }
 
 
-    addCategory(index){
-        let product = this.postableForm.value.AccountTransactionValues[index].productId;
-        product.Qty = this.postableForm.value.AccountTransactionValues[index].quantity;
-        console.log('the product is', product)
-        console.log('the index of current added data is', index);
-        this.addOrderItem(product);
+    addCategory(){
+        // let product = this.postableForm.value.AccountTransactionValues[index].productId;
+        // product.Qty = this.postableForm.value.AccountTransactionValues[index].quantity;
+        // console.log('the product is', product)
+        // console.log('the index of current added data is', index);
+        // this.addOrderItem(product);
+        // console.log(this.postableForm.value.AccountTransactionValues);
+       
+        
+        
         this.AccountTransactionValues.push(this.buildMenuForm());
         
     }
@@ -466,6 +470,8 @@ export class PosTableComponent implements OnInit {
     }
 
     // Add Product in orders function
+
+    
     addOrderItem(product: Product) {
         
         let UnSubmittedOrder = this.getUnSubmittedOrder(this.parsedOrders);
