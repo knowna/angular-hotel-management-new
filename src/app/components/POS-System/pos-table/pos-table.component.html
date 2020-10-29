@@ -92,7 +92,7 @@
 
 
 
-        <pos-orders *ngIf="selectedTicket && tableNew && (ordersNew.length > 0) && (productList.length > 0)"
+        <pos-orders 
                     [table]="tableNew"
                     [ticket]="ticket$ | async"
                     [products]="productList"
