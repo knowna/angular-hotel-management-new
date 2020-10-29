@@ -76,10 +76,10 @@
         </div>
         <div class="col-sm-2 mt-5">
             <button
-            class="bg-blue" (click)="addCategory()" [disabled]="!AccountTransactionValues.valid">Add</button>
+            class="btn bg-blue" (click)="addCategory()" [disabled]="!AccountTransactionValues.valid">Add</button>
         </div>
         <div class="mb-2">
-            <button (click)="createOrder()"  style="float:right" class="btn btn-success">Create Order</button>
+            <button (click)="createOrder()"  style="float:right" class="btn btn-success" [disabled]="!AccountTransactionValues.valid">Create Order</button>
             <!-- <button class="btn btn-secondary">Cancel Order</button> -->
         </div>
     </div>
