@@ -70,7 +70,7 @@ export class OrderService {
 	 * Adds product in the given order
 	 * @param payload 
 	 */
-    addOrderProduct(payload: OrderItemRequest) {
+    addOrderProduct(payload: any) {
          
         console.log('in service', payload)
         // payload.OrderItem.Tags = <any>payload.OrderItem.Tags.join(',');

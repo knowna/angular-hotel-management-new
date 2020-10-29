@@ -22,6 +22,7 @@ import * as CustomerSelector from '../../../../selectors/customer.selector';
 // Services
 import { UserStoreService } from '../../../../Service/store/user.store.service';
 import { TicketService } from 'src/app/Service/Billing/ticket.service';
+import { BillingService } from 'src/app/Service/Billing/billing.service';
 
 @Component({
   selector: 'pos-orders',
@@ -44,7 +45,7 @@ export class PosOrdersComponent implements OnInit {
     selected: any = '';
     isSelected: boolean = false;
     voidGiftSum: number = 0;
-
+    
     selectedTicket: number;
 
     // Constructor
@@ -54,11 +55,14 @@ export class PosOrdersComponent implements OnInit {
         private router: Router,
         private userStoreService: UserStoreService,
         private _location: Location,
-        private ticketService: TicketService
+        private ticketService: TicketService,
+        private billService:BillingService
     ) {}
 
     // On component Init
     ngOnInit() {
+console.log('id of customer',this.selectedCustomerId);
+
         console.log('the orders are', this.orders);
         this.activatedRoute.params.subscribe(params => {
             this.selectedTicket = (params['ticketId']) ? params['ticketId'] : 0;
@@ -75,6 +79,9 @@ export class PosOrdersComponent implements OnInit {
                 );
         }
     }
+
+
+
 
     // Calculates Discount
     calculateDiscount() {
