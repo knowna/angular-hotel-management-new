@@ -61,6 +61,7 @@ export class OrderItem {
     Qty?: number;
     UnitPrice?: number;
     TotalAmount?: number;
+    OrderDescription:string;
     Tags?: any;
     IsSelected?: boolean;
     IsVoid?: boolean;

@@ -233,7 +233,7 @@ export class PosTableComponent implements OnInit {
         return this.fb.group({
             productId: ['',Validators.required],
             quantity: [1,Validators.required],
-            description: ['',Validators.required]
+            description: ['']
         });
     }
 
@@ -502,53 +502,72 @@ export class PosTableComponent implements OnInit {
         let ListOrderItem =[];
 
         list.forEach(orderReq => {
-            ListOrderItem.push (orderReq.productId);
-           
+        let filterdProduct = orderReq.productId;
+        filterdProduct.Qty = orderReq.quantity;
+        filterdProduct.OrderDescription = orderReq.description;
+
+        ListOrderItem.push(filterdProduct);
         });
         this.addOrderItemList(ListOrderItem);
-
         
     }
 
-    addOrderItemList(products: Product[]) {
+    addOrderItemList(products: any[]) {
+        console.log(products);
+        
        let  ListOrderItem=[];
+       let ticketTotalWithoutVat=0;
+       let vatAmount =0;
+       let grandTotal =0;
         let UnSubmittedOrder = this.getUnSubmittedOrder(this.parsedOrders);
 
         products.forEach(product => {
-        let TempQty = this.qtyFromCalculator ? eval(this.qtyFromCalculator) : 1;
-        let ProductTotal = eval((TempQty * product.UnitPrice / 1.13).toFixed(2)); //Add Function VAT Value Minues;
+            let total =0;
+
+        // let TempQty = this.qtyFromCalculator ? eval(this.qtyFromCalculator) : 1;
+        // let ProductTotal = eval((TempQty * product.UnitPrice / 1.13).toFixed(2)); //Add Function VAT Value Minues;
         let unitprice = product.UnitPrice;
-        let VatPercent = 0.13;       
+        let VatPercent = 0.13; 
+        
+        total =total +(product.Qty*product.UnitPrice);
+        ticketTotalWithoutVat=ticketTotalWithoutVat+ total;
+
+        
+
+        
         let OrderItem = {
             "Id":0,
             "UserId": this.currentUser.UserName,
             "FinancialYear": this.currentYear.Name,
             "OrderNumber":0,
-            "OrderDescription":'abcxd',
+            "OrderDescription":product.OrderDescription,
             "OrderId": 0,
             "ItemId": product.Id,
-            "Qty": TempQty,
+            "Qty": product.Qty,
             "UnitPrice": unitprice,
-            "TotalAmount": ProductTotal,
+            "TotalAmount": total,
             "Tags": "New Order",
             "IsSelected": false,
             "IsVoid": false
         };
         ListOrderItem.push(OrderItem);
     });
-
+    
+    
+    vatAmount =(0.13*ticketTotalWithoutVat);
+    grandTotal = vatAmount+ticketTotalWithoutVat;
     let orderRequest={
        
         "TicketId":this.selectedTicket?this.selectedTicket:0,
         "TableId":this.selectedTable?this.selectedTable:0,
         "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
         "OrderId":0,
-        "TicketTotal":100,
+        "TicketTotal":ticketTotalWithoutVat,
         "Discount":0,
         "ServiceCharge":0,
-        "VatAmount":0,
-        "GrandTotal":100,
-        "Balance":0,
+        "VatAmount": vatAmount,
+        "GrandTotal":grandTotal,
+        "Balance":grandTotal,
         "UserId":this.currentUser.UserName,
         "FinancialYear":this.currentYear.Name,
         "ListOrderItem":ListOrderItem
@@ -556,10 +575,13 @@ export class PosTableComponent implements OnInit {
 
     }
 
-
+           
+            
     this.orderApi.addOrderProductList(orderRequest).subscribe(
         data =>{
+            
           this.toastrService.success('oder successfully created')
+          window.location.reload();
             
         }
     )
