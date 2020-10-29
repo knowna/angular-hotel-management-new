@@ -101,9 +101,10 @@ export class PosOrdersComponent implements OnInit {
 	 * @param UnitPrice 
 	 */
     CurrentUnitPrice(UnitPrice: number) {
-        let currentprice = UnitPrice / 1.13;
+        // let currentprice = UnitPrice / 1.13;
         // Return product
-        return currentprice.toFixed(2);
+        // return currentprice.toFixed(2);
+        return UnitPrice.toFixed(2);
     }
 	/**
 	 * Item Price
@@ -111,9 +112,10 @@ export class PosOrdersComponent implements OnInit {
 	 * @param Qty 
 	 */
     ProductPrice(UnitPrice: number, Qty: number) {
-        let currentprice = UnitPrice / 1.13 * Qty; 
+        // let currentprice = UnitPrice / 1.13 * Qty; 
         // Return product
-        return currentprice.toFixed(2);
+        // return currentprice.toFixed(2);
+        return (UnitPrice * Qty).toFixed(2);
     }
 	/**
 	 * Filter product by product ID
@@ -149,10 +151,14 @@ export class PosOrdersComponent implements OnInit {
 
         if (this.orders.length) {
             this.orders.forEach((order) => {
-                totalAmount = totalAmount +
-                    (order.OrderItems.length) ? order.OrderItems.reduce((total: number, order: OrderItem) => {
-                        return total + order.Qty * order.UnitPrice/1.13; //Add Function VAT Value Minues
-                    }, 0) : 0;
+                order.OrderItems.forEach(item => {
+                    totalAmount += item.TotalAmount;
+                });
+                // totalAmount = totalAmount +
+                //     (order.OrderItems.length) ? order.OrderItems.reduce((total: number, order: OrderItem) => {
+                //         return total + order.Qty * order.UnitPrice/1.13;
+                //     }, 0) : 0;
+
             });
         }
 
