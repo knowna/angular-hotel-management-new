@@ -23,6 +23,7 @@ import * as CustomerSelector from '../../../../selectors/customer.selector';
 import { UserStoreService } from '../../../../Service/store/user.store.service';
 import { TicketService } from 'src/app/Service/Billing/ticket.service';
 import { BillingService } from 'src/app/Service/Billing/billing.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'pos-orders',
@@ -56,12 +57,14 @@ export class PosOrdersComponent implements OnInit {
         private userStoreService: UserStoreService,
         private _location: Location,
         private ticketService: TicketService,
-        private billService:BillingService
+        private billService:BillingService,
+        private toastrService: ToastrService
+
+
     ) {}
 
     // On component Init
     ngOnInit() {
-console.log('id of customer',this.selectedCustomerId);
 
         console.log('the orders are', this.orders);
         this.activatedRoute.params.subscribe(params => {

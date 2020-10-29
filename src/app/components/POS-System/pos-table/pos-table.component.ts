@@ -29,6 +29,7 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@ang
 import { Global } from 'src/app/Shared/global';
 import { BillingService } from 'src/app/Service/Billing/billing.service';
 import { subscribeOn } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-pos-table',
@@ -101,6 +102,8 @@ export class PosTableComponent implements OnInit {
         private orderStoreApi: OrderStoreService,
         private fb: FormBuilder, 
         private billService: BillingService,
+        private toastrService: ToastrService
+
     ) {
        
 
@@ -517,6 +520,7 @@ export class PosTableComponent implements OnInit {
         let unitprice = product.UnitPrice;
         let VatPercent = 0.13;       
         let OrderItem = {
+            "Id":0,
             "UserId": this.currentUser.UserName,
             "FinancialYear": this.currentYear.Name,
             "OrderNumber":0,
@@ -534,6 +538,7 @@ export class PosTableComponent implements OnInit {
     });
 
     let orderRequest={
+       
         "TicketId":this.selectedTicket?this.selectedTicket:0,
         "TableId":this.selectedTable?this.selectedTable:0,
         "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
@@ -552,9 +557,9 @@ export class PosTableComponent implements OnInit {
     }
 
 
-    this.orderApi.addOrderProduct(orderRequest).subscribe(
+    this.orderApi.addOrderProductList(orderRequest).subscribe(
         data =>{
-            console.log(data);
+          this.toastrService.success('oder successfully created')
             
         }
     )
