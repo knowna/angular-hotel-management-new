@@ -116,7 +116,6 @@ export class PosSettleComponent implements OnInit {
 
         this.orders$.subscribe((orders: Order[]) => {
             if (orders.length) {
-                console.log('the orders are', orders)
                 this.parsedOrders = this.mergeDuplicateItems(orders);
             }
         });
