@@ -146,7 +146,7 @@ table td .firstimg{
                  height:100px!important;
 }
 .modal-body{
-   background-color: #dcdcdc;
+   /* background-color: #dcdcdc; */
    color:#212226;
 }
 .modal{
@@ -189,4 +189,22 @@ form{
     margin:0!important;
     padding:0!important;
     border-radius: none!important;
+}
+
+
+
+/* for removing scrollbar */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* dynamic heigh of scrollable items */
+.scroll {
+    max-height: calc(100vh - 250px);
+    overflow-y: scroll;
+}
+
+/* bg-main theme color */
+bg-blue{
+    background-color: #364a70;
 }

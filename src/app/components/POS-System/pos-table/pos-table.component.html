@@ -22,11 +22,13 @@
         </pos-options>
     </div>
 </div>
+
+
 <div [formGroup]="postableForm" class="row m-0 mt-4">
     <div class="col-7 card" formArrayName="AccountTransactionValues">
-        <div class="row m-0 mt-2" *ngFor="let AccountTransactionValue of AccountTransactionValues.controls; let i=index" [formGroupName]="i">
-            <div class="col-sm-4">
-                <label>Menu Items</label>
+        <div class="row m-0 mt-3" *ngFor="let AccountTransactionValue of AccountTransactionValues.controls; let i=index" [formGroupName]="i">
+            <div class="col-sm-8">
+                <label class="font-weight-bold">Menu Items</label>
                 <!-- <select class="form-control " formControlName="productId">
                     <option value="water"> water</option>
                     <option value="coke"> coke</option>
@@ -46,27 +48,39 @@
                     Particular Name is required
                 </small> -->
             </div>
-            <div class="col-sm-3">
-                <label>Quantity</label>
+            <div class="col-sm-4">
+                <label class="font-weight-bold">Quantity</label>
                 <input type="number" class="form-control" placeholder="quantity" formControlName="quantity">
                 <!-- <small [hidden]="postableForm.controls.AccountTransactionValues.controls[i].controls.quantity.valid" class="text-danger">
                     quantity is required
                 </small> -->
             </div>
-            <div class="col-sm-4">
-                <label>Description</label>
-                <textarea name="description" class="form-control" formControlName="description" rows="1" cols="20"></textarea>
+            <div class="col-sm-8">
+                <label class="font-weight-bold">Description</label>
+                <textarea name="description" class="form-control" formControlName="description" rows="4" cols="20"></textarea>
             </div>
-            <div class="col-sm-1 mt-2" *ngIf="AccountTransactionValues.controls.length > 1">
+            <!-- <div class="col-sm-2 mt-5">
+                <button
+                class="btn btn-success" (click)="addCategory(i)" [disabled]="!AccountTransactionValues.valid">Add</button>
+            </div> -->
+            <div class="col-sm-1 mt-5" *ngIf="AccountTransactionValues.controls.length > 1">
                 <button class="btn btn-danger" (click)="removeTrackerModel(i)">
                     <i class="fa fa-trash"></i>
                 </button>
             </div>
 
-            <div class="col-sm-12 mt-2 mb-2">
+            <!-- <div class="col-sm-12 mt-2 mb-2">
                 <button
                 class="btn btn-success" (click)="addCategory(i)" [disabled]="!AccountTransactionValues.valid">Add</button>
-            </div>
+            </div> -->
+        </div>
+        <div class="col-sm-2 mt-5">
+            <button
+            class="bg-blue" (click)="addCategory()" [disabled]="!AccountTransactionValues.valid">Add</button>
+        </div>
+        <div class="mb-2">
+            <button  style="float:right" class="btn btn-success">Create Order</button>
+            <!-- <button class="btn btn-secondary">Cancel Order</button> -->
         </div>
     </div>
 

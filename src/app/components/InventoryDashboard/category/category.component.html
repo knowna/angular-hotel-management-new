@@ -1,30 +1,36 @@
 ﻿<!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
-        Tables and Floor Planning
+        CATEGORY
     </div>
     <div class='panel-body'>
         <div class='table-responsive'>
             <div style="padding-bottom:10px">
-                <img src="../../../../assets/images/Add.png" (click)="openModal(template)" height="60" width="60" />
+                <div class="col-md-5"> <div style="padding-bottom:10px"><img src="../../../../assets/images/Add.png" (click)="openModal(template)" height="60" width="60" /></div></div>
+                <div class="col-md-1"> Search: </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" [(ngModel)]="ItemCategory" placeholder="Search by Name">
+                </div>
                 <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
-                <div *ngIf='tables && tables.length==0' class="alert alert-info" role="alert">No record found!</div>
-                <table  *ngIf='tables && tables.length'>
+                <div *ngIf='categorys && categorys.length==0' class="alert alert-info" role="alert">No record found!</div>
+                <table  *ngIf='categorys && categorys.length'>
                     <thead>
                         <tr>
                             <th>Name</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let table of tables">
-                            <td>{{table.Name}}</td>
+                        <tr *ngFor="let category of categorys ">
+                            <td>{{category.Name}}</td>
                             <td>
-                                <span><img src="../../../../assets/images/Edit.png" (click)="editTable(table.Id,template)" height="32" width="32" /></span>
-                                <span><img src="../../../../assets/images/Delete.png" (click)="deleteTable(table.Id,template)" height="32" width="32" /></span>
+                                <span><img src="../../../../assets/images/Edit.png" (click)="editCategory(category.Id,template)" height="60" width="60" /></span>
+                                <span><img src="../../../../assets/images/Delete.png" (click)="deleteCategory(category.Id,template)" height="60" width="60" /></span>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <div *ngIf='tables && tables.length>=10' style="padding-bottom:10px"><img src="../../../../assets/images/Add.png" (click)="openModal(template)" height="60" width="60" /></div>
+                <div>
+                </div>
             </div>
             <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -39,25 +45,25 @@
 <div class="container" style="padding-top: 20px;">
     <div class="row m-0">
         <div class="col-sm-12">
-            <h4> Tables and Floor Planning</h4>
+            <h4>Category</h4>
         </div>
     </div>
-  
     <div class="row m-0 mt-3">
         <div class="col-md-3">
-            <input type="text" class="form-control" placeholder="Search by Table Name">
+            <input type="text" class="form-control" [(ngModel)]="ItemCategory" placeholder="Search by Name">
         </div>
         <div class="col-md-6">
         </div>
         <div class="col-md-3">
             <button class="btn btn-success" (click)="openModal(template)" style="float: right">
-                <strong>Add New Table</strong>
+                <strong>Add New Category</strong>
             </button>
         </div>
     </div>
+
     <div class="row m-0 mt-2">
         <div class="col-sm-12 table-responsive scroll">
-            <table class='table table-bordered' *ngIf='tables && tables.length'>
+            <table class='table table-bordered'  *ngIf='categorys && categorys.length'>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -65,28 +71,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let table of tables">
-                        <td>{{table.Name}}</td>
+                    <tr *ngFor="let category of categorys ">
+                        <td>{{category.Name}}</td>
                         <td>
-                            <button class="btn btn-primary btn-sm" (click)="editTable(table.Id,template)">
+                            <button class="btn btn-primary btn-sm" (click)="editCategory(category.Id,template)">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteTable(table.Id,template)">
+                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteCategory(category.Id,template)">
                                 <i class="fa fa-trash"></i>
                             </button>
-                            <!-- <span><img src="../../../../assets/images/Edit.png" (click)="editTable(table.Id,template)" height="32" width="32" /></span>
-                            <span><img src="../../../../assets/images/Delete.png" (click)="deleteTable(table.Id,template)" height="32" width="32" /></span> -->
+                            <!-- <span><img src="../../../../assets/images/Edit.png" (click)="editCategory(category.Id,template)" height="60" width="60" /></span>
+                            <span><img src="../../../../assets/images/Delete.png" (click)="deleteCategory(category.Id,template)" height="60" width="60" /></span> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <div *ngIf='tables && tables.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <div *ngIf='categorys && categorys.length==0' class="alert alert-info" role="alert">No record found!</div>
         </div>
     </div>
 </div>
 
+
+
 <ng-template #template>
-    <form class="panel-primary" novalidate (ngSubmit)="onSubmit(TableForm)" [formGroup]="TableForm">
+    <form class="panel-primary" novalidate (ngSubmit)="onSubmit(CategoryFrm)" [formGroup]="CategoryFrm">
         <div class="modal-header panel-heading">
             <h4 class="modal-title pull-left">{{modalTitle}}</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
@@ -100,13 +108,12 @@
                         <label class="control-label">Name:</label>
                         <!-- <div class="col-sm-9"> -->
                         <input type="text" class="form-control" placeholder="" formControlName="Name">
-                        <div class="alert alert-danger mt-1" *ngIf="TableForm.get('Name').hasError('required') && formSubmitAttempt">
+                        <div class="alert alert-danger mt-1" *ngIf="CategoryFrm.get('Name').hasError('required') && formSubmitAttempt">
                             Name is required
                         </div>
                         <!-- </div> -->
                     </div>
                 </div>
-                
             </div>
         </div>
         <div class="modal-footer">
@@ -129,4 +136,3 @@
         </div>
     </form>
 </ng-template>
-

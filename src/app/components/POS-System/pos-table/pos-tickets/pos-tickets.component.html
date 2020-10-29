@@ -2,7 +2,7 @@
     <div class="card-header no-radius">
         <div class="row">
             <div class="col-md-5">
-                <h4><strong>{{ customerId ? 'Customer: ' + (customer$ | async)?.CustomerName : 'Table: ' + table ? table.Name : '' }}</strong></h4> 
+                <h4><strong>{{ customerId ? 'Customer: ' + (customer$ | async)?.CustomerName : 'Table: ' + table ? table?.Name : '' }}</strong></h4> 
             </div>
             <div class="col-md-7">
                 <span><strong>Available Tickets:</strong></span>

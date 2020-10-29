@@ -1,39 +1,41 @@
-<div class="card" *ngIf="!selectedItem">
-    <div class="row">
+<div *ngIf="!selectedItem">
+    <div class="row m-0">
         <button class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="goToTablesView()" style="cursor:pointer; width:18%;">
             <h4 class="text-center">Change Table</h4>
         </button>
-        <button class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="goToCustomerView()" style="cursor:pointer; width:18%;">
+        <button class="card-body border border-dark border-radius no-bottom-margin card-bag ml-1" (click)="goToCustomerView()" style="cursor:pointer; width:18%;">
             <h4 class="text-center">Select Customer</h4>
         </button>
-        <button [disabled]="disableButton" [ngClass]="{disabled: disableButton}" class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="showTicketNote.emit()" style="cursor:pointer; width:18%;">
+        <button [disabled]="disableButton" [ngClass]="{disabled: disableButton}" class="card-body border border-dark border-radius no-bottom-margin card-bag ml-1" (click)="showTicketNote.emit()" style="cursor:pointer; width:18%;">
             <h4 class="text-center">Ticket Note</h4>
         </button>
-        <button [disabled]="disableButton" [ngClass]="{disabled: disableButton}" class="card-body border border-dark border-radius no-bottom-margin card-bag" routerLink="/pos/InvoicePrint" style="cursor:pointer; width:18%;">
+        <button [disabled]="disableButton" [ngClass]="{disabled: disableButton}" class="card-body border border-dark border-radius no-bottom-margin card-bag ml-1" routerLink="/pos/InvoicePrint" style="cursor:pointer; width:18%;">
             <h4 class="text-center">Print Bill</h4>
         </button>
-        <button class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="createNewTicket.emit()" style="cursor:pointer; width:18%;">
+        <button class="card-body border border-dark border-radius no-bottom-margin card-bag ml-1" (click)="createNewTicket.emit()" style="cursor:pointer; width:18%;">
             <h4 class="text-center">Add Ticket</h4>
         </button>
     </div>
 </div>
-<div class="card" *ngIf="selectedItem">
-    <button class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="incrementQty.emit(selectedItem)" style="cursor:pointer; width:18%;">
-        <h4 class="text-center">+</h4>
-    </button>
-    <button class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="decrementQty.emit(selectedItem)" style="cursor:pointer; width:18%;">
-        <h4 class="text-center">-</h4>
-    </button>
-    <!--<div class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="addTag(selectedItem, 'Gift')" style="cursor:pointer;">
-        <h4 class="text-center">{{ (selectedItem.Tags.indexOf('Gift') !== -1) ? "Un Gift" : "Gift" }}</h4>
+<div *ngIf="selectedItem">
+    <div class="row m-0">
+        <button class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="incrementQty.emit(selectedItem)" style="cursor:pointer; width:18%;">
+            <h4 class="text-center">+</h4>
+        </button>
+        <button class="card-body border border-dark border-radius no-bottom-margin card-bag ml-2" (click)="decrementQty.emit(selectedItem)" style="cursor:pointer; width:18%;">
+            <h4 class="text-center">-</h4>
+        </button>
+        <!--<div class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="addTag(selectedItem, 'Gift')" style="cursor:pointer;">
+            <h4 class="text-center">{{ (selectedItem.Tags.indexOf('Gift') !== -1) ? "Un Gift" : "Gift" }}</h4>
+        </div>
+        <div class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="voidItem.emit(selectedItem)" style="cursor:pointer;">
+            <h4 class="text-center">{{ (selectedItem.IsVoid) ? "Un Void" : "Void" }}</h4>
+        </div>
+        <div class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="moveItems.emit(selectedItem)" style="cursor:pointer;">
+            <h4 class="text-center">Move</h4>
+        </div>-->
+        <button class="card-body border border-dark border-radius no-bottom-margin card-bag ml-2" (click)="cancel(selectedItem)" style="cursor:pointer; width:18%;">
+            <h4 class="text-center">Cancel</h4>
+        </button>
     </div>
-    <div class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="voidItem.emit(selectedItem)" style="cursor:pointer;">
-        <h4 class="text-center">{{ (selectedItem.IsVoid) ? "Un Void" : "Void" }}</h4>
-    </div>
-    <div class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="moveItems.emit(selectedItem)" style="cursor:pointer;">
-        <h4 class="text-center">Move</h4>
-    </div>-->
-    <button class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="cancel(selectedItem)" style="cursor:pointer; width:18%;">
-        <h4 class="text-center">Cancel</h4>
-    </button>
 </div>

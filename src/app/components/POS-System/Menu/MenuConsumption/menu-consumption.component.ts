@@ -47,6 +47,8 @@ export class MenuConsumptionComponent implements OnInit {
     private sub: any;
     MenuConsumption: string = '';
 
+    productNameList
+
     constructor(private fb: FormBuilder, private _menuItemService: BillingService,
         private _menuportionservice: BillingService,
         private modalService: BsModalService,

@@ -2,9 +2,14 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <div class="tab-content" style="padding-top: 40px;">
+            <div class="tab-content" style="padding-top: 20px;">
                 <div id="customer-search" class="tab-pane" [ngClass]="{ 'active': tabName === 'customers' }">
-                    <div class="row m-0 mt-5">
+                    <div class="row m-0">
+                        <div class="col-sm-12">
+                            <h4>Customer</h4>
+                        </div>
+                    </div>
+                    <div class="row m-0 mt-3">
                         <!-- <div class="col-md-12">
                             <div class="row m-0"> -->
                                 <!-- <div class="col-md-1"> Search: </div> -->
@@ -21,7 +26,7 @@
                                 </div>
                             </div>
                             <div class="row m-0">
-                                <div class="col-sm-12 table-responsive">
+                                <div class="col-sm-12 table-responsive scroll">
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>

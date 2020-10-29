@@ -1,12 +1,11 @@
-﻿
-<div class='panel panel-primary'>
+﻿<!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
         Menu
     </div>
     <div class='panel-body'>
         <div class='table-responsive'>
             <div style="padding-bottom:10px">
-                <img src="../../../../assets/images/Add.png (click)="addMenu(template)" height="60" width="60" /> &nbsp; Add New Menu
+                <img src="../../../../assets/images/Add.png" (click)="addMenu(template)" height="60" width="60" /> &nbsp; Add New Menu
             </div>
             <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
             <div *ngIf='menus && menus.length==0' class="alert alert-info" role="alert">No record found!</div>
@@ -39,7 +38,62 @@
             {{msg}}
         </div>
     </div>
+</div> -->
+
+
+<div class="container" style="padding-top: 20px;">
+    <div class="row m-0">
+        <div class="col-sm-12">
+            <h4>Menu</h4>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-3">
+        <div class="col-md-3">
+            <input type="text" class="form-control" placeholder="Search by Name">
+        </div>
+        <div class="col-md-6">
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-success" (click)="addMenu(template)" style="float: right">
+                <strong>Add New Menu</strong>
+            </button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive scroll">
+            <table class='table table-bordered'  *ngIf='menus && menus.length'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Action</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let menu of menus">
+                        <td>{{menu.Name}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" (click)="editMenu(menu.Id, template)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteMenu(menu.Id, template)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <!-- <span><img src="../../../../assets/images/Edit.png" (click)="editMenu(menu.Id, template)" height="32" width="32" /></span>
+                            <span><img src="../../../../assets/images/Delete.png" (click)="deleteMenu(menu.Id, template)" height="32" width="32" /></span> -->
+                        </td>
+                        <td><a class="btn btn-sm btn-primary" [routerLink]="['/menu-category', menu.Id]">List MenuCategory</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div *ngIf='menus && menus.length==0' class="alert alert-info" role="alert">No record found!</div>
+        </div>
+    </div>
 </div>
+
 
 <ng-template #template>
     <form class="panel-primary" novalidate (ngSubmit)="onSubmit(MenuFrm)" [formGroup]="MenuFrm">
@@ -63,10 +117,22 @@
             </div>
         </div>
         <div class="modal-footer">
-            <div>
+            <button 
+                type="button"
+                class="btn btn-default"
+                (click)="modalRef.hide()">
+                Cancel
+            </button>
+            <button 
+                type="submit"
+                class="btn btn-success"
+                ngbAutofocus>
+                {{modalBtnTitle}}
+            </button>
+            <!-- <div>
                 <button type="submit" class="btn btn-success pull-left">{{modalBtnTitle}}</button>
                 <a class="btn btn-danger pull-right" (click)="modalRef.hide()">Cancel</a>
-            </div>
+            </div> -->
         </div>
     </form>
 </ng-template>

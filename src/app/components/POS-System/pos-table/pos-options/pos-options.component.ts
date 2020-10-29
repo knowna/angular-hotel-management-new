@@ -32,6 +32,7 @@ export class PosOptionsComponent implements OnInit {
 
      // Initialize data here
      ngOnInit() {
+         console.log('the selected item is', this.selectedItem)
         this.orders && this.orders.subscribe(orders => {
             this.parsedOrders = orders;
             return this.parsedOrders.length

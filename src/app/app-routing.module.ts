@@ -77,6 +77,7 @@ import { PosInvoicePrintComponent } from './components/POS-System/pos-table/pos-
 import { PosSettleComponent } from './components/POS-System/pos-table/pos-settle/pos-settle.component';
 import { LoginGuard } from './guard/login.guard';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { CategoryComponent } from './components/InventoryDashboard/category/category.component';
 
 
 const routes: Routes = [
@@ -492,11 +493,11 @@ const routes: Routes = [
     component: TableComponent,
     canActivate: [AuthGuard]
   },
-  // {
-  //   path: 'pos-dashboard/table/category',
-  //   component: CategoryComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'pos-dashboard/table/category',
+    component: CategoryComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: 'pos-dashboard/table/menuconsumption',
     component: MenuConsumptionComponent,
