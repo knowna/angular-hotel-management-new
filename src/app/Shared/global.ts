@@ -34,6 +34,8 @@
     public static BASE_ACCOUNT_BillReturnView_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/BillReturnView/';
     public static BASE_ACCOUNT_MaterializedView_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/MaterializedView/';
 
+
+    public static BASE_ADD_ORDERlIST_ENDPOINT = Global.BASE_HOST_ENDPOINT+'/api/OrderMultiItemAPI/PostMultiOrder/'
     public static BASE_MASTERLEDGER_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/MasterLedgerAPI/';
     public static BASE_INVENTORYISSUE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/InventoryIssueAPI/';
     public static BASE_MENUCATEGORY_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/MenuCategoryAPI/';

@@ -70,12 +70,24 @@ export class OrderService {
 	 * Adds product in the given order
 	 * @param payload 
 	 */
-    addOrderProduct(payload: OrderItemRequest) {
+    addOrderProduct(payload: any) {
          
-        console.log('in service', payload)
+        console.log('in service', JSON.stringify(payload));
         // payload.OrderItem.Tags = <any>payload.OrderItem.Tags.join(',');
         
         return this.http.post(Global.BASE_ORDERS_ENDPOINT, payload)
+           
+        
+
+    }
+
+
+    addOrderProductList(payload: any) {
+         
+        console.log('in service', JSON.stringify(payload));
+        // payload.OrderItem.Tags = <any>payload.OrderItem.Tags.join(',');
+        
+        return this.http.post(Global.BASE_ADD_ORDERlIST_ENDPOINT, payload)
              
     }
 

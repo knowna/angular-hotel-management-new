@@ -28,6 +28,8 @@ import { Category } from 'src/app/Model/category.model';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Global } from 'src/app/Shared/global';
 import { BillingService } from 'src/app/Service/Billing/billing.service';
+import { subscribeOn } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-pos-table',
@@ -38,8 +40,7 @@ export class PosTableComponent implements OnInit {
 
     public postableForm: FormGroup;
 
-
-    
+  
 
     config = {
         search:true,
@@ -101,6 +102,8 @@ export class PosTableComponent implements OnInit {
         private orderStoreApi: OrderStoreService,
         private fb: FormBuilder, 
         private billService: BillingService,
+        private toastrService: ToastrService
+
     ) {
        
 
@@ -230,7 +233,7 @@ export class PosTableComponent implements OnInit {
         return this.fb.group({
             productId: ['',Validators.required],
             quantity: [1,Validators.required],
-            description: ['',Validators.required]
+            description: ['']
         });
     }
 
@@ -270,7 +273,6 @@ export class PosTableComponent implements OnInit {
     }
 
     loadTables(selectedTable): void {
-        console.log('the uf id', selectedTable)
         this.billService.loadTables()
             .subscribe(data => {
                 this.tableListNew = data;
@@ -285,12 +287,10 @@ export class PosTableComponent implements OnInit {
 
 
     selectionChanged(event,i){
-        console.log('the index is', i);
         // this.postableForm.value.AccountTransactionValues[i].productId = event.value.Id;
         // this.postableForm.controls['AccountTransactionValues'].setValue(this.postableForm.value.AccountTransactionValues)
         // this.addOrderItem(event.value);
         // this.postableForm.controls['productId'].setValue(event.value.Id);
-        console.log(this.postableForm.value);
 
         // this.productList.find(prod=>{
         //     prod.Name ===event.value;
@@ -308,13 +308,13 @@ export class PosTableComponent implements OnInit {
 
 
     removeTrackerModel(index){
-        console.log('the index is', index);
         this.AccountTransactionValues.removeAt(index);
     }
 
     get AccountTransactionValues(): FormArray {
         return this.postableForm.get('AccountTransactionValues') as FormArray;
     }
+
 
 
 
@@ -472,28 +472,124 @@ export class PosTableComponent implements OnInit {
     // Add Product in orders function
 
     
-    addOrderItem(product: Product) {
+    // addOrderItem(product: Product) {
         
+    //     let UnSubmittedOrder = this.getUnSubmittedOrder(this.parsedOrders);
+    //     let TempQty = this.qtyFromCalculator ? eval(this.qtyFromCalculator) : 1;
+    //     let ProductTotal = eval((TempQty * product.UnitPrice / 1.13).toFixed(2)); //Add Function VAT Value Minues;
+    //     let unitprice = product.UnitPrice;
+    //     let VatPercent = 0.13;       
+    //     let OrderItem = {
+    //         "UserId": this.currentUser.UserName,
+    //         "FinancialYear": this.currentYear.Name,
+    //         "OrderId": 0,
+    //         "ItemId": product.Id,
+    //         "Qty": TempQty,
+    //         "UnitPrice": unitprice,
+    //         "TotalAmount": ProductTotal,
+    //         "Tags": "New Order",
+    //         "IsSelected": false,
+    //         "IsVoid": false
+    //     };
+    //     this.orderStoreApi.addOrderItem(this.prepareOrderItemRequest(UnSubmittedOrder ? UnSubmittedOrder.OrderNumber : 0, OrderItem, this.parsedOrders, false, true, true));
+    //     this.updateQty('1');
+    // }
+
+    createOrder(){
+        let list= this.postableForm.value.AccountTransactionValues;
+        // console.log(list);
+
+        let ListOrderItem =[];
+
+        list.forEach(orderReq => {
+        let filterdProduct = orderReq.productId;
+        filterdProduct.Qty = orderReq.quantity;
+        filterdProduct.OrderDescription = orderReq.description;
+
+        ListOrderItem.push(filterdProduct);
+        });
+        this.addOrderItemList(ListOrderItem);
+        
+    }
+
+    addOrderItemList(products: any[]) {
+        console.log(products);
+        
+       let  ListOrderItem=[];
+       let ticketTotalWithoutVat=0;
+       let vatAmount =0;
+       let grandTotal =0;
         let UnSubmittedOrder = this.getUnSubmittedOrder(this.parsedOrders);
-        let TempQty = this.qtyFromCalculator ? eval(this.qtyFromCalculator) : 1;
-        let ProductTotal = eval((TempQty * product.UnitPrice / 1.13).toFixed(2)); //Add Function VAT Value Minues;
+
+        products.forEach(product => {
+            let total =0;
+
+        // let TempQty = this.qtyFromCalculator ? eval(this.qtyFromCalculator) : 1;
+        // let ProductTotal = eval((TempQty * product.UnitPrice / 1.13).toFixed(2)); //Add Function VAT Value Minues;
         let unitprice = product.UnitPrice;
-        let VatPercent = 0.13;       
+        let VatPercent = 0.13; 
+        
+        total =total +(product.Qty*product.UnitPrice);
+        ticketTotalWithoutVat=ticketTotalWithoutVat+ total;
+
+        
+
+        
         let OrderItem = {
+            "Id":0,
             "UserId": this.currentUser.UserName,
             "FinancialYear": this.currentYear.Name,
+            "OrderNumber":0,
+            "OrderDescription":product.OrderDescription,
             "OrderId": 0,
             "ItemId": product.Id,
-            "Qty": TempQty,
+            "Qty": product.Qty,
             "UnitPrice": unitprice,
-            "TotalAmount": ProductTotal,
+            "TotalAmount": total,
             "Tags": "New Order",
             "IsSelected": false,
             "IsVoid": false
         };
-        this.orderStoreApi.addOrderItem(this.prepareOrderItemRequest(UnSubmittedOrder ? UnSubmittedOrder.OrderNumber : 0, OrderItem, this.parsedOrders, false, true, true));
-        this.updateQty('1');
+        ListOrderItem.push(OrderItem);
+    });
+    
+    
+    vatAmount =(0.13*ticketTotalWithoutVat);
+    grandTotal = vatAmount+ticketTotalWithoutVat;
+    let orderRequest={
+       
+        "TicketId":this.selectedTicket?this.selectedTicket:0,
+        "TableId":this.selectedTable?this.selectedTable:0,
+        "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
+        "OrderId":0,
+        "TicketTotal":ticketTotalWithoutVat,
+        "Discount":0,
+        "ServiceCharge":0,
+        "VatAmount": vatAmount,
+        "GrandTotal":grandTotal,
+        "Balance":grandTotal,
+        "UserId":this.currentUser.UserName,
+        "FinancialYear":this.currentYear.Name,
+        "ListOrderItem":ListOrderItem
+
+
     }
+
+           
+            
+    this.orderApi.addOrderProductList(orderRequest).subscribe(
+        data =>{
+            
+          this.toastrService.success('oder successfully created')
+          window.location.reload();
+            
+        }
+    )
+    
+        // this.orderStoreApi.addOrderItem(this.prepareOrderItemRequest(UnSubmittedOrder ? UnSubmittedOrder.OrderNumber : 0, ListOrderItem, this.parsedOrders, false, true, true));
+        // this.updateQty('1');
+    }
+
 
     // Filter and get unsubmitted order
     getUnSubmittedOrder(orders: Order[]) {
@@ -735,10 +831,70 @@ export class PosTableComponent implements OnInit {
         OrderObject.CustomerId = this.selectedCustomerId || 0;
 
 
-        console.log('the added order item is', OrderObject);
 
         return OrderObject;
     }
+
+    // prepareOrderItemRequestList(orderId: number, selectedOrderItem: OrderItem[], parsedOrders: Order[] = this.parsedOrders, isMove: boolean = false, isAdd: boolean = false, isNew: boolean = false, isIncDec: boolean = false, flag: boolean = false) {
+        
+    //     let ticketTotal = 0;
+    //     let serviceCharge = 0;
+    //     let tTotal = this.calculateSum(parsedOrders);
+    //     let cServiceCharge = this.calculateServiceCharge();
+    //     let discountAmount = this.calculateDiscount();
+    //     let ProductTotal = selectedOrderItem.Qty * selectedOrderItem.UnitPrice/1.13; //Add Function VAT Value Minues;
+
+    //     if (isMove) {
+    //         ticketTotal = (this.ticket.TotalAmount) ? tTotal : tTotal + ProductTotal;
+    //         if (flag === false && eval(discountAmount) > ticketTotal) {
+    //             alert("Discount amount can't be greater than the ticket amount. So, the item can't be moved!");
+    //             return null;
+    //         }
+    //         //serviceCharge = ticketTotal * 0.1;
+    //     } else {
+    //         ticketTotal = (this.ticket.TotalAmount)
+    //             ? (isIncDec)
+    //                 ? tTotal
+    //                 : tTotal + ProductTotal 
+    //             : ProductTotal;
+    //         //serviceCharge = (ticketTotal - eval(discountAmount)) * 0.1;
+    //     }
+
+    //     let DiscountedAmount = (flag) ? ticketTotal : ticketTotal - eval(discountAmount);
+    //     let VatPercent = 0.13;
+    //     let Order = this.selectOrderByOrderId(selectedOrderItem.OrderNumber);
+
+    //     let OrderObject = {
+    //         UserId : this.currentUser.UserName,
+    //         FinancialYear: this.currentYear.Name,
+    //         TicketId: 0,
+    //         TableId: '',
+    //         CustomerId: 0,
+    //         OrderId: 0,
+    //         OrderItem: selectedOrderItem,
+    //         TicketTotal: eval(ticketTotal.toFixed(2)),
+    //         ServiceCharge: serviceCharge,
+    //         Discount: flag ? 0 : eval(discountAmount) || 0,
+    //         VatAmount: eval(((DiscountedAmount +  serviceCharge) * VatPercent).toFixed(2)),
+    //         GrandTotal: eval((DiscountedAmount + serviceCharge + (DiscountedAmount + serviceCharge) * VatPercent).toFixed(2)),
+    //         Balance: eval((DiscountedAmount + serviceCharge + (DiscountedAmount + serviceCharge) * VatPercent - this.getTotalCharged(this.ticket)).toFixed(2))
+    //     };
+
+    //     OrderObject.OrderItem['UserId'] = this.currentUser.UserName;
+    //     OrderObject.OrderItem['FinancialYear'] = this.currentYear.Name;
+    //     OrderObject.OrderId = this.prepareOrderId(isMove, isAdd, Order, orderId);
+    //     OrderObject.TicketId = this.selectedTicket || 0;
+    //     OrderObject.TableId = this.selectedTable || '0';
+    //     OrderObject.CustomerId = this.selectedCustomerId || 0;
+
+
+    //     console.log('the added order item is', OrderObject);
+
+    //     return OrderObject;
+    // }
+
+
+
 
     /**
      * Prepares Order Id based on wether the order is in move or In add state
