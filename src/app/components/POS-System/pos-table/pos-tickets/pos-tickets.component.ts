@@ -56,6 +56,7 @@ export class PosTicketsComponent {
         this.customer$ = this.store.select(CustomerSelector.getCurrentCustomer);   
         this.store.select(TicketSelector.getAllTickets)
             .subscribe((tickets: Ticket[]) => {
+                console.log('the tickets are', this.tickets)
                 
                 if (this.router.url == "/pos/settle") {
                     return false;
