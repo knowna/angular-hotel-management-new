@@ -84,7 +84,6 @@ export class OrderService {
 
     addOrderProductList(payload: any) {
          
-        console.log('in hereeerr service', JSON.stringify(payload));
         // payload.OrderItem.Tags = <any>payload.OrderItem.Tags.join(',');
         
         return this.http.post(Global.BASE_ADD_ORDERlIST_ENDPOINT, payload)
