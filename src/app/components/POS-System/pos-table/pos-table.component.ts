@@ -391,6 +391,10 @@ export class PosTableComponent implements OnInit {
         console.log(updateType);
         
         OrderItem.Qty =updateType==='increaseQuantity'?OrderItem.Qty+1:OrderItem.Qty-1;
+
+        if(OrderItem.Qty < 1){
+            OrderItem.Qty = 1;
+        }
         
         
         OrderItem.TotalAmount=OrderItem.Qty*OrderItem.UnitPrice;
