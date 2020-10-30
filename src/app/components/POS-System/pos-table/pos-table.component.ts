@@ -637,7 +637,7 @@ export class PosTableComponent implements OnInit {
         data =>{
             
           this.toastrService.success('oder successfully created')
-          window.location.reload();
+        //   window.location.reload();
             
         }
     )

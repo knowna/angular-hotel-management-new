@@ -92,20 +92,20 @@ export class PosInvoicePrintComponent implements OnInit {
             }
         });
     }
-	/**
-	 * Item Price
-	 * @param UnitPrice 
-	 */
+    /**
+     * Item Price
+     * @param UnitPrice 
+     */
     CurrentUnitPrice(UnitPrice: number) {
         // let currentprice = UnitPrice / 1.13;
         // Return product
         return UnitPrice.toFixed(2);
     }
-	/**
-	 * Item Price
-	 * @param UnitPrice 
-	 * @param Qty 
-	 */
+    /**
+     * Item Price
+     * @param UnitPrice 
+     * @param Qty 
+     */
     ProductPrice(UnitPrice: number, Qty: number) {
         // let currentprice = UnitPrice / 1.13 * Qty;
         let currentprice = UnitPrice * Qty;
