@@ -60,7 +60,7 @@ export class PosTableComponent implements OnInit {
 
     isLoading: boolean = false;
     isTicketEmpty: boolean = false;      
-    table: Table;
+    table: Table = new Table();
     parsedOrders: Order[] = [];
     ticketNote: string;
     enableTicketNote: boolean = false;
@@ -86,7 +86,7 @@ export class PosTableComponent implements OnInit {
     productNameList=[];
 
     tableListNew = [];
-    tableNew: Table;
+    tableNew: Table = new Table();
     ordersNew : Order[] = [];
 
     tables$: Observable<Table[]>
@@ -122,6 +122,7 @@ export class PosTableComponent implements OnInit {
                     .subscribe(
                         data => {
                             this.ordersNew = data;
+                            console.log('the orders after fetch are', this.ordersNew)
                             // this.ordersNew.forEach((order: Order) => {
                             //     order.OrderItems.forEach((item: any) => {
                             //         item.Tags = item.Tags.split(',');
@@ -149,7 +150,9 @@ export class PosTableComponent implements OnInit {
             .subscribe(data => {
                 this.tableListNew = data;
                 if(this.tableListNew != null) {
-                    this.tableNew = this.tableListNew.find(t => t.TableId == this.selectedTable);
+                    this.tableNew = this.tableListNew.find(t => t.TableId == this.selectedTable) || new Table();
+                    console.log('filter table', this.tableNew);
+                    
                 }
         });
 
@@ -189,10 +192,10 @@ export class PosTableComponent implements OnInit {
 
         this.table$ = this.store.select(TableSelector.getCurrentTable);
         // console.log('the current table is', this.table$)
-        this.customer$.subscribe((customerId: any) => {
-            this.customer = customerId;
-            this.selectedCustomerId = customerId ? customerId : 0;
-        });
+        // this.customer$.subscribe((customerId: any) => {
+        //     this.customer = customerId;
+        //     this.selectedCustomerId = customerId ? customerId : 0;
+        // });
 
         // this.table$.subscribe((table: Table) => {
         //     this.selectedTable = table.TableId || '';

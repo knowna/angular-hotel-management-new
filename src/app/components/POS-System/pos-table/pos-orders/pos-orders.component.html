@@ -8,7 +8,7 @@
             </div>
             <div class="col-md-5">
                 <strong>
-                    {{ selectedCustomerId ? 'Cust#: ' + (customer$ | async)?.CustomerName : 'Table: ' + table ? table.Name : '' }}
+                    {{ selectedCustomerId ? 'Cust#: ' + customerNew?.CustomerName : 'Table: ' + table ? table.Name : '' }}
                 </strong>
             </div>
             <div class="col-md-4">
@@ -198,6 +198,7 @@
             <div class="col-sm-6">
                 <button 
                     class="btn btn-block btn-success w-100 p-15"
+                    (click)="settle()"
                     routerLink="/pos/settle">
                     Settle
                 </button>
