@@ -91,15 +91,17 @@
 
 
 
-        <pos-orders 
+        <pos-orders  *ngIf="selectedTicket && (ordersNew.length > 0) && (productList.length > 0)" 
                     [table]="tableNew"
                     [ticket]="ticket$ | async"
                     [products]="productList"
                     [orders]="ordersNew"
-                    [selectedTable]="selectedTable"
+                    [selectedTable]="selectedTable ? selectedTable : ''"
                     [selectedCustomerId]="selectedCustomerId"
                     (selectOrderItem)="selectOrderItem($event)"
                     (printBill)="printBill()">
         </pos-orders>
     </div>
 </div>
+
+<!-- *ngIf="selectedTicket && tableNew  && (ordersNew.length > 0) && (productList.length > 0)" -->

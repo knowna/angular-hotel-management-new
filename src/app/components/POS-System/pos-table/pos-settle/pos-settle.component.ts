@@ -28,6 +28,11 @@ import { OrderStoreService } from '../../../../Service/store/order.store.service
 import { TicketStoreService } from '../../../../Service/store/ticket.store.service';
 import { TableAdapter } from '../../../../adapters/table.adapter';
 import { Product } from 'src/app/Model/product.model';
+import { BillingService } from 'src/app/Service/Billing/billing.service';
+import { AccountTransactionTypeService } from 'src/app/Service/Inventory/account-trans-type.service';
+import { Global } from 'src/app/Shared/global';
+import { OrderService } from 'src/app/Service/Billing/order.service';
+import { TicketService } from 'src/app/Service/Billing/ticket.service';
 
 @Component({
   selector: 'app-pos-settle',
@@ -53,6 +58,7 @@ export class PosSettleComponent implements OnInit {
     selectedTable: Observable<any>;
     selectedTicket: number;
     selectedCustomerId: number = 0;
+    selectedTableId: number;
 
     selectedValue: any = '';
     totalPayable: any = '';
@@ -65,13 +71,23 @@ export class PosSettleComponent implements OnInit {
     currentUser: any;
     currentYear: any;
 
+
+    tableNew: Table = new Table();
+    customerNew: any;
+    ordersNew : Order[] = [];
+    productList:Product[]=[];
+
     // Constructor
     constructor(
         private store: Store<any>,
         private activatedRoute: ActivatedRoute,
         private orderStoreApi: OrderStoreService,
         private ticketStoreApi: TicketStoreService,
-        private _location: Location
+        private _location: Location,
+        private billService: BillingService,
+        private _customerService:AccountTransactionTypeService,
+        private orderApi: OrderService,  
+        private ticketService: TicketService,
     ) {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -80,9 +96,56 @@ export class PosSettleComponent implements OnInit {
                 this.orderStoreApi.loadOrdersByTicket(this.selectedTicket);
             }
         });
+
+
+        this.activatedRoute.queryParamMap
+            .subscribe(params => {
+                this.selectedTableId = +params.get('tableId')||0;   
+                this.selectedCustomerId =  +params.get('customerId');
+                this.selectedTicket =  +params.get('ticketId')||0;
+
+                
+                console.log('table id', this.selectedTableId);
+                console.log('customer id', this.selectedCustomerId);
+                console.log('ticket id', this.selectedTicket);
+        });
     }
 
     ngOnInit() {
+        this.billService.loadProducts()
+            .subscribe(data => { 
+                this.productList = data;
+        });
+
+        if(this.selectedTicket){
+            this.orderApi.loadOrdersNew(this.selectedTicket.toString())
+                .subscribe(
+                    data => {
+                        this.ordersNew = data;
+                    }
+                )
+        }
+        if(this.selectedTableId) {
+            this.billService.loadTables()
+                .subscribe(data => {
+                    if(data != null) {
+                        this.tableNew = data.find(t => t.TableId == this.selectedTableId.toString()) || new Table();
+                    }
+            });
+        }
+
+        if(this.selectedCustomerId) {
+            this._customerService.get(Global.BASE_ACCOUNT_POSCUSTOMER_ENDPOINT)
+                .subscribe(
+                    customers => {
+                        if(customers != null) {
+                            this.customerNew = customers.find(c => c.Id == this.selectedCustomerId.toString());
+                        }
+                    },
+                    error => console.log(error)
+            );
+        }
+
         this.table$ = this.store.select(TableSelector.getCurrentTable);
         this.products$ = this.store.select(ProductSelector.getAllProducts);
         this.ticketsLoading$ = this.store.select(TicketSelector.getLoadingStatus);
@@ -94,15 +157,46 @@ export class PosSettleComponent implements OnInit {
         this.customer$ = this.store.select(CustomerSelector.getCurrentCustomer);
 
         // Subscriptions
-        this.ticket$.subscribe((ticket: Ticket) => {
-            if (ticket) {
-                this.ticket = ticket;
-                this.totalPayable = this.getFinalBalance().toFixed(2);
-                this.selectedCustomerId = ticket.CustomerId;
-                this.selectedValue = '';
-                this.isLoading = false;
-            }
-        });
+        // this.ticket$.subscribe((ticket: Ticket) => {
+        //     if (ticket) {
+        //         this.ticket = ticket;
+        //         this.totalPayable = this.getFinalBalance().toFixed(2);
+        //         this.selectedCustomerId = ticket.CustomerId;
+        //         this.selectedValue = '';
+        //         this.isLoading = false;
+        //     }
+        // });
+
+        if(this.selectedTableId) {
+            this.ticketService.loadTableTickets(this.selectedTableId.toString())
+            .subscribe(
+                data => {
+                    this.ticket = data.find(t => t.Id == this.selectedTicket);
+                    console.log('the ticccc', this.ticket);
+                    
+                }
+            );
+        }else {
+            this._customerService.get(Global.BASE_ACCOUNT_POSCUSTOMER_ENDPOINT)
+                .subscribe(
+                customers => {
+                    this.customerNew = customers.find(c => c.Id == this.selectedCustomerId);
+                    console.log('the customers are', customers)
+                },
+                error => console.log(error)
+            );
+
+            this.ticketService.loadCustomerTickets(this.selectedCustomerId.toString())
+            .subscribe(
+                data => {
+                    this.ticket = data.find(t => t.Id == this.selectedTicket);
+                }
+            );
+        }
+
+        // this.totalPayable = this.getFinalBalance().toFixed(2);
+        // this.selectedCustomerId = this.ticket.CustomerId;
+        // this.selectedValue = '';
 
         this.table$.subscribe((table: Table) => {
             if (table) {
@@ -115,6 +209,7 @@ export class PosSettleComponent implements OnInit {
         });
 
         this.orders$.subscribe((orders: Order[]) => {
+            console.log('in settle orders are', orders)
             if (orders.length) {
                 this.parsedOrders = this.mergeDuplicateItems(orders);
             }
@@ -127,6 +222,9 @@ export class PosSettleComponent implements OnInit {
         this.ordersLoading$.subscribe((isLoading: boolean) => {
             this.isLoading = isLoading;
         });
+
+
+        
     }
 	/**
 	 * Item Price
@@ -164,12 +262,15 @@ export class PosSettleComponent implements OnInit {
     calculateSum (): number {
         let totalAmount = 0;
 
-        if (this.parsedOrders.length) {
-            this.parsedOrders.forEach((order) => {
-                totalAmount = totalAmount +
-                    (order.OrderItems.length) ? order.OrderItems.reduce((total: number, order: OrderItem) => {
-                        return eval((total + order.Qty * order.UnitPrice / 1.13).toFixed(2));
-                    }, 0) : 0;
+        if (this.ordersNew.length) {
+            this.ordersNew.forEach((order) => {
+                order.OrderItems.forEach(item => {
+                    totalAmount += item.TotalAmount;
+                });
+                // totalAmount = totalAmount +
+                //     (order.OrderItems.length) ? order.OrderItems.reduce((total: number, order: OrderItem) => {
+                //         return eval((total + order.Qty * order.UnitPrice / 1.13).toFixed(2));
+                //     }, 0) : 0;
             });
         }
 
