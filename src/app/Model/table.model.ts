@@ -1,7 +1,7 @@
 ﻿/**	
  * Defines the model/interface for pos-table entity
  */
-export interface Table {
+export class Table {
 	Id: number;
     TableId: string;
 	Name?: string;

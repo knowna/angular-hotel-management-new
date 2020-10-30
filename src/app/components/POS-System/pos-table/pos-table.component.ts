@@ -60,7 +60,7 @@ export class PosTableComponent implements OnInit {
 
     isLoading: boolean = false;
     isTicketEmpty: boolean = false;      
-    table: Table;
+    table: Table = new Table();
     parsedOrders: Order[] = [];
     ticketNote: string;
     enableTicketNote: boolean = false;
@@ -86,7 +86,7 @@ export class PosTableComponent implements OnInit {
     productNameList=[];
 
     tableListNew = [];
-    tableNew: Table;
+    tableNew: Table = new Table();
     ordersNew : Order[] = [];
 
     tables$: Observable<Table[]>
@@ -122,6 +122,7 @@ export class PosTableComponent implements OnInit {
                     .subscribe(
                         data => {
                             this.ordersNew = data;
+                            console.log('the orders after fetch are', this.ordersNew)
                             // this.ordersNew.forEach((order: Order) => {
                             //     order.OrderItems.forEach((item: any) => {
                             //         item.Tags = item.Tags.split(',');
@@ -149,7 +150,9 @@ export class PosTableComponent implements OnInit {
             .subscribe(data => {
                 this.tableListNew = data;
                 if(this.tableListNew != null) {
-                    this.tableNew = this.tableListNew.find(t => t.TableId == this.selectedTable);
+                    this.tableNew = this.tableListNew.find(t => t.TableId == this.selectedTable) || new Table();
+                    console.log('filter table', this.tableNew);
+                    
                 }
         });
 
@@ -189,10 +192,10 @@ export class PosTableComponent implements OnInit {
 
         this.table$ = this.store.select(TableSelector.getCurrentTable);
         // console.log('the current table is', this.table$)
-        this.customer$.subscribe((customerId: any) => {
-            this.customer = customerId;
-            this.selectedCustomerId = customerId ? customerId : 0;
-        });
+        // this.customer$.subscribe((customerId: any) => {
+        //     this.customer = customerId;
+        //     this.selectedCustomerId = customerId ? customerId : 0;
+        // });
 
         // this.table$.subscribe((table: Table) => {
         //     this.selectedTable = table.TableId || '';
@@ -336,7 +339,10 @@ export class PosTableComponent implements OnInit {
     }
 
     // Select/Deselect Order Item
-    selectOrderItem(OrderItem: OrderItem) {
+    selectOrderItem(OrderItem: any) {
+        
+        console.log(OrderItem);
+        
         this.previousItem && this.orderStoreApi.unSelectOrderItem(this.previousItem);
 
         if (!OrderItem.IsSelected && this.previousItem !== OrderItem) {
@@ -381,49 +387,96 @@ export class PosTableComponent implements OnInit {
 	 * Increments Order Item Quantity by one
 	 * @param OrderItem 
 	 */
-    incrementQty(OrderItem: OrderItem) {
-        let newOrderItem: any = '';        
-        let orderItemParsed = JSON.parse(JSON.stringify(OrderItem));
-        let parsedOrders = JSON.parse(JSON.stringify(this.parsedOrders));
+    incrementDecrementQty(OrderItem: OrderItem,updateType) {
+        console.log(updateType);
+        
+        OrderItem.Qty =updateType==='increase'?OrderItem.Qty+1:OrderItem.Qty-1;
+        
+        
+        OrderItem.TotalAmount=OrderItem.Qty*OrderItem.UnitPrice;
 
-        parsedOrders.map((order: Order) => {
-            order.OrderItems.map((orderItem: OrderItem) => {
-                if (orderItem.Id === orderItemParsed.Id) {
-                    orderItem.Qty = orderItem.Qty + 1;
-                    orderItem.TotalAmount = orderItem.Qty * orderItem.UnitPrice / 1.13; //Add Function VAT Value Minues;
-                    newOrderItem = orderItem;
-                }
-            });
-        });
+        let ticketTotalWithoutVat = OrderItem.UnitPrice*OrderItem.Qty;
+        let vatAmount =(0.13*ticketTotalWithoutVat);
+        let grandTotal = vatAmount+ticketTotalWithoutVat;
+    
+        let orderRequest : OrderItemRequest={
+       
+            "TicketId":this.selectedTicket?this.selectedTicket:0,
+            "TableId":''+(this.selectedTable?this.selectedTable:0),
+            "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
+            "OrderId":0,
+            "TicketTotal":OrderItem.UnitPrice*OrderItem.Qty,
+            "Discount":0,
+            "ServiceCharge":0,
+            "VatAmount": vatAmount,
+            "GrandTotal":grandTotal,
+            "Balance":grandTotal,
+            "UserId":this.currentUser.UserName,
+            "FinancialYear":this.currentYear.Name,
+            "OrderItem":OrderItem
+    
+    
+        }
+    
 
-        let requestObject: OrderItemRequest = this.prepareOrderItemRequest(orderItemParsed.OrderId, newOrderItem, parsedOrders, false, false, false, true);
-        this.orderStoreApi.incrementQty(requestObject);
+        
+        this.orderApi.updateOrderProduct(updateType,orderRequest)
+        .subscribe(
+            data=>{
+                console.log('chalyo');
+                
+                console.log(data);
+                
+            }
+        )
+
+
+        
+
+        // let newOrderItem: any = '';        
+        // let orderItemParsed = JSON.parse(JSON.stringify(OrderItem));
+        // let parsedOrders = JSON.parse(JSON.stringify(this.parsedOrders));
+        // console.log(orderItemParsed,parsedOrders);
+        
+        // parsedOrders.map((order: Order) => {
+        //     order.OrderItems.map((orderItem: OrderItem) => {
+        //         if (orderItem.Id === orderItemParsed.Id) {
+        //             orderItem.Qty = orderItem.Qty + 1;
+        //             orderItem.TotalAmount = orderItem.Qty * orderItem.UnitPrice / 1.13; //Add Function VAT Value Minues;
+        //             newOrderItem = orderItem;
+        //         }
+        //     });
+        // });
+
+        // let requestObject: OrderItemRequest = this.prepareOrderItemRequest(orderItemParsed.OrderId, newOrderItem, parsedOrders, false, false, false, true);
+        // this.orderStoreApi.incrementQty(requestObject);
+        
     }
 
 	/**
 	 * Decrements Order Item Quantity by one
 	 * @param OrderItem 
 	 */
-    decrementQty(OrderItem: OrderItem) {
-        let newOrderItem: any = '';        
-        let orderItemParsed = JSON.parse(JSON.stringify(OrderItem));
-        let parsedOrders = JSON.parse(JSON.stringify(this.parsedOrders));
+    // decrementQty(OrderItem: OrderItem) {
+    //     let newOrderItem: any = '';        
+    //     let orderItemParsed = JSON.parse(JSON.stringify(OrderItem));
+    //     let parsedOrders = JSON.parse(JSON.stringify(this.parsedOrders));
 
-        parsedOrders.map((order: Order) => {
-            order.OrderItems.map((orderItem: OrderItem) => {
-                if (orderItem.Id === orderItemParsed.Id) {
-                    orderItem.Qty = orderItem.Qty - 1;
-                    orderItem.TotalAmount = orderItem.Qty * orderItem.UnitPrice / 1.13; //Add Function VAT Value Minues;
-                    newOrderItem = orderItem;
-                }
-            });
-        });
+    //     parsedOrders.map((order: Order) => {
+    //         order.OrderItems.map((orderItem: OrderItem) => {
+    //             if (orderItem.Id === orderItemParsed.Id) {
+    //                 orderItem.Qty = orderItem.Qty - 1;
+    //                 orderItem.TotalAmount = orderItem.Qty * orderItem.UnitPrice / 1.13; //Add Function VAT Value Minues;
+    //                 newOrderItem = orderItem;
+    //             }
+    //         });
+    //     });
 
-        if (newOrderItem.Qty >= 1) {
-            let requestObject: OrderItemRequest = this.prepareOrderItemRequest(orderItemParsed.OrderId, newOrderItem, parsedOrders, false, false, false, true);
-            this.orderStoreApi.decrementQty(requestObject);
-        }
-    }
+    //     if (newOrderItem.Qty >= 1) {
+    //         let requestObject: OrderItemRequest = this.prepareOrderItemRequest(orderItemParsed.OrderId, newOrderItem, parsedOrders, false, false, false, true);
+    //         this.orderStoreApi.decrementQty(requestObject);
+    //     }
+    // }
 
 	/**
 	 * Decrements Order Item Quantity by one
@@ -556,6 +609,8 @@ export class PosTableComponent implements OnInit {
     
     vatAmount =(0.13*ticketTotalWithoutVat);
     grandTotal = vatAmount+ticketTotalWithoutVat;
+
+
     let orderRequest={
        
         "TicketId":this.selectedTicket?this.selectedTicket:0,
@@ -605,6 +660,8 @@ export class PosTableComponent implements OnInit {
 	 * @param OrderItem 
 	 */
     removeItem(OrderItem: OrderItem) {
+        console.log(OrderItem);
+        
         let Orders = this.prepareOrders(OrderItem);
         let requestObjectWithoutMovedOrderItem: OrderItemRequest = this.prepareOrderItemRequest(OrderItem.OrderId, OrderItem, Orders.ordersWithoutSelectedOrderItem, true);
         let ItemsOrder: Order[] = Orders.ordersWithoutSelectedOrderItem.filter(order => order.OrderNumber == OrderItem.OrderNumber);

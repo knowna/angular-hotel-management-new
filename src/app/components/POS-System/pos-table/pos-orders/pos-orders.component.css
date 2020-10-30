@@ -19,7 +19,7 @@ hr {
 }
 
 .active {
-    background: #007bff;
+    background: #364a70;
     color:white !important;
 }
 
@@ -95,3 +95,8 @@ dl {
 .p-15 {
     padding: 15px;
 }
+
+.scrollbar {
+    max-height: 300px;
+    overflow-y: scroll;
+    }

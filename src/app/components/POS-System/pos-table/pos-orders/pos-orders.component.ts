@@ -24,6 +24,8 @@ import { UserStoreService } from '../../../../Service/store/user.store.service';
 import { TicketService } from 'src/app/Service/Billing/ticket.service';
 import { BillingService } from 'src/app/Service/Billing/billing.service';
 import { ToastrService } from 'ngx-toastr';
+import { AccountTransactionTypeService } from 'src/app/Service/Inventory/account-trans-type.service';
+import { Global } from 'src/app/Shared/global';
 
 @Component({
   selector: 'pos-orders',
@@ -43,6 +45,8 @@ export class PosOrdersComponent implements OnInit {
     user$: Observable<User>
     customer$: Observable<Customer>
 
+    customerNew: Customer;
+
     selected: any = '';
     isSelected: boolean = false;
     voidGiftSum: number = 0;
@@ -58,8 +62,8 @@ export class PosOrdersComponent implements OnInit {
         private _location: Location,
         private ticketService: TicketService,
         private billService:BillingService,
-        private toastrService: ToastrService
-
+        private toastrService: ToastrService,
+        private _customerService:AccountTransactionTypeService,
 
     ) {}
 
@@ -67,6 +71,8 @@ export class PosOrdersComponent implements OnInit {
     ngOnInit() {
 
         console.log('the orders are', this.orders);
+        console.log('the customer us', this.selectedCustomerId)
+        console.log('the table us', this.table)
         this.activatedRoute.params.subscribe(params => {
             this.selectedTicket = (params['ticketId']) ? params['ticketId'] : 0;
         });
@@ -74,14 +80,47 @@ export class PosOrdersComponent implements OnInit {
         this.user$ = this.userStoreService.user$;
         this.customer$ = this.store.select(CustomerSelector.getCurrentCustomer);
         if(!this.ticket) {
-            this.ticketService.loadTableTickets(this.table.TableId)
+            if(this.table.TableId) {
+                this.ticketService.loadTableTickets(this.table.TableId)
                 .subscribe(
                     data => {
                         this.ticket = data.find(t => t.Id == this.selectedTicket);
                     }
                 );
+            }else {
+                this._customerService.get(Global.BASE_ACCOUNT_POSCUSTOMER_ENDPOINT)
+                    .subscribe(
+                    customers => {
+                        this.customerNew = customers.find(c => c.Id == this.selectedCustomerId);
+                        console.log('the customers are', customers)
+                    },
+                    error => console.log(error)
+                );
+
+
+                this.ticketService.loadCustomerTickets(this.selectedCustomerId)
+                .subscribe(
+                    data => {
+                        this.ticket = data.find(t => t.Id == this.selectedTicket);
+                    }
+                );
+            }
+            
         }
     }
+
+    changeSelected(OrderItems,currentIndex) {
+        OrderItems = OrderItems.map(function(x) {
+        const i = OrderItems.indexOf(x);
+        if(i == currentIndex) {
+        x.IsSelected = !x.IsSelected;
+        }else{
+        x.IsSelected = false;
+        }
+        return x;
+        });
+        }
+        
 
 
 
@@ -244,4 +283,16 @@ export class PosOrdersComponent implements OnInit {
     getFinalBalance() {
         return (eval(this.getGrandTotal()) - this.getTotalCharged(this.ticket)).toFixed(2)
     }   
+
+
+    settle() {
+        // console.log('the table is', this.selectedTable);
+        // console.log('the customer is', this.selectedCustomerId);
+        if(this.selectedTable) {
+            this.router.navigate(['/pos/settle'], { queryParams: { tableId: this.selectedTable , ticketId : this.selectedTicket} });
+        }else {
+            this.router.navigate(['/pos/settle'], { queryParams: { customerId: this.selectedCustomerId , ticketId : this.selectedTicket} });
+        }
+        
+    }
 }

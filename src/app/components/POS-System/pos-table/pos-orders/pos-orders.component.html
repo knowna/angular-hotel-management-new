@@ -8,7 +8,7 @@
             </div>
             <div class="col-md-5">
                 <strong>
-                    {{ selectedCustomerId ? 'Cust#: ' + (customer$ | async)?.CustomerName : 'Table: ' + table ? table.Name : '' }}
+                    {{ selectedCustomerId ? 'Cust#: ' + customerNew?.CustomerName : 'Table: ' + table ? table.Name : '' }}
                 </strong>
             </div>
             <div class="col-md-4">
@@ -41,11 +41,11 @@
                     <strong>Order No: {{ order.OrderNumber }}, {{ order.UserId + '-' }} {{ order.OrderOpeningTime }}</strong>
                     <hr>
                 </div>
-                <div class="row order" *ngFor="let item of order.OrderItems" [ngClass]="{
+                <div class="row order" *ngFor="let item of order.OrderItems;index as i " [ngClass]="{
                         'active': item.IsSelected,
                         'submitted': item.Tags.indexOf('Submitted') !== -1,
                         'void': item.IsVoid
-                    }" (click)="selectOrderItem.emit(item)">
+                    }" (click)="selectOrderItem.emit(item);changeSelected(order.OrderItems,i)">
                     <div class="col-md-5 text-left">
                         <p>
                             <span>
@@ -198,6 +198,7 @@
             <div class="col-sm-6">
                 <button 
                     class="btn btn-block btn-success w-100 p-15"
+                    (click)="settle()"
                     routerLink="/pos/settle">
                     Settle
                 </button>

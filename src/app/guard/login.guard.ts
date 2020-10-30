@@ -19,7 +19,7 @@ export class LoginGuard implements CanActivate {
           return true; 
        }        
       else
-      this.router.navigate(['/reservation'])
+      this.router.navigate(['/dashboard'])
        return false;
        
 

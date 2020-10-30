@@ -14,17 +14,17 @@
                         <h5>
                             {{ (ticket) ? '#' + ticket.TicketId : '' }} {{
     selectedCustomerId ? 'Customer: ' + (customer$ | async)?.CustomerName : 'Table:
-                            ' + (table$ |async)?.TableId
+                            ' + (tableNew)?.TableId
                             }}
                         </h5>
                     </div>
-                    <div class="tickets-section__body">
+                    <div class="tickets-section__body scroll">
                         
-                            <div *ngFor="let order of parsedOrders">
+                            <div *ngFor="let order of ordersNew">
                                 <div class="row ticket-item" *ngFor="let item of order.OrderItems">
                                     <div class="col-md-6 text-left">
                                         <p>
-                                            <span>{{ getProductById(products$ | async, item.ItemId)?.Name }}</span>
+                                            <span>{{ getProductById(productList, item.ItemId)?.Name }}</span>
                                         </p>
                                     </div>
                                     <div class="col-md-2 text-left">
