@@ -6,7 +6,7 @@
         <button class="card-body border border-dark border-radius no-bottom-margin card-bag ml-1" (click)="goToCustomerView()" style="cursor:pointer; width:18%;">
             <h4 class="text-center">Select Customer</h4>
         </button>
-        <button [disabled]="disableButton" [ngClass]="{disabled: disableButton}" class="card-body border border-dark border-radius no-bottom-margin card-bag ml-1" (click)="showTicketNote.emit()" style="cursor:pointer; width:18%;">
+        <button [disabled]="orders?.length ? false : true" [ngClass]="{disabled: disableButton}" class="card-body border border-dark border-radius no-bottom-margin card-bag ml-1" (click)="showTicketNote.emit()" style="cursor:pointer; width:18%;">
             <h4 class="text-center">Ticket Note</h4>
         </button>
         <button [disabled]="disableButton" [ngClass]="{disabled: disableButton}" class="card-body border border-dark border-radius no-bottom-margin card-bag ml-1" routerLink="/pos/InvoicePrint" style="cursor:pointer; width:18%;">

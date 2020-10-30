@@ -148,7 +148,30 @@
                 <strong>Rs. {{ getGrandTotal() }}</strong>
             </div>
         </div>
-        <div class="row m-0" *ngIf="ticket?.PaymentHistory.length">
+
+        <div *ngIf="ticket?.PaymentHistory.length" class="scrollbar-payment">
+            <div class="row m-0">
+                <div class="col-sm-12">
+                    <strong class="pull-left">Payment Total: </strong>
+                    <strong class="pull-right">Rs. {{ getTotalCharged(ticket).toFixed(2) }} </strong>
+                </div>
+            </div>
+            <div class="row m-0" *ngFor="let pay of ticket.PaymentHistory" style="color:green">
+
+                <div class="col-sm-6 text-left">
+                    {{ getDate(pay.DateTime) }}
+                </div>
+                <div class="col-sm-3 text-left">
+                    {{ pay.PaymentMode }}
+                </div>
+                <div class="col-sm-3 text-right">
+                    Rs. {{ pay.AmountPaid.toFixed(2) }}
+                </div>
+            </div>
+        </div>
+
+        <!-- commented previous one -->
+        <!-- <div class="row m-0" *ngIf="ticket?.PaymentHistory.length">
             <div class="col-md-12">
                 <div class="row m-0">
                     <div class="col-md-12">
@@ -165,12 +188,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="row m-0 balance-section">
-            <div class="col-md-6 text-left">
+            <div class="col-sm-6 text-left">
                 <strong>Balance: </strong>
             </div>
-            <div class="col-md-6 text-right">
+            <div class="col-sm-6 text-right">
                 <strong>Rs. {{ getFinalBalance() }}</strong>
             </div>
         </div>
