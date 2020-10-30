@@ -92,7 +92,7 @@
                                         <strong class="pull-right">Rs. {{ getTotalCharged(ticket).toFixed(2)}} </strong>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row scrollbar">
                                     <div class="col-md-12">
                                         <dl class="dl-horizontal" *ngFor="let pay of ticket.PaymentHistory" style="color:green">
                                             <dt>{{ getDate(pay.DateTime) }}</dt>

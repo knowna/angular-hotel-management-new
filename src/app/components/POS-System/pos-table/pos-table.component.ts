@@ -568,11 +568,11 @@ export class PosTableComponent implements OnInit {
     }
 
     addOrderItemList(products: any[]) {
-       let  ListOrderItem=[];
-       let ticketTotalWithoutVat=0;
-       let vatAmount =0;
-       let grandTotal =0;
-        let UnSubmittedOrder = this.getUnSubmittedOrder(this.parsedOrders);
+        let  ListOrderItem=[];
+        let ticketTotalWithoutVat=0;
+        let vatAmount =0;
+        let grandTotal =0;
+        let UnSubmittedOrder = this.getUnSubmittedOrder(this.ordersNew);
 
         products.forEach(product => {
             let total =0;
@@ -592,9 +592,9 @@ export class PosTableComponent implements OnInit {
             "Id":0,
             "UserId": this.currentUser.UserName,
             "FinancialYear": this.currentYear.Name,
-            "OrderNumber":0,
+            "OrderNumber":UnSubmittedOrder ? UnSubmittedOrder.OrderNumber : 0,
             "OrderDescription":product.OrderDescription,
-            "OrderId": 0,
+            "OrderId": UnSubmittedOrder ? UnSubmittedOrder.Id : 0,
             "ItemId": product.Id,
             "Qty": product.Qty,
             "UnitPrice": unitprice,
@@ -616,7 +616,7 @@ export class PosTableComponent implements OnInit {
         "TicketId":this.selectedTicket?this.selectedTicket:0,
         "TableId":this.selectedTable?this.selectedTable:0,
         "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
-        "OrderId":0,
+        "OrderId":UnSubmittedOrder ? UnSubmittedOrder.OrderNumber : 0,
         "TicketTotal":ticketTotalWithoutVat,
         "Discount":0,
         "ServiceCharge":0,
@@ -630,6 +630,7 @@ export class PosTableComponent implements OnInit {
 
     }
 
+    console.log('the order request us', orderRequest);
            
             
     this.orderApi.addOrderProductList(orderRequest).subscribe(

@@ -10,7 +10,8 @@ import { Order, OrderItem } from '../../../../Model/order.model';
 })
 export class PosOptionsComponent implements OnInit {
     @Input('selectedItem') selectedItem: any;
-    @Input('orders') orders: Observable<Order[]>;   
+    // @Input('orders') orders: Observable<Order[]>;   
+    @Input('orders') orders: Order[];
     @Output() removeItem: EventEmitter<OrderItem> = new EventEmitter<OrderItem>();
     @Output() toogleGiftItem: EventEmitter<OrderItem> = new EventEmitter<OrderItem>();
     @Output() voidItem: EventEmitter<OrderItem> = new EventEmitter<OrderItem>();
@@ -32,13 +33,18 @@ export class PosOptionsComponent implements OnInit {
 
      // Initialize data here
      ngOnInit() {
-         console.log('the selected item is', this.selectedItem)
-        this.orders && this.orders.subscribe(orders => {
-            this.parsedOrders = orders;
-            return this.parsedOrders.length
-                ? this.disableButton = false
-                : this.disableButton = true;
-        });
+        console.log('the selected item is', this.selectedItem)
+        console.log('the orders in option are', this.orders)
+        this.disableButton = this.orders.length ? false : true;
+        console.log('the didable buttons us', this.disableButton)
+        
+        // this.orders && this.orders.subscribe(orders => {
+        //     console.log('the orders are in option class', orders);
+        //     this.parsedOrders = orders;
+        //     return this.parsedOrders.length
+        //         ? this.disableButton = false
+        //         : this.disableButton = true;
+        // });
      }
 
 	/**

@@ -33,6 +33,7 @@ import { AccountTransactionTypeService } from 'src/app/Service/Inventory/account
 import { Global } from 'src/app/Shared/global';
 import { OrderService } from 'src/app/Service/Billing/order.service';
 import { TicketService } from 'src/app/Service/Billing/ticket.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-pos-settle',
@@ -88,9 +89,10 @@ export class PosSettleComponent implements OnInit {
         private _customerService:AccountTransactionTypeService,
         private orderApi: OrderService,  
         private ticketService: TicketService,
+        private toastrService: ToastrService
     ) {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
-        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        this.currentUser = JSON.parse(localStorage.getItem('userInformation'));
         this.activatedRoute.params.subscribe(params => {
             if (this.selectedTicket) {
                 this.orderStoreApi.loadOrdersByTicket(this.selectedTicket);
@@ -438,14 +440,32 @@ export class PosSettleComponent implements OnInit {
         // }
 
         this.isLoading = true;
-        this.ticketStoreApi.payByCash(ticket.Id, {
+        // this.ticketStoreApi.payByCash(ticket.Id, {
+        //     "TicketId": ticket.Id,
+        //     "Charged": this.selectedValue,
+        //     "Discount": this.ticket.Discount,
+        //     "PaymentMode": "Cash",
+        //     "FinancialYear": this.currentYear.Name,
+        //     "UserName": this.currentUser.UserName
+        // });
+        let details = {
             "TicketId": ticket.Id,
             "Charged": this.selectedValue,
             "Discount": this.ticket.Discount,
             "PaymentMode": "Cash",
             "FinancialYear": this.currentYear.Name,
             "UserName": this.currentUser.UserName
-        });
+        }
+
+
+        this.ticketService.payTicketByCash(ticket.Id, details)
+            .subscribe(
+                data => {
+                    this.ticket = data;
+                    this.toastrService.success('Payment of Rs.'+this.selectedValue+' has been done successfully!');
+                    this.selectedValue = '';
+                }
+        );
     }
 
     // Call to make the ticket pay by card  
@@ -461,14 +481,30 @@ export class PosSettleComponent implements OnInit {
         }
 
         this.isLoading = true;
-        this.ticketStoreApi.payByCard(ticket.Id, {
+        // this.ticketStoreApi.payByCard(ticket.Id, {
+        //     "TicketId": ticket.Id,
+        //     "Charged": this.selectedValue,
+        //     "Discount": this.ticket.Discount,
+        //     "PaymentMode": "Card",
+        //     "FinancialYear": this.currentYear.Name,
+        //     "UserName": this.currentUser.UserName
+        // });
+        let details = {
             "TicketId": ticket.Id,
             "Charged": this.selectedValue,
             "Discount": this.ticket.Discount,
             "PaymentMode": "Card",
             "FinancialYear": this.currentYear.Name,
             "UserName": this.currentUser.UserName
-        });
+        }
+        this.ticketService.payTicketByCard(ticket.Id, details)
+            .subscribe(
+                data => {
+                    this.ticket = data;
+                    this.toastrService.success('Payment of Rs.'+this.selectedValue+' has been done successfully!');
+                    this.selectedValue = '';
+                }
+        );
     }
 
     // Call to make the ticket pay by voucher
