@@ -336,7 +336,9 @@ export class PosTableComponent implements OnInit {
     }
 
     // Select/Deselect Order Item
-    selectOrderItem(OrderItem: OrderItem) {
+    selectOrderItem(OrderItem: any) {
+        console.log(OrderItem);
+        
         this.previousItem && this.orderStoreApi.unSelectOrderItem(this.previousItem);
 
         if (!OrderItem.IsSelected && this.previousItem !== OrderItem) {
@@ -382,22 +384,59 @@ export class PosTableComponent implements OnInit {
 	 * @param OrderItem 
 	 */
     incrementQty(OrderItem: OrderItem) {
-        let newOrderItem: any = '';        
-        let orderItemParsed = JSON.parse(JSON.stringify(OrderItem));
-        let parsedOrders = JSON.parse(JSON.stringify(this.parsedOrders));
+        OrderItem.Qty = OrderItem.Qty+1;
+        console.log( OrderItem.Qty);
+        
+        OrderItem.TotalAmount=OrderItem.Qty*OrderItem.UnitPrice;
 
-        parsedOrders.map((order: Order) => {
-            order.OrderItems.map((orderItem: OrderItem) => {
-                if (orderItem.Id === orderItemParsed.Id) {
-                    orderItem.Qty = orderItem.Qty + 1;
-                    orderItem.TotalAmount = orderItem.Qty * orderItem.UnitPrice / 1.13; //Add Function VAT Value Minues;
-                    newOrderItem = orderItem;
-                }
-            });
-        });
+        let ticketTotalWithoutVat = OrderItem.UnitPrice*OrderItem.Qty;
+        let vatAmount =(0.13*ticketTotalWithoutVat);
+        let grandTotal = vatAmount+ticketTotalWithoutVat;
+    
+        let orderRequest={
+       
+            "TicketId":this.selectedTicket?this.selectedTicket:0,
+            "TableId":this.selectedTable?this.selectedTable:0,
+            "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
+            "OrderId":0,
+            "TicketTotal":OrderItem.UnitPrice*OrderItem.Qty,
+            "Discount":0,
+            "ServiceCharge":0,
+            "VatAmount": vatAmount,
+            "GrandTotal":grandTotal,
+            "Balance":grandTotal,
+            "UserId":this.currentUser.UserName,
+            "FinancialYear":this.currentYear.Name,
+            "ListOrderItem":OrderItem
+    
+    
+        }
+    
 
-        let requestObject: OrderItemRequest = this.prepareOrderItemRequest(orderItemParsed.OrderId, newOrderItem, parsedOrders, false, false, false, true);
-        this.orderStoreApi.incrementQty(requestObject);
+        
+        console.log('single update',orderRequest);
+
+
+        
+
+        // let newOrderItem: any = '';        
+        // let orderItemParsed = JSON.parse(JSON.stringify(OrderItem));
+        // let parsedOrders = JSON.parse(JSON.stringify(this.parsedOrders));
+        // console.log(orderItemParsed,parsedOrders);
+        
+        // parsedOrders.map((order: Order) => {
+        //     order.OrderItems.map((orderItem: OrderItem) => {
+        //         if (orderItem.Id === orderItemParsed.Id) {
+        //             orderItem.Qty = orderItem.Qty + 1;
+        //             orderItem.TotalAmount = orderItem.Qty * orderItem.UnitPrice / 1.13; //Add Function VAT Value Minues;
+        //             newOrderItem = orderItem;
+        //         }
+        //     });
+        // });
+
+        // let requestObject: OrderItemRequest = this.prepareOrderItemRequest(orderItemParsed.OrderId, newOrderItem, parsedOrders, false, false, false, true);
+        // this.orderStoreApi.incrementQty(requestObject);
+        
     }
 
 	/**
@@ -556,6 +595,8 @@ export class PosTableComponent implements OnInit {
     
     vatAmount =(0.13*ticketTotalWithoutVat);
     grandTotal = vatAmount+ticketTotalWithoutVat;
+
+
     let orderRequest={
        
         "TicketId":this.selectedTicket?this.selectedTicket:0,
