@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -89,7 +89,8 @@ export class PosSettleComponent implements OnInit {
         private _customerService:AccountTransactionTypeService,
         private orderApi: OrderService,  
         private ticketService: TicketService,
-        private toastrService: ToastrService
+        private toastrService: ToastrService,
+        private router: Router
     ) {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
         this.currentUser = JSON.parse(localStorage.getItem('userInformation'));
@@ -627,5 +628,9 @@ export class PosSettleComponent implements OnInit {
             Balance: this.getFinalBalance().toFixed(2),
             RemainingBalance: this.hasRefundable ? (this.getFinalBalance() * (-1)).toFixed(2) : (0).toFixed(2)
         };
+    }
+
+    printInvoice() {
+        this.router.navigate(['/pos/InvoicePrint'], { queryParams: { ticketId : this.selectedTicket} });
     }
 }

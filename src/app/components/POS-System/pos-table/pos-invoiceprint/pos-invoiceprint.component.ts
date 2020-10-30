@@ -23,6 +23,9 @@ import * as $ from 'jquery';
 declare var jsPDF: any;
 import 'jspdf-autotable';
 import { AccountTransactionTypeService } from 'src/app/Service/Inventory/account-trans-type.service';
+import { ActivatedRoute } from '@angular/router';
+import { OrderService } from 'src/app/Service/Billing/order.service';
+import { BillingService } from 'src/app/Service/Billing/billing.service';
 
 @Component({
     selector: 'app-pos-InvoicePrint',
@@ -36,17 +39,50 @@ export class PosInvoicePrintComponent implements OnInit {
     parsedOrders: Order[] = [];
     products$: Observable<Product[]>;
     invoiceprint: IInvoicePrint;
+<<<<<<< HEAD
     public company: any = {};
+=======
+    selectedTicket:number;
+    productList:Product[]=[];
+>>>>>>> 06fa3b2a4fe2dce11b447da613a795097a4b1315
 
+
+    public company: any = {};
     // Constructor
     constructor(
         private store: Store<any>,
         private _location: Location,
+<<<<<<< HEAD
         private _purchaseService:AccountTransactionTypeService
+=======
+        private _purchaseService:AccountTransactionTypeService,
+        private activatedRoute: ActivatedRoute,
+        private orderApi: OrderService,
+        private billService: BillingService
+>>>>>>> 06fa3b2a4fe2dce11b447da613a795097a4b1315
     ) {
         this.company = JSON.parse(localStorage.getItem('company'));
     }
     ngOnInit() {
+        this.activatedRoute.queryParamMap
+            .subscribe(params => {
+                this.selectedTicket =  +params.get('ticketId')||0;
+                if(this.selectedTicket){
+                    this.orderApi.loadOrdersNew(this.selectedTicket.toString())
+                        .subscribe(
+                            data => {
+                                this.parsedOrders = data;
+                                console.log('the parsed orders',this.parsedOrders)
+                            }
+                        )
+                }
+        });
+
+        this.billService.loadProducts()
+            .subscribe(data => { 
+                this.productList = data;
+        });
+
         this.ticket$ = this.store.select(TicketSelector.getCurrentTicket);
         this.orders$ = this.store.select(OrderSelector.getAllOrders);
         this.products$ = this.store.select(ProductSelector.getAllProducts);
@@ -69,9 +105,9 @@ export class PosInvoicePrintComponent implements OnInit {
 	 * @param UnitPrice 
 	 */
     CurrentUnitPrice(UnitPrice: number) {
-        let currentprice = UnitPrice / 1.13;
+        // let currentprice = UnitPrice / 1.13;
         // Return product
-        return currentprice.toFixed(2);
+        return UnitPrice.toFixed(2);
     }
 	/**
 	 * Item Price
@@ -79,7 +115,8 @@ export class PosInvoicePrintComponent implements OnInit {
 	 * @param Qty 
 	 */
     ProductPrice(UnitPrice: number, Qty: number) {
-        let currentprice = UnitPrice / 1.13 * Qty;
+        // let currentprice = UnitPrice / 1.13 * Qty;
+        let currentprice = UnitPrice * Qty;
         // Return product
         return currentprice.toFixed(2);
     }
@@ -124,10 +161,13 @@ export class PosInvoicePrintComponent implements OnInit {
 
         if (this.parsedOrders.length) {
             this.parsedOrders.forEach((order) => {
-                totalAmount = totalAmount +
-                    (order.OrderItems.length) ? order.OrderItems.reduce((total: number, order: OrderItem) => {
-                        return total + order.Qty * eval((order.UnitPrice / 1.13).toFixed(2));
-                    }, 0) : 0;
+                order.OrderItems.forEach(item => {
+                    totalAmount += item.TotalAmount;
+                });
+                // totalAmount = totalAmount +
+                //     (order.OrderItems.length) ? order.OrderItems.reduce((total: number, order: OrderItem) => {
+                //         return total + order.Qty * eval((order.UnitPrice / 1.13).toFixed(2));
+                //     }, 0) : 0;
             });
         }
 
@@ -136,13 +176,14 @@ export class PosInvoicePrintComponent implements OnInit {
 
     // Calculates Discount
     calculateDiscount() {
-        let sum = this.calculateSum();
-        let giftSum = this.calculateVoidGiftSum();
-        let value = (giftSum / sum) * 100 || 0;
+        return 0.00;
+        // let sum = this.calculateSum();
+        // let giftSum = this.calculateVoidGiftSum();
+        // let value = (giftSum / sum) * 100 || 0;
 
-        return (this.ticket.Discount)
-            ? this.ticket.Discount.toFixed(2)
-            : (sum * (value / 100)).toFixed(2);
+        // return (this.ticket.Discount)
+        //     ? this.ticket.Discount.toFixed(2)
+        //     : (sum * (value / 100)).toFixed(2);
     }
 
     /**
@@ -164,15 +205,17 @@ export class PosInvoicePrintComponent implements OnInit {
     }
     // Calculates Taxable Amount
     calculateTaxableAmount(): number {
-        let sum = this.calculateSum();
-        let Discount = this.ticket.Discount;
-        let TaxableAmount = sum - Discount;
-        return TaxableAmount; 
+        return 0;
+        // let sum = this.calculateSum();
+        // let Discount = this.ticket.Discount;
+        // let TaxableAmount = sum - Discount;
+        // return TaxableAmount; 
     }
 
     // Calculates VAT Amount
     calculateVat() {
-        let taxableAmount = this.calculateSum() - eval(this.calculateDiscount()) + eval(this.calculateServiceCharge());
+        let taxableAmount = this.calculateSum();
+        // let taxableAmount = this.calculateSum() - eval(this.calculateDiscount()) + eval(this.calculateServiceCharge());
         return (taxableAmount * 0.13).toFixed(2);
     }
 
@@ -180,7 +223,8 @@ export class PosInvoicePrintComponent implements OnInit {
      * Calculates the grand total of the ticket
      */
     getGrandTotal() {
-        let taxableAmount = this.calculateSum() - eval(this.calculateDiscount()) + eval(this.calculateServiceCharge());
+        let taxableAmount = this.calculateSum();
+        // let taxableAmount = this.calculateSum() - eval(this.calculateDiscount()) + eval(this.calculateServiceCharge());
         return (taxableAmount + taxableAmount * 0.13).toFixed(2);
     }
 
@@ -229,175 +273,175 @@ export class PosInvoicePrintComponent implements OnInit {
 
     //Print Bill
     printBill() {
-        
-        if (this.getFinalBalance() > 0) {
-            alert("Before bill print! Please settle amount");
-        }
-        else
-        {
-            //let Printbill =
-            let BillNo = this.ticket.TicketId;
-            let BillAmount = this.getGrandTotal();
-            this.getPrintInvoice(BillNo, BillAmount)
-                .subscribe((invoicePrint: IInvoicePrint) => { this.invoiceprint = invoicePrint });
-            if (this.invoiceprint != null) {
-                let TDate = this.invoiceprint.TDate;
-                let IDate = this.invoiceprint.IDate;
-                var doc = new jsPDF('p', 'pt', 'a4');
-                var elem = document.getElementById('InvoiceTableData');
-                var CompanyName = JSON.parse(localStorage.getItem('company'));
-                var header = function (data) {
-                    doc.setFontSize(18);
-                    doc.setTextColor(40);
-                    doc.setFontStyle('normal');
-                    doc.text(CompanyName.NameEnglish, data.settings.margin.left + 270, 20, 'center');
-                    doc.text(CompanyName.Address + " " + CompanyName.Street + " " + CompanyName.City + " " + CompanyName.District, data.settings.margin.left + 270, 40, 'center');
-                    doc.setFontSize(14);
-                    doc.text("VAT/PAN # " + CompanyName.Pan_Vat, data.settings.margin.left + 255, 60, 'center');
-                    doc.text("Tax Invoice ", data.settings.margin.left + 270, 80, 'center');
-                    doc.setFontSize(12);
-                    doc.text("Bill # " + BillNo, data.settings.margin.left + 10, 100, 'left');
-                    doc.text("Transaction Date : " + TDate, data.settings.margin.left + 10, 120, 'left');
-                    doc.text("Invoice Date : " + IDate, data.settings.margin.left + 10, 140, 'left');
-                    doc.text("Payment Mode : ", data.settings.margin.left + 10, 160, 'left');
-                };
+        (window as any).print();
+        // if (this.getFinalBalance() > 0) {
+        //     alert("Before bill print! Please settle amount");
+        // }
+        // else
+        // {
+        //     //let Printbill =
+        //     let BillNo = this.ticket.TicketId;
+        //     let BillAmount = this.getGrandTotal();
+        //     this.getPrintInvoice(BillNo, Number(BillAmount))
+        //         .subscribe((invoicePrint: IInvoicePrint) => { this.invoiceprint = invoicePrint });
+        //     if (this.invoiceprint != null) {
+        //         let TDate = this.invoiceprint.TDate;
+        //         let IDate = this.invoiceprint.IDate;
+        //         var doc = new jsPDF('p', 'pt', 'a4');
+        //         var elem = document.getElementById('InvoiceTableData');
+        //         var CompanyName = JSON.parse(localStorage.getItem('company'));
+        //         var header = function (data) {
+        //             doc.setFontSize(18);
+        //             doc.setTextColor(40);
+        //             doc.setFontStyle('normal');
+        //             doc.text(CompanyName.NameEnglish, data.settings.margin.left + 270, 20, 'center');
+        //             doc.text(CompanyName.Address + " " + CompanyName.Street + " " + CompanyName.City + " " + CompanyName.District, data.settings.margin.left + 270, 40, 'center');
+        //             doc.setFontSize(14);
+        //             doc.text("VAT/PAN # " + CompanyName.Pan_Vat, data.settings.margin.left + 255, 60, 'center');
+        //             doc.text("Tax Invoice ", data.settings.margin.left + 270, 80, 'center');
+        //             doc.setFontSize(12);
+        //             doc.text("Bill # " + BillNo, data.settings.margin.left + 10, 100, 'left');
+        //             doc.text("Transaction Date : " + TDate, data.settings.margin.left + 10, 120, 'left');
+        //             doc.text("Invoice Date : " + IDate, data.settings.margin.left + 10, 140, 'left');
+        //             doc.text("Payment Mode : ", data.settings.margin.left + 10, 160, 'left');
+        //         };
 
-                var options = {
-                    beforePageContent: header,
-                    margin: {
-                        top: 80
-                    },
-                    columnStyles: {
-                        0: { columnWidth: 40, halign: 'left' },
-                        1: { columnWidth: 220, halign: 'left' },
-                        2: { columnWidth: 60, halign: 'center' },
-                        3: { columnWidth: 80, halign: 'right' },
-                        4: { columnWidth: 80, halign: 'right' }
-                    },
-                    startY: doc.pageCount > 1 ? doc.autoTableEndPosY() + 10 : 180
-                    // startY: doc.autoTableEndPosY() + 20
-                };
+        //         var options = {
+        //             beforePageContent: header,
+        //             margin: {
+        //                 top: 80
+        //             },
+        //             columnStyles: {
+        //                 0: { columnWidth: 40, halign: 'left' },
+        //                 1: { columnWidth: 220, halign: 'left' },
+        //                 2: { columnWidth: 60, halign: 'center' },
+        //                 3: { columnWidth: 80, halign: 'right' },
+        //                 4: { columnWidth: 80, halign: 'right' }
+        //             },
+        //             startY: doc.pageCount > 1 ? doc.autoTableEndPosY() + 10 : 180
+        //             // startY: doc.autoTableEndPosY() + 20
+        //         };
 
-                var data = doc.autoTableHtmlToJson(elem);
-                var head = [{ "header": "S.N." }, { "header": "Details" }, { "header": "Quantity" }, { "header": "Per Unit (Rs.)" }, { "header": "Total(Rs.)" }];
-                doc.autoTable(head, data.rows, options, {
-                    tableLineColor: [189, 195, 199],
-                    tableLineWidth: 0.75,
-                    styles: {
-                        font: 'Meta',
-                        lineColor: [44, 62, 80],
-                        lineWidth: 0.55
-                    },
-                    headerStyles: {
-                        fillColor: [0, 0, 0],
-                        fontSize: 11
-                    },
-                    bodyStyles: {
-                        fillColor: [216, 216, 216],
-                        textColor: 50
-                    },
-                    alternateRowStyles: {
-                        fillColor: [250, 250, 250]
-                    },
-                    startY: 50,
-                    drawHeaderRow: function (row, data) {
-                        row.height = 46; // Height for both headers
-                    },
-                    drawHeaderCell: function (cell, data) {
-                        doc.rect(cell.x, cell.y, cell.width, cell.height, cell.styles.fillStyle);
-                        doc.setFillColor(230);
-                        doc.rect(cell.x, cell.y + (cell.height / 2), cell.width, cell.height / 2, cell.styles.fillStyle);
-                        doc.autoTableText(cell.text, cell.textPos.x, cell.textPos.y, {
-                            halign: cell.styles.halign,
-                            valign: cell.styles.valign
-                        });
-                        doc.setTextColor(100);
-                        var text = data.table.rows[0].cells[data.column.dataKey].text;
-                        doc.autoTableText(text, cell.textPos.x, cell.textPos.y + (cell.height / 2), {
-                            halign: cell.styles.halign,
-                            valign: cell.styles.valign
-                        });
-                        return false;
-                    },
-                    drawRow: function (row, data) {
-                        // Colspan
-                        doc.setFontStyle('bold');
-                        doc.setFontSize(10);
-                        //if ($(row.raw[0]).hasClass("innerHeader")) {
-                        //    doc.setTextColor(200, 0, 0);
-                        //    doc.setFillColor(110, 214, 84);
-                        //    doc.rect(data.settings.margin.left, row.y, data.table.width, 20, 'F');
-                        //    doc.autoTableText("", data.settings.margin.left + data.table.width / 2, row.y + row.height / 2, {
-                        //        halign: 'center',
-                        //        valign: 'middle'
-                        //    });
-                        //    /*  data.cursor.y += 20; */
-                        //};
+        //         var data = doc.autoTableHtmlToJson(elem);
+        //         var head = [{ "header": "S.N." }, { "header": "Details" }, { "header": "Quantity" }, { "header": "Per Unit (Rs.)" }, { "header": "Total(Rs.)" }];
+        //         doc.autoTable(head, data.rows, options, {
+        //             tableLineColor: [189, 195, 199],
+        //             tableLineWidth: 0.75,
+        //             styles: {
+        //                 font: 'Meta',
+        //                 lineColor: [44, 62, 80],
+        //                 lineWidth: 0.55
+        //             },
+        //             headerStyles: {
+        //                 fillColor: [0, 0, 0],
+        //                 fontSize: 11
+        //             },
+        //             bodyStyles: {
+        //                 fillColor: [216, 216, 216],
+        //                 textColor: 50
+        //             },
+        //             alternateRowStyles: {
+        //                 fillColor: [250, 250, 250]
+        //             },
+        //             startY: 50,
+        //             drawHeaderRow: function (row, data) {
+        //                 row.height = 46; // Height for both headers
+        //             },
+        //             drawHeaderCell: function (cell, data) {
+        //                 doc.rect(cell.x, cell.y, cell.width, cell.height, cell.styles.fillStyle);
+        //                 doc.setFillColor(230);
+        //                 doc.rect(cell.x, cell.y + (cell.height / 2), cell.width, cell.height / 2, cell.styles.fillStyle);
+        //                 doc.autoTableText(cell.text, cell.textPos.x, cell.textPos.y, {
+        //                     halign: cell.styles.halign,
+        //                     valign: cell.styles.valign
+        //                 });
+        //                 doc.setTextColor(100);
+        //                 var text = data.table.rows[0].cells[data.column.dataKey].text;
+        //                 doc.autoTableText(text, cell.textPos.x, cell.textPos.y + (cell.height / 2), {
+        //                     halign: cell.styles.halign,
+        //                     valign: cell.styles.valign
+        //                 });
+        //                 return false;
+        //             },
+        //             drawRow: function (row, data) {
+        //                 // Colspan
+        //                 doc.setFontStyle('bold');
+        //                 doc.setFontSize(10);
+        //                 //if ($(row.raw[0]).hasClass("innerHeader")) {
+        //                 //    doc.setTextColor(200, 0, 0);
+        //                 //    doc.setFillColor(110, 214, 84);
+        //                 //    doc.rect(data.settings.margin.left, row.y, data.table.width, 20, 'F');
+        //                 //    doc.autoTableText("", data.settings.margin.left + data.table.width / 2, row.y + row.height / 2, {
+        //                 //        halign: 'center',
+        //                 //        valign: 'middle'
+        //                 //    });
+        //                 //    /*  data.cursor.y += 20; */
+        //                 //};
 
-                        doc.setTextColor(200, 0, 0);
-                        doc.setFillColor(110, 214, 84);
-                        doc.rect(data.settings.margin.left, row.y, data.table.width, 20, 'F');
-                        doc.autoTableText("", data.settings.margin.left + data.table.width / 2, row.y + row.height / 2, {
-                            halign: 'center',
-                            valign: 'middle'
-                        });
+        //                 doc.setTextColor(200, 0, 0);
+        //                 doc.setFillColor(110, 214, 84);
+        //                 doc.rect(data.settings.margin.left, row.y, data.table.width, 20, 'F');
+        //                 doc.autoTableText("", data.settings.margin.left + data.table.width / 2, row.y + row.height / 2, {
+        //                     halign: 'center',
+        //                     valign: 'middle'
+        //                 });
 
 
-                        if (row.index % 5 === 0) {
-                            var posY = row.y + row.height * 6 + data.settings.margin.bottom;
-                            if (posY > doc.internal.pageSize.height) {
-                                data.addPage();
-                            }
-                        }
-                    },
-                    drawCell: function (cell, data) {
-                        // Rowspan
-                        console.log(cell);
-                        //if ($(cell.raw).hasClass("innerHeader")) {
-                        //    doc.setTextColor(200, 0, 0);
-                        //    doc.autoTableText(cell.text + '', data.settings.margin.left + data.table.width / 2, data.row.y + data.row.height / 2, {
-                        //        halign: 'center',
-                        //        valign: 'middle'
-                        //    });
+        //                 if (row.index % 5 === 0) {
+        //                     var posY = row.y + row.height * 6 + data.settings.margin.bottom;
+        //                     if (posY > doc.internal.pageSize.height) {
+        //                         data.addPage();
+        //                     }
+        //                 }
+        //             },
+        //             drawCell: function (cell, data) {
+        //                 // Rowspan
+        //                 console.log(cell);
+        //                 //if ($(cell.raw).hasClass("innerHeader")) {
+        //                 //    doc.setTextColor(200, 0, 0);
+        //                 //    doc.autoTableText(cell.text + '', data.settings.margin.left + data.table.width / 2, data.row.y + data.row.height / 2, {
+        //                 //        halign: 'center',
+        //                 //        valign: 'middle'
+        //                 //    });
 
-                        //    return false;
-                        //}
-                        doc.setTextColor(200, 0, 0);
-                        doc.autoTableText(cell.text + '', data.settings.margin.left + data.table.width / 2, data.row.y + data.row.height / 2, {
-                            halign: 'center',
-                            valign: 'middle'
-                        });
+        //                 //    return false;
+        //                 //}
+        //                 doc.setTextColor(200, 0, 0);
+        //                 doc.autoTableText(cell.text + '', data.settings.margin.left + data.table.width / 2, data.row.y + data.row.height / 2, {
+        //                     halign: 'center',
+        //                     valign: 'middle'
+        //                 });
 
-                        return false;
-                    }
-                });
-                doc.setFontSize(12);
-                doc.setTextColor(40);
-                doc.setFontStyle('bold');
-                doc.text("(In Words :" + this.invoiceprint.AmountWord + ")", 40, doc.autoTableEndPosY() + 20, 'left');
-                doc.text(".................................", 550, doc.autoTableEndPosY() + 35, 'right');
-                doc.text("Authorized Signature", 550, doc.autoTableEndPosY() + 50, 'right');
+        //                 return false;
+        //             }
+        //         });
+        //         doc.setFontSize(12);
+        //         doc.setTextColor(40);
+        //         doc.setFontStyle('bold');
+        //         doc.text("(In Words :" + this.invoiceprint.AmountWord + ")", 40, doc.autoTableEndPosY() + 20, 'left');
+        //         doc.text(".................................", 550, doc.autoTableEndPosY() + 35, 'right');
+        //         doc.text("Authorized Signature", 550, doc.autoTableEndPosY() + 50, 'right');
 
-               // doc.save("Invoice.pdf");
+        //        // doc.save("Invoice.pdf");
 
-                //For Auto Print of the bill using iframe
-                doc.autoPrint();
-                let docUrl = doc.output('bloburl');
+        //         //For Auto Print of the bill using iframe
+        //         doc.autoPrint();
+        //         let docUrl = doc.output('bloburl');
 
-                // Update the pdf inside the iframe
-                const element: HTMLIFrameElement = document.getElementById('iframePrint') as HTMLIFrameElement;
-                const printIframe = element.contentWindow;
-                printIframe.document.body.innerHTML = '';
-                let newObjectTag = document.createElement('object');
-                newObjectTag.setAttribute('data', docUrl);
-                newObjectTag.setAttribute('type', 'application/pdf');
-                let newEmbedTag = document.createElement('embed');
-                newEmbedTag.setAttribute('url', docUrl);
-                newEmbedTag.setAttribute('type', 'application/pdf');
-                newObjectTag.appendChild(newEmbedTag);
-                printIframe.document.body.appendChild(newObjectTag);
-            }
-        }
+        //         // Update the pdf inside the iframe
+        //         const element: HTMLIFrameElement = document.getElementById('iframePrint') as HTMLIFrameElement;
+        //         const printIframe = element.contentWindow;
+        //         printIframe.document.body.innerHTML = '';
+        //         let newObjectTag = document.createElement('object');
+        //         newObjectTag.setAttribute('data', docUrl);
+        //         newObjectTag.setAttribute('type', 'application/pdf');
+        //         let newEmbedTag = document.createElement('embed');
+        //         newEmbedTag.setAttribute('url', docUrl);
+        //         newEmbedTag.setAttribute('type', 'application/pdf');
+        //         newObjectTag.appendChild(newEmbedTag);
+        //         printIframe.document.body.appendChild(newObjectTag);
+        //     }
+        // }
     }
     /**
  * Gets individual journal voucher
