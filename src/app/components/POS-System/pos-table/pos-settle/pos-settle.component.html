@@ -176,7 +176,13 @@
                             <div class="col-md-12">
                                 <button type="button" class="btn btn-default" (click)="addDiscount()" [disabled]="calculateVoidGiftSum() > 0 || getFinalBalance().toFixed(2) === '0.00' || selectedValue == 0">Discount</button>
                                 <!--<button type="button" class="btn btn-default" (click)="roundTicket(ticket)" [disabled]="selectedValue == 0 || getFinalBalance().toFixed(2) === '0.00'">Round</button>-->
-                                <button type="button" class="btn btn-default" routerLink="/pos/InvoicePrint">Print Bill</button>
+                                <button 
+                                    type="button" 
+                                    [disabled]="(getTotalCharged(ticket).toFixed(2) < getGrandTotal())? true : false"
+                                    class="btn btn-default" 
+                                    (click)="printInvoice()">
+                                    Print Bill
+                                </button>
                             </div>
                         </div>
                     </div>

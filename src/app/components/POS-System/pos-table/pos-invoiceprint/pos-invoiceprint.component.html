@@ -13,6 +13,16 @@
         <div class="row">
             <div class="col-sm-12">
                 <table id="InvoiceTable" class='table table-striped' *ngIf='parsedOrders && parsedOrders.length'>
+                    <thead>
+                        <tr>
+                            <th colspan="4" class="centered">
+                                <div><h2>{{ company?.NameEnglish }}</h2></div>
+                                <div>{{ company?.Address }} {{ company?.Street }} {{ company?.City }} {{ company?.District }}</div>
+                                <div>{{ company?.Email }} {{ company?.Phone }}</div>
+                                <div> PAN/VAT : {{ company?.Pan_Vat }}</div>
+                            </th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr *ngFor="let order of parsedOrders">
                             <td>
@@ -32,7 +42,7 @@
                                                 {{i + 1}}
                                             </td>
                                             <td width="55%">
-                                                <span>{{ getProductById(products$ | async, item.ItemId)?.Name }}</span>
+                                                <span>{{ getProductById(productList, item.ItemId)?.Name }}</span>
                                             </td>
                                             <td align="center" width="10%">
                                                 <strong>{{ item.Qty }}</strong>
