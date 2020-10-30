@@ -103,7 +103,7 @@ export const navcomponents=[
           show: false,
         },
         {
-          title: 'Billing',
+          title: 'Report',
           link: 'pos-dashboard/table/posbilling',
           permission:'Billing:Billing',
           show: false,

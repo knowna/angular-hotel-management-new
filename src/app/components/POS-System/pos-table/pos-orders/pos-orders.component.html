@@ -1,23 +1,22 @@
 <div class="card" *ngIf="orders && ticket">
-    <div class="card-header no-radius">
-        <div class="row m-0">
-            <div class="col-md-3">
+    
+        <div class="row m-0" style="background-color: #364a70;color:white">
+            <div class="col-md-6">
                 <strong>
                    Bill No: {{ ticket ? '#' + ticket?.TicketId : '' }}
                 </strong>
             </div>
-            <div class="col-md-5">
-                <strong>
-                    {{ selectedCustomerId ? 'Cust#: ' + customerNew?.CustomerName : 'Table: ' + table ? table.Name : '' }}
+            <div class="col-md-6">
+                <strong class="right" >
+                    {{ selectedCustomerId ? 'Cust#: ' + customerNew?.CustomerName : 'Table:'+ table.Name }}
                 </strong>
             </div>
-            <div class="col-md-4">
-                <strong>
+            <div class="col-md-6">
+                <strong >
                     Status: {{ orders.length ? orders[0].OrderStatus : 'Un Settled' }}
                 </strong>
             </div>
         </div>
-    </div>
     <div class="card-sub-header no-radius">
         <div class="row m-0">
             <div class="col-sm-5 text-left">

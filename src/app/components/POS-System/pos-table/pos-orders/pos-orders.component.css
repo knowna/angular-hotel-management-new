@@ -105,3 +105,6 @@ dl {
     max-height: 100px;
     overflow: scroll;
 }
+.right{
+    float: right;
+}
