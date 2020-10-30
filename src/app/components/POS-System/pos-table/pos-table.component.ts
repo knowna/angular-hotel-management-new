@@ -340,6 +340,7 @@ export class PosTableComponent implements OnInit {
 
     // Select/Deselect Order Item
     selectOrderItem(OrderItem: any) {
+        
         console.log(OrderItem);
         
         this.previousItem && this.orderStoreApi.unSelectOrderItem(this.previousItem);
@@ -386,9 +387,11 @@ export class PosTableComponent implements OnInit {
 	 * Increments Order Item Quantity by one
 	 * @param OrderItem 
 	 */
-    incrementQty(OrderItem: OrderItem) {
-        OrderItem.Qty = OrderItem.Qty+1;
-        console.log( OrderItem.Qty);
+    incrementDecrementQty(OrderItem: OrderItem,updateType) {
+        console.log(updateType);
+        
+        OrderItem.Qty =updateType==='increase'?OrderItem.Qty+1:OrderItem.Qty-1;
+        
         
         OrderItem.TotalAmount=OrderItem.Qty*OrderItem.UnitPrice;
 
@@ -396,10 +399,10 @@ export class PosTableComponent implements OnInit {
         let vatAmount =(0.13*ticketTotalWithoutVat);
         let grandTotal = vatAmount+ticketTotalWithoutVat;
     
-        let orderRequest={
+        let orderRequest : OrderItemRequest={
        
             "TicketId":this.selectedTicket?this.selectedTicket:0,
-            "TableId":this.selectedTable?this.selectedTable:0,
+            "TableId":''+(this.selectedTable?this.selectedTable:0),
             "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
             "OrderId":0,
             "TicketTotal":OrderItem.UnitPrice*OrderItem.Qty,
@@ -410,14 +413,22 @@ export class PosTableComponent implements OnInit {
             "Balance":grandTotal,
             "UserId":this.currentUser.UserName,
             "FinancialYear":this.currentYear.Name,
-            "ListOrderItem":OrderItem
+            "OrderItem":OrderItem
     
     
         }
     
 
         
-        console.log('single update',orderRequest);
+        this.orderApi.updateOrderProduct(updateType,orderRequest)
+        .subscribe(
+            data=>{
+                console.log('chalyo');
+                
+                console.log(data);
+                
+            }
+        )
 
 
         
@@ -446,26 +457,26 @@ export class PosTableComponent implements OnInit {
 	 * Decrements Order Item Quantity by one
 	 * @param OrderItem 
 	 */
-    decrementQty(OrderItem: OrderItem) {
-        let newOrderItem: any = '';        
-        let orderItemParsed = JSON.parse(JSON.stringify(OrderItem));
-        let parsedOrders = JSON.parse(JSON.stringify(this.parsedOrders));
+    // decrementQty(OrderItem: OrderItem) {
+    //     let newOrderItem: any = '';        
+    //     let orderItemParsed = JSON.parse(JSON.stringify(OrderItem));
+    //     let parsedOrders = JSON.parse(JSON.stringify(this.parsedOrders));
 
-        parsedOrders.map((order: Order) => {
-            order.OrderItems.map((orderItem: OrderItem) => {
-                if (orderItem.Id === orderItemParsed.Id) {
-                    orderItem.Qty = orderItem.Qty - 1;
-                    orderItem.TotalAmount = orderItem.Qty * orderItem.UnitPrice / 1.13; //Add Function VAT Value Minues;
-                    newOrderItem = orderItem;
-                }
-            });
-        });
+    //     parsedOrders.map((order: Order) => {
+    //         order.OrderItems.map((orderItem: OrderItem) => {
+    //             if (orderItem.Id === orderItemParsed.Id) {
+    //                 orderItem.Qty = orderItem.Qty - 1;
+    //                 orderItem.TotalAmount = orderItem.Qty * orderItem.UnitPrice / 1.13; //Add Function VAT Value Minues;
+    //                 newOrderItem = orderItem;
+    //             }
+    //         });
+    //     });
 
-        if (newOrderItem.Qty >= 1) {
-            let requestObject: OrderItemRequest = this.prepareOrderItemRequest(orderItemParsed.OrderId, newOrderItem, parsedOrders, false, false, false, true);
-            this.orderStoreApi.decrementQty(requestObject);
-        }
-    }
+    //     if (newOrderItem.Qty >= 1) {
+    //         let requestObject: OrderItemRequest = this.prepareOrderItemRequest(orderItemParsed.OrderId, newOrderItem, parsedOrders, false, false, false, true);
+    //         this.orderStoreApi.decrementQty(requestObject);
+    //     }
+    // }
 
 	/**
 	 * Decrements Order Item Quantity by one
@@ -649,6 +660,8 @@ export class PosTableComponent implements OnInit {
 	 * @param OrderItem 
 	 */
     removeItem(OrderItem: OrderItem) {
+        console.log(OrderItem);
+        
         let Orders = this.prepareOrders(OrderItem);
         let requestObjectWithoutMovedOrderItem: OrderItemRequest = this.prepareOrderItemRequest(OrderItem.OrderId, OrderItem, Orders.ordersWithoutSelectedOrderItem, true);
         let ItemsOrder: Order[] = Orders.ordersWithoutSelectedOrderItem.filter(order => order.OrderNumber == OrderItem.OrderNumber);

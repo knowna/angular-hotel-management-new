@@ -96,11 +96,11 @@ export class OrderService {
 	 * @param OrderId 
 	 * @param OrderItem 
 	 */
-    updateOrderProduct(updateType: string, orderItemRequest: OrderItemRequest) {
-        ' '
+    updateOrderProduct(updateType: string, orderItemRequest: any) {
+        // ' '
         let newRequest = JSON.parse(JSON.stringify(orderItemRequest));
-        newRequest.OrderItem.Tags = <any>newRequest.OrderItem.Tags.join(',');
-        ' '
+        // newRequest.OrderItem.Tags = <any>newRequest.OrderItem.Tags.join(',');
+        // ' '
         return this.http.post(Global.BASE_ORDERSUPDATE_ENDPOINT + "?updateType=" + updateType, newRequest)
            
     }

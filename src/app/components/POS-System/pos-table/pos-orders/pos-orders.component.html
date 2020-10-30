@@ -41,11 +41,11 @@
                     <strong>Order No: {{ order.OrderNumber }}, {{ order.UserId + '-' }} {{ order.OrderOpeningTime }}</strong>
                     <hr>
                 </div>
-                <div class="row order" *ngFor="let item of order.OrderItems" [ngClass]="{
+                <div class="row order" *ngFor="let item of order.OrderItems;index as i " [ngClass]="{
                         'active': item.IsSelected,
                         'submitted': item.Tags.indexOf('Submitted') !== -1,
                         'void': item.IsVoid
-                    }" (click)="selectOrderItem.emit(item)">
+                    }" (click)="selectOrderItem.emit(item);changeSelected(order.OrderItems,i)">
                     <div class="col-md-5 text-left">
                         <p>
                             <span>

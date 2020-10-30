@@ -109,6 +109,19 @@ export class PosOrdersComponent implements OnInit {
         }
     }
 
+    changeSelected(OrderItems,currentIndex) {
+        OrderItems = OrderItems.map(function(x) {
+        const i = OrderItems.indexOf(x);
+        if(i == currentIndex) {
+        x.IsSelected = !x.IsSelected;
+        }else{
+        x.IsSelected = false;
+        }
+        return x;
+        });
+        }
+        
+
 
 
 

@@ -15,8 +15,8 @@
             (printBill)="printBill()" 
             (removeItem)="removeItem($event)" 
             (voidItem)="voidItem($event)"
-            (incrementQty)="incrementQty($event)"
-            (decrementQty)="decrementQty($event)"
+            (incrementQty)="incrementDecrementQty($event,'increase')"
+            (decrementQty)="incrementDecrementQty($event,'decrease')"
             (toogleGiftItem)="toogleGiftItem($event)"
             (moveItems)="moveItems($event)">
         </pos-options>
