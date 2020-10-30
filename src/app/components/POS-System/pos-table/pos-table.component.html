@@ -8,8 +8,9 @@
     </div>
     <div class="col-md-10">
         <pos-options 
+            *ngIf="ordersNew"
             [selectedItem]="selectedItem" 
-            [orders]="orders$" 
+            [orders]="ordersNew" 
             (showTicketNote)="showTicketNote()"
             (createNewTicket)="createNewTicket()"
             (printBill)="printBill()" 
