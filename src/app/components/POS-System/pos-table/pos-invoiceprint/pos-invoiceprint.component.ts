@@ -168,7 +168,7 @@ export class PosInvoicePrintComponent implements OnInit {
 
     // Calculates Discount
     calculateDiscount() {
-        return 0;
+        return 0.00;
         // let sum = this.calculateSum();
         // let giftSum = this.calculateVoidGiftSum();
         // let value = (giftSum / sum) * 100 || 0;
