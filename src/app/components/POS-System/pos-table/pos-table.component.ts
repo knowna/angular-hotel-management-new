@@ -388,7 +388,6 @@ export class PosTableComponent implements OnInit {
 	 * @param OrderItem 
 	 */
     incrementDecrementQty(OrderItem: OrderItem,updateType) {
-        console.log(updateType);
         
         OrderItem.Qty =updateType==='increaseQuantity'?OrderItem.Qty+1:OrderItem.Qty-1;
 
