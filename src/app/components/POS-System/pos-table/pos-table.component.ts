@@ -390,7 +390,7 @@ export class PosTableComponent implements OnInit {
     incrementDecrementQty(OrderItem: OrderItem,updateType) {
         console.log(updateType);
         
-        OrderItem.Qty =updateType==='increase'?OrderItem.Qty+1:OrderItem.Qty-1;
+        OrderItem.Qty =updateType==='increaseQuantity'?OrderItem.Qty+1:OrderItem.Qty-1;
         
         
         OrderItem.TotalAmount=OrderItem.Qty*OrderItem.UnitPrice;
