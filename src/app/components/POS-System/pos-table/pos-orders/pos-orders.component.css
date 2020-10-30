@@ -99,4 +99,9 @@ dl {
 .scrollbar {
     max-height: 300px;
     overflow-y: scroll;
-    }
+}
+
+.scrollbar-payment{
+    max-height: 100px;
+    overflow: scroll;
+}
