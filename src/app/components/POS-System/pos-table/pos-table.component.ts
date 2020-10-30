@@ -384,7 +384,7 @@ export class PosTableComponent implements OnInit {
     }
 
 	/**
-	 * Increments Order Item Quantity by one
+	 * Increments and decrement  Order Item Quantity by one
 	 * @param OrderItem 
 	 */
     incrementDecrementQty(OrderItem: OrderItem,updateType) {
