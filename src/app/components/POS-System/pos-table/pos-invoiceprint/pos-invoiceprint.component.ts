@@ -36,13 +36,16 @@ export class PosInvoicePrintComponent implements OnInit {
     parsedOrders: Order[] = [];
     products$: Observable<Product[]>;
     invoiceprint: IInvoicePrint;
+    public company: any = {};
 
     // Constructor
     constructor(
         private store: Store<any>,
         private _location: Location,
         private _purchaseService:AccountTransactionTypeService
-    ) {}
+    ) {
+        this.company = JSON.parse(localStorage.getItem('company'));
+    }
     ngOnInit() {
         this.ticket$ = this.store.select(TicketSelector.getCurrentTicket);
         this.orders$ = this.store.select(OrderSelector.getAllOrders);
