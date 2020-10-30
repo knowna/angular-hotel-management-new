@@ -137,3 +137,8 @@
     max-height: 200px;
     overflow: scroll;
   }
+
+  .scrollbar-payment{
+    max-height: 100px;
+    overflow: scroll;
+}

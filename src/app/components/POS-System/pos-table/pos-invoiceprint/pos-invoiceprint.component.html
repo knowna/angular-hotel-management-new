@@ -1,18 +1,27 @@
-﻿
-<div class="row">
-    <div class="pos-content">
+﻿<div class="row m-0">
+    <div class="pos-content no-print">
         <h2 style="color: #4267b2;margin: 10px auto 10px 14px;font-weight: bold;"> Print Invoice</h2>
     </div>
-    <div class="row">
+    <div class="row m-0 mt-2">
         <div class="col-md-6">
-            <button class="btn btn-primary" id="printButton" (click)="printBill()">Print</button>
+            <button class="btn btn-primary no-print" id="printButton" (click)="printBill()">Print</button>
         </div>
         <div class="col-md-6 pull-right">
-            <button class="btn btn-danger" id="CloseButton" (click)="close()">Close</button>
+            <button class="btn btn-danger no-print" id="CloseButton" (click)="close()">Close</button>
         </div>
         <div class="row">
             <div class="col-sm-12">
                 <table id="InvoiceTable" class='table table-striped' *ngIf='parsedOrders && parsedOrders.length'>
+                    <thead>
+                        <tr>
+                            <th colspan="4" class="centered">
+                                <div><h2>{{ company?.NameEnglish }}</h2></div>
+                                <div>{{ company?.Address }} {{ company?.Street }} {{ company?.City }} {{ company?.District }}</div>
+                                <div>{{ company?.Email }} {{ company?.Phone }}</div>
+                                <div> PAN/VAT : {{ company?.Pan_Vat }}</div>
+                            </th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr *ngFor="let order of parsedOrders">
                             <td>
@@ -32,7 +41,7 @@
                                                 {{i + 1}}
                                             </td>
                                             <td width="55%">
-                                                <span>{{ getProductById(products$ | async, item.ItemId)?.Name }}</span>
+                                                <span>{{ getProductById(productList, item.ItemId)?.Name }}</span>
                                             </td>
                                             <td align="center" width="10%">
                                                 <strong>{{ item.Qty }}</strong>
