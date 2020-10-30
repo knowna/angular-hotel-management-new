@@ -109,7 +109,7 @@ export class OrderService {
 	 * Adds product in the given order
 	 * @param payload 
 	 */
-    deleteOrderProduct(payload: DeleteAction) {
+    deleteOrderProduct(payload: any) {
         return this.http.post(Global.BASE_ORDERSCancel_ENDPOINT, payload)
            
     }

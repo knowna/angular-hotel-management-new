@@ -423,7 +423,6 @@ export class PosTableComponent implements OnInit {
         this.orderApi.updateOrderProduct(updateType,orderRequest)
         .subscribe(
             data=>{
-                console.log('chalyo');
                 
                 console.log(data);
                 
@@ -660,16 +659,54 @@ export class PosTableComponent implements OnInit {
 	 * @param OrderItem 
 	 */
     removeItem(OrderItem: OrderItem) {
-        console.log(OrderItem);
-        
-        let Orders = this.prepareOrders(OrderItem);
-        let requestObjectWithoutMovedOrderItem: OrderItemRequest = this.prepareOrderItemRequest(OrderItem.OrderId, OrderItem, Orders.ordersWithoutSelectedOrderItem, true);
-        let ItemsOrder: Order[] = Orders.ordersWithoutSelectedOrderItem.filter(order => order.OrderNumber == OrderItem.OrderNumber);
-        let UnSubmittedOrder = this.getUnSubmittedOrder(ItemsOrder);
 
-        if (UnSubmittedOrder) {
-            return this.orderStoreApi.deleteOrderItem(requestObjectWithoutMovedOrderItem);
+        // OrderItem.TotalAmount=OrderItem.Qty*OrderItem.UnitPrice;
+
+        let ticketTotalWithoutVat = OrderItem.UnitPrice*OrderItem.Qty;
+        let vatAmount =(0.13*ticketTotalWithoutVat);
+        let grandTotal = vatAmount+ticketTotalWithoutVat;
+    
+        let orderRequest : OrderItemRequest={
+       
+            "TicketId":this.selectedTicket?this.selectedTicket:0,
+            "TableId":''+(this.selectedTable?this.selectedTable:0),
+            "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
+            "OrderId":0,
+            "TicketTotal":OrderItem.UnitPrice*OrderItem.Qty,
+            "Discount":0,
+            "ServiceCharge":0,
+            "VatAmount": vatAmount,
+            "GrandTotal":grandTotal,
+            "Balance":grandTotal,
+            "UserId":this.currentUser.UserName,
+            "FinancialYear":this.currentYear.Name,
+            "OrderItem":OrderItem
+    
+    
         }
+    
+
+        
+        this.orderApi.deleteOrderProduct(orderRequest)
+        .subscribe(
+            data=>{
+                
+               this.toastrService.success('Item Successfully Cancelled');
+               window.location.reload();
+                
+            }
+        )
+
+
+        
+        // let Orders = this.prepareOrders(OrderItem);
+        // let requestObjectWithoutMovedOrderItem: OrderItemRequest = this.prepareOrderItemRequest(OrderItem.OrderId, OrderItem, Orders.ordersWithoutSelectedOrderItem, true);
+        // let ItemsOrder: Order[] = Orders.ordersWithoutSelectedOrderItem.filter(order => order.OrderNumber == OrderItem.OrderNumber);
+        // let UnSubmittedOrder = this.getUnSubmittedOrder(ItemsOrder);
+
+        // if (UnSubmittedOrder) {
+        //     return this.orderStoreApi.deleteOrderItem(requestObjectWithoutMovedOrderItem);
+        // }
     }
 
     /**
