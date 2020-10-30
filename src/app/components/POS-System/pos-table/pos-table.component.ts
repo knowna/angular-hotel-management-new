@@ -390,7 +390,11 @@ export class PosTableComponent implements OnInit {
     incrementDecrementQty(OrderItem: OrderItem,updateType) {
         console.log(updateType);
         
-        OrderItem.Qty =updateType==='increase'?OrderItem.Qty+1:OrderItem.Qty-1;
+        OrderItem.Qty =updateType==='increaseQuantity'?OrderItem.Qty+1:OrderItem.Qty-1;
+
+        if(OrderItem.Qty < 1){
+            OrderItem.Qty = 1;
+        }
         
         
         OrderItem.TotalAmount=OrderItem.Qty*OrderItem.UnitPrice;
@@ -565,8 +569,6 @@ export class PosTableComponent implements OnInit {
     }
 
     addOrderItemList(products: any[]) {
-        console.log(products);
-        
        let  ListOrderItem=[];
        let ticketTotalWithoutVat=0;
        let vatAmount =0;
@@ -690,7 +692,6 @@ export class PosTableComponent implements OnInit {
         this.orderApi.deleteOrderProduct(orderRequest)
         .subscribe(
             data=>{
-                
                this.toastrService.success('Item Successfully Cancelled');
                window.location.reload();
                 
