@@ -75,10 +75,25 @@ export class PosOrdersComponent implements OnInit {
         console.log('the table us', this.table)
         this.activatedRoute.params.subscribe(params => {
             this.selectedTicket = (params['ticketId']) ? params['ticketId'] : 0;
+            this.selectedCustomerId = (params['customerId']) ? params['customerId'] : 0;
+            console.log('after route cus id', this.selectedCustomerId)
         });
 
         this.user$ = this.userStoreService.user$;
         this.customer$ = this.store.select(CustomerSelector.getCurrentCustomer);
+
+        this._customerService.get(Global.BASE_ACCOUNT_POSCUSTOMER_ENDPOINT)
+            .subscribe(
+            customers => {
+                this.customerNew = customers.find(c => c.Id == this.selectedCustomerId);
+                console.log('the customers are', customers, this.selectedCustomerId)
+                customers.forEach(c => {
+                    console.log('each customer is', c)
+                });
+            },
+            error => console.log(error)
+        );
+
         if(!this.ticket) {
             if(this.table.TableId) {
                 this.ticketService.loadTableTickets(this.table.TableId)
@@ -88,20 +103,22 @@ export class PosOrdersComponent implements OnInit {
                     }
                 );
             }else {
-                this._customerService.get(Global.BASE_ACCOUNT_POSCUSTOMER_ENDPOINT)
-                    .subscribe(
-                    customers => {
-                        this.customerNew = customers.find(c => c.Id == this.selectedCustomerId);
-                        console.log('the customers are', customers)
-                    },
-                    error => console.log(error)
-                );
-
-
+                // this._customerService.get(Global.BASE_ACCOUNT_POSCUSTOMER_ENDPOINT)
+                //     .subscribe(
+                //     customers => {
+                //         this.customerNew = customers.find(c => c.Id == this.selectedCustomerId);
+                //         console.log('the customers are', customers, this.selectedCustomerId)
+                //         customers.forEach(c => {
+                //             console.log('each customer is', c)
+                //         });
+                //     },
+                //     error => console.log(error)
+                // );
                 this.ticketService.loadCustomerTickets(this.selectedCustomerId)
                 .subscribe(
                     data => {
                         this.ticket = data.find(t => t.Id == this.selectedTicket);
+
                     }
                 );
             }
