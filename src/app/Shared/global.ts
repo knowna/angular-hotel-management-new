@@ -66,6 +66,7 @@
     public static BASE_TicketNote_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/TicketNoteAPI';
     public static BASE_TicketPrint_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/TicketPrintAPI';
     public static BASE_CREDITNOTEINVOICE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/CerditNoteInvoice';
+    public static BASE_TICKET_BY_ID=Global.BASE_HOST_ENDPOINT+ '/api/TicketPaymetHistoryAPI/';
 
     public static BASE_JOURNAL_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/AccountTransValuesAPI/';
     public static BASE_JOURNALVOUCHERGET_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/AccountTransactionAPI/Get/';

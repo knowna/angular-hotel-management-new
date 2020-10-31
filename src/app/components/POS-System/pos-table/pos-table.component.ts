@@ -78,7 +78,8 @@ export class PosTableComponent implements OnInit {
     currentYear: any;
     ticket: Ticket = {
         TotalAmount: 0,
-        Discount: 0
+        Discount: 0,
+        Note: ''
     };
     SearchProduct = "";
     SearchCategory = "";
@@ -163,8 +164,11 @@ export class PosTableComponent implements OnInit {
                 this.ticketService.loadTableTickets(this.selectedTable)
                 .subscribe(
                     data => {
-                        this.ticket = data.find(t => t.Id == this.selectedTicket);
-                        this.postableForm.controls['ticketNote'].setValue(this.ticket.Note);
+                        if(this.selectedTicket) {
+                            this.ticket = data.find(t => t.Id == this.selectedTicket);
+                            this.postableForm.controls['ticketNote'].setValue(this.ticket.Note || '');
+                        }
+                        
                     }
                 );
             }else {
@@ -172,7 +176,7 @@ export class PosTableComponent implements OnInit {
                 .subscribe(
                     data => {
                         this.ticket = data.find(t => t.Id == this.selectedTicket);
-                        this.postableForm.controls['ticketNote'].setValue(this.ticket.Note);
+                        this.postableForm.controls['ticketNote'].setValue(this.ticket.Note || '');
                     }
                 );
             }
@@ -658,9 +662,19 @@ export class PosTableComponent implements OnInit {
             
     this.orderApi.addOrderProductList(orderRequest).subscribe(
         data =>{
+            console.log('the response is', data);
+            this.toastrService.success('oder successfully created')
+            if(this.ordersNew.length) {
+                data.ListOrder[0].OrderItems.forEach(o => {
+                    this.ordersNew[0].OrderItems.push(o);
+                });
+                console.log('the orders new are', this.ordersNew)
+               
+            }else{
+                this.router.navigate(['table/' + data.TableId + '/ticket/'+ data.TicketId]);
+            }
             
-          this.toastrService.success('oder successfully created')
-        //   window.location.reload();
+            // window.location.reload();
             
         }
     )
@@ -818,6 +832,7 @@ export class PosTableComponent implements OnInit {
             .subscribe(
                 data => {
                     this.ticket.Note = this.postableForm.value.ticketNote;
+                    this.toastrService.success('Ticket note added successfully!');
                     // console.log('after saving ticket note re', data);
                 }
             )

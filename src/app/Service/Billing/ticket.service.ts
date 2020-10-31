@@ -131,4 +131,8 @@ export class TicketService {
         return this.http.post(Global.BASE_POSSETTLEPAYMENT_ENDPOINT, payDetails)
            
     }
+
+    getTicketById(ticketId: number):any {
+        return this.http.get<any>(Global.BASE_TICKET_BY_ID  + "?TicketId=" + ticketId)
+    }
 }
