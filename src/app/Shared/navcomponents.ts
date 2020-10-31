@@ -75,21 +75,24 @@ export const navcomponents=[
         },
       ],
     }, 
+    // {
+    //   title: 'POS',
+    //   img:'../../../assets/images/pos1.svg',
+    //   permission:'POS',
+    //   group: true,
+    //   show: false
+     
+    // }, 
     {
       title: 'POS',
-      permission:'POS',
-      group: true,
-      show: false
-     
-    }, 
-    {
-      title: 'Billing',
+      img:'../../../assets/images/pos.svg',
       icon: 'fa fa-shopping-cart-outline',
       permission:'Billing',
       show: false,
       children: [
         {
           title: 'Order',
+          img:'../../../assets/images/order.svg',
           link: 'pos-dashboard/tables',
           permission:'Billing:Order',
           home: true,
@@ -98,46 +101,55 @@ export const navcomponents=[
         
         {
           title: 'Customer',
+          img:'../../../assets/images/customer.svg',
           link: 'pos-dashboard/customers',
           permission:'Billing:Customer',
           show: false,
         },
         {
           title: 'Report',
+          img:'../../../assets/images/report.svg',
           link: 'pos-dashboard/table/posbilling',
           permission:'Billing:Billing',
           show: false,
         },
         {
           title: 'Menu',
+          img:'../../../assets/images/menu.svg',
           icon: 'layout-outline',
           permission:'Billing:Menu',
           show: false,
           children: [
             {
               title: 'Item',
+              img:'../../../assets/images/dish.svg',
               link: 'pos-dashboard/table/items',
               permission:'Billing:Menu:Item',
             },
             {
               title: 'Category',
+              img:'../../../assets/images/category.svg',
               link: 'pos-dashboard/table/category',
               permission:'Billing:Menu:Category',
             },
             {
               title: 'Consumption',
+              img:'../../../assets/images/consumption.svg',
+
               link: 'pos-dashboard/table/menuconsumption',
               permission:'Billing:Menu:Consumption',
             },
             {
               title: 'Menu',
               link: 'pos-dashboard/table/menu',
+              img:'../../../assets/images/menu.svg',
               permission:'Billing:Menu:Menu',
             },
             {
-              title: 'Table and Room Design',
+              title: 'Table and Room',
               pathMatch: 'prefix',
               link: 'pos-dashboard/table/table',
+              img:'../../../assets/images/table.svg',
               permission:'Billing:Menu:Table and Room Design',
             },
           ],
