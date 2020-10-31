@@ -85,14 +85,14 @@ export const navcomponents=[
     // }, 
     {
       title: 'POS',
-      img:'../../../assets/images/pos.svg',
+      img:'../../../assets/images/pos.png',
       icon: 'fa fa-shopping-cart-outline',
       permission:'Billing',
       show: false,
       children: [
         {
           title: 'Order',
-          img:'../../../assets/images/order.svg',
+          img:'../../../assets/images/order.png',
           link: 'pos-dashboard/tables',
           permission:'Billing:Order',
           home: true,
@@ -101,40 +101,40 @@ export const navcomponents=[
         
         {
           title: 'Customer',
-          img:'../../../assets/images/customer.svg',
+          img:'../../../assets/images/customer.png',
           link: 'pos-dashboard/customers',
           permission:'Billing:Customer',
           show: false,
         },
         {
           title: 'Report',
-          img:'../../../assets/images/report.svg',
+          img:'../../../assets/images/report.png',
           link: 'pos-dashboard/table/posbilling',
           permission:'Billing:Billing',
           show: false,
         },
         {
           title: 'Menu',
-          img:'../../../assets/images/menu.svg',
+          img:'../../../assets/images/menu.png',
           icon: 'layout-outline',
           permission:'Billing:Menu',
           show: false,
           children: [
             {
               title: 'Item',
-              img:'../../../assets/images/dish.svg',
+              img:'../../../assets/images/dish.png',
               link: 'pos-dashboard/table/items',
               permission:'Billing:Menu:Item',
             },
             {
               title: 'Category',
-              img:'../../../assets/images/category.svg',
+              img:'../../../assets/images/category.png',
               link: 'pos-dashboard/table/category',
               permission:'Billing:Menu:Category',
             },
             {
               title: 'Consumption',
-              img:'../../../assets/images/consumption.svg',
+              img:'../../../assets/images/consumption.png',
 
               link: 'pos-dashboard/table/menuconsumption',
               permission:'Billing:Menu:Consumption',
@@ -142,14 +142,14 @@ export const navcomponents=[
             {
               title: 'Menu',
               link: 'pos-dashboard/table/menu',
-              img:'../../../assets/images/menu.svg',
+              img:'../../../assets/images/menu.png',
               permission:'Billing:Menu:Menu',
             },
             {
               title: 'Table and Room',
               pathMatch: 'prefix',
               link: 'pos-dashboard/table/table',
-              img:'../../../assets/images/table.svg',
+              img:'../../../assets/images/table.png',
               permission:'Billing:Menu:Table and Room Design',
             },
           ],
