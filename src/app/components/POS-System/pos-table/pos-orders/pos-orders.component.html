@@ -1,12 +1,12 @@
 <div class="card" *ngIf="orders && ticket">
     
         <div class="row m-0" style="background-color: #364a70;color:white">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <strong>
                    Bill No: {{ ticket ? '#' + ticket?.TicketId : '' }}
                 </strong>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <strong class="right" >
                     {{ selectedCustomerId ? 'Cust#: ' + customerNew?.CustomerName : 'Table:'+ table.Name }}
                 </strong>
