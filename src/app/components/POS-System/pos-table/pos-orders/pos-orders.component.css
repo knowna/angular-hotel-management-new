@@ -96,7 +96,7 @@ dl {
     padding: 15px;
 }
 
-.scrollbar {
+/* .scrollbar {
     max-height: 300px;
     overflow-y: scroll;
 }
@@ -104,7 +104,7 @@ dl {
 .scrollbar-payment{
     max-height: 100px;
     overflow: scroll;
-}
+} */
 .right{
     float: right;
 }

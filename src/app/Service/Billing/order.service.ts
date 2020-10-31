@@ -81,12 +81,16 @@ export class OrderService {
 
     }
 
+    ticketPrintApi(TicketId):any{
+        return this.http.get<any>(Global. BASE_TicketPrint_ENDPOINT+'?TicketId='+TicketId)
+    }
 
-    addOrderProductList(payload: any) {
+
+    addOrderProductList(payload: any):any {
          
         // payload.OrderItem.Tags = <any>payload.OrderItem.Tags.join(',');
         
-        return this.http.post(Global.BASE_ADD_ORDERlIST_ENDPOINT, payload)
+        return this.http.post<any>(Global.BASE_ADD_ORDERlIST_ENDPOINT, payload)
              
     }
 

@@ -26,6 +26,7 @@ import { AccountTransactionTypeService } from 'src/app/Service/Inventory/account
 import { ActivatedRoute } from '@angular/router';
 import { OrderService } from 'src/app/Service/Billing/order.service';
 import { BillingService } from 'src/app/Service/Billing/billing.service';
+import { TicketService } from 'src/app/Service/Billing/ticket.service';
 
 @Component({
     selector: 'app-pos-InvoicePrint',
@@ -51,7 +52,8 @@ export class PosInvoicePrintComponent implements OnInit {
         private _purchaseService:AccountTransactionTypeService,
         private activatedRoute: ActivatedRoute,
         private orderApi: OrderService,
-        private billService: BillingService
+        private billService: BillingService,
+        private ticketService: TicketService
     ) {
         this.company = JSON.parse(localStorage.getItem('company'));
     }
@@ -67,6 +69,15 @@ export class PosInvoicePrintComponent implements OnInit {
                                 console.log('the parsed orders',this.parsedOrders)
                             }
                         )
+                    
+
+                    this.ticketService.getTicketById(this.selectedTicket)
+                    .subscribe(
+                        data => {
+                            this.ticket = data;
+                            console.log('the ticket is', this.ticket);
+                        }
+                    );
                 }
         });
 
@@ -264,8 +275,10 @@ export class PosInvoicePrintComponent implements OnInit {
     }
 
     //Print Bill
-    printBill() {
-        (window as any).print();
+    // printBill() {
+    //     (window as any).print();
+
+
         // if (this.getFinalBalance() > 0) {
         //     alert("Before bill print! Please settle amount");
         // }
@@ -434,12 +447,40 @@ export class PosInvoicePrintComponent implements OnInit {
         //         printIframe.document.body.appendChild(newObjectTag);
         //     }
         // }
+    // }
+
+
+    printBill() {
+       
+        let ticketId = this.selectedTicket;
+        if (this.getFinalBalance() > 0) {
+            alert("Before bill print! Please settle amount");
+        }
+        else{
+            this.orderApi.ticketPrintApi(ticketId)
+            .subscribe(
+                (data:IInvoicePrint)=>{
+                    this.invoiceprint=data;
+                    if (this.invoiceprint != null) {
+                        (window as any).print();
+                    }
+                
+                }
+            )
+        }
+
     }
     /**
  * Gets individual journal voucher
  * @param Id 
  */
-    getPrintInvoice(Id: string, AmountWord: number) {
-        return this._purchaseService.get(Global.BASE_ORDERINVOICEPRINT_ENDPOINT + '?TicketNo=' + Id + '&InvoiceAmount=' + AmountWord);
+    getPrintInvoice(Id) {
+         this.orderApi.ticketPrintApi(Id)
+        .subscribe(
+            data=>{
+                console.log('printBill section',data);
+                
+            }
+        )
     }
 }

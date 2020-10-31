@@ -103,17 +103,6 @@ export class PosOrdersComponent implements OnInit {
                     }
                 );
             }else {
-                // this._customerService.get(Global.BASE_ACCOUNT_POSCUSTOMER_ENDPOINT)
-                //     .subscribe(
-                //     customers => {
-                //         this.customerNew = customers.find(c => c.Id == this.selectedCustomerId);
-                //         console.log('the customers are', customers, this.selectedCustomerId)
-                //         customers.forEach(c => {
-                //             console.log('each customer is', c)
-                //         });
-                //     },
-                //     error => console.log(error)
-                // );
                 this.ticketService.loadCustomerTickets(this.selectedCustomerId)
                 .subscribe(
                     data => {
