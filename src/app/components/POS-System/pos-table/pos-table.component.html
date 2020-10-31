@@ -91,7 +91,8 @@
                     <strong>Ticket Note:</strong>
                 </p>
                 <div *ngIf="!enableTicketNote">
-                    {{ postableForm.value.ticketNote}}
+                    <!-- {{ postableForm.value.ticketNote}} -->
+                    {{ticket.Note}}
                 </div>
                 <div *ngIf="enableTicketNote">
                     <textarea formControlName="ticketNote" placeholder="Enter Note Here..." style="margin-top: 14px;margin-left: -4px; min-height:200px;"></textarea>

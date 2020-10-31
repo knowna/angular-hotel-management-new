@@ -158,6 +158,26 @@ export class PosTableComponent implements OnInit {
                 }
         });
 
+      
+            if(this.selectedTable) {
+                this.ticketService.loadTableTickets(this.selectedTable)
+                .subscribe(
+                    data => {
+                        this.ticket = data.find(t => t.Id == this.selectedTicket);
+                        this.postableForm.controls['ticketNote'].setValue(this.ticket.Note);
+                    }
+                );
+            }else {
+                this.ticketService.loadCustomerTickets(this.selectedCustomerId.toString())
+                .subscribe(
+                    data => {
+                        this.ticket = data.find(t => t.Id == this.selectedTicket);
+                        this.postableForm.controls['ticketNote'].setValue(this.ticket.Note);
+                    }
+                );
+            }
+        
+
         
         
         
@@ -230,7 +250,7 @@ export class PosTableComponent implements OnInit {
     buildForm(){
         this.postableForm = this.fb.group({
             AccountTransactionValues: this.fb.array([this.buildMenuForm()]),
-            ticketNote: ''
+            ticketNote: [this.ticket.Note]
         });
     }
 
@@ -797,6 +817,7 @@ export class PosTableComponent implements OnInit {
         this.ticketService.addTicketNote(ticket,this.postableForm.value.ticketNote)
             .subscribe(
                 data => {
+                    this.ticket.Note = this.postableForm.value.ticketNote;
                     // console.log('after saving ticket note re', data);
                 }
             )
