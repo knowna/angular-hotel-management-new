@@ -2,19 +2,24 @@
     <div class="pos-content no-print">
         <h2 style="color: #4267b2;margin: 10px auto 10px 14px;font-weight: bold;"> Print Invoice</h2>
     </div>
-    <div class="row m-0 mt-2">
-        <div class="col-md-6">
-            <button class="btn btn-primary no-print" id="printButton" (click)="printBill()">Print</button>
+    <div class="row m-0 mt-2 ml-3">
+        <div class="col-md-6 text-center">
+            <button class="btn btn-primary no-print" id="printButton" (click)="printBill()">
+                <i class="fa fa-print fa-lg mr-1"></i>Print</button>
+            <button class="btn btn-danger no-print ml-3 " id="CloseButton" (click)="close()">
+                <i class="fa fa-ban fa-lg mr-1"></i>
+                Close</button>
+
         </div>
-        <div class="col-md-6 pull-right">
+        <!-- <div class="col-md-6">
             <button class="btn btn-danger no-print" id="CloseButton" (click)="close()">Close</button>
-        </div>
+        </div> -->
         <div class="row">
             <div class="col-sm-12">
                 <table id="InvoiceTable" class='table table-striped' *ngIf='parsedOrders && parsedOrders.length'>
                     <thead>
                         <tr>
-                            <th colspan="4" class="centered">
+                            <th colspan="4" class="text-center">
                                 <div><h2>{{ company?.NameEnglish }}</h2></div>
                                 <div>{{ company?.Address }} {{ company?.Street }} {{ company?.City }} {{ company?.District }}</div>
                                 <div>{{ company?.Email }} {{ company?.Phone }}</div>
@@ -56,39 +61,21 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td align="right">Total :</td>
-                                            <td align="right">{{ calculateSum().toFixed(2) }}</td>
+                                           
+                                            <td colspan="5" align="right">Total : {{ calculateSum().toFixed(2) }}</td>
                                         </tr>
                                         <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td align="right">Discount</td>
-                                            <td align="right">{{ calculateDiscount()}}</td>
+                                            
+                                            <td colspan="5" align="right">Discount : {{ calculateDiscount()}}</td>
+                                        </tr>
+                                      
+                                        <tr>
+                                            
+                                            <td colspan="5" align="right">VAT % : {{ calculateVat() }}</td>
                                         </tr>
                                         <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td align="right">Taxable Amount</td>
-                                            <td align="right">{{calculateTaxableAmount().toFixed(2)}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td align="right">VAT %</td>
-                                            <td align="right">{{ calculateVat() }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td align="right">Grand Total</td>
-                                            <td align="right">{{ getGrandTotal() }}</td>
+                                            
+                                            <td colspan="5" align="right">Grand Total : {{ getGrandTotal() }}</td>
                                         </tr>
                                     </tfoot>
                                 </table>

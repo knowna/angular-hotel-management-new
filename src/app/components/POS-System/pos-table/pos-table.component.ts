@@ -30,6 +30,7 @@ import { Global } from 'src/app/Shared/global';
 import { BillingService } from 'src/app/Service/Billing/billing.service';
 import { subscribeOn } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+import { TicketService } from 'src/app/Service/Billing/ticket.service';
 
 @Component({
     selector: 'app-pos-table',
@@ -102,7 +103,8 @@ export class PosTableComponent implements OnInit {
         private orderStoreApi: OrderStoreService,
         private fb: FormBuilder, 
         private billService: BillingService,
-        private toastrService: ToastrService
+        private toastrService: ToastrService,
+        private ticketService: TicketService
 
     ) {
        
@@ -228,6 +230,7 @@ export class PosTableComponent implements OnInit {
     buildForm(){
         this.postableForm = this.fb.group({
             AccountTransactionValues: this.fb.array([this.buildMenuForm()]),
+            ticketNote: ''
         });
     }
 
@@ -790,7 +793,13 @@ export class PosTableComponent implements OnInit {
 	 * @param ticket 
 	 */
     saveTicketNote(ticket: number) {
-        ticket && this.ticketStoreApi.addTicketNote(ticket, this.ticketNote);
+        // ticket && this.ticketStoreApi.addTicketNote(ticket, this.ticketNote);
+        this.ticketService.addTicketNote(ticket,this.postableForm.value.ticketNote)
+            .subscribe(
+                data => {
+                    // console.log('after saving ticket note re', data);
+                }
+            )
         this.enableTicketNote = false;
     }
 
