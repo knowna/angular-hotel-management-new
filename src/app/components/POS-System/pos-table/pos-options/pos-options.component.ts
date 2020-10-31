@@ -25,6 +25,8 @@ export class PosOptionsComponent implements OnInit {
     disableButton: boolean = true;
     parsedOrders: Order[];
 
+    selectedTicket: number;
+
     // Constructor
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -33,6 +35,11 @@ export class PosOptionsComponent implements OnInit {
 
      // Initialize data here
      ngOnInit() {
+
+        this.activatedRoute.params.subscribe(params => {
+            this.selectedTicket = (params['ticketId']) ? params['ticketId'] : 0;
+        });
+
         console.log('the selected item is', this.selectedItem)
         console.log('the orders in option are', this.orders)
         this.disableButton = this.orders.length ? false : true;
@@ -80,5 +87,9 @@ export class PosOptionsComponent implements OnInit {
     // Redirects to cuatomers view
     goToCustomerView() {
         this.router.navigate(['/pos-dashboard/customers']);
+    }
+
+    printInvoice() {
+        this.router.navigate(['/pos/InvoicePrint'], { queryParams: { ticketId : this.selectedTicket} });
     }
 }
