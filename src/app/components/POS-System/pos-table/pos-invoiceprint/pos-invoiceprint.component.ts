@@ -264,8 +264,10 @@ export class PosInvoicePrintComponent implements OnInit {
     }
 
     //Print Bill
-    printBill() {
-        (window as any).print();
+    // printBill() {
+    //     (window as any).print();
+
+
         // if (this.getFinalBalance() > 0) {
         //     alert("Before bill print! Please settle amount");
         // }
@@ -434,12 +436,38 @@ export class PosInvoicePrintComponent implements OnInit {
         //         printIframe.document.body.appendChild(newObjectTag);
         //     }
         // }
+    // }
+
+
+    printBill() {
+       
+       
+
+    let ticketId = this.selectedTicket;
+    
+    this.orderApi.ticketPrintApi(ticketId)
+    .subscribe(
+        (data:IInvoicePrint)=>{
+            this.invoiceprint=data;
+            if (this.invoiceprint != null) {
+                (window as any).print();
+            }
+           
+        }
+    )
+
     }
     /**
  * Gets individual journal voucher
  * @param Id 
  */
-    getPrintInvoice(Id: string, AmountWord: number) {
-        return this._purchaseService.get(Global.BASE_ORDERINVOICEPRINT_ENDPOINT + '?TicketNo=' + Id + '&InvoiceAmount=' + AmountWord);
+    getPrintInvoice(Id) {
+         this.orderApi.ticketPrintApi(Id)
+        .subscribe(
+            data=>{
+                console.log('printBill section',data);
+                
+            }
+        )
     }
 }

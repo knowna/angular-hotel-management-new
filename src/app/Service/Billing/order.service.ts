@@ -81,6 +81,10 @@ export class OrderService {
 
     }
 
+    ticketPrintApi(TicketId){
+        return this.http.get(Global. BASE_TicketPrint_ENDPOINT+'?TicketId='+TicketId)
+    }
+
 
     addOrderProductList(payload: any) {
          
