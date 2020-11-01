@@ -25,6 +25,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Account } from '../../../Model/Account/account';
 import { AccountType } from '../../../Model/AccountType/accountType';
+import { BillingService } from 'src/app/Service/Billing/billing.service';
 
 @Component({
     selector: 'dcubehotel-pos',
@@ -33,6 +34,7 @@ import { AccountType } from '../../../Model/AccountType/accountType';
 })
 export class POSDashboardComponent implements OnInit {
     tables$: Observable<Table[]>;
+    tables: Table[] = [];
     customers: Observable<Customer[]>;
     public acctype: any;
     account: Account;
@@ -60,10 +62,10 @@ export class POSDashboardComponent implements OnInit {
         private tableStoreService: TableStoreService,
         private customerStoreService: CustomerStoreService,
         private _customerService:AccountTransactionTypeService,
-        private accountService: AccountTransactionTypeService
-,
+        private accountService: AccountTransactionTypeService,
         private ticketStoreApi: TicketStoreService,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private billingService: BillingService
     ) 
     {
         this.accountService.getAccountTypes().subscribe(data => { this.acctype = data });
@@ -128,7 +130,14 @@ export class POSDashboardComponent implements OnInit {
             Amount: ['']
         });
              
-        this.tables$ = this.store.select(TableSelector.getAllTables);
+        this.billingService.loadTables()
+            .subscribe(
+                data => {
+                    this.tables = data;
+                }
+        );
+
+        // this.tables$ = this.store.select(TableSelector.getAllTables);
         console.log("loadedTable",this.tables$)
         this.LoadCustomers();
         this.LoadMasters();
