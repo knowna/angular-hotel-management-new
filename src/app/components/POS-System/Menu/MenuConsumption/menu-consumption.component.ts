@@ -62,7 +62,7 @@ export class MenuConsumptionComponent implements OnInit {
         private router: Router
     ) {
         this._menuItemService.getMenuCategories().subscribe(data => { this.menucategory = data });
-        this._inventoryReceiptService.getInventoryItems().subscribe(data => { this.inventoryReceiptItem = data });
+       
         this._menuConsumptionService.getMenuConsumptionProductPortions().subscribe(data => this.MenuItemPortions = data);
     }
 
@@ -72,9 +72,13 @@ export class MenuConsumptionComponent implements OnInit {
             CategoryId: ['', Validators.required],
             ProductId: ['', Validators.required],
             ProductPortionId: ['', Validators.required],
-            MenuConsumptionDetails: this.fb.array([])
+            MenuConsumptionDetails: this.fb.array([this.initMenuConsumptionPortions()])
         });
         this.LoadMenuConsumptions();
+
+        this._inventoryReceiptService.getInventoryItems().subscribe(data => {
+            
+            this.inventoryReceiptItem = data });
     }
 
     initMenuConsumptionPortions() {
@@ -393,5 +397,9 @@ export class MenuConsumptionComponent implements OnInit {
         
         this.modalRef.hide();
         this.reset();
+    }
+
+    get MenuConsumptionDetails(): FormArray {
+        return this.MenuConsumptionForm.get('MenuConsumptionDetails') as FormArray;
     }
 }
