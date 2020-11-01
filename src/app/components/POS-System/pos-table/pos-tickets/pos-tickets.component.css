@@ -7,7 +7,8 @@
 
 .tickets__item {
     /* background: #dadcda; */
-    background: gray;
+    /* background: gray; */
+    background: #364a70;
     padding: 13px 0;
     margin-bottom: 5px;
     height: 45px;;

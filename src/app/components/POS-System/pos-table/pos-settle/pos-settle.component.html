@@ -12,9 +12,9 @@
                 <div class="tickets-section">
                     <div class="tickets-section__header">
                         <h5>
-                            {{ (ticket) ? '#' + ticket.TicketId : '' }} {{
-    selectedCustomerId ? 'Customer: ' + (customer$ | async)?.CustomerName : 'Table:
-                            ' + (tableNew)?.TableId
+                            {{ (ticket) ? '#' + ticket.TicketId : '' }} 
+                            {{selectedCustomerId ? 'Customer: ' + (customerNew)?.CustomerName : 
+                            'Table:' + (tableNew)?.TableId
                             }}
                         </h5>
                     </div>
@@ -216,7 +216,7 @@
                             <button type="button" class="btn btn-default" (click)="payCash(ticket)" [disabled]="selectedValue == 0 || getFinalBalance().toFixed(2) === '0.00'">Cash</button>
                             <button type="button" class="btn btn-default" (click)="payByCard(ticket)" [disabled]="selectedValue == 0 || getFinalBalance().toFixed(2) === '0.00'">Credit Card</button>
                             <!--<button type="button" class="btn btn-default" (click)="payVoucher(ticket)" [disabled]="selectedValue == 0 || getFinalBalance().toFixed(2) === '0.00'">Voucher</button>-->
-                            <button type="button" class="btn btn-default" (click)="payCustomerAmount(ticket)" [disabled]="selectedValue === 0 || selectedCustomerId === 0">Customer Account</button>
+                            <button type="button" class="btn btn-default" (click)="payCustomerAmount(ticket)" [disabled]="selectedValue == 0">Customer Account</button>
                             <button type="button" class="btn btn-danger" (click)="close(ticket)">Close</button>
                         </div>
                     </div>
