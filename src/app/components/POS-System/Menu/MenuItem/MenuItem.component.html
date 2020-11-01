@@ -1,27 +1,25 @@
 ﻿
 <ng-template #template>
-    <form class="panel-primary" novalidate (ngSubmit)="onSubmit(MenuItemForm)" [formGroup]="MenuItemForm">
-        <div class="modal-header panel-heading">
+    <form class="" novalidate (ngSubmit)="onSubmit(MenuItemForm)" [formGroup]="MenuItemForm">
+        <div class="modal-header panel-heading" style="background-color: #364a70;">
             <h4 class="modal-title pull-left">{{modalTitle}}</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">
-            <div class="panel-body">
+            <div>
                 <div class="form-group">
-                    <label class="control-label col-sm-4 text-right">Name:</label>
-                    <div class="col-sm-8" style="margin: inherit;">
-                        <input type="text" class="form-control" placeholder="Name" formControlName="Name">
+                    <div class="col-sm-6 ml-auto mr-auto" style="margin: inherit;">
+                        <span> Name:  </span><input type="text" class="form-control" placeholder="Name" formControlName="Name">
                         <div class="alert alert-danger" *ngIf="MenuItemForm.get('Name').hasError('required') && formSubmitAttempt">
                             Name is required
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-4 text-right">Category:</label>
-                    <div class="col-sm-8" style="margin: inherit;">
-                        <select class="form-control" formControlName="categoryId">
+                    <div class="col-sm-6 ml-auto mr-auto" style="margin: inherit;">
+                        <span> Category:  </span><select class="form-control" formControlName="categoryId">
                             <option *ngFor="let menucategories of menucategory" value={{menucategories.Id}}>{{menucategories.Name}}</option>
                         </select>
                         <div class="alert alert-danger" *ngIf="MenuItemForm.get('Name').hasError('required') && formSubmitAttempt">
@@ -30,49 +28,48 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-4 text-right">Bar Code:</label>
-                    <div class="col-sm-8" style="margin: inherit;">
-                        <input type="text" class="form-control" placeholder="Barcode" formControlName="Barcode">
+                
+                    <div class="col-sm-6 ml-auto mr-auto" style="margin: inherit;">
+                      <span> Bar Code:  </span>   <input type="text" class="form-control" placeholder="Barcode" formControlName="Barcode">
                         <div class="alert alert-danger" *ngIf="MenuItemForm.get('Name').hasError('required') && formSubmitAttempt">
                             Code is required
                         </div>
                     </div>
                 </div>
                 <div class="form-group" style="margin: inherit;">
-                    <label class="control-label col-sm-4 text-right">Tag:</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" placeholder="Tag" formControlName="Tag">
+                    <div class="col-sm-6 ml-auto mr-auto">
+                        <span> Tag:  </span> <input type="text" class="form-control" placeholder="Tag" formControlName="Tag">
                         <div class="alert alert-danger" *ngIf="MenuItemForm.get('Name').hasError('required') && formSubmitAttempt">
                             Tag is required
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="panel panel-default container-fluid">
-                <div class="panel-heading row">
+            <div>
+                <!-- <div class=" row">
                     <div class="container col-md-12 text-right row" style="margin: 0px; margin-top: 15px;">
                         <button type="button" class="btn btn-success pull-right" [disabled]="MenuItemForm.controls.MenuItemPortions.invalid" (click)="addMenuItemPortions()">Add Portion +</button>
                     </div>
-                </div>
-                <div class="panel-heading row" style="background-color:cornflowerblue; color:#ffffff">
+                </div> -->
+                <div style="background-color: #364a70;color:white" class="mt-4 row">
                     <div class="col-md-6 text-center">
-                        <h2><label>Name</label></h2>
+                        <h4><label>Name</label></h4>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <h4><label>Quantity</label></h4>
                     </div>
                     <div class="col-md-2 text-center">
-                        <h2><label>Quantity</label></h2>
+                        <h4><label>Rate</label></h4>
                     </div>
-                    <div class="col-md-2 text-center">
-                        <h2><label>Rate</label></h2>
-                    </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-">
                         <label>&nbsp;</label>
                     </div>
                 </div>
-                <div class="panel-body">
-                    <div class="row">
+                <div>
+                    <div class="row ml-4 mt-2">
                         <div formArrayName="MenuItemPortions">
-                            <div class="panel-body" *ngFor="let MenuItemPortions of MenuItemForm.controls.MenuItemPortions; let i=index" [formGroupName]="i">
-                                <div class="row">
+                            <div *ngFor="let MenuItemPortions of MenuItemForm.controls.MenuItemPortions.controls; let i=index" [formGroupName]="i">
+                                <div class="row ml-3">
                                     <div class="col-md-6">
                                         <input type="hidden" formControlName="Id" />
                                         <input type="hidden" formControlName="MenuItemPortionId" />
@@ -95,8 +92,8 @@
                                             Price is required
                                         </div>
                                     </div>
-                                    <div class="col-sm-2">
-                                        <!-- <span style="cursor: pointer; font-size: 30px;" *ngIf="MenuItemForm.controls['MenuItemPortions'].length > 1" class="fa fa-window-close pull-right" (click)="removeMenuItemPortions(i)"></span> -->
+                                    <div class="col-sm-1">
+                                        <span style="cursor: pointer; font-size: 30px;" *ngIf="MenuItemForm.controls.MenuItemPortions.controls.length > 1" class="fa fa-window-close pull-right" (click)="removeMenuItemPortions(i)"></span>
                                     </div>
                                 </div>
                             </div>

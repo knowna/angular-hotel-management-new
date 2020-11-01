@@ -78,6 +78,7 @@ import { PosSettleComponent } from './components/POS-System/pos-table/pos-settle
 import { LoginGuard } from './guard/login.guard';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CategoryComponent } from './components/InventoryDashboard/category/category.component';
+import { PosCustomerComponent } from './components/POS-System/pos-table/pos-customer/pos-customer.component';
 
 
 const routes: Routes = [
@@ -477,6 +478,11 @@ const routes: Routes = [
     component: PosInvoicePrintComponent,
     pathMatch: 'full',
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'pos/PosCustomer',
+    component: PosCustomerComponent,
+    pathMatch: 'full', canActivate: [AuthGuard]
   },
   {
     path: 'pos-dashboard/table/items',

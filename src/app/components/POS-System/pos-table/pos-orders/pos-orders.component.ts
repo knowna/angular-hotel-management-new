@@ -69,14 +69,22 @@ export class PosOrdersComponent implements OnInit {
 
     // On component Init
     ngOnInit() {
-
-        console.log('the orders are', this.orders);
+        console.log('the orders in pos orders are', this.orders);
         console.log('the customer us', this.selectedCustomerId)
         console.log('the table us', this.table)
         this.activatedRoute.params.subscribe(params => {
             this.selectedTicket = (params['ticketId']) ? params['ticketId'] : 0;
             this.selectedCustomerId = (params['customerId']) ? params['customerId'] : 0;
-            console.log('after route cus id', this.selectedCustomerId)
+            console.log('after route cus id', this.selectedCustomerId);
+            console.log('the selected ticket id in pos order is', this.selectedTicket);
+            if(this.selectedTicket) {
+                this.ticketService.getTicketById(this.selectedTicket)
+                    .subscribe(
+                        data => {
+                            this.ticket = data;
+                        }
+                );
+            }
         });
 
         this.user$ = this.userStoreService.user$;
@@ -86,46 +94,24 @@ export class PosOrdersComponent implements OnInit {
             .subscribe(
             customers => {
                 this.customerNew = customers.find(c => c.Id == this.selectedCustomerId);
-                console.log('the customers are', customers, this.selectedCustomerId)
-                customers.forEach(c => {
-                    console.log('each customer is', c)
-                });
             },
             error => console.log(error)
         );
-
-        if(!this.ticket) {
-            if(this.table.TableId) {
-                this.ticketService.loadTableTickets(this.table.TableId)
-                .subscribe(
-                    data => {
-                        this.ticket = data.find(t => t.Id == this.selectedTicket);
-                    }
-                );
-            }else {
-                this.ticketService.loadCustomerTickets(this.selectedCustomerId)
-                .subscribe(
-                    data => {
-                        this.ticket = data.find(t => t.Id == this.selectedTicket);
-
-                    }
-                );
-            }
-            
-        }
+        console.log('the ticket is', this.ticket)
+       
     }
 
     changeSelected(OrderItems,currentIndex) {
         OrderItems = OrderItems.map(function(x) {
-        const i = OrderItems.indexOf(x);
-        if(i == currentIndex) {
-        x.IsSelected = !x.IsSelected;
-        }else{
-        x.IsSelected = false;
-        }
-        return x;
+            const i = OrderItems.indexOf(x);
+            if(i == currentIndex) {
+                x.IsSelected = !x.IsSelected;
+            }else{
+                x.IsSelected = false;
+            }   
+            return x;
         });
-        }
+    }
         
 
 

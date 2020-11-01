@@ -108,9 +108,9 @@ export class PosSettleComponent implements OnInit {
                 this.selectedTicket =  +params.get('ticketId')||0;
 
                 
-                console.log('table id', this.selectedTableId);
+                // console.log('table id', this.selectedTableId);
                 console.log('customer id', this.selectedCustomerId);
-                console.log('ticket id', this.selectedTicket);
+                // console.log('ticket id', this.selectedTicket);
         });
     }
 
@@ -170,32 +170,51 @@ export class PosSettleComponent implements OnInit {
         //     }
         // });
 
-        if(this.selectedTableId) {
-            this.ticketService.loadTableTickets(this.selectedTableId.toString())
-            .subscribe(
-                data => {
-                    this.ticket = data.find(t => t.Id == this.selectedTicket);
-                    console.log('the ticccc', this.ticket);
-                    
-                }
-            );
-        }else {
-            this._customerService.get(Global.BASE_ACCOUNT_POSCUSTOMER_ENDPOINT)
+        if(this.selectedTicket) {
+            this.ticketService.getTicketById(this.selectedTicket)
                 .subscribe(
-                customers => {
-                    this.customerNew = customers.find(c => c.Id == this.selectedCustomerId);
-                    console.log('the customers are', customers)
-                },
-                error => console.log(error)
-            );
-
-            this.ticketService.loadCustomerTickets(this.selectedCustomerId.toString())
-            .subscribe(
-                data => {
-                    this.ticket = data.find(t => t.Id == this.selectedTicket);
-                }
+                    data => {
+                        this.ticket = data;
+                        // console.log('the payment hist', this.ticket)
+                    }
             );
         }
+
+        this._customerService.get(Global.BASE_ACCOUNT_POSCUSTOMER_ENDPOINT)
+            .subscribe(
+            customers => {
+                this.customerNew = customers.find(c => c.Id == this.selectedCustomerId);
+                // console.log('the customers are', customers)
+            },
+            error => console.log(error)
+        );
+
+        // if(this.selectedTableId) {
+        //     this.ticketService.loadTableTickets(this.selectedTableId.toString())
+        //     .subscribe(
+        //         data => {
+        //             this.ticket = data.find(t => t.Id == this.selectedTicket);
+        //             console.log('the ticccc', this.ticket);
+                    
+        //         }
+        //     );
+        // }else {
+        //     this._customerService.get(Global.BASE_ACCOUNT_POSCUSTOMER_ENDPOINT)
+        //         .subscribe(
+        //         customers => {
+        //             this.customerNew = customers.find(c => c.Id == this.selectedCustomerId);
+        //             console.log('the customers are', customers)
+        //         },
+        //         error => console.log(error)
+        //     );
+
+        //     this.ticketService.loadCustomerTickets(this.selectedCustomerId.toString())
+        //     .subscribe(
+        //         data => {
+        //             this.ticket = data.find(t => t.Id == this.selectedTicket);
+        //         }
+        //     );
+        // }
 
         // this.totalPayable = this.getFinalBalance().toFixed(2);
         // this.selectedCustomerId = this.ticket.CustomerId;
@@ -315,8 +334,8 @@ export class PosSettleComponent implements OnInit {
         let giftSum = this.calculateVoidGiftSum();
         let value = (giftSum / sum) * 100 || 0;
 
-       return (this.ticket.Discount)
-            ? this.ticket.Discount.toFixed(2)
+       return (this.ticket?.Discount)
+            ? this.ticket?.Discount.toFixed(2)
             : (sum * (value / 100)).toFixed(2);
     }
 
@@ -413,7 +432,7 @@ export class PosSettleComponent implements OnInit {
      * Calculates total charged amount
      * @param ticket 
      */
-    getTotalCharged(ticket: Ticket) {
+    getTotalCharged(ticket?: Ticket) {
         return ticket.PaymentHistory.reduce((total: number, pay: PaymentHistory) => {
             total = total + pay.AmountPaid;
             return total;
@@ -538,20 +557,21 @@ export class PosSettleComponent implements OnInit {
         //     return false;
         // }
 
-        var r = confirm("Are you sure you want to continue?");
-        if (r == false) {
-            return false;
-        }
+        // var r = confirm("Are you sure you want to continue?");
+        // if (r == false) {
+        //     return false;
+        // }
 
-        this.isLoading = true;
-        this.ticketStoreApi.payCustomerAccount(ticket.Id, {
-            "TicketId": ticket.Id,
-            "Charged": this.selectedValue,
-            "Discount": this.ticket.Discount,
-            "PaymentMode": "Customer",
-            "FinancialYear": this.currentYear.Name,
-            "UserName": this.currentUser.UserName
-        });
+        // this.isLoading = true;
+        // this.ticketStoreApi.payCustomerAccount(ticket.Id, {
+        //     "TicketId": ticket.Id,
+        //     "Charged": this.selectedValue,
+        //     "Discount": this.ticket.Discount,
+        //     "PaymentMode": "Customer",
+        //     "FinancialYear": this.currentYear.Name,
+        //     "UserName": this.currentUser.UserName
+        // });
+        this.router.navigate(['/pos/PosCustomer'], { queryParams: { ticketId : this.selectedTicket} });
     }
 
     // Call to make the ticket round offed

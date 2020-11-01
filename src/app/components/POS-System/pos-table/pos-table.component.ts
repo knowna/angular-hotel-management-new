@@ -166,7 +166,10 @@ export class PosTableComponent implements OnInit {
                     data => {
                         if(this.selectedTicket) {
                             this.ticket = data.find(t => t.Id == this.selectedTicket);
-                            this.postableForm.controls['ticketNote'].setValue(this.ticket.Note || '');
+                            if(this.ticket) {
+                                this.postableForm.controls['ticketNote'].setValue(this.ticket.Note || '');
+                            }
+                           
                         }
                         
                     }
@@ -176,7 +179,10 @@ export class PosTableComponent implements OnInit {
                 .subscribe(
                     data => {
                         this.ticket = data.find(t => t.Id == this.selectedTicket);
-                        this.postableForm.controls['ticketNote'].setValue(this.ticket.Note || '');
+                        if(this.ticket) {
+                            this.postableForm.controls['ticketNote'].setValue(this.ticket.Note || '');
+                        }
+                        
                     }
                 );
             }
@@ -668,6 +674,7 @@ export class PosTableComponent implements OnInit {
                 data.ListOrder[0].OrderItems.forEach(o => {
                     this.ordersNew[0].OrderItems.push(o);
                 });
+                this.buildForm();
                 console.log('the orders new are', this.ordersNew)
                
             }else{

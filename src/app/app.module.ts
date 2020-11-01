@@ -162,6 +162,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { UserStoreService } from './Service/store/user.store.service';
 import { FilterMenuConsumption } from './filters/FilterMenuConsumption.filter';
 import { CategoryComponent } from './components/InventoryDashboard/category/category.component';
+import { PosCustomerComponent } from './components/POS-System/pos-table/pos-customer/pos-customer.component';
+import { PurchaseService } from './Service/Billing/purchase.service';
 // import { TicketService } from './Service/Billing/ticket.service';
 @NgModule({
   imports: [
@@ -317,7 +319,8 @@ import { CategoryComponent } from './components/InventoryDashboard/category/cate
     PosOrdersComponent,
     PosTicketsComponent,
     PosInvoicePrintComponent,
-    DashboardComponent
+    DashboardComponent,
+    PosCustomerComponent
 
   ],
   providers: [
@@ -356,6 +359,7 @@ import { CategoryComponent } from './components/InventoryDashboard/category/cate
     RoleService,
     UserRoleService,
     AccountTransactionTypeService,
+    PurchaseService,
     //pos
     TicketStoreService,
     TicketService,
