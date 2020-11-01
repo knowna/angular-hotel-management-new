@@ -216,7 +216,7 @@
                             <button type="button" class="btn btn-default" (click)="payCash(ticket)" [disabled]="selectedValue == 0 || getFinalBalance().toFixed(2) === '0.00'">Cash</button>
                             <button type="button" class="btn btn-default" (click)="payByCard(ticket)" [disabled]="selectedValue == 0 || getFinalBalance().toFixed(2) === '0.00'">Credit Card</button>
                             <!--<button type="button" class="btn btn-default" (click)="payVoucher(ticket)" [disabled]="selectedValue == 0 || getFinalBalance().toFixed(2) === '0.00'">Voucher</button>-->
-                            <button type="button" class="btn btn-default" (click)="payCustomerAmount(ticket)" [disabled]="selectedValue == 0">Customer Account</button>
+                            <button type="button" class="btn btn-default" (click)="payCustomerAmount(ticket)">Customer Account</button>
                             <button type="button" class="btn btn-danger" (click)="close(ticket)">Close</button>
                         </div>
                     </div>
