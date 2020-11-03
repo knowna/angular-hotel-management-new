@@ -165,6 +165,7 @@ import { CategoryComponent } from './components/InventoryDashboard/category/cate
 import { PosCustomerComponent } from './components/POS-System/pos-table/pos-customer/pos-customer.component';
 import { PurchaseService } from './Service/Billing/purchase.service';
 // import { TicketService } from './Service/Billing/ticket.service';
+
 @NgModule({
   imports: [
     SelectDropDownModule,
