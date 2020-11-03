@@ -19,6 +19,8 @@
     public static BASE_MENUCONSUMPTION_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/MenuConsumptionAPI/';
     public static BASE_MENUCONSUMPTIONDETAILS_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/MenuConsumptionDetailAPI/';
     public static BASE_DEPARTMENT_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/DepartmentAPI/';
+
+    
     public static BASE_CATEGORY_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/CategoryAPI/';
     public static BASE_MENU_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/MenuAPI/';
     public static BASE_INVENTORYRECEIPT_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/InventoryReceiptAPI/';

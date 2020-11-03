@@ -37,7 +37,7 @@ export class MenuItemComponent implements OnInit {
     modalRef: BsModalRef;
     menuitemPortions: IMenuItemPortion[];
     MenuItemName: string = '';
-
+    departments:any;
     selectedFile: File;
 
      dropMessage: string = "Upload Reference File";
@@ -64,9 +64,11 @@ export class MenuItemComponent implements OnInit {
             Barcode: ['', Validators.required],
             Tag: ['', Validators.required],
             Description:[''],
+            DepartmentId:[''],
             MenuItemPortions: this.fb.array([this.initMenuItemPortions()]),
         });
         this.LoadMenuItems();
+        this.LoadDepartments();
     }
 
     initMenuItemPortions() {
@@ -79,6 +81,19 @@ export class MenuItemComponent implements OnInit {
             OpeningStock:['0']
         });
     }
+
+
+    LoadDepartments(){
+        this._menuItemService.getDepartments()
+            .subscribe(
+                data =>{
+                    
+                    this.departments=data;
+                    
+                }
+            )
+    }
+
 
     LoadMenuItems(): void {
         this.indLoading = true;
@@ -159,6 +174,9 @@ export class MenuItemComponent implements OnInit {
         this.MenuItemForm.controls['Name'].setValue(this.menuItem.Name);
         this.MenuItemForm.controls['Barcode'].setValue(this.menuItem.Barcode);
         this.MenuItemForm.controls['Tag'].setValue(this.menuItem.Tag);
+
+        this.MenuItemForm.controls['Description'].setValue(this.menuItem.Description);
+        this.MenuItemForm.controls['DepartmentId'].setValue(this.menuItem.DepartmentId);
         this.MenuItemForm.controls['MenuItemPortions'] = this.fb.array([]);
         let control = <FormArray>this.MenuItemForm.controls['MenuItemPortions'];
         console.log(this.MenuItemForm.value);
@@ -220,19 +238,19 @@ export class MenuItemComponent implements OnInit {
         if (menuitemform.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
-                    console.log("DebugwithSantosh", menuitemform.value);
                     let AddMenuItemObj = {
                         Id: this.MenuItemForm.controls['Id'].value,
                         Name: this.MenuItemForm.controls['Name'].value,
                         categoryId: this.MenuItemForm.controls['categoryId'].value,
                         Barcode: this.MenuItemForm.controls['Barcode'].value,
                         Tag: this.MenuItemForm.controls['Tag'].value,
-                        PhoteIdentity:this.selectedFile,
+                        DepartmentId:this.MenuItemForm.controls['DepartmentId'].value,
+                        Description: this.MenuItemForm.controls['Description'].value,
+                        // PhoteIdentity:this.selectedFile,
 
                         MenuItemPortions:this.MenuItemForm.controls['MenuItemPortions'].value
                     }
 
-                    console.log(AddMenuItemObj);
                     
                     this._menuItemService.post(Global.BASE_MENUITEM_ENDPOINT, AddMenuItemObj).subscribe(
                         async (data) => {
@@ -276,6 +294,8 @@ export class MenuItemComponent implements OnInit {
                         categoryId: this.MenuItemForm.controls['categoryId'].value,
                         Barcode: this.MenuItemForm.controls['Barcode'].value,
                         Tag: this.MenuItemForm.controls['Tag'].value,
+                        DepartmentId:this.MenuItemForm.controls['DepartmentId'].value,
+                        Description: this.MenuItemForm.controls['Description'].value,
                         MenuItemPortions: this.MenuItemForm.controls['MenuItemPortions'].value
                     }
 
