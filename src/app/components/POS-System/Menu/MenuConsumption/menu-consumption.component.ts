@@ -98,14 +98,14 @@ export class MenuConsumptionComponent implements OnInit {
         this._menuConsumptionService.get(Global.BASE_MENUCONSUMPTION_ENDPOINT)
             .subscribe(
                 menuConsumptions => { 
-                    console.log(menuConsumptions);
+                    // console.log(menuConsumptions);
                     
                     this.menuConsumptions = menuConsumptions; 
                     this._menuConsumptionService.getMenuConsumptionProductPortions()
                         .subscribe(
                             data => {
                                 if(data) {
-                                    this.tempMenuConsumptions = this.tempMenuConsumptions.map(function(x) {
+                                    this.menuConsumptions = this.menuConsumptions.map(function(x) {
                                         let ProductNamelist = data.filter(ISRItem =>ISRItem.MenuItemPortionId === x.ProductPortionId)[0];
                                         x.MenuConsumptionName = ProductNamelist.Name;
                                         return x;

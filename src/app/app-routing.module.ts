@@ -515,7 +515,11 @@ const routes: Routes = [
     component: POSSaleBillingComponent,
     canActivate: [AuthGuard]
   },
-
+  {
+    path: 'menu-category/:menuid',
+    component: MenuCategoryComponent1,
+    canActivate: [AuthGuard]
+  },
   {
     path: "**",
     component: PagenotfoundComponent
@@ -525,11 +529,11 @@ const routes: Routes = [
     redirectTo: "/404",
   },
 
-  {
-    path: 'menu-category/:menuid',
-    component: MenuCategoryComponent1,
-    canActivate: [AuthGuard]
-},
+  // {
+  //   path: 'menu-category/:menuid',
+  //   component: MenuCategoryComponent1,
+  //   canActivate: [AuthGuard]
+  // },
 
 ];
 
