@@ -5,6 +5,8 @@
     categoryId: number;
     Barcode: string;
     Tag: string;
+    Description: string;
+    PhoteIdentity:any;
     MenuItemPortions: IMenuItemPortion[];
 }
 export class IMenuItemPortion {

@@ -37,6 +37,8 @@ export class MenuItemComponent implements OnInit {
     modalRef: BsModalRef;
     menuitemPortions: IMenuItemPortion[];
     MenuItemName: string = '';
+
+    selectedFile: File;
     
     constructor(private router: Router,
         private fb: FormBuilder,
@@ -56,6 +58,7 @@ export class MenuItemComponent implements OnInit {
             categoryId: ['', Validators.required],
             Barcode: ['', Validators.required],
             Tag: ['', Validators.required],
+            Description:[''],
             MenuItemPortions: this.fb.array([this.initMenuItemPortions()]),
         });
         this.LoadMenuItems();
@@ -76,7 +79,10 @@ export class MenuItemComponent implements OnInit {
         this.indLoading = true;
         
         this._menuItemService.get(Global.BASE_MENUITEM_ENDPOINT)
-            .subscribe(menuItems => { this.menuItems = menuItems; this.indLoading = false; },
+            .subscribe(menuItems => {
+                console.log('menu items of image are',menuItems);
+                
+                this.menuItems = menuItems; this.indLoading = false; },
             error => this.msg = <any>error);
     }
 
@@ -86,6 +92,19 @@ export class MenuItemComponent implements OnInit {
         const AddPortions = this.initMenuItemPortions();
         control.push(AddPortions);
     }
+
+
+
+
+    //Gets called when the user selects an image
+
+  public onFileChanged(event) {
+
+    //Select File
+
+    this.selectedFile = event.target.files[0];
+
+  }
 
     removeMenuItemPortions(i: number) {
         
@@ -135,10 +154,10 @@ export class MenuItemComponent implements OnInit {
         this.MenuItemForm.controls['Name'].setValue(this.menuItem.Name);
         this.MenuItemForm.controls['Barcode'].setValue(this.menuItem.Barcode);
         this.MenuItemForm.controls['Tag'].setValue(this.menuItem.Tag);
-
         this.MenuItemForm.controls['MenuItemPortions'] = this.fb.array([]);
         let control = <FormArray>this.MenuItemForm.controls['MenuItemPortions'];
-
+        console.log(this.MenuItemForm.value);
+        
         for (let i = 0; i < this.menuItem.MenuItemPortions.length; i++)
         {
             control.push(this.fb.group(this.menuItem.MenuItemPortions[i]));
@@ -188,7 +207,7 @@ export class MenuItemComponent implements OnInit {
         });
     }
 
-    onSubmit(formData: any) {
+    onSubmit(formData: any,fileUpload: any) {
         
         this.msg = "";
         this.formSubmitAttempt = true;
@@ -203,18 +222,36 @@ export class MenuItemComponent implements OnInit {
                         categoryId: this.MenuItemForm.controls['categoryId'].value,
                         Barcode: this.MenuItemForm.controls['Barcode'].value,
                         Tag: this.MenuItemForm.controls['Tag'].value,
+                        PhoteIdentity:this.selectedFile,
+
                         MenuItemPortions:this.MenuItemForm.controls['MenuItemPortions'].value
                     }
+
+                    console.log(AddMenuItemObj);
+                    
                     this._menuItemService.post(Global.BASE_MENUITEM_ENDPOINT, AddMenuItemObj).subscribe(
-                        data => {
-                            
-                            if (data >= 0) //Success
-                            {
+                        async (data) => {
+                            if (data > 0) {
+                                // file upload stuff goes here
+                                let upload = await fileUpload.handleFileUpload({
+                                    'moduleName': 'Menu Items',
+                                    'id': data
+                                });
+
+                                if (upload == 'error' ) {
+                                    alert('There is error uploading file!');
+                                } 
+                                
+                                if (upload == true || upload == false) {
+                                    this.modalRef.hide();
+                                    this.formSubmitAttempt = false;
+                                    this.reset();
+                                }
                                 
                                 alert("Data successfully added.");
                                 this.modalRef.hide();
-                                this.reset();
-                                this.formSubmitAttempt = false;
+                                // this.reset();
+                                // this.formSubmitAttempt = false;
                                 this.LoadMenuItems();
                             }
                             else {
