@@ -28,6 +28,7 @@ export class TableComponent implements OnInit {
     modalTitle: string;
     modalBtnTitle: string;
     modalRef: BsModalRef;
+    departments:any;
 
     constructor(
         private fb: FormBuilder, 
@@ -39,9 +40,23 @@ export class TableComponent implements OnInit {
     ngOnInit(): void {
         this.TableForm = this.fb.group({
             Id: [''],
-            Name: ['', Validators.required]
+            Name: ['', Validators.required],
+            Description:[''],
+            DepartmentId:[''],
+            TableTypeId: [''],
+            PhoteIdentity: ['']
         });
         this.LoadTable();
+        this.LoadDepartments();
+    }
+
+    LoadDepartments(){
+        this._BillingService.getDepartments()
+            .subscribe(
+                data =>{
+                    this.departments=data;
+                }
+        );
     }
 
     LoadTable(): void {
@@ -50,6 +65,7 @@ export class TableComponent implements OnInit {
         this._BillingService.get(Global.BASE_TABLEAPI_ENDPOINT)
             .subscribe(tables => { this.tables = tables; this.indLoading = false; },
             error => this.msg = <any>error);
+        console.log('tables', this.tables)
     }
     openModal(template: TemplateRef<any>) {
 
@@ -58,7 +74,7 @@ export class TableComponent implements OnInit {
         this.modalTitle = "Add New Table";
         this.modalBtnTitle = "Save";
         this.TableForm.reset();
-        this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
+        this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false ,class: 'modal-lg'});
     }
 
     editTable(id: number, template: TemplateRef<any>) {
@@ -66,6 +82,7 @@ export class TableComponent implements OnInit {
         this.SetControlsState(true);
         this.modalTitle = "Edit Table";
         this.modalBtnTitle = "Update";
+        console.log('the list of tables are', this.tables)
         this.table = this.tables.filter(x => x.Id == id)[0];
         this.TableForm.setValue(this.table);
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });

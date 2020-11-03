@@ -1,6 +1,6 @@
 ﻿
 <ng-template #template>
-    <form class="" novalidate (ngSubmit)="onSubmit(MenuItemForm)" [formGroup]="MenuItemForm">
+    <form class="" novalidate (ngSubmit)="onSubmit(MenuItemForm,fileUpload)" [formGroup]="MenuItemForm">
         <div class="modal-header panel-heading" style="background-color: #364a70;">
             <h4 class="modal-title pull-left">{{modalTitle}}</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
@@ -9,41 +9,86 @@
         </div>
         <div class="modal-body">
             <div>
-                <div class="form-group">
-                    <div class="col-sm-6 ml-auto mr-auto" style="margin: inherit;">
+                <div class="row">
+                    <div class="col-md-6 ml-auto" style="margin: inherit;">
                         <span> Name:  </span><input type="text" class="form-control" placeholder="Name" formControlName="Name">
                         <div class="alert alert-danger" *ngIf="MenuItemForm.get('Name').hasError('required') && formSubmitAttempt">
                             Name is required
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
                     <div class="col-sm-6 ml-auto mr-auto" style="margin: inherit;">
-                        <span> Category:  </span><select class="form-control" formControlName="categoryId">
+                        <span> Category:  </span>
+                        <ngx-select-dropdown
+                        (change)="selectionChanged($event,i)"
+                        [multiple]="false"
+                        [config]="config"
+                        formControlName="categoryId"
+                        [options]="menucategory">
+                    </ngx-select-dropdown>
+                        
+
+
+
+
+                        
+                        <!-- <select class="form-control" formControlName="categoryId">
                             <option *ngFor="let menucategories of menucategory" value={{menucategories.Id}}>{{menucategories.Name}}</option>
-                        </select>
+                        </select> -->
                         <div class="alert alert-danger" *ngIf="MenuItemForm.get('Name').hasError('required') && formSubmitAttempt">
                             Category is required
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+              
+                <div class="row mt-4">
                 
-                    <div class="col-sm-6 ml-auto mr-auto" style="margin: inherit;">
+                    <div class="col-sm-6 ml-auto">
                       <span> Bar Code:  </span>   <input type="text" class="form-control" placeholder="Barcode" formControlName="Barcode">
                         <div class="alert alert-danger" *ngIf="MenuItemForm.get('Name').hasError('required') && formSubmitAttempt">
                             Code is required
                         </div>
                     </div>
-                </div>
-                <div class="form-group" style="margin: inherit;">
-                    <div class="col-sm-6 ml-auto mr-auto">
+
+                    <div class="col-md-6">
                         <span> Tag:  </span> <input type="text" class="form-control" placeholder="Tag" formControlName="Tag">
                         <div class="alert alert-danger" *ngIf="MenuItemForm.get('Name').hasError('required') && formSubmitAttempt">
                             Tag is required
                         </div>
                     </div>
                 </div>
+
+                <div class="form-group" style="margin: inherit;">
+                    
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-6 ml-auto">
+                       Description <input type="text" name="Description" rows="4" class="form-control" formControlName="Description">
+                        <div class="alert alert-danger" *ngIf="MenuItemForm.get('Description').hasError('required') && formSubmitAttempt">
+                            Description is required
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        Department
+                        <select class="form-control p-0" formControlName="DepartmentId">
+                            <option *ngFor="let dep of departments" [value]="dep.Id">{{dep.Name}}</option>
+                        </select>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-sm-10 ml-3">
+                          Upload File  <app-file-upload #fileUpload [extraFormData]="receiptFrm" [uploadUrl]="uploadUrl" [dropMessage]="dropMessage"></app-file-upload>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                
             </div>
             <div>
                 <!-- <div class=" row">

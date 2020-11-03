@@ -4,6 +4,7 @@
     ProductId: number;
     ProductPortionId: number;
     MenuConsumptionDetails: MenuConsumptionDetail[];
+    MenuConsumptionName?: string;
 }
 
 export class MenuConsumptionDetail {
