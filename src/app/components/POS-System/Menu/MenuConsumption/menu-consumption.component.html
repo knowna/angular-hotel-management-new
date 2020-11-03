@@ -10,12 +10,23 @@
         <div class="modal-body">
                 <div class="row">
                         <div class="col-md-4">
-                            Category: <select class="form-control" formControlName="CategoryId" (change)="onChangeCategory($event.target.value)">
+                            <!-- Category: <select class="form-control" formControlName="CategoryId" (change)="onChangeCategory($event.target.value)">
                                 <option *ngFor="let menucategories of menucategory" [value]="menucategories.Id">{{menucategories.Name}}</option>
-                            </select>
-                            <div class="alert alert-danger" *ngIf="MenuConsumptionForm.get('CategoryId').hasError('required') && formSubmitAttempt">
+                            </select> -->
+                            Category:
+                            <ngx-select-dropdown
+                            (change)="onChangeCategory($event.value)"
+                            [multiple]="false"
+                            [config]="config"
+                            formControlName="CategoryId"
+                            [options]="menucategory">
+                        </ngx-select-dropdown>
+
+
+                            
+                            <!-- <div class="alert alert-danger" *ngIf="MenuConsumptionForm.get('CategoryId').hasError('required') && formSubmitAttempt">
                                 category Name is required
-                            </div>
+                            </div> -->
                         </div>
                         <div class="col-md-4" style="margin: inherit;">
                             Product: <select class="form-control" formControlName="ProductId" (change)="onChangeProduct($event.target.value)">
