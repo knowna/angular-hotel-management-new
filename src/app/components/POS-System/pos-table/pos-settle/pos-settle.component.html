@@ -199,7 +199,7 @@
                                 <!--<button type="button" class="btn btn-default" (click)="roundTicket(ticket)" [disabled]="selectedValue == 0 || getFinalBalance().toFixed(2) === '0.00'">Round</button>-->
                                 <button 
                                     type="button" 
-                                    [disabled]="(getTotalCharged(ticket).toFixed(2) < getGrandTotal())? true : false"
+                                    [disabled]="selectedCustomerId == 0"
                                     class="btn btn-default" 
                                     (click)="printInvoice()">
                                     Print Bill
