@@ -45,7 +45,7 @@
   
     <div class="row m-0 mt-3">
         <div class="col-md-3">
-            <input type="text" class="form-control" placeholder="Search by Table Name">
+            <input type="text" class="form-control" [(ngModel)]="tableName" placeholder="Search by Table Name">
         </div>
         <div class="col-md-6">
         </div>
@@ -67,7 +67,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let table of tables">
+                    <tr *ngFor="let table of tables | TableFilter : tableName">
                         <td>{{table.Name}}</td>
                         <td>{{table.DepartmentId}}</td>
                         <td>{{table.Description}}</td>

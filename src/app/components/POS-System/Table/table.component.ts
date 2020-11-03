@@ -29,6 +29,7 @@ export class TableComponent implements OnInit {
     modalBtnTitle: string;
     modalRef: BsModalRef;
     departments:any;
+    tableName = '';
 
     constructor(
         private fb: FormBuilder, 
