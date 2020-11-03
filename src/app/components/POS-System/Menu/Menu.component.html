@@ -117,17 +117,23 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button 
+            <!-- <button 
                 type="button"
                 class="btn btn-default"
                 (click)="modalRef.hide()">
                 Cancel
-            </button>
+            </button> -->
             <button 
                 type="submit"
                 class="btn btn-success"
                 ngbAutofocus>
                 {{modalBtnTitle}}
+            </button>
+            <button 
+                type="button"
+                class="btn btn-danger"
+                (click)="modalRef.hide()">
+                Cancel
             </button>
             <!-- <div>
                 <button type="submit" class="btn btn-success pull-left">{{modalBtnTitle}}</button>

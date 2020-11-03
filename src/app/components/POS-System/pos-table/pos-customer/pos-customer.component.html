@@ -1,0 +1,116 @@
+﻿<!-- <app-pos-dashboard-nav></app-pos-dashboard-nav> -->
+<div class="row m-0 hidden-print">
+    <div class="col-md-12 centered">
+        <h1 style="color: #4267b2;margin: 10px auto 10px 14px;font-weight: bold;">Table/Room Bill Transfer to Customer A/C</h1>
+    </div>
+</div>
+
+<!-- <div class="row m-0">
+    <div class="col-sm-3">
+        <ngx-select-dropdown (searchChange)="searchChangeAccountId($event)" [(ngModel)]="AccountId" [config]="configAccount" [options]="account"></ngx-select-dropdown>
+    </div>
+
+    <div class="col-sm-3">
+        <button class="btn btn-primary" id="TrfButton" (click)="TransferBill(ticket, AccountId)">Transfer</button>
+    </div>
+
+    <div class="col-sm-3">
+        <button class="btn btn-danger" id="CloseButton" (click)="close()">Close</button>
+    </div>
+</div> -->
+<div class="row m-0">
+    <div class="col-md-7">
+        <table id="InvoiceTable" class='table table-striped' *ngIf='parsedOrders && parsedOrders.length'>
+            <tbody>
+                <tr *ngFor="let order of parsedOrders">
+                    <td>
+                        <table id="InvoiceTableData" class='table table-striped'>
+                            <thead>
+                                <tr>
+                                    <th colspan="4" class="centered">
+                                        <div><h2>{{ company?.NameEnglish }}</h2></div>
+                                        <div>{{ company?.Address }} {{ company?.Street }} {{ company?.City }} {{ company?.District }}</div>
+                                        <div>{{ company?.Email }} {{ company?.Phone }}</div>
+                                        <div> PAN/VAT : {{ company?.Pan_Vat }}</div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="description">Details</th>
+                                    <th class="quantity">Qty.</th>
+                                    <th class="price">Rate<br /> <span>Amount <br />(Rs.)</span></th>
+                                    <th class="price">Total <br /><span>Amount <br />(Rs.)</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of order.OrderItems; let i = index ">
+                                    <td class="description">
+                                        <span>{{ getProductById(productList, item.ItemId)?.Name }}</span>
+                                    </td>
+                                    <td class="quantity">
+                                        <strong>{{ item.Qty }}</strong>
+                                    </td>
+                                    <td class="price">
+                                        {{ CurrentUnitPrice(item.UnitPrice) }}
+                                    </td>
+                                    <td class="price">
+                                        {{ ProductPrice(item.UnitPrice, item.Qty) }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <!--<td></td>-->
+                                    <!-- <td></td> -->
+                                    <td align="right" colspan="3">Total</td>
+                                    <td class="price">{{ calculateSum().toFixed(2) }}</td>
+                                </tr>
+                                <tr>
+                                    <!--<td></td>-->
+                                    <!-- <td></td> -->
+                                    <td align="right" colspan="3">Discount</td>
+                                    <td class="price">{{ calculateDiscount()}}</td>
+                                </tr>
+                                <!-- <tr>
+                                    <td align="right" colspan="3">Taxable Amount</td>
+                                    <td class="price">{{calculateTaxableAmount().toFixed(2)}}</td>
+                                </tr> -->
+                                <tr>
+                                    <!--<td></td>-->
+                                    <!-- <td></td> -->
+                                    <td align="right" colspan="3">VAT %</td>
+                                    <td class="price">{{ calculateVat() }}</td>
+                                </tr>
+                                <tr>
+                                    <!--<td></td>-->
+                                    <!-- <td></td> -->
+                                    <td align="right" colspan="3">Grand Total</td>
+                                    <td class="price">{{ getGrandTotal() }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="centered" colspan="4">Thanks for your Visit!</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-5">
+        <div class="row m-0 mt-4">
+            <div class="col-sm-12">
+                <ngx-select-dropdown (searchChange)="searchChangeAccountId($event)" [(ngModel)]="AccountId" [config]="configAccount" [options]="account"></ngx-select-dropdown>
+            </div>
+        </div>
+
+        <div class="row m-0 mt-3 hidden-print">
+            <div class="col-md-6">
+                <button class="btn btn-primary" id="TrfButton" (click)="TransferBill(ticket, AccountId)">Transfer</button>
+                <button class="btn btn-danger ml-2" id="CloseButton" (click)="close()">Close</button>
+            </div>
+            <!-- <div class="col-md-6">
+                <button class="btn btn-danger" id="CloseButton" (click)="close()">Close</button>
+            </div> -->
+        </div>
+    </div>
+</div>

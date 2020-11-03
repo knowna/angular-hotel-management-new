@@ -674,6 +674,7 @@ export class PosTableComponent implements OnInit {
                 data.ListOrder[0].OrderItems.forEach(o => {
                     this.ordersNew[0].OrderItems.push(o);
                 });
+                this.buildForm();
                 console.log('the orders new are', this.ordersNew)
                
             }else{

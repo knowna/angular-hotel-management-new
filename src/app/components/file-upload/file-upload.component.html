@@ -3,11 +3,11 @@
   <div class="form-group">
     <div class="row col-md-12">
       <div class="input-group c-input-group m-t-20">
-        <div class="input-group-prepend">
+        <!-- <div class="input-group-prepend">
           <span class="input-group-text" id="file">
             <i class=" icon-cloud-upload"></i>
           </span>
-        </div>
+        </div> -->
         <input #fileInput type="file" id="file" (change)="handleFileInput($event.target.files)" class="form-control" aria-label="file" aria-describedby="file" />
         <div *ngIf="currentFile" class="input-group-prepend">
           <span class="input-group-text c-input-group-text">

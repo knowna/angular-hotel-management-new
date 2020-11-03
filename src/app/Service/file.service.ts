@@ -26,6 +26,8 @@ export class FileService {
     let apiEndpoint = url;
     const formData: FormData = new FormData();
 
+    console.log('in service file', fileItem)
+
     formData.append('newFileItem', fileItem, fileItem.name);
     formData.append("moduleName", extraData['moduleName']);
     formData.append('id', extraData['id'])

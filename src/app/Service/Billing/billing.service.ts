@@ -19,6 +19,10 @@ export class BillingService {
         this._http = _http;
     }
 
+    getDepartments(){
+      return this._http.get( Global.BASE_DEPARTMENT_ENDPOINT);
+    }
+
     get(url: string): Observable<any> {
         return this._http.get(url).pipe(
             catchError(this.handleError));
