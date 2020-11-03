@@ -90,7 +90,10 @@ export class FileUploadComponent implements OnInit, OnDestroy {
    */
   async handleFileUpload(extraData) {
       if (this.fileToUpload) {
-         console.log(this.fileToUpload);
+         console.log('the file to upload is', this.fileToUpload);
+         console.log('the extract data is', extraData);
+         console.log('the upload url is', this.uploadUrl);
+         
          
       let uploadStatus = await new Promise(resolve => {
         this.fileUploadSub = this.fileUploadService.fileUpload(this.uploadUrl, this.fileToUpload, extraData)

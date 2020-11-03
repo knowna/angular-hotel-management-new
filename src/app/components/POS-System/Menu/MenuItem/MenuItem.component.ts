@@ -39,6 +39,11 @@ export class MenuItemComponent implements OnInit {
     MenuItemName: string = '';
 
     selectedFile: File;
+
+     dropMessage: string = "Upload Reference File";
+    uploadUrl = Global.BASE_FILE_UPLOAD_ENDPOINT;
+    fileUrl: string = '';
+    file: any[] = [];
     
     constructor(private router: Router,
         private fb: FormBuilder,
@@ -234,7 +239,7 @@ export class MenuItemComponent implements OnInit {
                             if (data > 0) {
                                 // file upload stuff goes here
                                 let upload = await fileUpload.handleFileUpload({
-                                    'moduleName': 'Menu Items',
+                                    'moduleName': 'MenuItem',
                                     'id': data
                                 });
 
