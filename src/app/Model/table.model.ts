@@ -10,4 +10,7 @@ export class Table {
 	TicketOpeningTime?: string;	
 	LastOrderTime?: string;
 	TableStatus?: string;
+	TableTypeId?: number;
+	DepartmentId?: number;
+	PhoteIdentity?: string;
 }

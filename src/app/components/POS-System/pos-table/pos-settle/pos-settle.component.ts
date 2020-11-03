@@ -226,9 +226,9 @@ export class PosSettleComponent implements OnInit {
             }
         });
 
-        this.customerId$.subscribe((customerId: any) => {
-            this.selectedCustomerId = customerId ? customerId : 0;
-        });
+        // this.customerId$.subscribe((customerId: any) => {
+        //     this.selectedCustomerId = customerId ? customerId : 0;
+        // });
 
         this.orders$.subscribe((orders: Order[]) => {
             console.log('in settle orders are', orders)
