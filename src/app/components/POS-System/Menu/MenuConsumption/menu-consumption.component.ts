@@ -88,7 +88,24 @@ export class MenuConsumptionComponent implements OnInit {
         
         this.indLoading = true;
         this._menuConsumptionService.get(Global.BASE_MENUCONSUMPTION_ENDPOINT)
-            .subscribe(menuConsumptions => { this.menuConsumptions = menuConsumptions; this.indLoading = false; },
+            .subscribe(
+                menuConsumptions => { 
+                    this.menuConsumptions = menuConsumptions; 
+                    this._menuConsumptionService.getMenuConsumptionProductPortions()
+                        .subscribe(
+                            data => {
+                                if(data) {
+                                    this.menuConsumptions = this.menuConsumptions.map(function(x) {
+                                        let ProductNamelist = data.filter(ISRItem =>ISRItem.MenuItemPortionId === x.ProductPortionId)[0];
+                                        x.MenuConsumptionName = ProductNamelist.Name;
+                                        return x;
+                                    });
+                                    
+                                }
+                    });
+                        
+                    this.indLoading = false; 
+                },
             error => this.msg = <any>error);
     }
 

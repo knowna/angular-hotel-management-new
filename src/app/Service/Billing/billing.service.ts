@@ -131,8 +131,8 @@ getMenu() {
     )
        
 }
-getMenuConsumptionProductPortions() {
-  return this._http.get(Global.BASE_MENUITEM_PRODUCT_PORTION_ENDPOINT).pipe(
+getMenuConsumptionProductPortions():any {
+  return this._http.get<any>(Global.BASE_MENUITEM_PRODUCT_PORTION_ENDPOINT).pipe(
     catchError(this.handleError)
   )
       
