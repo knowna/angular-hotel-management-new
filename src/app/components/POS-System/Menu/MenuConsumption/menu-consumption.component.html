@@ -130,7 +130,7 @@
                 </thead>
 
                 <tbody>
-                    <ng-container *ngFor="let menuConsumption of menuConsumptions">
+                    <ng-container *ngFor="let menuConsumption of menuConsumptions|FilterMenuConsumption :MenuConsumption">
                         <tr>
                             <td class="font-weight-bold">{{getProductName(menuConsumption.ProductPortionId)}}</td>
                             <td>&nbsp;</td>

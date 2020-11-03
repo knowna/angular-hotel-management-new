@@ -44,6 +44,13 @@ export class MenuItemComponent implements OnInit {
     uploadUrl = Global.BASE_FILE_UPLOAD_ENDPOINT;
     fileUrl: string = '';
     file: any[] = [];
+
+    config = {
+        search:true,
+        displayKey:"Name",
+        searchOnKey: 'Name',
+        height: '300px'
+    }
     
     constructor(private router: Router,
         private fb: FormBuilder,
@@ -81,7 +88,7 @@ export class MenuItemComponent implements OnInit {
             OpeningStock:['0']
         });
     }
-
+    selectionChanged($event,i){}
 
     LoadDepartments(){
         this._menuItemService.getDepartments()
@@ -164,13 +171,17 @@ export class MenuItemComponent implements OnInit {
 
     editMenuItems(Id: number, template: TemplateRef<any>) {
         
+      
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Menu Item";
         this.modalBtnTitle = "Update";
         this.menuItem = this.menuItems.filter(x => x.Id == Id)[0];
+        
+        let category= this.menucategory.find(cat=> cat.Id == this.menuItem.categoryId);
+
         this.MenuItemForm.controls['Id'].setValue(this.menuItem.Id);
-        this.MenuItemForm.controls['categoryId'].setValue(this.menuItem.categoryId);
+        this.MenuItemForm.controls['categoryId'].setValue(category);
         this.MenuItemForm.controls['Name'].setValue(this.menuItem.Name);
         this.MenuItemForm.controls['Barcode'].setValue(this.menuItem.Barcode);
         this.MenuItemForm.controls['Tag'].setValue(this.menuItem.Tag);
@@ -231,6 +242,8 @@ export class MenuItemComponent implements OnInit {
     }
 
     onSubmit(formData: any,fileUpload: any) {
+        let categoryId;
+        categoryId = formData.value.categoryId.Id;
         
         this.msg = "";
         this.formSubmitAttempt = true;
@@ -241,7 +254,7 @@ export class MenuItemComponent implements OnInit {
                     let AddMenuItemObj = {
                         Id: this.MenuItemForm.controls['Id'].value,
                         Name: this.MenuItemForm.controls['Name'].value,
-                        categoryId: this.MenuItemForm.controls['categoryId'].value,
+                        categoryId: categoryId,
                         Barcode: this.MenuItemForm.controls['Barcode'].value,
                         Tag: this.MenuItemForm.controls['Tag'].value,
                         DepartmentId:this.MenuItemForm.controls['DepartmentId'].value,
@@ -250,7 +263,8 @@ export class MenuItemComponent implements OnInit {
 
                         MenuItemPortions:this.MenuItemForm.controls['MenuItemPortions'].value
                     }
-
+                    console.log(AddMenuItemObj);
+                    
                     
                     this._menuItemService.post(Global.BASE_MENUITEM_ENDPOINT, AddMenuItemObj).subscribe(
                         async (data) => {
@@ -291,7 +305,7 @@ export class MenuItemComponent implements OnInit {
                     let MenuItemObj = {
                         Id: this.MenuItemForm.controls['Id'].value,
                         Name: this.MenuItemForm.controls['Name'].value,
-                        categoryId: this.MenuItemForm.controls['categoryId'].value,
+                        categoryId: categoryId,
                         Barcode: this.MenuItemForm.controls['Barcode'].value,
                         Tag: this.MenuItemForm.controls['Tag'].value,
                         DepartmentId:this.MenuItemForm.controls['DepartmentId'].value,
