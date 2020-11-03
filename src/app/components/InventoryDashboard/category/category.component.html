@@ -71,7 +71,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let category of categorys ">
+                    <tr *ngFor="let category of (categorys |filterByCategory:ItemCategory) ">
                         <td>{{category.Name}}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" (click)="editCategory(category.Id,template)">

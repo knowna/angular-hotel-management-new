@@ -17,9 +17,23 @@
                         </div>
                     </div>
                     <div class="col-sm-6 ml-auto mr-auto" style="margin: inherit;">
-                        <span> Category:  </span><select class="form-control" formControlName="categoryId">
+                        <span> Category:  </span>
+                        <ngx-select-dropdown
+                        (change)="selectionChanged($event,i)"
+                        [multiple]="false"
+                        [config]="config"
+                        formControlName="categoryId"
+                        [options]="menucategory">
+                    </ngx-select-dropdown>
+                        
+
+
+
+
+                        
+                        <!-- <select class="form-control" formControlName="categoryId">
                             <option *ngFor="let menucategories of menucategory" value={{menucategories.Id}}>{{menucategories.Name}}</option>
-                        </select>
+                        </select> -->
                         <div class="alert alert-danger" *ngIf="MenuItemForm.get('Name').hasError('required') && formSubmitAttempt">
                             Category is required
                         </div>

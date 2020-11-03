@@ -14,9 +14,10 @@ export class FilterMenuConsumption implements PipeTransform {
         }
 
         filteredItemNames = ItemNameList.filter((MenuItemPortion) => {
-            console.log(MenuItemPortion);
-            // 
-            // return (MenuItemPortion.Name.toLowerCase().indexOf(MenuConsumption.toLowerCase()) !== -1);
+           console.log(ItemNameList,MenuConsumption);
+           
+            
+            return (MenuItemPortion.Name.toLowerCase().indexOf(MenuConsumption.toLowerCase()) !== -1);
         });
 
         return filteredItemNames;

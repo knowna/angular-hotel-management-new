@@ -164,6 +164,7 @@ import { FilterMenuConsumption } from './filters/FilterMenuConsumption.filter';
 import { CategoryComponent } from './components/InventoryDashboard/category/category.component';
 import { PurchaseService } from './Service/Billing/purchase.service';
 import { PosCustomerComponent } from './components/POS-System/pos-table/pos-customer/pos-customer.component';
+import { FilterByCategory } from './filters/filterByCategory.filter';
 // import { TicketService } from './Service/Billing/ticket.service';\
 @NgModule({
   imports: [
@@ -310,9 +311,12 @@ import { PosCustomerComponent } from './components/POS-System/pos-table/pos-cust
     POSSaleBillingComponent,
     PosTableComponent,
     FilterMenuItemName,
+    FilterByCategory,
+    FilterMenuConsumption,
     FilterMenuConsumption,
     FilterPipe,
     LinksFilterPipe,
+
     PosOptionsComponent,
     PosCalculatorComponent,
     PosSettleComponent,
@@ -342,6 +346,7 @@ import { PosCustomerComponent } from './components/POS-System/pos-table/pos-cust
     AccountTransactionTypeService
     ,
     DatePipe,
+   
     FileService,
     AccountTransactionTypeService,
     PaymentTypeService,
