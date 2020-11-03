@@ -48,6 +48,13 @@ export class MenuConsumptionComponent implements OnInit {
     private sub: any;
     MenuConsumption: string = '';
 
+    config = {
+        search:true,
+        displayKey:"Name",
+        searchOnKey: 'Name',
+        height: '300px'
+    }
+
     constructor(private fb: FormBuilder, private _menuItemService: BillingService,
         private _menuportionservice: BillingService,
         private modalService: BsModalService,
@@ -91,8 +98,9 @@ export class MenuConsumptionComponent implements OnInit {
         this._menuConsumptionService.get(Global.BASE_MENUCONSUMPTION_ENDPOINT)
             .subscribe(
                 menuConsumptions => { 
-                    this.menuConsumptions = menuConsumptions;
-                    this.tempMenuConsumptions = menuConsumptions; 
+                    console.log(menuConsumptions);
+                    
+                    this.menuConsumptions = menuConsumptions; 
                     this._menuConsumptionService.getMenuConsumptionProductPortions()
                         .subscribe(
                             data => {
@@ -160,9 +168,9 @@ export class MenuConsumptionComponent implements OnInit {
         }
     }
 
-    onChangeCategory(CategoryId: number) {
+    onChangeCategory(event) {
         
-        this._menuItemService.get(Global.BASE_MENUITEM_ConsumptionCategory_ENDPOINT + '?CategoryId=' + CategoryId ).subscribe(data => {
+        this._menuItemService.get(Global.BASE_MENUITEM_ConsumptionCategory_ENDPOINT + '?CategoryId=' + event.Id).subscribe(data => {
             this.menuItemFilter = data;
             this.indLoading = false;
         });
@@ -221,8 +229,13 @@ export class MenuConsumptionComponent implements OnInit {
         this.getMenuComsumption(Id).subscribe((menuConsumptions: MenuConsumption) => {
             this.indLoading = false;
             this.MenuConsumptionForm.controls['Id'].setValue(menuConsumptions.Id);
-            this.MenuConsumptionForm.controls['CategoryId'].setValue(menuConsumptions.CategoryId);
-            this.onChangeCategory(menuConsumptions.CategoryId);
+
+            let category= this.menucategory.find(cat=> cat.Id == menuConsumptions.CategoryId);
+
+            this.MenuConsumptionForm.controls['CategoryId'].setValue(category);
+            console.log('form value',this.MenuConsumptionForm.value);
+            
+            this.onChangeCategory(category);
             this.MenuConsumptionForm.controls['ProductId'].setValue(menuConsumptions.ProductId);
             this.onChangeProduct(menuConsumptions.ProductId);
             this.MenuConsumptionForm.controls['ProductPortionId'].setValue(menuConsumptions.ProductPortionId);
@@ -301,7 +314,12 @@ export class MenuConsumptionComponent implements OnInit {
     }
 
     onSubmit(formData: any) {
+        console.log(formData.value);
         
+        let categoryId;
+        categoryId = formData.value.CategoryId.Id;
+        
+
         this.msg = "";
         this.formSubmitAttempt = true;
         let MenuConsumptionForm = this.MenuConsumptionForm;
@@ -311,7 +329,7 @@ export class MenuConsumptionComponent implements OnInit {
                 case DBOperation.create:
                     let MenuItemAddObj = {
                         Id: this.MenuConsumptionForm.controls['Id'].value,
-                        CategoryId: this.MenuConsumptionForm.controls['CategoryId'].value,
+                        CategoryId: categoryId,
                         ProductId: this.MenuConsumptionForm.controls['ProductId'].value,
                         ProductPortionId: this.MenuConsumptionForm.controls['ProductPortionId'].value,
                         MenuConsumptionDetails: this.MenuConsumptionForm.controls['MenuConsumptionDetails'].value
@@ -340,7 +358,7 @@ export class MenuConsumptionComponent implements OnInit {
                     
                     let MenuItemObj = {
                         Id: this.MenuConsumptionForm.controls['Id'].value,
-                        CategoryId: this.MenuConsumptionForm.controls['CategoryId'].value,
+                        CategoryId: categoryId ,
                         ProductId: this.MenuConsumptionForm.controls['ProductId'].value,
                         ProductPortionId: this.MenuConsumptionForm.controls['ProductPortionId'].value,
                         MenuConsumptionDetails: this.MenuConsumptionForm.controls['MenuConsumptionDetails'].value

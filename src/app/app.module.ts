@@ -165,6 +165,7 @@ import { CategoryComponent } from './components/InventoryDashboard/category/cate
 import { PurchaseService } from './Service/Billing/purchase.service';
 import { PosCustomerComponent } from './components/POS-System/pos-table/pos-customer/pos-customer.component';
 import { FilterByCategory } from './filters/filterByCategory.filter';
+import { MenuCategoryComponent1 } from './components/POS-System/Menu/ScreenMenuCategory/menu-category.component';
 // import { TicketService } from './Service/Billing/ticket.service';\
 @NgModule({
   imports: [
@@ -220,7 +221,7 @@ import { FilterByCategory } from './filters/filterByCategory.filter';
     PagenotfoundComponent,
     // CheckInComponent,
     FileUploadComponent,
-
+    MenuCategoryComponent1,
 
     // RoomStatusComponent,
     // ReservationComponent,
