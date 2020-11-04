@@ -4,22 +4,25 @@
         <div class="col-md-12">
             <div class="tab-content" style="padding-top: 20px;">
                 <div id="customer-search" class="tab-pane" [ngClass]="{ 'active': tabName === 'customers' }">
-                    <div class="row m-0">
+                    <!-- <div class="row m-0">
                         <div class="col-sm-12">
                             <h4>Customer</h4>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="row m-0 mt-3">
                         <!-- <div class="col-md-12">
                             <div class="row m-0"> -->
                                 <!-- <div class="col-md-1"> Search: </div> -->
-                                <div class="col-md-3">
+                                <div class="col-md-4">
+                                    <h4>Customer</h4>
+                                </div>
+                                <div class="col-md-4">
                                     <input type="text" class="form-control" [(ngModel)]="customerName" placeholder="Search customer by name">
                                 </div>
-                                <div class="col-md-6">
+                                <!-- <div class="col-md-6">
 
-                                </div>
-                                <div class="col-md-3">
+                                </div> -->
+                                <div class="col-md-4">
                                     <button class="btn btn-success" (click)="addAccounts()" style="float: right">
                                         <strong>Add New Customer</strong>
                                     </button>
@@ -38,7 +41,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let customer of customers ">
+                                            <tr *ngFor="let customer of customers | customerByName : customerName">
                                                 <td>
                                                     <a href="javascript:void(0)" (click)="setCurrentCustomer(customer)">
                                                         {{ customer.Title }}

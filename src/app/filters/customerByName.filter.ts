@@ -12,7 +12,7 @@ export class CustomerByName implements PipeTransform {
 		}
 
 		filteredCustomers = customersList.filter((customer) => {
-			return (customer.FirstName.indexOf(customerName) !== -1);
+			return (customer.FirstName.toLowerCase().indexOf(customerName.toLowerCase()) !== -1);
 		});
 
 		return filteredCustomers;

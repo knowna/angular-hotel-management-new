@@ -109,20 +109,23 @@
 
 
 <div class="container" style="padding-top: 20px;">
-    <div class="row m-0">
+    <!-- <div class="row m-0">
         <div class="col-sm-12">
             <h4>Menu Consumption</h4>
         </div>
-    </div>
+    </div> -->
   
 
     <div class="row m-0 mt-3">
-        <div class="col-md-3">
+        <div class="col-md-4">
+            <h4>Menu Consumption</h4>
+        </div>
+        <div class="col-md-4">
             <input type="text" class="form-control" [(ngModel)]="MenuConsumption" placeholder="Search by Name">
         </div>
-        <div class="col-md-6">
-        </div>
-        <div class="col-md-3">
+        <!-- <div class="col-md-6">
+        </div> -->
+        <div class="col-md-4">
             <button class="btn btn-success" (click)="addMenuConsumptions(template)" style="float: right">
                 <strong>Add New Menu</strong>
             </button>
