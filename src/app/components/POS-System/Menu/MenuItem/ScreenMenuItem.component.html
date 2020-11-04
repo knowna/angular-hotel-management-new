@@ -1,5 +1,34 @@
 ﻿
-<div class='panel panel-primary'>
+<div class="container" style="padding-top: 20px;">
+    <div class="row m-0">
+        <div class="col-sm-12">
+            <h4>Menu Category Item</h4>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <table class='table table-bordered' *ngIf='screenmenuitems && screenmenuitems.length'>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let screenmenuitem of screenmenuitems">
+                        <td><input type="checkbox" (change)="addMenuToCategories(screenmenuitem.Id,screenmenuitem.categoryId, screenmenuitem.MenuItem_Bool, screenmenuitem.MenuId)" [checked]="screenmenuitem.MenuItem_Bool" [(ngModel)]="screenmenuitem.MenuItem_Bool" /></td>
+                        <td>{{screenmenuitem.Name}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf='screenmenuitems && screenmenuitems.length==0' class="alert alert-info" role="alert">No record found!</div>
+        </div>
+    </div>
+</div>
+
+
+<!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
         Menu Category Item
     </div>
@@ -29,5 +58,5 @@
             {{msg}}
         </div>
     </div>
-</div>
+</div> -->
 

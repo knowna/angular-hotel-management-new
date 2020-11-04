@@ -1,5 +1,6 @@
-import { HttpClient, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpRequest, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { param } from 'jquery';
 
 /* Naming NOTE
   The API's file field is `fileItem` thus, we name it the same below
@@ -28,11 +29,17 @@ export class FileService {
 
     console.log('in service file', fileItem)
 
-    formData.append('newFileItem', fileItem, fileItem.name);
-    formData.append("moduleName", extraData['moduleName']);
-    formData.append('id', extraData['id'])
+    formData.append('newFileItem', fileItem);
+    // formData.append("moduleName", extraData['moduleName']);
+    // formData.append('id', extraData['id'])
 
-    const req = new HttpRequest('POST', apiEndpoint, formData, { responseType: "json" });
-    return this.http.request(req);
+    const params = new HttpParams()
+      .set('moduleName', extraData['moduleName'].toString())
+      .set('id', extraData['id'].toString());
+
+    return this.http.post(apiEndpoint, formData, {params});
+
+    // const req = new HttpRequest('POST', apiEndpoint, formData, { responseType: "json" });
+    // return this.http.request(req);
   }
 }

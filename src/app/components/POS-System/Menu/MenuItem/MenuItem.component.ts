@@ -275,6 +275,8 @@ export class MenuItemComponent implements OnInit {
                                     'id': data
                                 });
 
+                                console.log('the upload is', upload);
+
                                 if (upload == 'error' ) {
                                     alert('There is error uploading file!');
                                 } 
