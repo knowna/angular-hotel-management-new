@@ -169,6 +169,7 @@ import { MenuCategoryComponent1 } from './components/POS-System/Menu/ScreenMenuC
 import { TableFilter } from './filters/table.filter';
 import { MenuFilter } from './filters/menu.filter';
   import { from } from 'rxjs';
+import { CustomerByName } from './filters/customerByName.filter';
 // import { TicketService } from './Service/Billing/ticket.service';\
 @NgModule({
   imports: [
@@ -322,7 +323,7 @@ import { MenuFilter } from './filters/menu.filter';
     FilterMenuConsumption,
     FilterPipe,
     LinksFilterPipe,
-
+    CustomerByName,
     PosOptionsComponent,
     PosCalculatorComponent,
     PosSettleComponent,
