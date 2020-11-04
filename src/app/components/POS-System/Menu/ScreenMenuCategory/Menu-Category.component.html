@@ -1,5 +1,52 @@
 ﻿
-<div class='panel panel-primary'>
+<div class="container" style="padding-top: 20px;">
+    <div class="row m-0">
+        <div class="col-sm-12">
+            <h4> Menu Category</h4>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <table class='table table-bordered' *ngIf='screenmenucategories && screenmenucategories.length'>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let screenmenucategory of screenmenucategories">
+                        <td class="col-md-1">
+                            <input 
+                                type="checkbox" 
+                                (change)="addCategoriesToMenu(screenmenucategory.Id, screenmenucategory.MenuId,screenmenucategory.Menu_Bool, screenmenucategory.Name)" 
+                                [checked]="screenmenucategory.Menu_Bool" 
+                                [(ngModel)]="screenmenucategory.Menu_Bool" />
+                        </td>
+                        <td>{{screenmenucategory.Name}}</td>
+                        <td>
+                            <button 
+                                class="btn btn-sm btn-primary"
+                                [routerLink]="['/category-item', screenmenucategory.Id]">
+                                MenuCategoryItems
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div *ngIf='screenmenucategories && screenmenucategories.length==0' class="alert alert-info" role="alert">No record found!</div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- <div class='panel'>
     <div class='panel-heading'>
         Menu Category
     </div>
@@ -32,5 +79,5 @@
             {{msg}}
         </div>
     </div>
-</div>
+</div> -->
 

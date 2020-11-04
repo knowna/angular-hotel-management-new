@@ -80,6 +80,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CategoryComponent } from './components/InventoryDashboard/category/category.component';
 import { PosCustomerComponent } from './components/POS-System/pos-table/pos-customer/pos-customer.component';
 import { MenuCategoryComponent1 } from './components/POS-System/Menu/ScreenMenuCategory/menu-category.component';
+import { ScreenMenuItemComponent } from './components/POS-System/Menu/MenuItem/ScreenMenuItem.component';
 
 
 const routes: Routes = [
@@ -518,6 +519,11 @@ const routes: Routes = [
   {
     path: 'menu-category/:menuid',
     component: MenuCategoryComponent1,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'category-item/:categoryid', 
+    component: ScreenMenuItemComponent, 
     canActivate: [AuthGuard]
   },
   {
