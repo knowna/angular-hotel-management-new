@@ -13,4 +13,6 @@ export class Table {
 	TableTypeId?: number;
 	DepartmentId?: number;
 	PhoteIdentity?: string;
+	DepartmentName?: string;
+	TableType?: string;
 }

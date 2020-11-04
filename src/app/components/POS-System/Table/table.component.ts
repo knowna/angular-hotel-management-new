@@ -12,6 +12,8 @@ import { Global } from '../../../Shared/global'; import { AccountTransactionType
 
 // Services
 import { TableStoreService } from '../../../Service/Billing/table.store.service';
+import { RoomTypeService } from 'src/app/Service/reservation/room-type.services';
+import { RoomType } from 'src/app/Model/reservation/customer-screen.model';
 
 @Component({
     selector: 'my-table-list',
@@ -30,13 +32,18 @@ export class TableComponent implements OnInit {
     modalRef: BsModalRef;
     departments:any;
     tableName = '';
+    roomTypes: any[];
 
     constructor(
         private fb: FormBuilder, 
         private _BillingService:BillingService,
         private _tableStoreService: TableStoreService, 
-        private modalService: BsModalService
-    ) { }
+        private modalService: BsModalService,
+        private _roomTypeService: RoomTypeService, 
+    ) { 
+        this.LoadDepartments();
+        this.LoadRoomTypes();
+    }
 
     ngOnInit(): void {
         this.TableForm = this.fb.group({
@@ -45,10 +52,11 @@ export class TableComponent implements OnInit {
             Description:[''],
             DepartmentId:[''],
             TableTypeId: [''],
-            PhoteIdentity: ['']
+            PhoteIdentity: [''],
+            IdentityFileName: [''],
+            IdentityFileType: [''],
         });
         this.LoadTable();
-        this.LoadDepartments();
     }
 
     LoadDepartments(){
@@ -60,13 +68,33 @@ export class TableComponent implements OnInit {
         );
     }
 
+    LoadRoomTypes(): void {
+        this._roomTypeService.get(Global.BASE_ROOM_TYPES_ENDPOINT)
+            .subscribe(
+                roomTypes => { 
+                    this.roomTypes = roomTypes;
+                },
+            error => this.msg = <any>error);
+    }
+
+   
+
     LoadTable(): void {
-        this._tableStoreService.loadAllTables();
+        // this._tableStoreService.loadAllTables();
         this.indLoading = true;
         this._BillingService.get(Global.BASE_TABLEAPI_ENDPOINT)
-            .subscribe(tables => { this.tables = tables; this.indLoading = false; },
-            error => this.msg = <any>error);
-        console.log('tables', this.tables)
+            .subscribe(
+                tables => { 
+                    this.tables = tables; 
+                    // this.tables.forEach(t => {
+                    //     const department = this.departments  ? this.departments.find(d => d.Id == t.DepartmentId) : {};
+                    //     const roomType = this.roomTypes ? this.roomTypes.find(r => r.Id == t.TableTypeId) : {};
+                    //     t.DepartmentName = department?.Name;
+                    //     t.TableType = roomType?.Name;
+                    // });
+                    this.indLoading = false; 
+                },
+                error => this.msg = <any>error);
     }
     openModal(template: TemplateRef<any>) {
 
@@ -114,6 +142,8 @@ export class TableComponent implements OnInit {
         this.msg = "";
         this.formSubmitAttempt = true;
         let tablefrm = this.TableForm;
+
+        console.log('the value is', formData.value)
 
         if (tablefrm.valid) {
             switch (this.dbops) {
@@ -183,6 +213,17 @@ export class TableComponent implements OnInit {
     }
     SetControlsState(isEnable: boolean) {
         isEnable ? this.TableForm.enable() : this.TableForm.disable();
+    }
+
+
+    getDepartment(departments: any[], DepartmentId?: number) {
+        let department = this.departments.find(d  => d.Id === DepartmentId);
+        return department;
+    }
+
+    getTableType(roomTypes: any[], TableTypeId?: number) {
+        let tableType = this.roomTypes.find(r  => r.Id === TableTypeId);
+        return tableType;
     }
 
 }
