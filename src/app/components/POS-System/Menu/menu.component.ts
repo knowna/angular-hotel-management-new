@@ -32,6 +32,8 @@ export class MenuComponent implements OnInit {
     modalBtnTitle: string;
     modalRef: BsModalRef;
 
+    name = '';
+
     constructor(private fb: FormBuilder, private _menuService: BillingService, private modalService: BsModalService) {
     }
 

@@ -79,6 +79,7 @@ import { LoginGuard } from './guard/login.guard';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CategoryComponent } from './components/InventoryDashboard/category/category.component';
 import { PosCustomerComponent } from './components/POS-System/pos-table/pos-customer/pos-customer.component';
+import { MenuCategoryComponent1 } from './components/POS-System/Menu/ScreenMenuCategory/menu-category.component';
 
 
 const routes: Routes = [
@@ -514,7 +515,11 @@ const routes: Routes = [
     component: POSSaleBillingComponent,
     canActivate: [AuthGuard]
   },
-
+  {
+    path: 'menu-category/:menuid',
+    component: MenuCategoryComponent1,
+    canActivate: [AuthGuard]
+  },
   {
     path: "**",
     component: PagenotfoundComponent
@@ -523,6 +528,12 @@ const routes: Routes = [
     path: '**',
     redirectTo: "/404",
   },
+
+  // {
+  //   path: 'menu-category/:menuid',
+  //   component: MenuCategoryComponent1,
+  //   canActivate: [AuthGuard]
+  // },
 
 ];
 

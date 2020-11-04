@@ -45,7 +45,7 @@
   
     <div class="row m-0 mt-3">
         <div class="col-md-3">
-            <input type="text" class="form-control" placeholder="Search by Table Name">
+            <input type="text" class="form-control" [(ngModel)]="tableName" placeholder="Search by Table Name">
         </div>
         <div class="col-md-6">
         </div>
@@ -62,14 +62,20 @@
                     <tr>
                         <th>Name</th>
                         <th>Department</th>
+                        <th>Room Type</th>
                         <th>Description</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let table of tables">
+                    <tr *ngFor="let table of tables | TableFilter : tableName">
                         <td>{{table.Name}}</td>
-                        <td>{{table.DepartmentId}}</td>
+                        <td>
+                            {{ getDepartment(departments,table.DepartmentId)?.Name }}
+                        </td>
+                        <td>
+                            {{ getTableType(roomTypes,table.TableTypeId)?.Name }}
+                        </td>
                         <td>{{table.Description}}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" (click)="editTable(table.Id,template)">
@@ -110,12 +116,14 @@
                         <!-- </div> -->
                     </div>
                 </div>
+               
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="control-label">Department</label>
-                        <select class="form-control p-0" formControlName="DepartmentId">
-                            <option *ngFor="let dep of departments" [value]="dep.Id">{{dep.Name}}</option>
-                        </select>
+                        <label class="control-label">Description</label>
+                        <input type="text" class="form-control" placeholder="" formControlName="Description">
+                        <div class="alert alert-danger" *ngIf="TableForm.get('Description').hasError('required') && formSubmitAttempt">
+                            Description is required
+                        </div>
                     </div>
                 </div>
                 
@@ -124,11 +132,20 @@
             <div class="row m-0">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="control-label">Description</label>
-                        <input type="text" class="form-control" placeholder="" formControlName="Description">
-                        <div class="alert alert-danger" *ngIf="TableForm.get('Description').hasError('required') && formSubmitAttempt">
-                            Description is required
-                        </div>
+                        <label class="control-label">Department</label>
+                        <select class="form-control p-0" formControlName="DepartmentId">
+                            <option *ngFor="let dep of departments" [value]="dep.Id">{{dep.Name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- roomTypes -->
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">Room Type</label>
+                        <select class="form-control p-0" formControlName="TableTypeId">
+                            <option *ngFor="let room of roomTypes" [value]="room.Id">{{room.Name}}</option>
+                        </select>
                     </div>
                 </div>
             </div>

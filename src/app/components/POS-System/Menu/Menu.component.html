@@ -50,7 +50,7 @@
 
     <div class="row m-0 mt-3">
         <div class="col-md-3">
-            <input type="text" class="form-control" placeholder="Search by Name">
+            <input type="text" class="form-control" placeholder="Search by Name" [(ngModel)]="name">
         </div>
         <div class="col-md-6">
         </div>
@@ -72,7 +72,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let menu of menus">
+                    <tr *ngFor="let menu of menus | MenuFilter : name">
                         <td>{{menu.Name}}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" (click)="editMenu(menu.Id, template)">
