@@ -72,6 +72,7 @@ export class MenuItemComponent implements OnInit {
             Tag: ['', Validators.required],
             Description:[''],
             DepartmentId:[''],
+            PhoteIdentity:[''],
             MenuItemPortions: this.fb.array([this.initMenuItemPortions()]),
         });
         this.LoadMenuItems();
@@ -185,7 +186,7 @@ export class MenuItemComponent implements OnInit {
         this.MenuItemForm.controls['Name'].setValue(this.menuItem.Name);
         this.MenuItemForm.controls['Barcode'].setValue(this.menuItem.Barcode);
         this.MenuItemForm.controls['Tag'].setValue(this.menuItem.Tag);
-
+        this.MenuItemForm.controls['PhoteIdentity'].setValue(this.menuItem.PhoteIdentity);
         this.MenuItemForm.controls['Description'].setValue(this.menuItem.Description);
         this.MenuItemForm.controls['DepartmentId'].setValue(this.menuItem.DepartmentId);
         this.MenuItemForm.controls['MenuItemPortions'] = this.fb.array([]);

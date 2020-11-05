@@ -82,6 +82,10 @@
 
                         </div>
 
+                        <div *ngIf="modalBtnTitle === 'Update'" class="col-sm-6 ml-2">
+                            <img [src]="'data:image/png;base64,'+MenuItemForm.value.PhoteIdentity" alt="" height="50" width="50">
+                        </div>
+
                     </div>
 
                 </div>
@@ -187,6 +191,7 @@
                     <tr>
                         <th></th>
                         <th>Name</th>
+                        <th>Description</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -198,6 +203,9 @@
                         <td>
                             <!-- <img [src]="'data:image/png;base64,'+menuItem.PhoteIdentity" alt="" height="30" width="30"> -->
                             {{menuItem.Name}}
+                        </td>
+                        <td>
+                            {{menuItem.Description}}
                         </td>
                         <td>
                             <button class="btn btn-primary btn-sm" (click)="editMenuItems(menuItem.Id, template)">

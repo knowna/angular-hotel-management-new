@@ -28,7 +28,7 @@ import { ModalModule } from 'node_modules/ngx-bootstrap/modal';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { FileService } from "./Service/file.service";
 import { BsModalModule } from "ng2-bs3-modal";
-import { DatePipe } from "@angular/common";
+import { DatePipe, LocationStrategy, HashLocationStrategy } from "@angular/common";
 import { AngularDateTimePickerModule } from "angular2-datetimepicker";
 import { BsDatepickerModule } from "node_modules/ngx-bootstrap/datepicker";
 
@@ -337,6 +337,7 @@ import { CustomerByName } from './filters/customerByName.filter';
   providers: [
     { provide: 'NAVCOMPONENTS', useValue: navcomponents },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     AuthenticationService,
     ReservationTypeService,
     CustomerTypeService,
