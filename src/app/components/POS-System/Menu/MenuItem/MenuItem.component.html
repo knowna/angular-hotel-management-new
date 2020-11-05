@@ -185,13 +185,20 @@
             <table class='table table-bordered' *ngIf='menuItems && menuItems.length'>
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Name</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let menuItem of menuItems | FilterMenuItemName: MenuItemName">
-                        <td>{{menuItem.Name}}</td>
+                        <td>
+                            <img [src]="'data:image/png;base64,'+menuItem.PhoteIdentity" alt="" height="30" width="30">
+                        </td>
+                        <td>
+                            <!-- <img [src]="'data:image/png;base64,'+menuItem.PhoteIdentity" alt="" height="30" width="30"> -->
+                            {{menuItem.Name}}
+                        </td>
                         <td>
                             <button class="btn btn-primary btn-sm" (click)="editMenuItems(menuItem.Id, template)">
                                 <i class="fa fa-edit"></i>
