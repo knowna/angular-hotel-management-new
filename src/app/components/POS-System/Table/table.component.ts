@@ -14,6 +14,7 @@ import { Global } from '../../../Shared/global'; import { AccountTransactionType
 import { TableStoreService } from '../../../Service/Billing/table.store.service';
 import { RoomTypeService } from 'src/app/Service/reservation/room-type.services';
 import { RoomType } from 'src/app/Model/reservation/customer-screen.model';
+import { async } from '@angular/core/testing';
 
 @Component({
     selector: 'my-table-list',
@@ -33,6 +34,12 @@ export class TableComponent implements OnInit {
     departments:any;
     tableName = '';
     roomTypes: any[];
+
+    dropMessage: string = "Upload Reference File";
+    uploadUrl = Global.BASE_FILE_UPLOAD_ENDPOINT;
+    fileUrl: string = '';
+    file: any[] = [];
+
 
     constructor(
         private fb: FormBuilder, 
@@ -114,7 +121,7 @@ export class TableComponent implements OnInit {
         console.log('the list of tables are', this.tables)
         this.table = this.tables.filter(x => x.Id == id)[0];
         this.TableForm.setValue(this.table);
-        this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
+        this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false, class: 'modal-lg' });
     }
 
     deleteTable(id: number, template: TemplateRef<any>) {
@@ -124,7 +131,7 @@ export class TableComponent implements OnInit {
         this.modalBtnTitle = "Delete";
         this.table = this.tables.filter(x => x.Id == id)[0];
         this.TableForm.setValue(this.table);
-        this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
+        this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false, class: 'modal-lg'});
     }
 
     validateAllFields(formGroup: FormGroup) {
@@ -138,7 +145,7 @@ export class TableComponent implements OnInit {
         });
     }
 
-    onSubmit(formData: any) {
+    onSubmit(formData: any,fileUpload: any) {
         this.msg = "";
         this.formSubmitAttempt = true;
         let tablefrm = this.TableForm;
@@ -149,9 +156,26 @@ export class TableComponent implements OnInit {
             switch (this.dbops) {
                 case DBOperation.create:
                     this._BillingService.post(Global.BASE_TABLEAPI_ENDPOINT, formData.value).subscribe(
-                        data => {
-                            if (data == 1) //Success
+                        async (data) => {
+                            if (data > 0) //Success
                             {
+                                let upload = await fileUpload.handleFileUpload({
+                                    'moduleName': 'Table',
+                                    'id': data
+                                });
+
+                                console.log('the upload is', upload);
+
+                                if (upload == 'error' ) {
+                                    alert('There is error uploading file!');
+                                } 
+                                
+                                if (upload == true || upload == false) {
+                                    this.modalRef.hide();
+                                    this.formSubmitAttempt = false;
+                                    // this.reset();
+                                }
+
                                 alert("Table successfully added.");
                                 this.LoadTable();
                                 this.modalRef.hide();
@@ -168,13 +192,31 @@ export class TableComponent implements OnInit {
                     break;
                 case DBOperation.update:
                     this._BillingService.put(Global.BASE_TABLEAPI_ENDPOINT,  formData.value.Id, formData.value).subscribe(
-                        data => {
-                            if (data == 1) //Success
+                        async (data) => {
+                            console.log('the data is', data);
+                            if (data > 0) //Success
                             {
+                                let upload = await fileUpload.handleFileUpload({
+                                    'moduleName': 'Table',
+                                    'id': data
+                                });
+
+                                console.log('the upload is', upload);
+
+                                if (upload == 'error' ) {
+                                    alert('There is error uploading file!');
+                                } 
+                                
+                                if (upload == true || upload == false) {
+                                    this.modalRef.hide();
+                                    this.formSubmitAttempt = false;
+                                    // this.reset();
+                                }
+
                                 alert("Table successfully updated.");
                                 this.modalRef.hide();
                                 this.LoadTable();
-                                this.formSubmitAttempt = false;
+                                // this.formSubmitAttempt = false;
                             }
                             else {
                                 alert("There is some issue in saving records, please contact to system administrator!");

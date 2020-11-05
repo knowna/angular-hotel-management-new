@@ -40,7 +40,7 @@ export class MenuItemComponent implements OnInit {
     departments:any;
     selectedFile: File;
 
-     dropMessage: string = "Upload Reference File";
+    dropMessage: string = "Upload Reference File";
     uploadUrl = Global.BASE_FILE_UPLOAD_ENDPOINT;
     fileUrl: string = '';
     file: any[] = [];
@@ -318,14 +318,31 @@ export class MenuItemComponent implements OnInit {
 
                     this._menuItemService.put(Global.BASE_MENUITEM_ENDPOINT, formData.value.Id, MenuItemObj).subscribe(
                         
-                        data => {
+                        async (data) => {
                             
                             if (data > 0) //Success
                             {
+                                let upload = await fileUpload.handleFileUpload({
+                                    'moduleName': 'MenuItem',
+                                    'id': data
+                                });
+
+                                console.log('the upload is', upload);
+
+                                if (upload == 'error' ) {
+                                    alert('There is error uploading file!');
+                                } 
+                                
+                                if (upload == true || upload == false) {
+                                    this.modalRef.hide();
+                                    this.formSubmitAttempt = false;
+                                    this.reset();
+                                }
+
                                 alert("Data successfully updated.");
                                 this.modalRef.hide();
-                                this.reset();
-                                this.formSubmitAttempt = false;
+                                // this.reset();
+                                // this.formSubmitAttempt = false;
                                 this.LoadMenuItems();
                             }
                             else {

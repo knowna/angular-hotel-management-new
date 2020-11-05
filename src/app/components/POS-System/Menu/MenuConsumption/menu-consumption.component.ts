@@ -80,15 +80,27 @@ export class MenuConsumptionComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.MenuConsumptionForm = this.fb.group({
-            Id: [''],
-            CategoryId: [''],
-            ProductId: [''],
-            ProductPortionId: [''],
-            MenuConsumptionDetails: this.fb.array([]),
-        });
+        // this.MenuConsumptionForm = this.fb.group({
+        //     Id: [''],
+        //     CategoryId: [''],
+        //     ProductId: [''],
+        //     ProductPortionId: [''],
+        //     MenuConsumptionDetails: this.fb.array([this.initMenuConsumptionPortions()]),
+        // });
+        this.buildMenuConsumptionForm();
         this.LoadMenuConsumptions();
     }
+
+    buildMenuConsumptionForm() {
+        this.MenuConsumptionForm = this.fb.group({
+            Id: [''],
+            CategoryId: ['',Validators.required],
+            ProductId: ['',Validators.required],
+            ProductPortionId: ['',Validators.required],
+            MenuConsumptionDetails: this.fb.array([this.initMenuConsumptionPortions()]),
+        });
+    }
+
 
     initMenuConsumptionPortions() {
         return this.fb.group({
@@ -146,13 +158,15 @@ export class MenuConsumptionComponent implements OnInit {
     }
 
     addMenuConsumptionDetail() {
-        
-        
-
-        const control = <FormArray>this.MenuConsumptionForm.controls['MenuConsumptionDetails'];
-        const AddPortions = this.initMenuConsumptionPortions();
-        control.push(AddPortions);
+        // const control = <FormArray>this.MenuConsumptionForm.controls['MenuConsumptionDetails'];
+        // const AddPortions = this.initMenuConsumptionPortions();
+        // control.push(AddPortions);
+        this.MenuConsumptionDetails.push(this.initMenuConsumptionPortions());
     }
+
+    // removeTrackerModel(index){
+    //     this.AccountTransactionValues.removeAt(index);
+    // }
 
 
     removeMenuConsumptionDetails(i: number) {
@@ -181,14 +195,16 @@ export class MenuConsumptionComponent implements OnInit {
         
         this._menuItemService.get(Global.BASE_MENUITEM_ConsumptionCategory_ENDPOINT + '?CategoryId=' + event.Id).subscribe(data => {
             this.menuItemFilter = data;
+            // this.MenuConsumptionForm.controls['ProductId'].setValue(null);
+            // this.MenuConsumptionForm.controls['ProductPortionId'].setValue(null);
             this.indLoading = false;
         });
     }
 
     onChangeProduct(event) {
-        
         this._menuItemService.get(Global.BASE_MENUITEMPORTION_ENDPOINT + '?ItemId=' + event.Id).subscribe(data => {
             this.screenmenuitems = data;
+            // this.MenuConsumptionForm.controls['ProductPortionId'].setValue(null);
             this.indLoading = false;
         });
     }
@@ -203,7 +219,7 @@ export class MenuConsumptionComponent implements OnInit {
                 this.router.navigate(['pos-dashboard/table/menuconsumption'])
             }
             else {
-                this.MenuConsumptionForm.controls['MenuConsumptionDetails'] = this.fb.array([]);
+                // this.MenuConsumptionForm.controls['MenuConsumptionDetails'] = this.fb.array([]);
             }
         });
     }
@@ -215,8 +231,8 @@ export class MenuConsumptionComponent implements OnInit {
     }
 
     addMenuConsumptions(template: TemplateRef<any>) {
-        
-        this.MenuConsumptionForm.reset();
+        this.buildMenuConsumptionForm();
+        // this.MenuConsumptionForm.reset();
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
         this.modalTitle = "Add Menu Consumption";
@@ -242,12 +258,27 @@ export class MenuConsumptionComponent implements OnInit {
             let category= this.menucategory.find(cat=> cat.Id == menuConsumptions.CategoryId);
 
             this.MenuConsumptionForm.controls['CategoryId'].setValue(category);
-            console.log('form value',this.MenuConsumptionForm.value);
             
             this.onChangeCategory(category);
-            this.MenuConsumptionForm.controls['ProductId'].setValue(menuConsumptions.ProductId);
-            this.onChangeProduct(menuConsumptions.ProductId);
-            this.MenuConsumptionForm.controls['ProductPortionId'].setValue(menuConsumptions.ProductPortionId);
+
+
+            this._menuItemService.get(Global.BASE_MENUITEM_ConsumptionCategory_ENDPOINT + '?CategoryId=' + category.Id).subscribe(data => {
+                this.menuItemFilter = data;
+                let product = this.menuItemFilter.find(p => p.Id == menuConsumptions.ProductId); 
+                this.MenuConsumptionForm.controls['ProductId'].setValue(product);
+
+                this.onChangeProduct(product);
+                this._menuItemService.get(Global.BASE_MENUITEMPORTION_ENDPOINT + '?ItemId=' + product.Id).subscribe(data => {
+                    this.screenmenuitems = data;
+                });
+                this.MenuConsumptionForm.controls['ProductPortionId'].setValue(menuConsumptions.ProductPortionId);
+            });
+
+
+            // this.MenuConsumptionForm.controls['ProductId'].setValue(menuConsumptions.ProductId);
+            // this.onChangeProduct(product);
+            // console.log('the produc tport', this.screenmenuitems)
+            // this.MenuConsumptionForm.controls['ProductPortionId'].setValue(menuConsumptions.ProductPortionId);
 
             this.MenuConsumptionForm.controls['MenuConsumptionDetails'] = this.fb.array([]);
             const control = <FormArray>this.MenuConsumptionForm.controls['MenuConsumptionDetails'];
@@ -323,10 +354,12 @@ export class MenuConsumptionComponent implements OnInit {
     }
 
     onSubmit(formData: any) {
-        console.log(formData.value);
+        // console.log(formData.value);
         
         let categoryId;
         categoryId = formData.value.CategoryId.Id;
+
+        let productId = formData.value.ProductId.Id;
         
 
         this.msg = "";
@@ -339,7 +372,8 @@ export class MenuConsumptionComponent implements OnInit {
                     let MenuItemAddObj = {
                         Id: this.MenuConsumptionForm.controls['Id'].value,
                         CategoryId: categoryId,
-                        ProductId: this.MenuConsumptionForm.controls['ProductId'].value,
+                        // ProductId: this.MenuConsumptionForm.controls['ProductId'].value,
+                        ProductId: productId,
                         ProductPortionId: this.MenuConsumptionForm.controls['ProductPortionId'].value,
                         MenuConsumptionDetails: this.MenuConsumptionForm.controls['MenuConsumptionDetails'].value
                     }
@@ -368,7 +402,8 @@ export class MenuConsumptionComponent implements OnInit {
                     let MenuItemObj = {
                         Id: this.MenuConsumptionForm.controls['Id'].value,
                         CategoryId: categoryId ,
-                        ProductId: this.MenuConsumptionForm.controls['ProductId'].value,
+                        // ProductId: this.MenuConsumptionForm.controls['ProductId'].value,
+                        ProductId: productId,
                         ProductPortionId: this.MenuConsumptionForm.controls['ProductPortionId'].value,
                         MenuConsumptionDetails: this.MenuConsumptionForm.controls['MenuConsumptionDetails'].value
                     }
@@ -437,5 +472,9 @@ export class MenuConsumptionComponent implements OnInit {
         
         this.modalRef.hide();
         this.reset();
+    }
+
+    get MenuConsumptionDetails(): FormArray {
+        return this.MenuConsumptionForm.get('MenuConsumptionDetails') as FormArray;
     }
 }
