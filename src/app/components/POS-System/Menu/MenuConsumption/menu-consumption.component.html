@@ -20,7 +20,7 @@
                             [config]="config"
                             formControlName="CategoryId"
                             [options]="menucategory">
-                        </ngx-select-dropdown>
+                            </ngx-select-dropdown>
 
 
                             
@@ -29,9 +29,20 @@
                             </div> -->
                         </div>
                         <div class="col-md-4" style="margin: inherit;">
-                            Product: <select class="form-control" formControlName="ProductId" (change)="onChangeProduct($event.target.value)">
+                            <!-- Product: <select class="form-control" formControlName="ProductId" (change)="onChangeProduct($event.target.value)">
                                 <option *ngFor="let menuItemProduct of menuItemFilter" [value]="menuItemProduct.Id">{{menuItemProduct.Name}}</option>
-                            </select>
+                            </select> -->
+
+                        <!-- </select> --> 
+                        Product :
+                        <ngx-select-dropdown
+                        (change)="onChangeProduct($event.value)"
+                        [multiple]="false"
+                        [config]="productConfig"
+                        formControlName="ProductId"
+                        [options]="menuItemFilter">
+                        </ngx-select-dropdown>
+
                             <div class="alert alert-danger" *ngIf="MenuConsumptionForm.get('ProductId').hasError('required') && formSubmitAttempt">
                                 Product Name is required
                             </div>

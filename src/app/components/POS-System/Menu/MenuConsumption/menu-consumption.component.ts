@@ -55,6 +55,13 @@ export class MenuConsumptionComponent implements OnInit {
         height: '300px'
     }
 
+    productConfig ={
+        search:true,
+        displayKey:"Name",
+        searchOnKey: 'Name',
+        height: '300px'
+    }
+
     constructor(private fb: FormBuilder, private _menuItemService: BillingService,
         private _menuportionservice: BillingService,
         private modalService: BsModalService,
@@ -75,9 +82,9 @@ export class MenuConsumptionComponent implements OnInit {
     ngOnInit(): void {
         this.MenuConsumptionForm = this.fb.group({
             Id: [''],
-            CategoryId: ['', Validators.required],
-            ProductId: ['', Validators.required],
-            ProductPortionId: ['', Validators.required],
+            CategoryId: [''],
+            ProductId: [''],
+            ProductPortionId: [''],
             MenuConsumptionDetails: this.fb.array([]),
         });
         this.LoadMenuConsumptions();
@@ -140,6 +147,8 @@ export class MenuConsumptionComponent implements OnInit {
 
     addMenuConsumptionDetail() {
         
+        
+
         const control = <FormArray>this.MenuConsumptionForm.controls['MenuConsumptionDetails'];
         const AddPortions = this.initMenuConsumptionPortions();
         control.push(AddPortions);
@@ -176,9 +185,9 @@ export class MenuConsumptionComponent implements OnInit {
         });
     }
 
-    onChangeProduct(ProductId: number) {
+    onChangeProduct(event) {
         
-        this._menuItemService.get(Global.BASE_MENUITEMPORTION_ENDPOINT + '?ItemId=' + ProductId).subscribe(data => {
+        this._menuItemService.get(Global.BASE_MENUITEMPORTION_ENDPOINT + '?ItemId=' + event.Id).subscribe(data => {
             this.screenmenuitems = data;
             this.indLoading = false;
         });
