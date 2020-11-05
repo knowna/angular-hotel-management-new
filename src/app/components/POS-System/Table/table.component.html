@@ -63,6 +63,7 @@
             <table class='table table-bordered' *ngIf='tables && tables.length'>
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Name</th>
                         <th>Department</th>
                         <th>Room Type</th>
@@ -72,6 +73,9 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let table of tables | TableFilter : tableName">
+                        <td>
+                            <img [src]="'data:image/png;base64,'+table.PhoteIdentity" alt="" height="30" width="30">
+                        </td>
                         <td>{{table.Name}}</td>
                         <td>
                             {{ getDepartment(departments,table.DepartmentId)?.Name }}
@@ -93,13 +97,14 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
             <div *ngIf='tables && tables.length==0' class="alert alert-info" role="alert">No record found!</div>
         </div>
     </div>
 </div>
 
 <ng-template #template>
-    <form class="panel-primary" novalidate (ngSubmit)="onSubmit(TableForm)" [formGroup]="TableForm">
+    <form class="panel-primary" novalidate (ngSubmit)="onSubmit(TableForm,fileUpload)" [formGroup]="TableForm">
         <div class="modal-header panel-heading">
             <h4 class="modal-title pull-left">{{modalTitle}}</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
@@ -151,6 +156,17 @@
                         </select>
                     </div>
                 </div>
+            </div>
+
+            <div class="row m-0 mt-4">
+                <div class="col-sm-10">
+                  Upload File  <app-file-upload #fileUpload  [uploadUrl]="uploadUrl" [dropMessage]="dropMessage"></app-file-upload>
+                </div>
+
+                <div *ngIf="modalBtnTitle === 'Update'" class="col-sm-6">
+                    <img [src]="'data:image/png;base64,'+TableForm.value.PhoteIdentity" alt="" height="50" width="50">
+                </div>
+
             </div>
         </div>
         <div class="modal-footer">

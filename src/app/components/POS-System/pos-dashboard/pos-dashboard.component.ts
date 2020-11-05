@@ -35,7 +35,8 @@ import { BillingService } from 'src/app/Service/Billing/billing.service';
 export class POSDashboardComponent implements OnInit {
     tables$: Observable<Table[]>;
     tables: Table[] = [];
-    customers: Observable<Customer[]>;
+    // customers: Observable<Customer[]>;
+    customers: Customer[] = [];
     public acctype: any;
     account: Account;
     accounts: Account[];

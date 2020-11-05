@@ -41,7 +41,7 @@ export class FileUploadComponent implements OnInit, OnDestroy {
    * Overrides OnInit Lifecycle Hook
    */
   ngOnInit() {   
-    this.initialiazeFileUploadForm();
+    // this.initialiazeFileUploadForm();
   }
 
   /**

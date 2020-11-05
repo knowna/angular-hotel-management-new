@@ -75,9 +75,9 @@
                     </div>
                     <div>
                         <div class="mt-3" formArrayName="MenuConsumptionDetails">
-                            <div *ngFor="let MenuConsumptionDetail of MenuConsumptionDetails; let i=index" [formGroupName]="i">
-                                <div class="row">
-                                    <div class="col-md-8">
+                            <div *ngFor="let MenuConsumptionDetail of MenuConsumptionDetails.controls; let i=index" [formGroupName]="i">
+                                <div class="row mt-2">
+                                    <div class="col-md-6">
                                         <input type="hidden" formControlName="Id" />
                                         <input type="hidden" formControlName="MenuConsumptionId" />
                                         <select class="form-control" formControlName="InventoryItemId">
@@ -93,15 +93,19 @@
                                             Quantity is required
                                         </div> -->
                                     </div>
-                                    <div class="col-md-2">
-                                    </div>
+
+                                    <!-- <div class="col-md-2 mt-4" *ngIf="MenuConsumptionDetails.controls.length > 1">
+                                        <button class="btn btn-danger" (click)="removeTrackerModel(i)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="panel-footer row">
                         <div class="container col-md-12 text-center row" style="margin: 0px; margin-top: 15px;">
-                            <button type="button" class="btn btn-success pull-right" [disabled]="MenuConsumptionForm.invalid" 
+                            <button type="button" class="btn btn-success pull-right" [disabled]="MenuConsumptionDetails.invalid" 
                             (click)="addMenuConsumptionDetail()">Add Item +</button>
                         </div>
                     </div>
@@ -191,6 +195,9 @@
                 <!-- <tbody *ngFor="let menuConsumption of menuConsumptions | FilterMenuConsumption: MenuConsumption"> -->
         
             </table>
+            <div class="alert alert-info" role="alert" *ngIf="indLoading">
+                <img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...
+            </div>
             <div *ngIf='menuConsumptions && menuConsumptions.length == 0' class="alert alert-info" role="alert">No record found!</div>
         </div>
     </div>

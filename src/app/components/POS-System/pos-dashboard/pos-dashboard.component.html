@@ -30,7 +30,7 @@
                             </div>
                             <div class="row m-0">
                                 <div class="col-sm-12 table-responsive">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordered" *ngIf="customers && customers.length">
                                         <thead>
                                             <tr>
                                                 <th>Customer Name</th>
@@ -73,6 +73,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <div class="alert alert-info mt-2" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div> 
                                 </div>
                             </div>
                         <!-- </div> -->
