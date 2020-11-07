@@ -81,6 +81,7 @@ import { CategoryComponent } from './components/InventoryDashboard/category/cate
 import { PosCustomerComponent } from './components/POS-System/pos-table/pos-customer/pos-customer.component';
 import { MenuCategoryComponent1 } from './components/POS-System/Menu/ScreenMenuCategory/menu-category.component';
 import { ScreenMenuItemComponent } from './components/POS-System/Menu/MenuItem/ScreenMenuItem.component';
+import { FullMergeComponent } from './components/POS-System/Order/FullMerge/full-merge.component';
 
 
 const routes: Routes = [
@@ -108,6 +109,10 @@ const routes: Routes = [
   {
     path: "test",
     component: TestComponent
+  },
+  {
+    path: "full-merge",
+    component: FullMergeComponent
   },
 
   // {
