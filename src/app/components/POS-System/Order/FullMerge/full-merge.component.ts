@@ -22,11 +22,11 @@ import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-    selector: 'menu-consumption',
-    templateUrl: 'menu-consumption.component.html'
+    selector: 'full-merge',
+    templateUrl: 'full-merge.component.html'
 })
 
-export class MenuConsumptionComponent implements OnInit {
+export class FullMergeComponent implements OnInit {
     menuConsumptions: MenuConsumption[];
     tempMenuConsumptions: MenuConsumption[];
     menuConsumption: MenuConsumption;
@@ -235,7 +235,7 @@ export class MenuConsumptionComponent implements OnInit {
         // this.MenuConsumptionForm.reset();
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
-        this.modalTitle = "Add Menu Consumption";
+        this.modalTitle = "Full Merge of Orders";
         this.modalBtnTitle = "Save";
 
         this.modalRef = this.modalService.show(template, {
@@ -313,27 +313,11 @@ export class MenuConsumptionComponent implements OnInit {
         this.getMenuComsumption(Id).subscribe((menuConsumptions: MenuConsumption) => {
             this.indLoading = false;
             this.MenuConsumptionForm.controls['Id'].setValue(menuConsumptions.Id);
-            let category= this.menucategory.find(cat=> cat.Id == menuConsumptions.CategoryId);
-
-            this.MenuConsumptionForm.controls['CategoryId'].setValue(category);
-
-
-            this.onChangeCategory(category);
-            this._menuItemService.get(Global.BASE_MENUITEM_ConsumptionCategory_ENDPOINT + '?CategoryId=' + category.Id).subscribe(data => {
-                this.menuItemFilter = data;
-                let product = this.menuItemFilter.find(p => p.Id == menuConsumptions.ProductId); 
-                this.MenuConsumptionForm.controls['ProductId'].setValue(product);
-
-                this.onChangeProduct(product);
-                this._menuItemService.get(Global.BASE_MENUITEMPORTION_ENDPOINT + '?ItemId=' + product.Id).subscribe(data => {
-                    this.screenmenuitems = data;
-                });
-                this.MenuConsumptionForm.controls['ProductPortionId'].setValue(menuConsumptions.ProductPortionId);
-            });
-
-            // this.MenuConsumptionForm.controls['ProductId'].setValue(menuConsumptions.ProductId);
-            // this.onChangeProduct(menuConsumptions.ProductId);
-            // this.MenuConsumptionForm.controls['ProductPortionId'].setValue(menuConsumptions.ProductPortionId);
+            this.MenuConsumptionForm.controls['CategoryId'].setValue(menuConsumptions.CategoryId);
+            this.onChangeCategory(menuConsumptions.CategoryId);
+            this.MenuConsumptionForm.controls['ProductId'].setValue(menuConsumptions.ProductId);
+            this.onChangeProduct(menuConsumptions.ProductId);
+            this.MenuConsumptionForm.controls['ProductPortionId'].setValue(menuConsumptions.ProductPortionId);
 
             this.MenuConsumptionForm.controls['MenuConsumptionDetails'] = this.fb.array([]);
             const control = <FormArray>this.MenuConsumptionForm.controls['MenuConsumptionDetails'];

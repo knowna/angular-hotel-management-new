@@ -170,6 +170,7 @@ import { TableFilter } from './filters/table.filter';
 import { MenuFilter } from './filters/menu.filter';
   import { from } from 'rxjs';
 import { CustomerByName } from './filters/customerByName.filter';
+import { FullMergeComponent } from './components/POS-System/Order/FullMerge/full-merge.component';
 // import { TicketService } from './Service/Billing/ticket.service';\
 @NgModule({
   imports: [
@@ -218,6 +219,7 @@ import { CustomerByName } from './filters/customerByName.filter';
   declarations: [
 
     AppComponent,
+    FullMergeComponent,
     LoginComponent,
     HeaderComponent,
     NavbarComponent,

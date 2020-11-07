@@ -116,34 +116,10 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="control-label">Name:</label>
-                        <!-- <div class="col-sm-9"> -->
                         <input type="text" class="form-control" placeholder="" formControlName="Name">
                         <div class="alert alert-danger mt-1" *ngIf="TableForm.get('Name').hasError('required') && formSubmitAttempt">
                             Name is required
                         </div>
-                        <!-- </div> -->
-                    </div>
-                </div>
-               
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="control-label">Description</label>
-                        <input type="text" class="form-control" placeholder="" formControlName="Description">
-                        <div class="alert alert-danger" *ngIf="TableForm.get('Description').hasError('required') && formSubmitAttempt">
-                            Description is required
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-
-            <div class="row m-0">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="control-label">Department</label>
-                        <select class="form-control p-0" formControlName="DepartmentId">
-                            <option *ngFor="let dep of departments" [value]="dep.Id">{{dep.Name}}</option>
-                        </select>
                     </div>
                 </div>
 
@@ -156,6 +132,28 @@
                         </select>
                     </div>
                 </div>
+            </div>
+
+            <div class="row m-0" *ngIf="modalBtnTitle != 'Update'">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">Department</label>
+                        <select class="form-control p-0" formControlName="DepartmentId">
+                            <option *ngFor="let dep of departments" [value]="dep.Id">{{dep.Name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">Description</label>
+                        <input type="text" class="form-control" placeholder="" formControlName="Description">
+                        <div class="alert alert-danger" *ngIf="TableForm.get('Description').hasError('required') && formSubmitAttempt">
+                            Description is required
+                        </div>
+                    </div>
+                </div>
+                
             </div>
 
             <div class="row m-0 mt-4">
