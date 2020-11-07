@@ -171,6 +171,7 @@ import { MenuFilter } from './filters/menu.filter';
   import { from } from 'rxjs';
 import { CustomerByName } from './filters/customerByName.filter';
 import { FullMergeComponent } from './components/POS-System/Order/FullMerge/full-merge.component';
+import { MergeService } from './components/POS-System/Order/services/merge.service';
 // import { TicketService } from './Service/Billing/ticket.service';\
 @NgModule({
   imports: [
@@ -343,6 +344,7 @@ import { FullMergeComponent } from './components/POS-System/Order/FullMerge/full
     AuthenticationService,
     ReservationTypeService,
     CustomerTypeService,
+    MergeService,
     FacilityService,
     PaymentTypeService,
     ReservationTypeService,
