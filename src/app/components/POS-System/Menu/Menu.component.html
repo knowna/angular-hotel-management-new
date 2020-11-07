@@ -66,6 +66,7 @@
 
     <div class="row m-0 mt-2">
         <div class="col-sm-12 table-responsive scroll">
+            <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
             <table class='table table-bordered'  *ngIf='menus && menus.length'>
                 <thead>
                     <tr>
@@ -91,7 +92,6 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
             <div *ngIf='menus && menus.length==0' class="alert alert-info" role="alert">No record found!</div>
         </div>
     </div>
@@ -108,15 +108,18 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-2 left">Name:</label>
-                    <div class="col-sm-9" required minlength="4">
-                        <input type="text" class="form-control" placeholder="" formControlName="Name">
-                        <div class="alert alert-danger" *ngIf="MenuFrm.get('Name').hasError('required') && formSubmitAttempt">
-                            Name is required
-                        </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">Name:</label>
+                        <!-- <div class="col-sm-9" required minlength="4"> -->
+                            <input type="text" class="form-control" placeholder="" formControlName="Name">
+                            <div class="alert alert-danger" *ngIf="MenuFrm.get('Name').hasError('required') && formSubmitAttempt">
+                                Name is required
+                            </div>
+                        <!-- </div> -->
                     </div>
                 </div>
+                
             </div>
         </div>
         <div class="modal-footer">
