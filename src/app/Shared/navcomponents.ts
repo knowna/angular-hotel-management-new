@@ -93,10 +93,36 @@ export const navcomponents=[
         {
           title: 'Order',
           img:'../../../assets/images/order.png',
-          link: 'pos-dashboard/tables',
           permission:'Billing:Order',
           home: true,
           show: false,
+          children: [
+            {
+              title: 'New Order',
+              img:'../../../assets/images/dish.png',
+              link: 'pos-dashboard/tables',
+              permission:'Billing:Menu:Item',
+            },
+            {
+              title: 'Full Merge',
+              img:'../../../assets/images/category.png',
+              link: 'full-merge',
+              permission:'Billing:Menu:Category',
+            },
+            {
+              title: 'Partial Merge',
+              img:'../../../assets/images/consumption.png',
+              link: 'pos-dashboard/table/menuconsumption',
+              permission:'Billing:Menu:Consumption',
+            },
+            {
+              title: 'Split Merge',
+              link: 'pos-dashboard/table/menu',
+              img:'../../../assets/images/menu.png',
+              permission:'Billing:Menu:Menu',
+            },
+            
+          ],
         },
         
         {

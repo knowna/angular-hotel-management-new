@@ -1,0 +1,184 @@
+﻿
+<ng-template #template>
+    <form class="panel-primary" novalidate (ngSubmit)="onSubmit(MenuConsumptionForm)" [formGroup]="MenuConsumptionForm">
+        <div class="modal-header panel-heading" style="background-color: #364a70;">
+            <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="cancel()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="row">
+            <div class="card">
+     
+                
+            </div>
+
+        </div>
+
+
+        <div class="modal-footer">
+            <button type="submit" [disabled]="MenuConsumptionForm.invalid" class="btn btn-success pull-left">{{modalBtnTitle}}</button>
+            <button type="reset" class="btn btn-danger" (click)="cancel()">Cancel</button>
+        </div>
+    </form>
+</ng-template>
+
+
+
+
+
+
+<div class="container" style="padding-top: 20px;">
+    <!-- <div class="row m-0">
+        <div class="col-sm-12">
+            <h4>Menu Consumption</h4>
+        </div>
+    </div> -->
+  
+
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h4>Menu Consumption</h4>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" [(ngModel)]="MenuConsumption" placeholder="Search by Name">
+        </div>
+        <!-- <div class="col-md-6">
+        </div> -->
+        <div class="col-md-4">
+            <button class="btn btn-success" (click)="addMenuConsumptions(template)" style="float: right">
+                <strong>Add New Menu</strong>
+            </button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <table class='table table-bordered' *ngIf='menuConsumptions && menuConsumptions.length'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>&nbsp;</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <ng-container *ngFor="let menuConsumption of menuConsumptions|FilterMenuConsumption :MenuConsumption">
+                        <tr>
+                            <td class="font-weight-bold">{{getProductName(menuConsumption.ProductPortionId)}}</td>
+                            <td>&nbsp;</td>
+    
+                            <td>
+                                <button class="btn btn-primary btn-sm" (click)="editMenuConsumptions(menuConsumption.Id, template)">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm ml-2" (click)="deleteMenuConsumptions(menuConsumption.Id, template)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                              
+                            </td>
+                           
+                        </tr>
+
+                        <ng-container>
+                        <tr style="background-color: rgb(230, 225, 225);">
+                            <td class="text-center">Item Name</td>
+                            <td>Quantity</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr style="background-color: rgb(230, 225, 225);" 
+                        *ngFor="let IRItemName of menuConsumption.MenuConsumptionDetails">
+                            <td class="text-center">{{getIRItemName(IRItemName.InventoryItemId)?.Name}}</td>
+                            <td>{{IRItemName.Quantity}}</td>
+                            <td>&nbsp;</td>
+                        
+                        </tr>
+                        </ng-container>    
+                    </ng-container>
+                </tbody>
+                <!-- <tbody *ngFor="let menuConsumption of menuConsumptions | FilterMenuConsumption: MenuConsumption"> -->
+        
+            </table>
+            <div class="alert alert-info" role="alert" *ngIf="indLoading">
+                <img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...
+            </div>
+            <div *ngIf='menuConsumptions && menuConsumptions.length == 0' class="alert alert-info" role="alert">No record found!</div>
+        </div>
+    </div>
+
+
+    <!-- <div class='panel panel-primary'>
+        <div class='panel-heading'>
+            Menu Comsumption
+        </div>
+        <div class='panel-body'>
+            <div class='table-responsive'>
+                <div class="col-md-5"> <div style="padding-bottom:10px"><img src="../../../../assets/images/Add.png (click)="addMenuConsumptions(template)" height="60" width="60" /></div></div>
+                <div class="col-md-1"> Search: </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" [(ngModel)]="MenuConsumption" placeholder="Search by Name">
+                </div>
+                <div class="alert alert-info" role="alert" *ngIf="indLoading">
+                    <img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...
+                </div>
+
+               
+                <div *ngIf='menuConsumptions && menuConsumptions.length==0' class="alert alert-info" role="alert">No record found!</div>
+                <table class='table table-striped' *ngIf='menuConsumptions && menuConsumptions.length'>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>&nbsp;</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let menuConsumption of menuConsumptions ">
+                        <tr>
+                            <td>{{getProductName(menuConsumption.ProductPortionId)}}</td>
+                            <td>&nbsp;</td>
+                            <td>
+                                <span>
+                                    <img style="cursor: pointer" src="../../../../assets/images/Edit.png" (click)="editMenuConsumptions(menuConsumption.Id, template)" height="50"
+                                         width="50" />
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    <img style="cursor: pointer" src="../../../../assets/images/Delete.png" (click)="deleteMenuConsumptions(menuConsumption.Id, template)" height="50"
+                                         width="50" />
+                                </span>
+                            </td>
+                        </tr>
+                        <tr style="color: blue;">
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr *ngFor="let IRItemName of menuConsumption.MenuConsumptionDetails">
+                            <td>{{getIRItemName(IRItemName.InventoryItemId)?.Name}}</td>
+                            <td>{{IRItemName.Quantity}}</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf='menuConsumptions && menuConsumptions.length>=10' style="padding-bottom:10px"><img src="../../../../assets/images/Add.png (click)="addMenuConsumptions(template)" height="60" width="60" /> </div>
+            </div>
+            <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{msg}}
+            </div>
+        </div>
+    </div> -->
+
+
+
+</div>
