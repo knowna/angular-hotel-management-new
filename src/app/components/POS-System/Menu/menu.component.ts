@@ -64,10 +64,12 @@ export class MenuComponent implements OnInit {
     editMenu(id: number, template: TemplateRef<any>) {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
-        this.modalTitle = "Edit Items";
+        this.modalTitle = "Edit Menu";
         this.modalBtnTitle = "Update";
         this.menu = this.menus.filter(x => x.Id == id)[0];
-        this.MenuFrm.setValue(this.menu);
+        this.MenuFrm.controls['Id'].setValue(this.menu.Id);
+        this.MenuFrm.controls['Name'].setValue(this.menu.Name);
+        // this.MenuFrm.setValue(this.menu);
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
         //this.modal.open();
     }
@@ -78,7 +80,9 @@ export class MenuComponent implements OnInit {
         this.modalTitle = "Confirm to Delete?";
         this.modalBtnTitle = "Delete";
         this.menu = this.menus.filter(x => x.Id == id)[0];
-        this.MenuFrm.setValue(this.menu);
+        // this.MenuFrm.setValue(this.menu);
+        this.MenuFrm.controls['Id'].setValue(this.menu.Id);
+        this.MenuFrm.controls['Name'].setValue(this.menu.Name);
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
         //this.modal.open();
     }
