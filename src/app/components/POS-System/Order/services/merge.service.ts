@@ -13,6 +13,10 @@ export class MergeService {
     getunsettleOrders():Observable<any>{
         return this._http.get('http://hotel.dcubeitsolution.com/api/TicketAPI/GetAllTicket')
     }
+    
+    fullMerge(TicketId,details):Observable<any>{
+        return this._http.post('http://hotel.dcubeitsolution.com/api/OrderMergeFull/Post/?TicketId='+TicketId,details)
+    }
 
    
 }
