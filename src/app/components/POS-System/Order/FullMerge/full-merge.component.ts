@@ -24,6 +24,8 @@ export class FullMergeComponent implements OnInit {
    moveToOrderItems=[];
     primaryOrderList=[];
     secondaryOrderList=[];
+    tempPrimaryOrderList=[];
+    tempSecondaryOrderList=[];
     primaryTicket:any;
     modalTitle="Full Order Merge"
     config = {
@@ -65,6 +67,8 @@ export class FullMergeComponent implements OnInit {
             data =>{
             this.primaryOrderList = data;
             this.secondaryOrderList = data;
+            this.tempPrimaryOrderList= data;
+            this.tempSecondaryOrderList= data;
             console.log(this.primaryOrderList);
             
                 
@@ -74,37 +78,41 @@ export class FullMergeComponent implements OnInit {
    
     secondaryChanged(event){
         let secondarySelectedTicket;
-         this.ticketIdTobeDeleted = event.value.Id;
+        this.ticketIdTobeDeleted = event.value.Id;
 
-         secondarySelectedTicket = this.primaryOrderList.find( ticket=>
-             ticket.Id==this.ticketIdTobeDeleted
-             
+        secondarySelectedTicket = this.primaryOrderList.find( ticket=>
+            ticket.Id==this.ticketIdTobeDeleted
+        )
 
-         )
-
-         if(secondarySelectedTicket){
-             console.log('jjjj');
-             
-             this.primaryOrderList.splice(this.primaryOrderList.indexOf(secondarySelectedTicket),1);
-         }
+        if(secondarySelectedTicket){
+            this.primaryOrderList = [...this.tempPrimaryOrderList];
+            this.primaryOrderList.splice(this.primaryOrderList.indexOf(secondarySelectedTicket),1);
+            this.primaryOrderList = [...this.primaryOrderList];
+        }
 
         this.orderApi.loadOrdersNew(event.value.Id)
-                .subscribe(
-                    data => {
-                        data.forEach(order => {
-                            this.moveFromOrderItems =order.OrderItems;
-                            
-                        });
-                        
-                    }
-                )
-
-
+            .subscribe(
+                data => {
+                    data.forEach(order => {
+                        this.moveFromOrderItems =order.OrderItems;
+                    });
+                }
+            )
         
     }
 
     primaryChanged(event){
+        let primarySelectedTicket;
         this.primaryTicket = event.value;
+
+        primarySelectedTicket = this.secondaryOrderList.find( ticket=> ticket.Id ==this.primaryTicket.Id);
+
+        if(primarySelectedTicket){
+            this.secondaryOrderList = [...this.tempSecondaryOrderList];
+            this.secondaryOrderList.splice(this.secondaryOrderList.indexOf(primarySelectedTicket),1);
+            this.secondaryOrderList = [...this.secondaryOrderList];
+        }
+
         this.orderApi.loadOrdersNew(event.value.Id)
         .subscribe(
             data => {

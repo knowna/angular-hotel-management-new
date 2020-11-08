@@ -112,7 +112,7 @@ export const navcomponents=[
             {
               title: 'Partial Merge',
               img:'../../../assets/images/consumption.png',
-              link: 'pos-dashboard/table/menuconsumption',
+              link: 'partial-merge',
               permission:'Billing:Menu:Consumption',
             },
             {
