@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@ang
 import { Router, ActivatedRoute } from '@angular/router';
 import { MergeService } from '../services/merge.service';
 import { OrderService } from 'src/app/Service/Billing/order.service';
+import { Order } from 'src/app/Model/order.model';
 
 @Component({
     selector: 'full-merge',
@@ -15,6 +16,8 @@ export class FullMergeComponent implements OnInit {
     currentUser: any;
     currentYear: any;
 
+    orders:Order[]=[];
+    showOrders=false;
     ticketIdTobeDeleted=0;
 
    moveFromOrderItems=[];
@@ -125,7 +128,7 @@ export class FullMergeComponent implements OnInit {
         this.moveFromOrderItems.forEach(order => {
             this.moveToOrderItems.push(order)
         });
-                        this.calculateTotalCost(this.moveToOrderItems);
+        this.calculateTotalCost(this.moveToOrderItems);
 
         
     }
@@ -172,7 +175,18 @@ console.log(orderRequest);
         
     }
 
-   
+    showDetail(ticketId){
+        
+        this.orderApi.loadOrdersNew(ticketId)
+        .subscribe(
+            data => {
+               this.orders= data;
+               console.log(this.orders);
+               
+                
+    })
 
+   
+    }
   
 }

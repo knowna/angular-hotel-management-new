@@ -46,7 +46,17 @@
               <h6  class="font-weight-bold ml-3">  All unsettled tickets  </h6> 
             </div>
             <div *ngFor="let order of primaryOrderList" class=" ml-3 mt-4 row text-center">
-                <a style="background-color: #364a70;color:white"> {{order.Name}}  {{order.TicketId}}</a>
+                <span (click)="showDetail(order.Id)" style="background-color: #364a70;color:white;width:100%"> {{order.Name}}  {{order.TicketId}}</span>
+
+            </div>
+            <div *ngIf="showOrders" class="row">
+                <div *ngFor="let item of order.OrderItems;index as i " class="row">
+                    <table class="table table-borderless">
+                        <tr>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
 
             </div>
 
