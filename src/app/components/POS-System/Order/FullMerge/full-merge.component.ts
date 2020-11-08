@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MergeService } from '../services/merge.service';
 import { OrderService } from 'src/app/Service/Billing/order.service';
 import { Order } from 'src/app/Model/order.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'full-merge',
@@ -15,6 +16,8 @@ import { Order } from 'src/app/Model/order.model';
 export class FullMergeComponent implements OnInit {
     currentUser: any;
     currentYear: any;
+
+    productList = [];
 
     orders:Order[]=[];
     showOrders=false;
@@ -47,6 +50,8 @@ export class FullMergeComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private router: Router,
         private orderApi: OrderService,  
+        private billService: BillingService,
+        private toastrService: ToastrService
 
     ) {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
@@ -56,16 +61,34 @@ export class FullMergeComponent implements OnInit {
     }
 
     ngOnInit(): void {
-       
-      this.getAllUnsettledTicket();
+        this.loadProducts();
+        this.getAllUnsettledTicket();
     }
 
+
+    loadProducts(): void {
+        this.billService.loadProducts()
+            .subscribe(data => { 
+                this.productList=data;
+        });
+    }
+
+
+    getProductById(products: any[], productId: number) {
+        var product = this.productList.find(product => product.Id === productId);
+        return product;
+    }
   
     getAllUnsettledTicket(){
         this.mergeService.getunsettleOrders()
         .subscribe(
             data =>{
             this.primaryOrderList = data;
+            this.primaryOrderList = this.primaryOrderList.map(function(x) {
+                x.show = false;
+                return x;
+            })
+
             this.secondaryOrderList = data;
             this.tempPrimaryOrderList= data;
             this.tempSecondaryOrderList= data;
@@ -172,29 +195,33 @@ export class FullMergeComponent implements OnInit {
     
         }
 
-console.log(orderRequest);
+    console.log(orderRequest);
     this.mergeService.fullMerge(this.ticketIdTobeDeleted,orderRequest)
         .subscribe(
             data =>{
                 console.log(data);
-                
+                this.toastrService.success('Tickets merged successfully!');
+                window.location.reload();
             }
         )
         
     }
 
-    showDetail(ticketId){
-        
-        this.orderApi.loadOrdersNew(ticketId)
+    showDetail(order){
+        order.ItemList = [];
+        this.orderApi.loadOrdersNew(order.Id)
         .subscribe(
             data => {
-               this.orders= data;
-               console.log(this.orders);
+               this.orders = data;
+               this.orders.forEach(o => {
+                   o.OrderItems.forEach(item => {
+                    order.ItemList.push(item)
+                   });
+                  
+               });
                
-                
-    })
-
-   
+               console.log('the ', order)
+        })
     }
   
 }
