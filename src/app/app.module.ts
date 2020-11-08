@@ -171,6 +171,8 @@ import { MenuFilter } from './filters/menu.filter';
   import { from } from 'rxjs';
 import { CustomerByName } from './filters/customerByName.filter';
 import { FullMergeComponent } from './components/POS-System/Order/FullMerge/full-merge.component';
+import { MergeService } from './components/POS-System/Order/services/merge.service';
+import { PartialMergeComponent } from './components/POS-System/Order/partial-merge/partial-merge.component';
 // import { TicketService } from './Service/Billing/ticket.service';\
 @NgModule({
   imports: [
@@ -333,7 +335,8 @@ import { FullMergeComponent } from './components/POS-System/Order/FullMerge/full
     PosTicketsComponent,
     PosInvoicePrintComponent,
     DashboardComponent,
-    PosCustomerComponent
+    PosCustomerComponent,
+    PartialMergeComponent
 
   ],
   providers: [
@@ -343,6 +346,7 @@ import { FullMergeComponent } from './components/POS-System/Order/FullMerge/full
     AuthenticationService,
     ReservationTypeService,
     CustomerTypeService,
+    MergeService,
     FacilityService,
     PaymentTypeService,
     ReservationTypeService,
