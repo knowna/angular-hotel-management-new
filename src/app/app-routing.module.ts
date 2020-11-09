@@ -83,6 +83,7 @@ import { MenuCategoryComponent1 } from './components/POS-System/Menu/ScreenMenuC
 import { ScreenMenuItemComponent } from './components/POS-System/Menu/MenuItem/ScreenMenuItem.component';
 import { FullMergeComponent } from './components/POS-System/Order/FullMerge/full-merge.component';
 import { PartialMergeComponent } from './components/POS-System/Order/partial-merge/partial-merge.component';
+import { SplitMergeComponent } from './components/POS-System/Order/split-merge/split-merge.component';
 
 
 const routes: Routes = [
@@ -118,6 +119,10 @@ const routes: Routes = [
   {
     path: "partial-merge",
     component: PartialMergeComponent
+  },
+  {
+    path: "split-order",
+    component: SplitMergeComponent
   },
 
   // {

@@ -197,7 +197,6 @@ export class POSDashboardComponent implements OnInit {
     }
 
     addAccounts() {
-         ;
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
         this.modalTitle = "Add Ledger";
