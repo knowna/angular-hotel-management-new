@@ -116,8 +116,8 @@ export const navcomponents=[
               permission:'Billing:Menu:Consumption',
             },
             {
-              title: 'Split Merge',
-              link: 'pos-dashboard/table/menu',
+              title: 'Split Order',
+              link: 'split-order',
               img:'../../../assets/images/menu.png',
               permission:'Billing:Menu:Menu',
             },

@@ -202,6 +202,9 @@ export class FullMergeComponent implements OnInit {
                 console.log(data);
                 this.toastrService.success('Tickets merged successfully!');
                 window.location.reload();
+            },
+            error => {
+                this.toastrService.error('Error while merging tickets!');
             }
         )
         
