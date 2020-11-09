@@ -15,6 +15,12 @@ export class PartialMergeComponent implements OnInit {
   moveToOrderItems=[];
   primaryOrderList=[];
   secondaryOrderList=[];
+  orders =[];
+  showOrders=false;
+  productList = [];
+
+  modalTitle ='PartialMerge'
+  tempPrimaryOrderList=[];
 
   title = "Partial Order Merge"
 
@@ -37,22 +43,66 @@ export class PartialMergeComponent implements OnInit {
     private mergeService: MergeService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    private billService: BillingService,
+
     private orderApi: OrderService,  
   ) { }
 
   ngOnInit(): void {
     this.getAllUnsettledTicket();
+    this.loadProducts();
   }
+
+  loadProducts(): void {
+    this.billService.loadProducts()
+        .subscribe(data => { 
+            this.productList=data;
+    });
+}
 
   getAllUnsettledTicket(){
     this.mergeService.getunsettleOrders()
     .subscribe(
         data =>{
-          this.primaryOrderList = data;
+          this.tempPrimaryOrderList = data;
           this.secondaryOrderList = data;
-          console.log(this.primaryOrderList);
-        }
+          this.primaryOrderList = this.primaryOrderList.map(function(x) {
+            x.show = false;
+            return x;
+        })        }
     )
-}
+  }
+
+  showDetail(order){
+    order.ItemList = [];
+    this.orderApi.loadOrdersNew(order.Id)
+    .subscribe(
+        data => {
+           this.orders = data;
+           this.orders.forEach(o => {
+               o.OrderItems.forEach(item => {
+                order.ItemList.push(item)
+               });
+              
+           });
+           
+    })
+  }
+    getProductById(products: any[], productId: number) {
+      var product = this.productList.find(product => product.Id === productId);
+      
+      return product;
+  }
+
+  secondaryChanged(event)
+  {
+    console.log(event.value);
+    
+  }
+
+  moveOrder(item){
+    console.log(item);
+    
+  }
 
 }
