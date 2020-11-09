@@ -207,6 +207,7 @@ export class FullMergeComponent implements OnInit {
         
     }
 
+    
     showDetail(order){
         order.ItemList = [];
         this.orderApi.loadOrdersNew(order.Id)
