@@ -115,4 +115,9 @@
     public static BASE_COSTDETAILS_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/CostDetailsAPI/';
     public static BASE__CONSUMPTIONDETAILS_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/ConsumptionDetailsAPI/';
 
+
+    // merge section
+    public static BASE_GET_UNSETTLED_ORDERS = Global.BASE_HOST_ENDPOINT+ '/api/TicketAPI/GetAllTicket';
+    public static BASE_FULL_MERGE = Global.BASE_HOST_ENDPOINT+ '/api/OrderMergeFull/Post/';
+    public static BASE_PARTIAL_MERGE = Global.BASE_HOST_ENDPOINT+ '/api/OrderMergePartial/Post/';
 }

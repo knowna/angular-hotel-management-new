@@ -1,1 +1,156 @@
-<p>partial-merge works!</p>
+<div class="row m-0 mb-5">
+    <div class="col-sm-12">
+        <h4>{{modalTitle}}</h4>
+    </div>
+</div> 
+
+<!-- <form class="panel-primary" novalidate>
+    <div class="modal-header panel-heading" style="background-color: #364a70;">
+        <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+    </div>
+
+    <div class="card"> -->
+        <!-- <div class="row m-0">
+            
+            <div class="col-sm-6 ml-auto mr-auto" style="margin: inherit;">
+                <span> Merge Ticket from:  </span>
+                <ngx-select-dropdown
+                    (change)="secondaryChanged($event)"
+                    [multiple]="false"
+                    [config]="config"
+                    [options]="secondaryOrderList">
+                </ngx-select-dropdown>
+            </div>  
+
+            <div class="col-sm-6 ml-auto mr-auto" style="margin: inherit;">
+                <span> Merge To Ticket:  </span>
+                <ngx-select-dropdown
+                    (change)="primaryChanged($event)"
+                    [multiple]="false"
+                    [config]="config"
+                    [options]="primaryOrderList">
+                </ngx-select-dropdown>
+            </div>   
+
+
+            
+        </div> -->
+
+        <!-- <div class="row m-0 mt-4">
+            <div class="col-11">
+
+            </div>
+            <div  class="col-1">
+                <button type="button" (click)="merge()" style="float: right;"  class="btn btn-success">Merge </button>
+
+            </div>
+        </div> -->
+
+
+        <div class="row m-0 mt-5">
+            <h6  class="font-weight-bold ml-3">  All unsettled tickets  </h6> 
+        </div>
+
+        <div class="row m-0">
+            <div class="col-md-8">
+               <div class="row m-0">
+                   <div *ngFor="let order of tempPrimaryOrderList" class="col-md-12 card">
+                       <div class="card-body" style="cursor: pointer;">
+                           <span (click)="showDetail(order);order.show = !order.show" style="width:100%"> 
+                               <i 
+                                   class="fa" 
+                                   [class.fa-chevron-right]="!order.show"
+                                   [class.fa-chevron-down]="order.show">
+                               </i>
+                               {{order.Name}}  {{order.TicketId}}
+                           </span>
+                           <div *ngIf="order.show && order.ItemList.length > 0">
+                               <table>
+                                   <thead>
+                                       <tr>
+                                           <th> move This Item</th>
+                                           <th>change quantity </th>
+                                           <th>Name</th>
+                                           <th>Qty</th>
+                                           <th>Unit Price</th>
+                                           <th>Total Price</th>
+                                       </tr>
+                                   </thead>
+                                   <tbody>
+                                       <tr *ngFor="let item of order.ItemList;index as i">
+                                           <td>  <input  [id]="'item'+i" type="checkbox"(change)="moveOrder(item)"> </td>
+                                           <td> <input [disabled]="item.Qty==1" type="text"> </td>
+                                           <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
+                                           <td>{{item.Qty}}</td>
+                                           <td>{{item.UnitPrice}}</td>
+                                           <td>{{item.TotalAmount}}</td>
+                                       </tr>
+                                   </tbody>
+                               </table>
+                           </div>
+           
+                           <div *ngIf="order.show && order.ItemList?.length == 0" class="text-center">
+                               No record found!!
+                           </div>
+                           
+                       </div>
+                     
+                       
+                   </div>
+                   
+
+               </div>
+            </div>
+            <div class="col-md-4" style="margin: inherit;">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <span> Merge To Ticket:  </span>
+                        <ngx-select-dropdown
+                            (change)="secondaryChanged($event)"
+                            [multiple]="false"
+                            [config]="config"
+                            [options]="secondaryOrderList">
+                        </ngx-select-dropdown>
+                    </div>
+                    
+                </div>
+                <div class="row mt-5">
+                    <div class="col-sm-12">
+                        <button type="button" class="btn btn-success" (click)="partialMerge()">
+                            Merge
+                        </button>
+                    </div>
+                </div>
+                
+            </div> 
+            
+
+        </div>
+
+        
+        <div *ngIf="showOrders" class="row m-0 mb-2">
+            <div *ngFor="let item of order.OrderItems;index as i " class="row">
+                <table class="table table-borderless">
+                    <tr>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+
+    <!-- </div> -->
+
+
+    <!-- <div class="modal-footer">
+        <button type="submit" [disabled]="MenuConsumptionForm.invalid" class="btn btn-success pull-left">{{modalBtnTitle}}</button>
+        <button type="reset" class="btn btn-danger" (click)="cancel()">Cancel</button>
+    </div> -->
+<!-- </form> -->
+
+
+
+
+
+
