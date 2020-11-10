@@ -55,7 +55,7 @@ export class MenuComponent implements OnInit {
     addMenu(template: TemplateRef<any>) {
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
-        this.modalTitle = "Add New Menu";
+        this.modalTitle = "Add";
         this.modalBtnTitle = "Save";
         this.MenuFrm.reset();
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
@@ -64,7 +64,7 @@ export class MenuComponent implements OnInit {
     editMenu(id: number, template: TemplateRef<any>) {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
-        this.modalTitle = "Edit Menu";
+        this.modalTitle = "Edit";
         this.modalBtnTitle = "Update";
         this.menu = this.menus.filter(x => x.Id == id)[0];
         this.MenuFrm.controls['Id'].setValue(this.menu.Id);

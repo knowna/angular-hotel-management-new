@@ -172,7 +172,7 @@ export const navcomponents=[
               permission:'Billing:Menu:Menu',
             },
             {
-              title: 'Table and Room',
+              title: 'Table/Room Setup',
               pathMatch: 'prefix',
               link: 'pos-dashboard/table/table',
               img:'../../../assets/images/table.png',
