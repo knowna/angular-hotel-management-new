@@ -40,7 +40,7 @@ export class MenuItemComponent implements OnInit {
     departments:any;
     selectedFile: File;
 
-    dropMessage: string = "Upload Reference File";
+    dropMessage: string = "Upload Reference Image";
     uploadUrl = Global.BASE_FILE_UPLOAD_ENDPOINT;
     fileUrl: string = '';
     file: any[] = [];
@@ -159,7 +159,7 @@ export class MenuItemComponent implements OnInit {
 
     addMenuItems() {
         
-        this.modalTitle = "Add Menu Item";
+        this.modalTitle = "Add Item";
         this.modalBtnTitle = "Save";
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
@@ -175,8 +175,8 @@ export class MenuItemComponent implements OnInit {
       
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
-        this.modalTitle = "Edit Menu Item";
-        this.modalBtnTitle = "Update";
+        this.modalTitle = "Edit Item";
+        this.modalBtnTitle = "Save";
         this.menuItem = this.menuItems.filter(x => x.Id == Id)[0];
         
         let category= this.menucategory.find(cat=> cat.Id == this.menuItem.categoryId);

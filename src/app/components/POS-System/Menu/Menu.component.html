@@ -50,7 +50,7 @@
 
     <div class="row m-0 mt-3">
         <div class="col-md-4">
-            <h4>Menu</h4>
+            <h4>Menu Configure</h4>
         </div>
         <div class="col-md-4">
             <input type="text" class="form-control" placeholder="Search by Name" [(ngModel)]="name">
@@ -59,7 +59,10 @@
         </div> -->
         <div class="col-md-4">
             <button class="btn btn-success" (click)="addMenu(template)" style="float: right">
-                <strong>Add New Menu</strong>
+                <strong>
+                    <i class="fa fa-plus"></i>
+                    Add
+                </strong>
             </button>
         </div>
     </div>
@@ -88,7 +91,7 @@
                             <!-- <span><img src="../../../../assets/images/Edit.png" (click)="editMenu(menu.Id, template)" height="32" width="32" /></span>
                             <span><img src="../../../../assets/images/Delete.png" (click)="deleteMenu(menu.Id, template)" height="32" width="32" /></span> -->
                         </td>
-                        <td><a class="btn btn-sm btn-primary" [routerLink]="['/menu-category', menu.Id]">List MenuCategory</a></td>
+                        <td><a class="btn btn-sm btn-primary" [routerLink]="['/menu-category', menu.Id]">Menu Category</a></td>
                     </tr>
                 </tbody>
             </table>

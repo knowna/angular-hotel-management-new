@@ -92,7 +92,7 @@
 
                 <div class="row mt-4">
                     <div class="col-sm-10">
-                      Upload File  <app-file-upload #fileUpload [uploadUrl]="uploadUrl" [dropMessage]="dropMessage"></app-file-upload>
+                      Upload Image  <app-file-upload #fileUpload [uploadUrl]="uploadUrl" [dropMessage]="dropMessage"></app-file-upload>
                     </div>
 
                     <div *ngIf="modalBtnTitle === 'Update'" class="col-sm-6">
@@ -139,7 +139,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <input type="number" class="form-control" formControlName="Multiplier" />
                                         <div class="alert alert-danger" *ngIf="MenuItemPortions.get('Multiplier').hasError('required') && formSubmitAttempt">
                                             No. of portions is required
@@ -190,7 +190,10 @@
         </div> -->
         <div class="col-md-4">
             <button class="btn btn-success" (click)="addMenuItems()" style="float: right">
-                <strong>Add New Item</strong>
+                <strong>
+                    <i class="fa fa-plus"></i>
+                    Add
+                </strong>
             </button>
         </div>
     </div>
