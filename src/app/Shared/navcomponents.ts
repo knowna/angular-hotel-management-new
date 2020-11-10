@@ -117,7 +117,7 @@ export const navcomponents=[
             },
             {
               title: 'Split Order',
-              link: 'pos-dashboard/table/menu',
+              link: 'split-order',
               img:'../../../assets/images/menu.png',
               permission:'Billing:Menu:Menu',
             },

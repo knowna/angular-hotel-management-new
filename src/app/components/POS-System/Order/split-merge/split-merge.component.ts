@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { BillingService } from 'src/app/Service/Billing/billing.service';
-import { MergeService } from '../services/merge.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OrderService } from 'src/app/Service/Billing/order.service';
 import { Order } from 'src/app/Model/order.model';
 import { Product } from 'src/app/Model/product.model';
+import { BillingService } from 'src/app/Service/Billing/billing.service';
+import { OrderService } from 'src/app/Service/Billing/order.service';
+import { MergeService } from '../services/merge.service';
 
 @Component({
-  selector: 'app-partial-merge',
-  templateUrl: './partial-merge.component.html',
-  styleUrls: ['./partial-merge.component.css']
+  selector: 'app-split-merge',
+  templateUrl: './split-merge.component.html',
+  styleUrls: ['./split-merge.component.css']
 })
-export class PartialMergeComponent implements OnInit {
+export class SplitMergeComponent implements OnInit {
 
   moveFromOrderItems=[];
   moveToOrderItems=[];

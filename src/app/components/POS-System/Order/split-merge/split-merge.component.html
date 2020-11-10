@@ -68,8 +68,8 @@
                                <table>
                                    <thead>
                                        <tr>
-                                           <th> move This Item</th>
-                                           <th>change quantity </th>
+                                           <th> Split this order</th>
+                                           <th>Split quantity </th>
                                            <th>Name</th>
                                            <th>Qty</th>
                                            <th>Unit Price</th>
@@ -102,22 +102,11 @@
                </div>
             </div>
             <div class="col-md-4" style="margin: inherit;">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <span> Merge To Ticket:  </span>
-                        <ngx-select-dropdown
-                            (change)="secondaryChanged($event)"
-                            [multiple]="false"
-                            [config]="config"
-                            [options]="secondaryOrderList">
-                        </ngx-select-dropdown>
-                    </div>
-                    
-                </div>
+                
                 <div class="row mt-5">
                     <div class="col-sm-12">
                         <button type="button" class="btn btn-success" (click)="partialMerge()">
-                            Merge
+                            Split Order
                         </button>
                     </div>
                 </div>
