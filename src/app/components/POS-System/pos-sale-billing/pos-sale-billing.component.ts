@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, Input } from '@angular/core';
+﻿import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Order, OrderItem, OrderItemRequest } from '../../../Model/order.model';
 import { SaleBillingBook } from '../../../Model/SaleBook';
 import { AccountTransactionTypeService } from '../../../Service/Inventory/account-trans-type.service';
@@ -14,6 +14,9 @@ import * as OrderSelector from '../../../selectors/order.selector';
 import * as TicketSelector from '../../../selectors/ticket.selector';
 import { ActivatedRoute } from '@angular/router';
 import { OrderStoreService } from '../../../Service/store/order.store.service';
+import * as XLSX from 'xlsx'; 
+import * as jsPDF from 'jspdf'
+
 
 @Component({
     selector: 'pos-sale-billing',
@@ -21,6 +24,10 @@ import { OrderStoreService } from '../../../Service/store/order.store.service';
 })
 
 export class POSSaleBillingComponent implements OnInit {
+
+    // @ViewChild('salebillingbookTable') htmlData:ElementRef
+
+    fileName= 'ExcelSheet.xlsx'; 
     currentYear: any;
     currentUser: any;
     company: any;
@@ -43,6 +50,23 @@ export class POSSaleBillingComponent implements OnInit {
     totalPayable: any = '';
     selectedCustomerId: number = 0;
     OrderItem: OrderItem[];
+
+
+    title = 'export-table-data-to-pdf-using-jspdf-example';
+
+    head = [['Date', 'DBi;;', 'DESIGNATION', 'DEPARTMENT']]
+  
+    data = [
+      [1, 'ROBERT', 'SOFTWARE DEVELOPER', 'ENGINEERING'],
+      [2, 'CRISTINAO','QA', 'TESTING'],
+      [3, 'KROOS','MANAGER', 'MANAGEMENT'],
+      [4, 'XYZ','DEVELOPER', 'DEVLOPEMENT'],
+      [5, 'ABC','CONSULTANT', 'HR'],
+      [73, 'QWE','VICE PRESIDENT', 'MANAGEMENT'],
+    ]
+  
+
+
     constructor(
         private _reservationService: AccountTransactionTypeService,
         private date: DatePipe,
@@ -137,37 +161,77 @@ export class POSSaleBillingComponent implements OnInit {
     * Exports the pOrder voucher data in CSV/ Excel format
     */
     exportTableToExcel(tableID, filename = '') {
-        var downloadLink;
-        var dataType = 'application/vnd.ms-excel';
-        var clonedtable = $('#' + tableID);
-        var clonedHtml = clonedtable.clone();
-        $(clonedtable).find('.export-no-display').remove();
-        var tableSelect = document.getElementById(tableID);
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-        $('#' + tableID).html(clonedHtml.html());
+        // var downloadLink;
+        // var dataType = 'application/vnd.ms-excel';
+        // var clonedtable = $('#' + tableID);
+        // var clonedHtml = clonedtable.clone();
+        // $(clonedtable).find('.export-no-display').remove();
+        // var tableSelect = document.getElementById(tableID);
+        // var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        // $('#' + tableID).html(clonedHtml.html());
 
-        // Specify file name
-        filename = filename ? filename + '.xls' : this.toExportFileName;
+        // // Specify file name
+        // filename = filename ? filename + '.xls' : this.toExportFileName;
 
-        // Create download link element
-        downloadLink = document.createElement("a");
+        // // Create download link element
+        // downloadLink = document.createElement("a");
 
-        document.body.appendChild(downloadLink);
+        // document.body.appendChild(downloadLink);
 
-        if (navigator.msSaveOrOpenBlob) {
-            var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
-            navigator.msSaveOrOpenBlob(blob, filename);
-        } else {
-            // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+        // if (navigator.msSaveOrOpenBlob) {
+        //     var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
+        //     navigator.msSaveOrOpenBlob(blob, filename);
+        // } else {
+        //     // Create a link to the file
+        //     downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
 
-            // Setting the file name
-            downloadLink.download = filename;
+        //     // Setting the file name
+        //     downloadLink.download = filename;
 
-            //triggering the function
-            downloadLink.click();
-        }
+        //     //triggering the function
+        //     downloadLink.click();
+
+         /* table id is passed over here */   
+       let element = document.getElementById('salebillingbookTable'); 
+       const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+       /* generate workbook and add the worksheet */
+       const wb: XLSX.WorkBook = XLSX.utils.book_new();
+       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+       /* save to file */
+       XLSX.writeFile(wb, this.fileName);
+			
+    
     }
+
+    exportTableToPdf(){
+       
+            var doc = new jsPDF();
+        
+            doc.setFontSize(18);
+            doc.text('My Team Detail', 11, 8);
+            doc.setFontSize(11);
+            doc.setTextColor(100);
+        
+        
+            (doc as any).autoTable({
+              head: this.head,
+              body: this.data,
+              theme: 'plain',
+              didDrawCell: data => {
+                console.log(data.column.index)
+              }
+            })
+        
+            // below line for Open PDF document in new tab
+            doc.output('dataurlnewwindow')
+        
+            // below line for Download PDF document  
+            doc.save('myteamdetail.pdf');
+          
+    }
+    
     nepaliDateValidator(nepaliDate: string) {
         let pattern = new RegExp(/(^[0-9]{4})\.([0-9]{2})\.([0-9]{2})/g);
         let isValid = pattern.test(nepaliDate);
