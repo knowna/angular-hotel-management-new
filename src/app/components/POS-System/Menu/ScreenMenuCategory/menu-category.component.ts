@@ -24,6 +24,8 @@ export class MenuCategoryComponent1 implements OnInit {
     modalTitle: string;
     modalBtnTitle: string;
 
+    Name = '';
+
     constructor(private fb: FormBuilder, private _menucategoryService: BillingService, private _menuService: BillingService, private route: ActivatedRoute) {
     }
 

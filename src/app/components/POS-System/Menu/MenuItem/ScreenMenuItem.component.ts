@@ -28,6 +28,8 @@ export class ScreenMenuItemComponent implements OnInit {
     modalBtnTitle: string;
     modalRef: BsModalRef;
 
+    Name = '';
+
     constructor(private fb: FormBuilder, private _menuItemService: BillingService, private route: ActivatedRoute,
         private modalService: BsModalService) {
     }
