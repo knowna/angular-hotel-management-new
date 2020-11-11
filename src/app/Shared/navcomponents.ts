@@ -140,7 +140,7 @@ export const navcomponents=[
           show: false,
         },
         {
-          title: 'Menu',
+          title: 'Menu Setup',
           img:'../../../assets/images/menu.png',
           icon: 'layout-outline',
           permission:'Billing:Menu',
@@ -166,7 +166,7 @@ export const navcomponents=[
               permission:'Billing:Menu:Consumption',
             },
             {
-              title: 'Menu',
+              title: 'Menu Configure',
               link: 'pos-dashboard/table/menu',
               img:'../../../assets/images/menu.png',
               permission:'Billing:Menu:Menu',

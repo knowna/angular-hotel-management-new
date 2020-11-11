@@ -45,6 +45,9 @@ export class PosInvoicePrintComponent implements OnInit {
 
 
     public company: any = {};
+
+    OrderItems:any[] = [];
+
     // Constructor
     constructor(
         private store: Store<any>,
@@ -66,6 +69,12 @@ export class PosInvoicePrintComponent implements OnInit {
                         .subscribe(
                             data => {
                                 this.parsedOrders = data;
+                                this.parsedOrders.forEach(order => {
+                                    order.OrderItems.forEach(item => {
+                                        this.OrderItems.push(item);
+                                    });
+                                    
+                                });
                                 console.log('the parsed orders',this.parsedOrders)
                             }
                         )

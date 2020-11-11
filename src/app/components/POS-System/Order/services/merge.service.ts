@@ -23,5 +23,9 @@ export class MergeService {
         return this._http.post(Global.BASE_PARTIAL_MERGE, details);
     }
 
+    splitOrder(details):Observable<any> {
+        return this._http.post(Global.BASE_SPLIT_ORDER, details);
+    }
+
    
 }
