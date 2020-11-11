@@ -11,9 +11,15 @@
                     {{ selectedCustomerId ? 'Cust#: ' + customerNew?.CustomerName : 'Table:'+ table.Name }}
                 </strong>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <strong >
                     Status: {{ orders.length ? orders[0].OrderStatus : 'Un Settled' }}
+                </strong>
+            </div>
+
+            <div class="col-md-12">
+                <strong>
+                    Date: {{ticket.TicketOpeningTime}}
                 </strong>
             </div>
         </div>
