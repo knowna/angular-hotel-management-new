@@ -120,4 +120,5 @@
     public static BASE_GET_UNSETTLED_ORDERS = Global.BASE_HOST_ENDPOINT+ '/api/TicketAPI/GetAllTicket';
     public static BASE_FULL_MERGE = Global.BASE_HOST_ENDPOINT+ '/api/OrderMergeFull/Post/';
     public static BASE_PARTIAL_MERGE = Global.BASE_HOST_ENDPOINT+ '/api/OrderMergePartial/Post/';
+    public static BASE_SPLIT_ORDER = Global.BASE_HOST_ENDPOINT+ '/api/OrderSplit/Post/';
 }

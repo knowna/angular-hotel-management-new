@@ -5,6 +5,7 @@ import { Product } from 'src/app/Model/product.model';
 import { BillingService } from 'src/app/Service/Billing/billing.service';
 import { OrderService } from 'src/app/Service/Billing/order.service';
 import { MergeService } from '../services/merge.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-split-merge',
@@ -21,10 +22,10 @@ export class SplitMergeComponent implements OnInit {
   showOrders=false;
   productList = [];
 
-  modalTitle ='Partial Merge'
+  modalTitle ='Split Order'
   tempPrimaryOrderList=[];
 
-  title = "Partial Order Merge"
+  title = "Split Order"
 
   config = {
     search:true,
@@ -52,13 +53,15 @@ export class SplitMergeComponent implements OnInit {
   tempPrimaryItemList: any[] = [];
   secondaryItemList: any[] = [];
 
+  selectedTicket: any;
+
   constructor(
     private _menuItemService: BillingService,
     private mergeService: MergeService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private billService: BillingService,
-
+    private toastrService: ToastrService,
     private orderApi: OrderService,  
   ) { 
     this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
@@ -92,6 +95,11 @@ export class SplitMergeComponent implements OnInit {
 
   showDetail(order){
     order.ItemList = [];
+    this.selectedTicket = order;
+
+    // this.secondaryOrderList.splice(this.secondaryOrderList.indexOf(order),1);
+    // this.secondaryOrderList = [...this.secondaryOrderList];
+
     this.orderApi.loadOrdersNew(order.Id)
     .subscribe(
         data => {
@@ -110,10 +118,12 @@ export class SplitMergeComponent implements OnInit {
     this.primaryItemList = order.ItemList;
     this.tempPrimaryItemList = this.primaryItemList;
   }
-    getProductById(products: any[], productId: number) {
-      var product = this.productList.find(product => product.Id === productId);
-      
-      return product;
+
+  ß
+  getProductById(products: any[], productId: number) {
+    var product = this.productList.find(product => product.Id === productId);
+    
+    return product;
   }
 
   secondaryChanged(event){
@@ -137,29 +147,79 @@ export class SplitMergeComponent implements OnInit {
     
   }
 
-  partialMerge() {
-    let mainItemList = this.tempPrimaryItemList;
-    let  ListOrderItem=[];
-    let ticketTotalWithoutVat=0;
-    let vatAmount =0;
-    let grandTotal =0;
+  splitOrder() {
+    let mainItemList = [...this.tempPrimaryItemList];
+
+    let ListOrderItemPrimary=[];
+    let ticketTotalWithoutVatPrimary=0;
+    let vatAmountPrimary =0;
+    let grandTotalPrimary =0;
+
+    let ListOrderItemPartial=[];
+    let ticketTotalWithoutVatPartial=0;
+    let vatAmountPartial =0;
+    let grandTotalPartial =0;
+
     // let UnSubmittedOrder = this.getUnSubmittedOrder(this.ordersNew);
 
     this.secondaryItemList.forEach(item => {
-      const idx = mainItemList.indexOf(item);
-      mainItemList.splice(idx,1);
+      mainItemList = mainItemList.filter(i => i.Id != item.Id);
     });
 
-    console.log('the primary', mainItemList);
+    // for primary
+    mainItemList.forEach(product => {
+      let total =0;
+      let unitprice = product.UnitPrice;
     
+      total =total +(product.Qty*product.UnitPrice);
+      ticketTotalWithoutVatPrimary=ticketTotalWithoutVatPrimary+ total;
+
+    
+      let OrderItem = {
+          "Id":product.Id,
+          "UserId": this.currentUser.UserName,
+          "FinancialYear": this.currentYear.Name,
+          "OrderNumber": product.OrderNumber,
+          "OrderDescription":product.OrderDescription,
+          "OrderId":  product.OrderId,
+          "ItemId": product.ItemId,
+          "Qty": product.Qty,
+          "UnitPrice": unitprice,
+          "TotalAmount": total,
+          "Tags": "New Order",
+          "IsSelected": false,
+          "IsVoid": false
+      };
+      ListOrderItemPrimary.push(OrderItem);
+    });
+
+    vatAmountPrimary =(0.13*ticketTotalWithoutVatPrimary);
+    grandTotalPrimary = vatAmountPrimary+ticketTotalWithoutVatPrimary;
+
+
+    let MainOrderItemRequest = {
+      "TicketId":this.selectedTicket.Id,
+      "TableId":this.selectedTicket.TableId,
+      "CustomerId":this.selectedTicket.CustomerId,
+      "OrderId": 0,
+      "TicketTotal":ticketTotalWithoutVatPrimary,
+      "Discount":0,
+      "ServiceCharge":0,
+      "VatAmount": vatAmountPrimary,
+      "GrandTotal":grandTotalPrimary,
+      "Balance":grandTotalPrimary,
+      "UserId":this.currentUser.UserName,
+      "FinancialYear":this.currentYear.Name,
+      "ListOrderItem":ListOrderItemPrimary
+    }
+    
+     //for partial
     this.secondaryItemList.forEach(product => {
       let total =0;
       let unitprice = product.UnitPrice;
-      let VatPercent = 0.13; 
     
       total =total +(product.Qty*product.UnitPrice);
-      ticketTotalWithoutVat=ticketTotalWithoutVat+ total;
-
+      ticketTotalWithoutVatPartial=ticketTotalWithoutVatPartial+ total;
     
       let OrderItem = {
           "Id":0,
@@ -168,7 +228,7 @@ export class SplitMergeComponent implements OnInit {
           "OrderNumber": 0,
           "OrderDescription":'',
           "OrderId":  0,
-          "ItemId": product.Id,
+          "ItemId": product.ItemId,
           "Qty": product.Qty,
           "UnitPrice": unitprice,
           "TotalAmount": total,
@@ -176,36 +236,47 @@ export class SplitMergeComponent implements OnInit {
           "IsSelected": false,
           "IsVoid": false
       };
-      ListOrderItem.push(OrderItem);
+      ListOrderItemPartial.push(OrderItem);
     });
     
-    
-    vatAmount =(0.13*ticketTotalWithoutVat);
-    grandTotal = vatAmount+ticketTotalWithoutVat;
-
+    vatAmountPartial =(0.13*ticketTotalWithoutVatPartial);
+    grandTotalPartial = vatAmountPartial+ticketTotalWithoutVatPartial;
 
     let PartialOrderItemRequest = {
-       
-      "TicketId":this.secondaryTicket.Id,
-      "TableId":this.secondaryTicket.TableId,
-      "CustomerId":this.secondaryTicket.CustomerId,
+      "TicketId":0,
+      "TableId":this.selectedTicket.TableId,
+      "CustomerId":this.selectedTicket.CustomerId,
       "OrderId": 0,
-      "TicketTotal":ticketTotalWithoutVat,
+      "TicketTotal":ticketTotalWithoutVatPartial,
       "Discount":0,
       "ServiceCharge":0,
-      "VatAmount": vatAmount,
-      "GrandTotal":grandTotal,
-      "Balance":grandTotal,
+      "VatAmount": vatAmountPartial,
+      "GrandTotal":grandTotalPartial,
+      "Balance":grandTotalPartial,
       "UserId":this.currentUser.UserName,
       "FinancialYear":this.currentYear.Name,
-      "ListOrderItem":ListOrderItem
+      "ListOrderItem":ListOrderItemPartial
     }
 
-
-    this.secondaryItemList.forEach(item => {
-      mainItemList = mainItemList.filter(i => i = !i);
-    });
-    console.log('the main item list are', mainItemList)
+    let details = {
+      "MainOrderItemRequest" : MainOrderItemRequest,
+      "SplitOrderItemRequest" : PartialOrderItemRequest
+    }
+    
+    console.log('primary is', MainOrderItemRequest);
+    console.log('partial is', PartialOrderItemRequest);
+    console.log('the details is', details);
+    this.mergeService.splitOrder(details)
+      .subscribe(
+        data => {
+          console.log('the data is', data)
+          this.toastrService.success('Order splited successfully!');
+          window.location.reload();
+        },
+        error => {
+          console.error('the error is', error);
+        }
+      )
   }
 
   getUnSubmittedOrder(orders: Order[]) {

@@ -200,7 +200,7 @@ export class POSDashboardComponent implements OnInit {
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
         this.modalTitle = "Add Ledger";
-        this.modalBtnTitle = "Save & Submit";
+        this.modalBtnTitle = "Save";
         this.accountLedgerFrm.reset();
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
@@ -213,7 +213,7 @@ export class POSDashboardComponent implements OnInit {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Ledger";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.account = this.accounts.filter(x => x.Id == Id)[0];
         this.accountLedgerFrm.setValue(this.account);
         this.modalRef = this.modalService.show(this.TemplateRef, {

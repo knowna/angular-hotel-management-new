@@ -112,7 +112,7 @@ export class PartialMergeComponent implements OnInit {
            this.orders = data;
            console.log('the order s ss', this.orders)
            this.orders.forEach(o => {
-               o.OrderItems.forEach(item => {
+               o.OrderItems.forEach(item => {      
                 order.ItemList.push(item)
                });
               
@@ -267,13 +267,19 @@ export class PartialMergeComponent implements OnInit {
       "ListOrderItem":ListOrderItemPrimary
     }
 
+    let details = {
+      "MainOrderItemRequest" : MainOrderItemRequest,
+      "SplitOrderItemRequest" : PartialOrderItemRequest
+    }
 
     console.log('primary is', MainOrderItemRequest);
     console.log('partial is', PartialOrderItemRequest);
-    this.mergeService.partialMerge(MainOrderItemRequest,PartialOrderItemRequest)
+    console.log('the details is', details);
+    this.mergeService.partialMerge(details)
       .subscribe(
         data => {
           this.toastrService.success('Partial merged successfully!');
+          window.location.reload();
         },
         error => {
           console.error('the error is', error);

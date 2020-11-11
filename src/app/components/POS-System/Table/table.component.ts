@@ -35,7 +35,7 @@ export class TableComponent implements OnInit {
     tableName = '';
     roomTypes: any[];
 
-    dropMessage: string = "Upload Reference File";
+    dropMessage: string = "Upload Reference Image";
     uploadUrl = Global.BASE_FILE_UPLOAD_ENDPOINT;
     fileUrl: string = '';
     file: any[] = [];
@@ -107,7 +107,7 @@ export class TableComponent implements OnInit {
 
         this.dbops = DBOperation.create;    
         this.SetControlsState(true);
-        this.modalTitle = "Add New Table";
+        this.modalTitle = "Add";
         this.modalBtnTitle = "Save";
         this.TableForm.reset();
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false ,class: 'modal-lg'});
@@ -116,7 +116,7 @@ export class TableComponent implements OnInit {
     editTable(id: number, template: TemplateRef<any>) {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
-        this.modalTitle = "Edit Table";
+        this.modalTitle = "Edit";
         this.modalBtnTitle = "Update";
         console.log('the list of tables are', this.tables)
         this.table = this.tables.filter(x => x.Id == id)[0];

@@ -77,7 +77,7 @@
                         <div class="mt-3" formArrayName="MenuConsumptionDetails">
                             <div *ngFor="let MenuConsumptionDetail of MenuConsumptionDetails.controls; let i=index" [formGroupName]="i">
                                 <div class="row mt-2">
-                                    <div class="col-md-6">
+                                    <div class="col-md-8">
                                         <input type="hidden" formControlName="Id" />
                                         <input type="hidden" formControlName="MenuConsumptionId" />
                                         <select class="form-control" formControlName="InventoryItemId">
@@ -142,7 +142,10 @@
         </div> -->
         <div class="col-md-4">
             <button class="btn btn-success" (click)="addMenuConsumptions(template)" style="float: right">
-                <strong>Add New Menu</strong>
+                <strong>
+                    <i class="fa fa-plus"></i>
+                    Add
+                </strong>
             </button>
         </div>
     </div>

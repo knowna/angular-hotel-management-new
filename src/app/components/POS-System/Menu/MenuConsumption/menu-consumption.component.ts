@@ -235,7 +235,7 @@ export class MenuConsumptionComponent implements OnInit {
         // this.MenuConsumptionForm.reset();
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
-        this.modalTitle = "Add Menu Consumption";
+        this.modalTitle = "Add Consumption";
         this.modalBtnTitle = "Save";
 
         this.modalRef = this.modalService.show(template, {
@@ -248,7 +248,7 @@ export class MenuConsumptionComponent implements OnInit {
     editMenuConsumptions(Id: number, template: TemplateRef<any>) {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
-        this.modalTitle = "Edit Menu Consumption";
+        this.modalTitle = "Edit Consumption";
         this.modalBtnTitle = "Update";
         
         this.getMenuComsumption(Id).subscribe((menuConsumptions: MenuConsumption) => {

@@ -19,8 +19,12 @@ export class MergeService {
         return this._http.post(Global.BASE_FULL_MERGE+'?TicketId='+TicketId,details);
     }
 
-    partialMerge(main,partial):Observable<any> {
-        return this._http.post(Global.BASE_PARTIAL_MERGE, main, partial);
+    partialMerge(details):Observable<any> {
+        return this._http.post(Global.BASE_PARTIAL_MERGE, details);
+    }
+
+    splitOrder(details):Observable<any> {
+        return this._http.post(Global.BASE_SPLIT_ORDER, details);
     }
 
    
