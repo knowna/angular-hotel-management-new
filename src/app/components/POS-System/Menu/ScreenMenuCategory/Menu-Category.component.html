@@ -1,8 +1,12 @@
 ﻿
 <div class="container" style="padding-top: 20px;">
-    <div class="row m-0">
-        <div class="col-sm-12">
-            <h4> Menu Category</h4>
+    <div class="row m-0 mt-3">
+        <div class="col-sm-4">
+            <!-- <h4> Menu Category</h4> -->
+            <h2 class="header">Menu Category</h2>
+        </div>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" [(ngModel)]="Name" placeholder="Search by Name">
         </div>
     </div>
 
@@ -17,8 +21,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let screenmenucategory of screenmenucategories">
-                        <td class="col-md-1">
+                    <tr *ngFor="let screenmenucategory of screenmenucategories | ScreenMenuCategoryFilter : Name">
+                        <td>
                             <input 
                                 type="checkbox" 
                                 (change)="addCategoriesToMenu(screenmenucategory.Id, screenmenucategory.MenuId,screenmenucategory.Menu_Bool, screenmenucategory.Name)" 
