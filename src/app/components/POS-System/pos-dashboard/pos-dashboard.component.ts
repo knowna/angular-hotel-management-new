@@ -216,6 +216,7 @@ export class POSDashboardComponent implements OnInit {
         this.modalTitle = "Edit Ledger";
         this.modalBtnTitle = "Save";
         this.account = this.accounts.filter(x => x.Id == Id)[0];
+        console.log('the account is', this.account)
         this.accountLedgerFrm.setValue(this.account);
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
