@@ -128,7 +128,8 @@ export class POSDashboardComponent implements OnInit {
             PanNo: [''],
             Telephone: [''],
             Email: [''],
-            Amount: ['']
+            Amount: [''],
+            DRCR:['']
         });
              
         this.billingService.loadTables()
