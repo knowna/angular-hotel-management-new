@@ -80,9 +80,19 @@
                                     <div class="col-md-8">
                                         <input type="hidden" formControlName="Id" />
                                         <input type="hidden" formControlName="MenuConsumptionId" />
-                                        <select class="form-control" formControlName="InventoryItemId">
+                                        <!-- <select class="form-control" formControlName="InventoryItemId">
                                             <option *ngFor="let inventoryReceiptItems of inventoryReceiptItem" [value]="inventoryReceiptItems.Id">{{inventoryReceiptItems.Name}}</option>
-                                        </select>
+                                        </select> -->
+
+                                        <ngx-select-dropdown
+                                            (change)="onChangeItem($event.value)"
+                                            [multiple]="false"
+                                            [config]="itemConfig"
+                                            formControlName="InventoryItemId"
+                                            [options]="inventoryReceiptItem">
+                                        </ngx-select-dropdown>
+
+
                                         <!-- <div class="alert alert-danger" *ngIf="MenuConsumptionDetails.get('InventoryItemId').hasError('required') && formSubmitAttempt">
                                             Inventory Item Name is required
                                         </div> -->
@@ -94,19 +104,22 @@
                                         </div> -->
                                     </div>
 
-                                    <!-- <div class="col-md-2 mt-4" *ngIf="MenuConsumptionDetails.controls.length > 1">
-                                        <button class="btn btn-danger" (click)="removeTrackerModel(i)">
+                                    <div class="col-md-2" *ngIf="MenuConsumptionDetails.controls.length > 1">
+                                        <button class="btn btn-danger" (click)="removeMenuConsumptionDetails(i)">
                                             <i class="fa fa-trash"></i>
                                         </button>
-                                    </div> -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="panel-footer row">
                         <div class="container col-md-12 text-center row" style="margin: 0px; margin-top: 15px;">
-                            <button type="button" class="btn btn-success pull-right" [disabled]="MenuConsumptionDetails.invalid" 
-                            (click)="addMenuConsumptionDetail()">Add Item +</button>
+                            <button 
+                                type="button" 
+                                class="btn btn-success pull-right" 
+                                [disabled]="MenuConsumptionDetails.invalid" 
+                                (click)="addMenuConsumptionDetail()">Add Item +</button>
                         </div>
                     </div>
                 </div>
