@@ -98,6 +98,7 @@ export class PartialMergeComponent implements OnInit {
   }
 
   showDetail(order){
+    this.secondaryItemList =[];
     this.secondaryOrderList = [...this.tempSecondaryOrderList];
     order.ItemList = [];
     this.selectedTicket = order;
