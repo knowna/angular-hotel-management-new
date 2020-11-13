@@ -218,7 +218,7 @@ export class MenuItemComponent implements OnInit {
         this.MenuItemForm.controls['Barcode'].setValue(this.menuItem.Barcode);
         this.MenuItemForm.controls['Tag'].setValue(this.menuItem.Tag);
         this.MenuItemForm.controls['PhoteIdentity'].setValue(this.menuItem.PhoteIdentity);
-        
+
         this.MenuItemForm.controls['MenuItemPortions'] = this.fb.array([]);
         let control = <FormArray>this.MenuItemForm.controls['MenuItemPortions'];
 
@@ -250,7 +250,7 @@ export class MenuItemComponent implements OnInit {
         this.msg = "";
         this.formSubmitAttempt = true;
         let menuitemform = this.MenuItemForm;
-        if (menuitemform.valid) {
+        if (menuitemform.valid && fileUpload.fileUpload != null) {
             switch (this.dbops) {
                 case DBOperation.create:
                     let AddMenuItemObj = {

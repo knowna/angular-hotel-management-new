@@ -561,8 +561,8 @@
                 </div>
                 <div class="modal-footer">
                     <div>
-                        <button type="button" class="btn btn-danger pull-right" (click)="reset(); modalRef.hide();">Cancel</button>
-                        <button type="submit" [disabled]="accountLedgerFrm.invalid" class="btn btn-success pull-left">{{modalBtnTitle}} </button>
+                        <button type="submit" [disabled]="accountLedgerFrm.invalid" class="btn btn-success mr-1">{{modalBtnTitle}} </button>
+                        <button type="button" class="btn btn-danger" (click)="reset(); modalRef.hide();">Cancel</button>
                     </div>
                 </div>
             </div>
