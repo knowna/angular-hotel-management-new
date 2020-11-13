@@ -95,7 +95,7 @@
                       Upload Image  <app-file-upload #fileUpload [uploadUrl]="uploadUrl" [dropMessage]="dropMessage"></app-file-upload>
                     </div>
 
-                    <div *ngIf="modalBtnTitle === 'Update'" class="col-sm-6">
+                    <div *ngIf="modalTitle != 'Add Item'" class="col-sm-6">
                         <img [src]="'data:image/png;base64,'+MenuItemForm.value.PhoteIdentity" alt="" height="50" width="50">
                     </div>
 
@@ -129,11 +129,11 @@
                     <div class="row ml-4 mt-2">
                         <div formArrayName="MenuItemPortions">
                             <div *ngFor="let MenuItemPortions of MenuItemForm.controls.MenuItemPortions.controls; let i=index" [formGroupName]="i">
-                                <div class="row ml-3">
+                                <div class="row ml-3 mt-2">
                                     <div class="col-md-6">
                                         <input type="hidden" formControlName="Id" />
                                         <input type="hidden" formControlName="MenuItemPortionId" />
-                                        <textarea class="form-control col-md-12" name="Name" formControlName="Name" rows="2" placeholder="Position Item Name..."></textarea>
+                                        <textarea class="form-control col-md-12" name="Name" formControlName="Name" rows="1" placeholder="Position Item Name..."></textarea>
                                         <div class="alert alert-danger" *ngIf="MenuItemPortions.get('Name').hasError('required') && formSubmitAttempt">
                                             PortionName is required
                                         </div>
