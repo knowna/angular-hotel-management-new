@@ -208,3 +208,10 @@ form{
 bg-blue{
     background-color: #364a70;
 }
+
+
+.header {
+    color: #4267b2;
+    /* margin: 10px auto 10px 14px; */
+    font-weight: bold;
+}

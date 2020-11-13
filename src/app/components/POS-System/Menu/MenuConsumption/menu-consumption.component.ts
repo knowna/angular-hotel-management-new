@@ -62,6 +62,13 @@ export class MenuConsumptionComponent implements OnInit {
         height: '300px'
     }
 
+    itemConfig = {
+        search:true,
+        displayKey:"Name",
+        searchOnKey: 'Name',
+        height: '300px'
+    }
+
     constructor(private fb: FormBuilder, private _menuItemService: BillingService,
         private _menuportionservice: BillingService,
         private modalService: BsModalService,
@@ -209,6 +216,11 @@ export class MenuConsumptionComponent implements OnInit {
         });
     }
 
+    onChangeItem(event) {
+
+    }
+
+
     onChangePortion(i: number) {
         
         this._menuConsumptionDetailsService.get(Global.BASE_MENUCONSUMPTIONDETAILS_ENDPOINT + '?ProductPortionId=' + i).subscribe((data) => {
@@ -249,7 +261,7 @@ export class MenuConsumptionComponent implements OnInit {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Consumption";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         
         this.getMenuComsumption(Id).subscribe((menuConsumptions: MenuConsumption) => {
             this.indLoading = false;
@@ -286,10 +298,11 @@ export class MenuConsumptionComponent implements OnInit {
             for (let i = 0; i < menuConsumptions.MenuConsumptionDetails.length; i++) {
                 let valuesFromServer = menuConsumptions.MenuConsumptionDetails[i];
                 let instance = this.fb.group(valuesFromServer);
+                let inventoryItem = this.inventoryReceiptItem.find(i => i.Id == valuesFromServer.InventoryItemId);
 
                 instance.controls['Id'].setValue(valuesFromServer.Id);
                 instance.controls['MenuConsumptionId'].setValue(valuesFromServer.MenuConsumptionId);
-                instance.controls['InventoryItemId'].setValue(valuesFromServer.InventoryItemId);
+                instance.controls['InventoryItemId'].setValue(inventoryItem);
                 instance.controls['Quantity'].setValue(valuesFromServer.Quantity);
                 control.push(instance);
             }
@@ -341,10 +354,11 @@ export class MenuConsumptionComponent implements OnInit {
             for (let i = 0; i < menuConsumptions.MenuConsumptionDetails.length; i++) {
                 let valuesFromServer = menuConsumptions.MenuConsumptionDetails[i];
                 let instance = this.fb.group(valuesFromServer);
+                let inventoryItem = this.inventoryReceiptItem.find(i => i.Id == valuesFromServer.InventoryItemId);
 
                 instance.controls['Id'].setValue(valuesFromServer.Id);
                 instance.controls['MenuConsumptionId'].setValue(valuesFromServer.MenuConsumptionId);
-                instance.controls['InventoryItemId'].setValue(valuesFromServer.InventoryItemId);
+                instance.controls['InventoryItemId'].setValue(inventoryItem);
                 instance.controls['Quantity'].setValue(valuesFromServer.Quantity);
                 control.push(instance);
             }
@@ -370,8 +384,11 @@ export class MenuConsumptionComponent implements OnInit {
     }
 
     onSubmit(formData: any) {
-        // console.log(formData.value);
-        
+        this.MenuConsumptionForm.controls['MenuConsumptionDetails'].value.forEach(detail => {
+            let id = detail.InventoryItemId.Id;
+            detail.InventoryItemId = id;
+        });
+
         let categoryId;
         categoryId = formData.value.CategoryId.Id;
 

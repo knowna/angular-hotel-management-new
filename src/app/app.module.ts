@@ -174,6 +174,8 @@ import { FullMergeComponent } from './components/POS-System/Order/FullMerge/full
 import { MergeService } from './components/POS-System/Order/services/merge.service';
 import { PartialMergeComponent } from './components/POS-System/Order/partial-merge/partial-merge.component';
 import { SplitMergeComponent } from './components/POS-System/Order/split-merge/split-merge.component';
+import { ScreenMenuCategoryFilter } from './filters/screen-menu-category.filter';
+import { ScreenMenuCategoryItemFilter } from './filters/screen-menu-category-item.filter';
 // import { TicketService } from './Service/Billing/ticket.service';\
 @NgModule({
   imports: [
@@ -328,6 +330,8 @@ import { SplitMergeComponent } from './components/POS-System/Order/split-merge/s
     FilterMenuConsumption,
     FilterPipe,
     LinksFilterPipe,
+    ScreenMenuCategoryFilter,
+    ScreenMenuCategoryItemFilter,
     CustomerByName,
     PosOptionsComponent,
     PosCalculatorComponent,

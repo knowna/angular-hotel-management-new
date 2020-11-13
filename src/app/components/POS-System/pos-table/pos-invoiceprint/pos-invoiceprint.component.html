@@ -24,6 +24,12 @@
                                 <div>{{ company?.Address }} {{ company?.Street }} {{ company?.City }} {{ company?.District }}</div>
                                 <div>{{ company?.Email }} {{ company?.Phone }}</div>
                                 <div> PAN/VAT : {{ company?.Pan_Vat }}</div>
+                                <div>
+                                    Bill No: {{ ticket ? '#' + ticket?.TicketId : '' }}
+                                </div>
+                                <div>
+                                    Date : {{ticket.TicketOpeningTime | date :'yyyy-MM-dd hh:mm' }}
+                                </div>
                             </th>
                         </tr>
                     </thead>

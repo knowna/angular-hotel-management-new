@@ -22,7 +22,7 @@ export class PartialMergeComponent implements OnInit {
   showOrders=false;
   productList = [];
 
-  modalTitle ='Partial Merge'
+  modalTitle ='Partial Order Merge'
   tempPrimaryOrderList=[];
 
   title = "Partial Order Merge"

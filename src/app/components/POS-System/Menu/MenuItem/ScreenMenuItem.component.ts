@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, ViewChild } from '@angular/core';
-import { Routes, RouterModule, ActivatedRoute, Params } from '@angular/router';
+import { Routes, RouterModule, ActivatedRoute, Params, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IMenuItem, IScreenMenuItem, IScreenMenuItems } from '../../../../Model/Menu/MenuItem';
 import { IMenuCategory } from '../../../../Model/Menu/MenuCategory';
@@ -28,8 +28,12 @@ export class ScreenMenuItemComponent implements OnInit {
     modalBtnTitle: string;
     modalRef: BsModalRef;
 
+    Name = '';
+    categoryId: number;
+
     constructor(private fb: FormBuilder, private _menuItemService: BillingService, private route: ActivatedRoute,
-        private modalService: BsModalService) {
+        private modalService: BsModalService,
+        private router: Router) {
     }
 
     ngOnInit(): void {
@@ -42,8 +46,13 @@ export class ScreenMenuItemComponent implements OnInit {
             MenuItemPortions: this.fb.array([])
         });
         this.route.params.subscribe((params: Params) => {
+            this.categoryId = params['categoryid'];
             this.LoadScreenCategoryItems(params['categoryid']);
         });
+    }
+
+    back() {
+        this.router.navigate(['menu-category/' + this.categoryId])
     }
 
     LoadScreenCategoryItems(Id: number): void {

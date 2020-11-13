@@ -50,7 +50,8 @@
 
     <div class="row m-0 mt-3">
         <div class="col-md-4">
-            <h4>Menu Configure</h4>
+            <!-- <h4>Menu Configure</h4> -->
+            <h2 class="header">Menu Configure</h2>
         </div>
         <div class="col-md-4">
             <input type="text" class="form-control" placeholder="Search by Name" [(ngModel)]="name">
@@ -68,7 +69,7 @@
     </div>
 
     <div class="row m-0 mt-2">
-        <div class="col-sm-12 table-responsive scroll">
+        <div class="col-sm-12 table-responsive">
             <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
             <table class='table table-bordered'  *ngIf='menus && menus.length'>
                 <thead>

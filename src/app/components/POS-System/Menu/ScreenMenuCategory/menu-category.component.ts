@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { Routes, RouterModule, ActivatedRoute, Params } from '@angular/router';
+import { Routes, RouterModule, ActivatedRoute, Params, Router } from '@angular/router';
 import { BillingService } from '../../../../Service/Billing/billing.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IMenuItem } from '../../../../Model/Menu/MenuItem';
@@ -24,7 +24,14 @@ export class MenuCategoryComponent1 implements OnInit {
     modalTitle: string;
     modalBtnTitle: string;
 
-    constructor(private fb: FormBuilder, private _menucategoryService: BillingService, private _menuService: BillingService, private route: ActivatedRoute) {
+    Name = '';
+
+    constructor(
+        private fb: FormBuilder, 
+        private _menucategoryService: BillingService, 
+        private _menuService: BillingService, 
+        private route: ActivatedRoute,
+        private router: Router) {
     }
 
     ngOnInit(): void {
@@ -37,6 +44,11 @@ export class MenuCategoryComponent1 implements OnInit {
         this.route.params.subscribe((params: Params) => {
             this.LoadMenuCategory(params['menuid']);
         });
+    }
+
+
+    back() {
+        this.router.navigate(['pos-dashboard/table/menu'])
     }
 
     LoadMenuCategory(Id: number): void {

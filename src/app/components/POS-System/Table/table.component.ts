@@ -117,7 +117,7 @@ export class TableComponent implements OnInit {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         console.log('the list of tables are', this.tables)
         this.table = this.tables.filter(x => x.Id == id)[0];
         this.TableForm.setValue(this.table);
@@ -151,8 +151,9 @@ export class TableComponent implements OnInit {
         let tablefrm = this.TableForm;
 
         console.log('the value is', formData.value)
+        console.log('file in add', fileUpload)
 
-        if (tablefrm.valid) {
+        if (tablefrm.valid && fileUpload.fileUpload != null) {
             switch (this.dbops) {
                 case DBOperation.create:
                     this._BillingService.post(Global.BASE_TABLEAPI_ENDPOINT, formData.value).subscribe(

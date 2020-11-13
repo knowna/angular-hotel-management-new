@@ -217,7 +217,8 @@ export class MenuItemComponent implements OnInit {
         this.MenuItemForm.controls['Name'].setValue(this.menuItem.Name);
         this.MenuItemForm.controls['Barcode'].setValue(this.menuItem.Barcode);
         this.MenuItemForm.controls['Tag'].setValue(this.menuItem.Tag);
-
+        this.MenuItemForm.controls['PhoteIdentity'].setValue(this.menuItem.PhoteIdentity);
+        
         this.MenuItemForm.controls['MenuItemPortions'] = this.fb.array([]);
         let control = <FormArray>this.MenuItemForm.controls['MenuItemPortions'];
 
