@@ -165,9 +165,9 @@
                     Upload Image  <app-file-upload #fileUpload  [uploadUrl]="uploadUrl" [dropMessage]="dropMessage"></app-file-upload>
                 </div>
                 
-                <div class="alert alert-danger mt-1" *ngIf="fileUpload.fileUpload == null">
+                <!-- <div class="alert alert-danger mt-1" *ngIf="fileUpload.fileUpload == null">
                     File is required
-                </div>
+                </div> -->
 
                 <div *ngIf="modalTitle != 'Add'" class="col-sm-6">
                     <img [src]="'data:image/png;base64,'+TableForm.value.PhoteIdentity" alt="" height="50" width="50">
