@@ -1,45 +1,74 @@
 <div class="card" *ngIf="orders && ticket">
+    <!-- <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <div class="row m-0" style="background-color: #364a70;color:white">
+                    <div class="col-md-4">
+                        <strong>
+                           Bill No: {{ ticket ? '#' + ticket?.TicketId : '' }}
+                        </strong>
+                    </div>
+                    <div class="col-md-8">
+                        <strong class="right" >
+                            {{ selectedCustomerId ? 'Cust#: ' + customerNew?.CustomerName : 'Table:'+ table.Name }}
+                        </strong>
+                    </div>
+                    <div class="col-md-4">
+                        <strong >
+                            Status: {{ orders.length ? orders[0].OrderStatus : 'Un Settled' }}
+                        </strong>
+                    </div>
+        
+                    <div class="col-md-8">
+                        <strong class="right">
+                            Date: {{ticket.TicketOpeningTime | date :'yyyy-MM-dd hh:mm'}}
+                        </strong>
+                    </div>
+                </div>
+            </tr>
+        </table>
+    </div> -->
     
-        <div class="row m-0" style="background-color: #364a70;color:white">
-            <div class="col-md-4">
-                <strong>
-                   Bill No: {{ ticket ? '#' + ticket?.TicketId : '' }}
-                </strong>
-            </div>
-            <div class="col-md-8">
-                <strong class="right" >
-                    {{ selectedCustomerId ? 'Cust#: ' + customerNew?.CustomerName : 'Table:'+ table.Name }}
-                </strong>
-            </div>
-            <div class="col-md-4">
-                <strong >
-                    Status: {{ orders.length ? orders[0].OrderStatus : 'Un Settled' }}
-                </strong>
-            </div>
-
-            <div class="col-md-8">
-                <strong class="right">
-                    Date: {{ticket.TicketOpeningTime | date :'yyyy-MM-dd hh:mm'}}
-                </strong>
-            </div>
+    <div class="row m-0" style="background-color: #364a70;color:white">
+        <div class="col-5">
+            <strong>
+                Bill No: {{ ticket ? '#' + ticket?.TicketId : '' }}
+            </strong>
         </div>
+        <div class="col-7">
+            <strong class="right" >
+                {{ selectedCustomerId ? 'Cust#: ' + customerNew?.CustomerName : 'Table:'+ table.Name }}
+            </strong>
+        </div>
+        <div class="col-5">
+            <strong >
+                Status: {{ orders.length ? orders[0].OrderStatus : 'Un Settled' }}
+            </strong>
+        </div>
+
+        <div class="col-7">
+            <strong class="right">
+                Date: {{ticket.TicketOpeningTime | date :'yyyy-MM-dd hh:mm'}}
+            </strong>
+        </div>
+    </div>
     <div class="card-sub-header no-radius">
         <div class="row m-0">
-            <div class="col-sm-5 text-left">
+            <div class="col-4 text-left">
                 <strong>Item</strong>
             </div>
-            <div class="col-sm-2 text-center">
+            <div class="col-2 text-center">
                 <strong>Qty</strong>
             </div>
-            <div class="col-sm-2 text-right">
-                <strong>Unit (Rs.)</strong>
+            <div class="col-3 text-right">
+                <strong>Unit(Rs)</strong>
             </div>
-            <div class="col-sm-3 text-right">
-                <strong>Amount (Rs.)</strong>
+            <div class="col-3 text-right">
+                <strong>Amount(Rs)</strong>
             </div>
         </div>
     </div>
-    <div class="card-body orders__container scrollbar" id="style-2">
+    <div class="card-body orders__container scrollbar" id="style-2"> 
         
             <div class="order-item" *ngFor="let order of orders">
                 <div class="row new-orders__label" style="color: darkgrey;">
@@ -51,7 +80,7 @@
                         'submitted': item.Tags.indexOf('Submitted') !== -1,
                         'void': item.IsVoid
                     }" (click)="selectOrderItem.emit(item);changeSelected(order.OrderItems,i)">
-                    <div class="col-md-5 text-left">
+                    <div class="col-4 text-left">
                         <p>
                             <span>
                                 <strong>{{ getProductById(products,item.ItemId)?.Name }}</strong>
@@ -60,28 +89,28 @@
                             </span>
                         </p>
                     </div>
-                    <div class="col-md-2 text-center">
+                    <div class="col-2 text-center">
                         <p>
                             <span>
                                 <strong>{{ item.Qty }}</strong>
                             </span>
                         </p>
                     </div>
-                    <div class="col-md-2 text-right">
+                    <div class="col-3 text-right">
                         <p>
                             <span>
                                 <strong>{{CurrentUnitPrice(item.UnitPrice)}}</strong>
                             </span>
                         </p>
                     </div>
-                    <div class="col-md-3 text-right" style="padding-right:20px;">
+                    <div class="col-3 text-right">
                         <p>
                             <strong>{{ProductPrice(item.UnitPrice, item.Qty)}}</strong>
                         </p>
                     </div>
                 </div>
             </div>
-        
+
     </div>
     <div class="card-sub-header">
         <!-- <div class="row">
@@ -114,43 +143,33 @@
 
     <div class="order-footer">
         <div class="row m-0">
-            <div class="col-md-6 text-left">
-                <strong>Ticket Total: </strong>
-            </div>
-            <div class="col-md-6 text-right">
-                <strong>Rs. {{ calculateSum().toFixed(2) }}</strong>
+            <div class="col-sm-12">
+                <strong class="left">Ticket Total: </strong>
+                <strong class="right">Rs. {{ calculateSum().toFixed(2) }}</strong>
             </div>
         </div>
         <div class="row m-0">
-            <div class="col-md-6 text-left">
-                <strong>Discount: </strong>
-            </div>
-            <div class="col-md-6 text-right">
-                <strong>Rs. {{ calculateDiscount() }}</strong>
+            <div class="col-sm-12">
+                <strong class="left">Discount: </strong>
+                <strong class="right">Rs. {{ calculateDiscount() }}</strong>
             </div>
         </div>
         <div class="row m-0">
-            <div class="col-md-6 text-left">
-                <strong>Service Charge: </strong>
-            </div>
-            <div class="col-md-6 text-right">
-                <strong>Rs. {{ calculateServiceCharge() }}</strong>
+            <div class="col-sm-12">
+                <strong class="left">Service Charge: </strong>
+                <strong class="right">Rs. {{ calculateServiceCharge() }}</strong> 
             </div>
         </div>
         <div class="row m-0">
-            <div class="col-md-6 text-left">
-                <strong>VAT (13%): </strong>
-            </div>
-            <div class="col-md-6 text-right">
-                <strong>Rs. {{ calculateVat() }}</strong>
+            <div class="col-sm-12">
+                <strong class="left">VAT (13%): </strong>
+                <strong class="right">Rs. {{ calculateVat() }}</strong>
             </div>
         </div>
         <div class="row m-0">
-            <div class="col-md-6 text-left">
-                <strong>Grand Total: </strong>
-            </div>
-            <div class="col-md-6 text-right">
-                <strong>Rs. {{ getGrandTotal() }}</strong>
+            <div class="col-sm-12">
+                <strong class="left">Grand Total: </strong>
+                <strong class="right">Rs. {{ getGrandTotal() }}</strong>
             </div>
         </div>
 
@@ -195,11 +214,9 @@
             </div>
         </div> -->
         <div class="row m-0 balance-section">
-            <div class="col-sm-6 text-left">
-                <strong>Balance: </strong>
-            </div>
-            <div class="col-sm-6 text-right">
-                <strong>Rs. {{ getFinalBalance() }}</strong>
+            <div class="col-sm-12">
+                <strong class="left">Balance: </strong>
+                <strong class="right">Rs. {{ getFinalBalance() }}</strong>
             </div>
         </div>
 
