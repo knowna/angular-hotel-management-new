@@ -14,7 +14,7 @@
   }
   
   .tickets-section__body {
-    height: 270px;
+    /* height: 270px; */
     border-bottom: 2px solid gray;
   }
   
@@ -141,4 +141,8 @@
   .scrollbar-payment{
     max-height: 100px;
     overflow: scroll;
+}
+
+.right{
+  float: right;
 }
