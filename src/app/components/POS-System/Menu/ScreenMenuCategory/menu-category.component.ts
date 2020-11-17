@@ -8,6 +8,7 @@ import { IMenu } from '../../../../Model/Menu/Menu';
 import { DBOperation } from '../../../../Shared/enum';
 import { Observable } from 'rxjs/Rx';
 import { Global } from '../../../../Shared/global';
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'my-menu-category-list',
@@ -31,7 +32,8 @@ export class MenuCategoryComponent1 implements OnInit {
         private _menucategoryService: BillingService, 
         private _menuService: BillingService, 
         private route: ActivatedRoute,
-        private router: Router) {
+        private router: Router,
+        private _location: Location) {
     }
 
     ngOnInit(): void {
@@ -48,7 +50,8 @@ export class MenuCategoryComponent1 implements OnInit {
 
 
     back() {
-        this.router.navigate(['pos-dashboard/table/menu'])
+        this._location.back();
+        // this.router.navigate(['pos-dashboard/table/menu'])
     }
 
     LoadMenuCategory(Id: number): void {

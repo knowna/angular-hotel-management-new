@@ -11,6 +11,7 @@ import { DBOperation } from '../../../../Shared/enum';
 import { Observable } from 'rxjs/Rx';
 import { Global } from '../../../../Shared/global';
 import { BillingService } from 'src/app/Service/Billing/billing.service';
+import { Location } from '@angular/common';
 
 @Component({
     templateUrl: './ScreenMenuItem.component.html'
@@ -33,7 +34,8 @@ export class ScreenMenuItemComponent implements OnInit {
 
     constructor(private fb: FormBuilder, private _menuItemService: BillingService, private route: ActivatedRoute,
         private modalService: BsModalService,
-        private router: Router) {
+        private router: Router,
+        private _location: Location) {
     }
 
     ngOnInit(): void {
@@ -52,7 +54,8 @@ export class ScreenMenuItemComponent implements OnInit {
     }
 
     back() {
-        this.router.navigate(['menu-category/' + this.categoryId])
+        this._location.back();
+        // this.router.navigate(['menu-category/' + this.categoryId])
     }
 
     LoadScreenCategoryItems(Id: number): void {
