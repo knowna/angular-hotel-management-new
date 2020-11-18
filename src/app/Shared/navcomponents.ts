@@ -405,52 +405,69 @@ export const navcomponents=[
       permission:'User Management',
       
     }, 
+
     {
       title: 'Manage',
       icon: 'lock-outline',
+      img:'../../../assets/images/manage.png',
       permission:'Manage',
       children: [
         {
           title: 'User',
           icon: 'lock-outline',
+          permission:'Manage:user',
+          img:'../../../assets/images/user.png',
           children: [
-            {
-              title: 'Login',
-              link: 'login',
-            },
+            // {
+            //   title: 'Login',
+            //   link: 'login',
+            //   permission:'Manage:user:login',
+            // },
             {
               title: 'Users',
               link: '/user',
+              permission:'Manage:user:users',
+              img:'../../../assets/images/group.png',
             },
             {
               title: 'Roles',
               link: '/managedashboard/role',
+              permission: 'Manage:user:roles',
+              img:'../../../assets/images/roles.png',
             },
             {
               title: 'Role Module',
               link: '/managedashboard/rolemodule',
+              permission:'Manage:user:role module',
+              img:'../../../assets/images/roleModule.png',
             },
             {
               title: 'User Roles',
               link: '/managedashboard/userRole',
+              permission:'Manage:user:user roles',
+              img:'../../../assets/images/userRole.png',
             },
           ],
         },
         {
           title: 'Management',
           icon: 'home-outline',
+          permission:'Manage',
           children: [
             {
               title: 'Department',
               link: '/managedashboard/department',
+              permission: 'Manage:management:department',
             },
             {
               title: 'Financial Year',
               link: '/managedashboard/financial',
+              permission:'Manage:management : financial year',
             },
             {
               title: 'Company',
               link: '/managedashboard/company',
+              permission: 'Manage:management: company',
             },
           ],
         },      

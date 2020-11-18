@@ -101,6 +101,7 @@ export class PartialMergeComponent implements OnInit {
     this.secondaryItemList =[];
     this.secondaryOrderList = [...this.tempSecondaryOrderList];
     order.ItemList = [];
+    order.Orders = [];
     this.selectedTicket = order;
     this.tempPrimaryOrderList.forEach(tick => (tick.Id != this.selectedTicket.Id) ? (tick.show = false) : (order.show));
 
@@ -111,6 +112,7 @@ export class PartialMergeComponent implements OnInit {
     .subscribe(
         data => {
            this.orders = data;
+           order.Orders = this.orders;
            console.log('the order s ss', this.orders)
            this.orders.forEach(o => {
                o.OrderItems.forEach(item => {      

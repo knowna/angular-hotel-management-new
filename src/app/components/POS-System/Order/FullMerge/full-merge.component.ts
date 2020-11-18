@@ -213,10 +213,13 @@ export class FullMergeComponent implements OnInit {
     
     showDetail(order){
         order.ItemList = [];
+        order.Orders = [];
         this.orderApi.loadOrdersNew(order.Id)
         .subscribe(
             data => {
                this.orders = data;
+               order.Orders = this.orders;
+               console.log('the orders are', order.Orders);
                this.orders.forEach(o => {
                    o.OrderItems.forEach(item => {
                     order.ItemList.push(item)
