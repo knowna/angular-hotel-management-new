@@ -21,7 +21,19 @@ export class LinksFilterPipe implements PipeTransform {
     'Billing:Menu:Category',
     'Billing:Menu:Consumption',
     'Billing:Menu:Menu',
-    'Billing:Menu:Table and Room Design'
+    'Billing:Menu:Table and Room Design',
+    'Manage',
+    'Manage:user',
+    'Manage:user:login',
+    'Manage:user:users',
+    'Manage:user:roles',
+    'Manage:user:role module',
+    'Manage:user:user roles',
+    'Manage:management',
+    'Manage:management:department',
+    'Manage:management : financial year',
+    'Manage:management: company'
+
 
 ];
 
