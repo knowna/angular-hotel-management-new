@@ -62,7 +62,7 @@
                     </i>
                     {{order.Name}}  {{order.TicketId}}
                 </span>
-                
+
                 <div *ngIf="order.show && order.Orders.length > 0">
                     <div *ngFor="let o of order.Orders">
                         <table>
@@ -112,7 +112,7 @@
                     </table>
                 </div> -->
 
-                <div *ngIf="order.show && order.ItemList?.length == 0" class="text-center">
+                <div *ngIf="order.show && order.Orders?.length == 0" class="text-center">
                     No record found!!
                 </div>
                 

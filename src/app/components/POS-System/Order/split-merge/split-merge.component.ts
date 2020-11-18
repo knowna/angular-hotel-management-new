@@ -95,6 +95,7 @@ export class SplitMergeComponent implements OnInit {
 
   showDetail(order){
     order.ItemList = [];
+    order.Orders = [];
     this.selectedTicket = order;
 
     // this.secondaryOrderList.splice(this.secondaryOrderList.indexOf(order),1);
@@ -104,6 +105,7 @@ export class SplitMergeComponent implements OnInit {
     .subscribe(
         data => {
            this.orders = data;
+           order.Orders = this.orders;
            console.log('the order s ss', this.orders)
            this.orders.forEach(o => {
                o.OrderItems.forEach(item => {
