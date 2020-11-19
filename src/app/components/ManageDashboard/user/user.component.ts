@@ -122,6 +122,8 @@ export class UserComponent implements OnInit {
         if (users.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
+                    console.log(formData.value);
+                    
                     this._userService.post(Global.BASE_USERACCOUNT_ENDPOINT, formData.value, ).subscribe(
                         data => {
                             if (data == 1)

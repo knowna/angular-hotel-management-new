@@ -1,61 +1,78 @@
 ﻿
+
+
+ <div class="row m-0 mt-3">
+    <div class="col-md-4">
+        <!-- <h4>Menu Configure</h4> -->
+        <h2 class="header">User Management</h2>
+    </div>
+    <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="Search by Name" [(ngModel)]="name">
+    </div>
+    <!-- <div class="col-md-6">
+    </div> -->
+    <div class="col-md-4">
+        <button class="btn btn-success" (click)="addUser()" style="float: right">
+            <strong>
+                <i class="fa fa-plus"></i>
+                Add
+            </strong>
+        </button>
+    </div>
+</div>
+
 <div class='panel panel-primary'>
     <div class='panel-heading'>
-        <h4>User Management</h4>
+        <h4></h4>
     </div>
-    <div class='panel-body'>
-        <div class='table table-stripped'>
-            <div class="row">
-                <div class="col-md-12">
-                    <img src="../../../../assets/images/UserAdd.png" (click)="addUser()" height="48" width="48" />
-                    <span>Add New User</span>
-                </div>
-                <br />
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="alert alert-info" role="alert" *ngIf="indLoading">
-                        <img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...
-                    </div>
-                    <div *ngIf='user && user.length==0' class="alert alert-info" role="alert">
-                        No record found! click
-                        <button class="btn btn-small btn-primary" (click)="addUser()">Here</button> to add new User.
-                    </div>
-                    <table class='table table-striped table-responsive' *ngIf='user && user.length'>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>UserName</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let users of user; let i = index">
-                                <td>{{users.FullName}}</td>
-                                <td>{{users.UserName}}</td>
-                                <td>
-                                    <span>
-                                        <img src="../../../../assets/images/EditUser.png" (click)="editUser(users.UserId)" height="32" width="32" />
-                                    </span>
-                                    <span>
-                                        <img src="../../../../assets/images/DeleteUser.png" (click)="deleteUser(users.UserId)" height="32" width="32" />
-                                    </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            <span class="sr-only">Error:</span>
-            {{msg}}
+
+
+
+
+    
+
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <table class='table table-bordered'>
+                <thead>
+                    <tr>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">UserName</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            Nona
+                        </td>
+                        <td> Subedi</td>
+                        <td>njfjjf</td>
+                    </tr>
+                    <!-- <tr *ngFor="let users of user; let i = index">
+                        <td>{{users.FullName}}</td>
+                        <td>{{users.UserName}}</td>
+                        <td>
+
+                            <button class="btn btn-primary btn-sm" (click)="editUser(users.UserId)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteUser(users.UserId)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            
+                        </td>
+                    </tr> -->
+                </tbody>
+            </table>
+            <div *ngIf='menus && menus.length==0' class="alert alert-info" role="alert">No record found!</div>
         </div>
     </div>
+
+
+   
 </div>
 <ng-template #template>
     <form class="form-verticle" novalidate (ngSubmit)="onSubmit(userFrm)" [formGroup]="userFrm">
