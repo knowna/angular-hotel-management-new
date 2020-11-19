@@ -62,7 +62,36 @@
                     </i>
                     {{order.Name}}  {{order.TicketId}}
                 </span>
-                <div *ngIf="order.show && order.ItemList.length > 0">
+
+                <div *ngIf="order.show && order.Orders.length > 0">
+                    <div *ngFor="let o of order.Orders">
+                        <table>
+                            <caption style="caption-side:top">
+                                Order No: {{o.OrderNumber}},
+                                {{o.UserId}} -
+                                {{o.OrderOpeningTime}}
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Qty</th>
+                                    <th>Unit Price</th>
+                                    <th>Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of o.OrderItems">
+                                    <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
+                                    <td>{{item.Qty}}</td>
+                                    <td>{{item.UnitPrice}}</td>
+                                    <td>{{item.TotalAmount}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- <div *ngIf="order.show && order.ItemList.length > 0">
                     <table>
                         <thead>
                             <tr>
@@ -81,9 +110,9 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
+                </div> -->
 
-                <div *ngIf="order.show && order.ItemList?.length == 0" class="text-center">
+                <div *ngIf="order.show && order.Orders?.length == 0" class="text-center">
                     No record found!!
                 </div>
                 
