@@ -135,7 +135,7 @@
                         <!-- <div class="help-block" *ngIf="userFrm.get('Email').hasError('required') && formSubmitAttempt">
                             Email is required
                         </div> -->
-                        <div class="text-danger" *ngIf="Email.errors.pattern">
+                        <div class="text-danger" *ngIf="Email.errors?.pattern">
                            Not a valid email
                           </div>
                     </div>
