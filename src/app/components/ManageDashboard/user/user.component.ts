@@ -44,8 +44,8 @@ export class UserComponent implements OnInit {
             LastName: ['', Validators.required],
             UserName: ['', Validators.required],
             RoleName: ['', Validators.required],
-            Password: ['', [Validators.required,Validators.pattern(this.checkPattern.errorPattern)]],
-            Email: ['', [Validators.required,Validators.pattern('[A-Za-z0-9._%-]+@[A-Za-z0-9._%-]+\\.[a-z]{2,3}')]],
+            Password: ['', [Validators.required,Validators.pattern(this.checkPattern.passwordPattern)]],
+            Email: ['', [Validators.required,Validators.pattern(this.checkPattern.emailPatternError)]],
             ConfirmPassword: ['', Validators.required],
             // PhoneNumber: ['', Validators.required],
             // IsActive: ['',],
@@ -68,7 +68,11 @@ export class UserComponent implements OnInit {
     LoadUsers(): void {
         this.indLoading = true;
         this._userService.get(Global.BASE_USERACCOUNT_ENDPOINT)
-            .subscribe(user => { this.user = user; this.indLoading = false; console.log(user) },
+            .subscribe(user => { this.user = user;
+                console.log(this.users);
+                
+                
+                this.indLoading = false; console.log(user) },
             error =>{this.msg = error,
                 this.indLoading=false} );
     }
