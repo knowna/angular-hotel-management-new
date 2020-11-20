@@ -8,6 +8,7 @@ import { Global } from '../../../Shared/global'; import { AccountTransactionType
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { CheckPattern } from 'src/app/models/check-pattern.model';
 
 @Component({
     templateUrl: './user.component.html'
@@ -28,6 +29,10 @@ export class UserComponent implements OnInit {
     editingStatus: boolean;
     public formSubmitAttempt: boolean;
     buttonDisabled: boolean;
+    passwordNotMatch = false;
+
+
+    checkPattern : CheckPattern = new CheckPattern();
  
 
     constructor(private fb: FormBuilder, private _userService: UsersService, private modalService: BsModalService) { }
@@ -35,17 +40,30 @@ export class UserComponent implements OnInit {
     ngOnInit(): void {
         this.userFrm = this.fb.group({
             UserId: [''],
-            FullName: ['', Validators.required],
+            FirstName: ['', Validators.required],
+            LastName: ['', Validators.required],
             UserName: ['', Validators.required],
-            Password: ['', Validators.required],
-            Email: ['', Validators.required],
-            PhoneNumber: ['', Validators.required],
-            IsActive: ['',],
-            ResetPassword: [''],
+            RoleName: ['', Validators.required],
+            Password: ['', [Validators.required,Validators.pattern(this.checkPattern.errorPattern)]],
+            Email: ['', [Validators.required,Validators.pattern('[A-Za-z0-9._%-]+@[A-Za-z0-9._%-]+\\.[a-z]{2,3}')]],
+            ConfirmPassword: ['', Validators.required],
+            // PhoneNumber: ['', Validators.required],
+            // IsActive: ['',],
+            // ResetPassword: [''],
         });
 
         this.LoadUsers();
     }
+
+    get Email() {
+        
+        return this.userFrm.controls.Email;
+      }
+
+      get Password() {
+        
+        return this.userFrm.controls.Password;
+      }
 
     LoadUsers(): void {
         this.indLoading = true;
@@ -108,6 +126,19 @@ export class UserComponent implements OnInit {
         });
     }
 
+    passwordMatch(){
+        this.passwordNotMatch = false;
+        console.log(this.userFrm.controls['Password'].value ,this.userFrm.controls['ConfirmPassword'].value);
+        
+        if(this.userFrm.controls['Password'].value != this.userFrm.controls['ConfirmPassword'].value){
+            this.passwordNotMatch = true;
+        }
+        else{
+            this.passwordNotMatch = false; 
+        }
+        
+    }
+
 
     openModal2(template: TemplateRef<any>) {
         this.modalRef2 = this.modalService.show(template, { class: 'modal-sm' });
@@ -122,6 +153,8 @@ export class UserComponent implements OnInit {
         if (users.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
+                    console.log(formData.value);
+                    
                     this._userService.post(Global.BASE_USERACCOUNT_ENDPOINT, formData.value, ).subscribe(
                         data => {
                             if (data == 1)
