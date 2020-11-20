@@ -134,10 +134,10 @@
                         </div>
                         <div class="help-block" *ngIf="userFrm.get('Email').hasError('required') && formSubmitAttempt">
                             Email is required
-                        </div>
-                        <!-- <div class="text-danger" *ngIf="Email.errors.pattern">
+                        </div> 
+                        <div class="text-danger" *ngIf="Email.errors?.pattern">
                            Not a valid email
-                          </div> -->
+                          </div> 
                     </div>
                 </div>
 
@@ -154,7 +154,7 @@
                             <input type="test" class="form-control" placeholder="role" formControlName="RoleName">
                         </div>
                         <div class="help-block" *ngIf="userFrm.get('RoleName').hasError('required') && formSubmitAttempt">
-                            Password is required
+                            Role name is required
                         </div>
                     </div>
                 </div>
@@ -191,7 +191,7 @@
                             <input type="text" class="form-control" placeholder="UserName" formControlName="UserName">
                         </div>
                         <div class="help-block" *ngIf="userFrm.get('UserName').hasError('required') && formSubmitAttempt">
-                            Name is required
+                            user name is required
                         </div>
                     </div>
                 </div>
@@ -210,9 +210,9 @@
                         <div class="help-block" *ngIf="userFrm.get('Password').hasError('required') && formSubmitAttempt">
                             Password is required
                         </div>
-                        <div class="text-danger"  *ngIf="userFrm.controls.Password.hasError('pattern')">
-                            Not a valid password
-                           </div>
+                        <div class="text-danger" *ngIf="Password.errors?.pattern">
+                            Password must have min length 6 with one digit, one capital letter & one special character
+                           </div> 
                     </div>
                 </div>
 
@@ -252,3 +252,4 @@
         <button type="button" class="btn btn-default" (click)="confirm()">Ok</button>
     </div>
 </ng-template>
+

@@ -17,6 +17,8 @@ import { OrderStoreService } from '../../../Service/store/order.store.service';
 import * as XLSX from 'xlsx'; 
 import * as jsPDF from 'jspdf'
 
+import { NepaliDate, DateFormatter } from 'angular-nepali-datepicker';
+
 
 @Component({
     selector: 'pos-sale-billing',
@@ -67,6 +69,17 @@ export class POSSaleBillingComponent implements OnInit {
   
 
 
+    fromDateNew: any;
+
+    startFormatter: DateFormatter = (sfromDate) => {
+        return `${ sfromDate.year }.${ sfromDate.month }.${ sfromDate.day }`;
+    }
+
+    endFormatter: DateFormatter = (stoDate) => {
+        return `${ stoDate.year }.${ stoDate.month }.${ stoDate.day }`;
+    }
+
+
     constructor(
         private _reservationService: AccountTransactionTypeService,
         private date: DatePipe,
@@ -85,8 +98,13 @@ export class POSSaleBillingComponent implements OnInit {
     /**
    *  Get the list of filtered journals by the form and to date
    */
-    filterJournalByDate(sfromdate: string, stodate: string) {
+    filterJournalByDate(sfromdate: any, stodate: any) {
+        sfromdate = sfromdate.year + '.' + sfromdate.month + '.' + sfromdate.day;
+        stodate = stodate.year + '.' + stodate.month + '.' + stodate.day;
         
+        // console.log('the start date is', sfromdate);
+        // console.log('the end date is', stodate);
+
         if (sfromdate == "undefined" || sfromdate == null) {
             alert("Enter Start Date");
             return false;
@@ -95,18 +113,18 @@ export class POSSaleBillingComponent implements OnInit {
             alert("Enter End Date");
             return false;
         }
-        if (this.nepaliDateValidator(stodate) === false) {
-            alert("Enter Valid End Date");
-            return false;
-        }
-        if (this.nepaliDateValidator(sfromdate) === false) {
-            alert("Enter Valid Start Date");
-            return false;
-        }
+        // if (this.nepaliDateValidator(stodate) === false) {
+        //     alert("Enter Valid End Date");
+        //     return false;
+        // }
+        // if (this.nepaliDateValidator(sfromdate) === false) {
+        //     alert("Enter Valid Start Date");
+        //     return false;
+        // }
         this.fromDate = sfromdate;
         this.toDate = stodate;
-        this.sfromDate = sfromdate;
-        this.stoDate = stodate;
+        // this.sfromDate = sfromdate;
+        // this.stoDate = stodate;
         this.indLoading = true;
         this._reservationService.get(Global.BASE_POSBILLING_API_ENDPOINT + '?fromDate=' + this.fromDate + '&toDate=' + this.toDate + '&TransactionTypeId=' + 3)
             .subscribe(data => {
