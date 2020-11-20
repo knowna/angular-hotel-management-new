@@ -177,6 +177,9 @@ import { SplitMergeComponent } from './components/POS-System/Order/split-merge/s
 import { ScreenMenuCategoryFilter } from './filters/screen-menu-category.filter';
 import { ScreenMenuCategoryItemFilter } from './filters/screen-menu-category-item.filter';
 // import { TicketService } from './Service/Billing/ticket.service';\
+
+import { NpDatepickerModule } from 'angular-nepali-datepicker';
+
 @NgModule({
   imports: [
     SelectDropDownModule,
@@ -220,6 +223,7 @@ import { ScreenMenuCategoryItemFilter } from './filters/screen-menu-category-ite
       autoDismiss: true,
       closeButton: true,
     }),
+    NpDatepickerModule,
   ],
   declarations: [
 
