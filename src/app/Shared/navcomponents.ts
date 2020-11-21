@@ -183,151 +183,155 @@ export const navcomponents=[
       ],    
     },
     {
-      title: 'Account / Finance',
+      title: 'Accounts',
       permission:'Account / Finance',
       group: true,
-    },
-    {
-      title: 'Transaction',
-      permission:'Transaction',
-      icon: 'edit-2-outline',
       children: [
+       ,
         {
-          title: 'Bank/Cash',
-          link: 'Account/contra',
-        },
-        {
-          title: 'Sales',
-          link: 'Account/sales',
-        },
-        {
-          title: 'Receipt',
-          link: 'Account/receipt',
-        },
-        {
-          title: 'Purchase',
-          link: 'Account/purchase',
-        },
-        {
-          title: 'Payment',
-          link: 'Account/payment',
-        },
-        {
-          title: 'Journal',
-          link: 'Account/journalVoucher',
-        },
-        {
-          title: 'Debit Note',
-          link: 'Account/debit-note',
-        },
-        {
-          title: 'Credit Note',
-          link: 'Account/credit-note',
-        },      
-      ],
-    },
-    {
-      title: 'Report',
-      permission:'Report',
-      icon: 'keypad-outline',
-      link: '/pages/ui-features',
-      children: [
-        {
-          title: 'Account',
-          icon: 'grid-outline',
-          children:[
+          title: 'Transaction',
+          permission:'Transaction',
+          icon: 'edit-2-outline',
+          children: [
             {
-              title: 'Day Book',
+              title: 'Bank/Cash',
+              link: 'Account/contra',
+            },
+            {
+              title: 'Sales',
+              link: 'Account/sales',
+            },
+            {
+              title: 'Receipt',
+              link: 'Account/receipt',
+            },
+            {
+              title: 'Purchase',
+              link: 'Account/purchase',
+            },
+            {
+              title: 'Payment',
+              link: 'Account/payment',
+            },
+            {
+              title: 'Journal',
               link: 'Account/journalVoucher',
             },
+            {
+              title: 'Debit Note',
+              link: 'Account/debit-note',
+            },
+            {
+              title: 'Credit Note',
+              link: 'Account/credit-note',
+            },      
+          ],
+        },
+        {
+          title: 'Report',
+          permission:'Report',
+          icon: 'keypad-outline',
+          link: '/pages/ui-features',
+          children: [
+            {
+              title: 'Account',
+              icon: 'grid-outline',
+              children:[
+                {
+                  title: 'Day Book',
+                  link: 'Account/journalVoucher',
+                },
+                {
+                  title: 'Ledger',
+                  link: 'Account/accountLedgerView',
+                },
+                {
+                  title: 'Trial Balance',
+                  link: 'Account/TrialBalance',
+                },
+                {
+                  title: 'Profit & Loss',
+                  link: 'Account/ProfitLoss',
+                },
+                {
+                  title: 'Balance Sheet',
+                  link: 'Account/BalanceSheet',
+                },
+                {
+                  title: 'Cash Flow',
+                  link: 'Account/journalVoucher',
+                },
+                {
+                  title: 'Fund Flow',
+                  link: 'Account/journalVoucher',
+                },
+              ],
+            },
+            {
+              title: 'Sale / Purchase',
+              icon: 'grid-outline',
+              children:[
+                {
+                  title: 'Sales Book',
+                  link: 'Account/SaleBook',
+                },
+                {
+                  title: 'Item Wise',
+                  link: 'Account/SaleItemWise',
+                },
+                {
+                  title: 'Date Wise',
+                  link: 'Account/SaleDateWise',
+                },
+                {
+                  title: 'Customer',
+                  link: 'Account/SaleCustomerWise',
+                },
+              ],
+            },
+            {
+              title: 'Miscellaneous',
+              icon: 'grid-outline',
+              children:[
+                {
+                  title: 'Purchase Book',
+                  link: 'Account/PurchaseBook',
+                },
+                {
+                  title: 'Materialized View',
+                  link: 'Account/MaterializedView',
+                },
+                {
+                  title: 'Bill Return View',
+                  link: 'Account/BillReturnView',
+                },
+              ],
+            },      
+          
+          ],
+        },
+        {
+          title: 'Master',
+          permission:'Account:Master',
+          icon: 'layout-outline',
+          children: [
             {
               title: 'Ledger',
-              link: 'Account/accountLedgerView',
+              permission:'Account:Master:legder',
+              link: 'Account/account',
             },
             {
-              title: 'Trial Balance',
-              link: 'Account/TrialBalance',
+              title: 'Group Ledger',
+              permission:'Account:Master:group',
+              link: 'Account/accountType',
             },
             {
-              title: 'Profit & Loss',
-              link: 'Account/ProfitLoss',
-            },
-            {
-              title: 'Balance Sheet',
-              link: 'Account/BalanceSheet',
-            },
-            {
-              title: 'Cash Flow',
-              link: 'Account/journalVoucher',
-            },
-            {
-              title: 'Fund Flow',
-              link: 'Account/journalVoucher',
+              title: 'Transaction Type',
+              link: 'Account/accounttransType',
+              permission:'Account:Master:legder:transactionType',
             },
           ],
-        },
-        {
-          title: 'Sale / Purchase',
-          icon: 'grid-outline',
-          children:[
-            {
-              title: 'Sales Book',
-              link: 'Account/SaleBook',
-            },
-            {
-              title: 'Item Wise',
-              link: 'Account/SaleItemWise',
-            },
-            {
-              title: 'Date Wise',
-              link: 'Account/SaleDateWise',
-            },
-            {
-              title: 'Customer',
-              link: 'Account/SaleCustomerWise',
-            },
-          ],
-        },
-        {
-          title: 'Miscellaneous',
-          icon: 'grid-outline',
-          children:[
-            {
-              title: 'Purchase Book',
-              link: 'Account/PurchaseBook',
-            },
-            {
-              title: 'Materialized View',
-              link: 'Account/MaterializedView',
-            },
-            {
-              title: 'Bill Return View',
-              link: 'Account/BillReturnView',
-            },
-          ],
-        },      
-       
-      ],
-    },
-    {
-      title: 'Master',
-      permission:'Master',
-      icon: 'layout-outline',
-      children: [
-        {
-          title: 'Ledger',
-          link: 'Account/account',
-        },
-        {
-          title: 'Group Ledger',
-          link: 'Account/accountType',
-        },
-        {
-          title: 'Transaction Type',
-          link: 'Account/accounttransType',
-        },
-      ],
-    },  
+        },  ] },
     {
       title: 'Inventory',
       permission:'Inventory',

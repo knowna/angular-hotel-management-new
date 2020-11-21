@@ -32,7 +32,14 @@ export class LinksFilterPipe implements PipeTransform {
     'Manage:management',
     'Manage:management:department',
     'Manage:management : financial year',
-    'Manage:management: company'
+    'Manage:management: company',
+    'Account / Finance',
+    'Account:Master',
+    'Account:Master:legder',
+    'Account:Master:group',
+    
+    'Account:Master:legder:transactionType'
+
 
 
 ];
