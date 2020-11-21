@@ -84,6 +84,7 @@ import { ScreenMenuItemComponent } from './components/POS-System/Menu/MenuItem/S
 import { FullMergeComponent } from './components/POS-System/Order/FullMerge/full-merge.component';
 import { PartialMergeComponent } from './components/POS-System/Order/partial-merge/partial-merge.component';
 import { SplitMergeComponent } from './components/POS-System/Order/split-merge/split-merge.component';
+import { MasterLedgerComponent } from './components/master/master-ledger/master-ledger.component';
 
 
 const routes: Routes = [
@@ -298,12 +299,12 @@ const routes: Routes = [
   //   component: WareHouseTypeComponent,
   //   canActivate: [AuthGuard]
   // },
-  // {
-  //   path: 'Account',
-  //   component: InventoryDashboardComponent,
-  //   canActivate: [AuthGuard],
+  {
+    path: 'Account/ledger',
+    component: MasterLedgerComponent,
+    // canActivate: [AuthGuard],
 
-  // },
+  },
 
   // {
   //   path: 'Account/contra',

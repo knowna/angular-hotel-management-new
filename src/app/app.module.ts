@@ -179,6 +179,8 @@ import { ScreenMenuCategoryItemFilter } from './filters/screen-menu-category-ite
 // import { TicketService } from './Service/Billing/ticket.service';\
 
 import { NpDatepickerModule } from 'angular-nepali-datepicker';
+import { MasterLedgerComponent } from './components/master/master-ledger/master-ledger.component';
+import { MasterLedgerService } from './components/master/master-ledger/services/MasterLedger.service';
 
 @NgModule({
   imports: [
@@ -233,6 +235,7 @@ import { NpDatepickerModule } from 'angular-nepali-datepicker';
     HeaderComponent,
     NavbarComponent,
     TestComponent,
+    MasterLedgerComponent,
     PagenotfoundComponent,
     // CheckInComponent,
     FileUploadComponent,
@@ -360,6 +363,7 @@ import { NpDatepickerModule } from 'angular-nepali-datepicker';
     FacilityService,
     PaymentTypeService,
     ReservationTypeService,
+    MasterLedgerService,
     AccountTransactionTypeService,
     RoomOccupiedService,
     RoomTypeService,

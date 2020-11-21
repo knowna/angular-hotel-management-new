@@ -318,7 +318,7 @@ export const navcomponents=[
             {
               title: 'Ledger',
               permission:'Account:Master:legder',
-              link: 'Account/account',
+              link: 'Account/ledger',
             },
             {
               title: 'Group Ledger',
