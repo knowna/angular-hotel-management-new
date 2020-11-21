@@ -320,7 +320,7 @@ export const navcomponents=[
             {
               title: 'Ledger',
               permission:'Account:Master:legder',
-              link: 'Account/account',
+              link: 'Account/ledger',
               img:'../../../assets/images/ledger.png',
             },
             {

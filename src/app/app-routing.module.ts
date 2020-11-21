@@ -84,7 +84,7 @@ import { ScreenMenuItemComponent } from './components/POS-System/Menu/MenuItem/S
 import { FullMergeComponent } from './components/POS-System/Order/FullMerge/full-merge.component';
 import { PartialMergeComponent } from './components/POS-System/Order/partial-merge/partial-merge.component';
 import { SplitMergeComponent } from './components/POS-System/Order/split-merge/split-merge.component';
-import { MasterLedgerComponent } from './components/master/master-ledger/master-ledger.component';
+import { MasterLedgerComponent } from './components/account/master-ledger/master-ledger.component';
 
 
 const routes: Routes = [

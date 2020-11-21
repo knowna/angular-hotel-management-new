@@ -179,8 +179,8 @@ import { ScreenMenuCategoryItemFilter } from './filters/screen-menu-category-ite
 // import { TicketService } from './Service/Billing/ticket.service';\
 
 import { NpDatepickerModule } from 'angular-nepali-datepicker';
-import { MasterLedgerComponent } from './components/master/master-ledger/master-ledger.component';
-import { MasterLedgerService } from './components/master/master-ledger/services/MasterLedger.service';
+import { MasterLedgerComponent } from './components/account/master-ledger/master-ledger.component';
+import { MasterLedgerService } from './components/account/master-ledger/services/MasterLedger.service';
 
 @NgModule({
   imports: [
