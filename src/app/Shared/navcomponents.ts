@@ -315,6 +315,7 @@ export const navcomponents=[
           title: 'Master',
           permission:'Account:Master',
           icon: 'layout-outline',
+          img:'../../../assets/images/master.png',
           children: [
             {
               title: 'Ledger',
