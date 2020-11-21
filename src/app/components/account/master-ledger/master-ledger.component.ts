@@ -91,9 +91,15 @@ export class MasterLedgerComponent implements OnInit {
 
     LoadMasters(): void {
         this.indLoading = true;
-    //     this._masterLedgerService.get(Global.BASE_MASTERLEDGER_ENDPOINT)
-    //         .subscribe(masterLedgers => { this.masterLedgers = masterLedgers; this.indLoading = false; },
-    //         error => this.msg = <any>error);
+        this._masterLedgerService.get(Global.BASE_MASTERLEDGER_ENDPOINT)
+            .subscribe(masterLedgers => { this.masterLedgers = masterLedgers;
+                
+                this.indLoading = false; },
+            error => 
+           
+            this.msg = <any>error
+            
+            );
     }
 
     addMasterLedger() {
@@ -151,35 +157,43 @@ export class MasterLedgerComponent implements OnInit {
     }
 
     onSubmit() {
+       
+        
         //this.isChecked = Number(data['status']) === 0 ? false : true;
         this.msg = "";
         let master = this.masterLedgerFrm;
         this.formSubmitAttempt = true;
-        if (master.valid) {
+                    
+        // if (master.valid) {
+                    
             switch (this.dbops) {
+                    
                 case DBOperation.create:
-                    // this._masterLedgerService.post(Global.BASE_MASTERLEDGER_ENDPOINT, master.value).subscribe(
-                    //     data => {
-
-                    //         if (data == 1) //Success
-                    //         {
-                    //             //alert("Data successfully added.");
-                    //             this.openModal2(this.TemplateRef2); 
-                    //             this.LoadMasters();
-                    //         }
-                    //         else {
-                    //             alert("There is some issue in saving records, please contact to system administrator!");
-                    //         }
-                    //     },
-                    //     error => {
-                    //         this.msg = error;
-                    //     }
-                    // );
+                    
+                    this._masterLedgerService.post(Global.BASE_MASTERLEDGER_ENDPOINT, this.masterLedgerFrm.value).subscribe(
+                        data => {
+                            console.log('aayo hai',data);
+                            
+                            if (data == 1) //Success
+                            {
+                                //alert("Data successfully added.");
+                                this.openModal2(this.TemplateRef2); 
+                                this.LoadMasters();
+                            }
+                            else {
+                                alert("There is some issue in saving records, please contact to system administrator!");
+                            }
+                        },
+                        error => {
+                            this.msg = error;
+                        }
+                    );
             }
 
-        } else {
-            this.validateAllFields(master);
-        }
+        // }
+        //  else {
+        //     this.validateAllFields(this.masterLedgerFrm);
+        // }
     }
 
     confirm(): void {

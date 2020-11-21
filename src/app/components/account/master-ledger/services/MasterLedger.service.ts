@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import { HttpClient } from '@angular/common/http';
+import { typeWithParameters } from '@angular/compiler/src/render3/util';
 
 @Injectable()
 export class MasterLedgerService {
@@ -11,21 +12,26 @@ export class MasterLedgerService {
         this._http = _http;
     }
 
-    // get(url: string): Observable<any> {
-    // //     return this._http.get(url)
-    // //         .map((response: Response) => <any>response.json())
-    // //         .do(data => console.log("All: " + JSON.stringify(data)))
-    // //         .catch(this.handleError);
-    //  }
+    get(url: string): Observable<any> {
 
-    // post(url: string, model: any): Observable<any> {
-    //     let body = JSON.stringify(model);
-    //     let headers = new Headers({ 'Content-Type': 'application/json' });
-    //     let options = new RequestOptions({ headers: headers });
-    //     return this._http.post(url, body, options)
+        return this._http.get(url);
+    //     return this._http.get(url)
     //         .map((response: Response) => <any>response.json())
+    //         .do(data => console.log("All: " + JSON.stringify(data)))
     //         .catch(this.handleError);
-    // }
+     }
+
+    post(url: string, model: any): Observable<any> {
+        console.log(model,url);
+        
+        return this._http.post(url,model);
+        // let body = JSON.stringify(model);
+        // let headers = new Headers({ 'Content-Type': 'application/json' });
+        // let options = new RequestOptions({ headers: headers });
+        // return this._http.post(url, body, options)
+        //     .map((response: Response) => <any>response.json())
+        //     .catch(this.handleError);
+    }
 
     // put(url: string, id: number, model: any): Observable<any> {
     //     let body = JSON.stringify(model);
