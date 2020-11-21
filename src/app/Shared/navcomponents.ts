@@ -186,6 +186,7 @@ export const navcomponents=[
       title: 'Accounts',
       permission:'Account / Finance',
       group: true,
+      img:'../../../assets/images/accounts.png',
       children: [
        ,
         {
@@ -319,16 +320,19 @@ export const navcomponents=[
               title: 'Ledger',
               permission:'Account:Master:legder',
               link: 'Account/account',
+              img:'../../../assets/images/ledger.png',
             },
             {
               title: 'Group Ledger',
               permission:'Account:Master:group',
               link: 'Account/accountType',
+              img:'../../../assets/images/group-ledger.png',
             },
             {
               title: 'Transaction Type',
               link: 'Account/accounttransType',
               permission:'Account:Master:legder:transactionType',
+              img:'../../../assets/images/transaction.png',
             },
           ],
         },  ] },
@@ -457,21 +461,25 @@ export const navcomponents=[
           title: 'Management',
           icon: 'home-outline',
           permission:'Manage',
+          img:'../../../assets/images/management.png',
           children: [
             {
               title: 'Department',
               link: '/managedashboard/department',
               permission: 'Manage:management:department',
+              img:'../../../assets/images/department.png',
             },
             {
               title: 'Financial Year',
               link: '/managedashboard/financial',
               permission:'Manage:management : financial year',
+              img:'../../../assets/images/financial-year.png',
             },
             {
               title: 'Company',
               link: '/managedashboard/company',
               permission: 'Manage:management: company',
+              img:'../../../assets/images/company.png',
             },
           ],
         },      
