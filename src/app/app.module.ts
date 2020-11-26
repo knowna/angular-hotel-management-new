@@ -98,7 +98,6 @@ import { SelectDropDownModule } from "ngx-select-dropdown";
 // import { PurchaseDetailsComponent } from './components/Accounts/purchase/purchaseDetail/purchaseDetail.component';
 // import { SalesBillingDetailComponent } from './components/Accounts/sales-billing/sales-billing-detail/sales-billing-details.component';
 // import { JournalVoucherDetailComponent } from './components/Accounts/journal/journalvoucher-details/journalvoucher-details.component';
-// import { AccountTypeComponent } from './components/Accounts/account-type/account-type.component';
 // import { AccountTransactionTypeComponent } from './components/Accounts/account-transaction-type/account-transaction-type.component';
 // import { AccountComponent } from './components/Accounts/account/account.component';
 // import { BalanceSheetComponent } from './components/Report/balance-sheet/balance-sheet.component';
@@ -179,6 +178,10 @@ import { ScreenMenuCategoryItemFilter } from './filters/screen-menu-category-ite
 // import { TicketService } from './Service/Billing/ticket.service';\
 
 import { NpDatepickerModule } from 'angular-nepali-datepicker';
+import { MasterLedgerComponent } from './components/account/master-ledger/master-ledger.component';
+import { MasterLedgerService } from './components/account/master-ledger/services/MasterLedger.service';
+import { AccountTypeComponent } from './components/account/account-type/account-type.component';
+import { AccountTypeService } from './components/account/master-ledger/services/account-type.service';
 
 @NgModule({
   imports: [
@@ -233,6 +236,7 @@ import { NpDatepickerModule } from 'angular-nepali-datepicker';
     HeaderComponent,
     NavbarComponent,
     TestComponent,
+    MasterLedgerComponent,
     PagenotfoundComponent,
     // CheckInComponent,
     FileUploadComponent,
@@ -288,7 +292,7 @@ import { NpDatepickerModule } from 'angular-nepali-datepicker';
     // AccountDashboardComponent,
     // PurchaseDetailsComponent,
     // SalesBillingDetailComponent,
-    // AccountTypeComponent,
+    AccountTypeComponent,
     // AccountTransactionTypeComponent,
     // AccountComponent,
     // BalanceSheetComponent,
@@ -360,6 +364,7 @@ import { NpDatepickerModule } from 'angular-nepali-datepicker';
     FacilityService,
     PaymentTypeService,
     ReservationTypeService,
+    MasterLedgerService,
     AccountTransactionTypeService,
     RoomOccupiedService,
     RoomTypeService,
@@ -392,6 +397,7 @@ import { NpDatepickerModule } from 'angular-nepali-datepicker';
     //pos
     TicketStoreService,
     TicketService,
+    AccountTypeService
   ],
 
   bootstrap: [AppComponent]
