@@ -85,6 +85,7 @@ import { FullMergeComponent } from './components/POS-System/Order/FullMerge/full
 import { PartialMergeComponent } from './components/POS-System/Order/partial-merge/partial-merge.component';
 import { SplitMergeComponent } from './components/POS-System/Order/split-merge/split-merge.component';
 import { MasterLedgerComponent } from './components/account/master-ledger/master-ledger.component';
+import { AccountTypeComponent } from './components/account/account-type/account-type.component';
 
 
 const routes: Routes = [
@@ -361,11 +362,11 @@ const routes: Routes = [
   //   component: AccountComponent,
   //   canActivate: [AuthGuard]
   // },
-  // {
-  //   path: 'Account/accountType',
-  //   component: AccountTypeComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'Account/accountType',
+    component: AccountTypeComponent,
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: 'Account/accountLedgerView',
   //   component: AccountLedgerViewComponent,

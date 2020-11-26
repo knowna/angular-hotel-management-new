@@ -22,20 +22,20 @@
 
 <div class="row m-0 mt-2">
     <div class="col-sm-12 table-responsive">
-        <!-- <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div> -->
-        <table class='table table-bordered'>
-        <!-- <table class='table table-bordered' *ngIf='masterLedgers && masterLedgers.length'> -->
+        <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+        <!-- <table class='table table-bordered'> -->
+        <table class='table table-bordered' *ngIf='masterLedgers && masterLedgers.length'>
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>UnderGroup Master</th>
+                    <!-- <th>UnderGroup Master</th> -->
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- <tr *ngFor="let masterLedger of masterLedgers">
+                <tr *ngFor="let masterLedger of masterLedgers">
                     <td>{{masterLedger.Name}}</td>
-                    <td>{{masterLedger.UnderGroupMaster}}</td>
+                    <!-- <td>{{masterLedger.UnderGroupMaster}}</td> -->
 
                     <td>
 
@@ -47,8 +47,9 @@
                         </button>
                         
                     </td>
-                </tr> -->
-                <tr>
+                </tr>
+
+                <!-- <tr>
                     <td>abc</td>
                     <td>xyz</td>
 
@@ -62,7 +63,7 @@
                         </button>
                         
                     </td>
-                </tr>
+                </tr> -->
             </tbody>
         </table>
     </div>
