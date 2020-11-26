@@ -1,74 +1,76 @@
-﻿<div class="row m-0 mt-3">
-    <div class="col-md-4">
-        <!-- <h4>Menu Configure</h4> -->
-        <h2 class="header">Ledger</h2>
-    </div>
-    <div class="col-md-4">
-        <!-- <input type="text" class="form-control" placeholder="Search by Name" [(ngModel)]="name"> -->
-    </div>
-    <!-- <div class="col-md-6">
-    </div> -->
-    <div class="col-md-4">
-        <button class="btn btn-success" (click)="addMasterLedger()" style="float: right">
-            <strong>
-                <i class="fa fa-plus"></i>
-                Add
-            </strong>
-        </button>
-    </div>
-</div>    
+﻿<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <!-- <h4>Menu Configure</h4> -->
+            <h2 class="header">Ledger</h2>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="Search by Name">
+        </div>
+        <div class="col-md-2">
+            <button *ngIf='masterLedgers && masterLedgers.length' class="btn btn-primary pull-left" (click)="exportTableToExcel('ledgersTable')"> Export</button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-success" (click)="addMasterLedger()" style="float: right">
+                <strong>
+                    <i class="fa fa-plus"></i>
+                    Add
+                </strong>
+            </button>
+        </div>
+    </div>    
 
 
 
-<div class="row m-0 mt-2">
-    <div class="col-sm-12 table-responsive">
-        <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
-        <!-- <table class='table table-bordered'> -->
-        <table class='table table-bordered' *ngIf='masterLedgers && masterLedgers.length'>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <!-- <th>UnderGroup Master</th> -->
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let masterLedger of masterLedgers">
-                    <td>{{masterLedger.Name}}</td>
-                    <!-- <td>{{masterLedger.UnderGroupMaster}}</td> -->
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <!-- <table class='table table-bordered'> -->
+            <table id="ledgersTable" class='table table-bordered' *ngIf='masterLedgers && masterLedgers.length'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <!-- <th>UnderGroup Master</th> -->
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let masterLedger of masterLedgers">
+                        <td>{{masterLedger.Name}}</td>
+                        <!-- <td>{{masterLedger.UnderGroupMaster}}</td> -->
 
-                    <td>
+                        <td>
 
-                        <button class="btn btn-primary btn-sm" (click)="editMasterLedger(masterLedger.Id)">
-                            <i class="fa fa-edit"></i>
-                        </button>
-                        <button class="btn btn-danger btn-sm ml-2" (click)="deleteMasterLedger(masterLedger.Id)">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                        
-                    </td>
-                </tr>
+                            <button class="btn btn-primary btn-sm" (click)="editMasterLedger(masterLedger.Id)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteMasterLedger(masterLedger.Id)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            
+                        </td>
+                    </tr>
 
-                <!-- <tr>
-                    <td>abc</td>
-                    <td>xyz</td>
+                    <!-- <tr>
+                        <td>abc</td>
+                        <td>xyz</td>
 
-                    <td>
+                        <td>
 
-                        <button class="btn btn-primary btn-sm" (click)="editMasterLedger(masterLedger.Id)">
-                            <i class="fa fa-edit"></i>
-                        </button>
-                        <button class="btn btn-danger btn-sm ml-2" (click)="deleteMasterLedger(masterLedger.Id)">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                        
-                    </td>
-                </tr> -->
-            </tbody>
-        </table>
+                            <button class="btn btn-primary btn-sm" (click)="editMasterLedger(masterLedger.Id)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteMasterLedger(masterLedger.Id)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            
+                        </td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-
 
 
 <!-- <div class="panel panel-primary">
