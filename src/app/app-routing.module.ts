@@ -86,6 +86,7 @@ import { PartialMergeComponent } from './components/POS-System/Order/partial-mer
 import { SplitMergeComponent } from './components/POS-System/Order/split-merge/split-merge.component';
 import { MasterLedgerComponent } from './components/account/master-ledger/master-ledger.component';
 import { AccountTypeComponent } from './components/account/account-type/account-type.component';
+import { AccountTransactionTypeComponent } from './components/account/account-transaction-type/account-transaction-type.component';
 
 
 const routes: Routes = [
@@ -352,11 +353,11 @@ const routes: Routes = [
   // //   component: CreditNoteComponent,
   // //   canActivate: [AuthGuard]
   // // },
-  // {
-  //   path: 'Account/accounttransType',
-  //   component: AccountTransactionTypeComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'Account/accounttransType',
+    component: AccountTransactionTypeComponent,
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: 'Account/account',
   //   component: AccountComponent,

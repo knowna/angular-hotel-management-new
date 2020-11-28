@@ -51,7 +51,7 @@ export class AccountTransactionTypeService {
             catchError(this.handleError));
     }
 
-    getAccountTypes() {
+    getAccountTypes():any {
         return this._http.get(Global.BASE_ACCOUNTTYPE_ENDPOINT).pipe(
             catchError(this.handleError))
     }

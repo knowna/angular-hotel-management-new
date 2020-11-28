@@ -182,6 +182,7 @@ import { MasterLedgerComponent } from './components/account/master-ledger/master
 import { MasterLedgerService } from './components/account/master-ledger/services/MasterLedger.service';
 import { AccountTypeComponent } from './components/account/account-type/account-type.component';
 import { AccountTypeService } from './components/account/master-ledger/services/account-type.service';
+import { AccountTransactionTypeComponent } from './components/account/account-transaction-type/account-transaction-type.component';
 
 @NgModule({
   imports: [
@@ -293,7 +294,7 @@ import { AccountTypeService } from './components/account/master-ledger/services/
     // PurchaseDetailsComponent,
     // SalesBillingDetailComponent,
     AccountTypeComponent,
-    // AccountTransactionTypeComponent,
+    AccountTransactionTypeComponent,
     // AccountComponent,
     // BalanceSheetComponent,
     // AccountBalanceSheetComponent,
