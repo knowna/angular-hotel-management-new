@@ -126,7 +126,7 @@
 <ng-template #template>
     <form class="form-horizontal" novalidate (ngSubmit)="onSubmit(masterLedgerFrm)" [formGroup]="masterLedgerFrm">
         <div class="modal-header" style="background-color: #364a70;">
-            <h4 class="modal-title pull-left">PurchaseOrder</h4>
+            <h4 class="modal-title pull-left">Add Ledger</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -551,7 +551,7 @@
             <!-- <button class="btn btn-success" [disabled]="buttonDisabled" (click)="reset()">Save</button>
             <button type="submit" class="btn btn-success pull-left">Save </button> -->
             <div>
-                <button class="btn btn-danger pull-right" [disabled]="buttonDisabled" (click)="reset()">Cancel</button>
+                <button class="btn btn-danger pull-right ml-2" [disabled]="buttonDisabled" (click)="reset()">Cancel</button>
                 <button type="submit" class="btn btn-success pull-left">Save </button>
             </div>
         </div>

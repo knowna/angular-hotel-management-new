@@ -108,7 +108,7 @@ export class AccountTypeComponent implements OnInit {
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
         this.modalTitle = "Add Group";
-        this.modalBtnTitle = "Save & Submit";
+        this.modalBtnTitle = "Save";
         this.accTypeFrm.reset();
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
@@ -122,7 +122,7 @@ export class AccountTypeComponent implements OnInit {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Group";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.accountType = this.accountTypes.filter(x => x.Id == Id)[0];
         this.accTypeFrm.setValue(this.accountType);
         this.modalRef = this.modalService.show(this.TemplateRef, {

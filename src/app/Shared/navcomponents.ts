@@ -188,44 +188,77 @@ export const navcomponents=[
       group: true,
       img:'../../../assets/images/accounts.png',
       children: [
-       ,
+        {
+          title: 'Master',
+          permission:'Account:Master',
+          icon: 'layout-outline',
+          img:'../../../assets/images/master.png',
+          children: [
+            {
+              title: 'Ledger',
+              permission:'Account:Master:legder',
+              link: 'Account/ledger',
+              img:'../../../assets/images/ledger.png',
+            },
+            {
+              title: 'Group Ledger',
+              permission:'Account:Master:group',
+              link: 'Account/accountType',
+              img:'../../../assets/images/group-ledger.png',
+            },
+            {
+              title: 'Transaction Type',
+              link: 'Account/accounttransType',
+              permission:'Account:Master:legder:transactionType',
+              img:'../../../assets/images/transaction.png',
+            },
+          ],
+        }, 
         {
           title: 'Transaction',
-          permission:'Transaction',
+          permission:'Account:Transaction',
           icon: 'edit-2-outline',
           children: [
             {
-              title: 'Bank/Cash',
-              link: 'Account/contra',
+              title: 'Journal',
+              permission:'Account:Transaction:Journal',
+              link: 'Account/journalVoucher',
+            },
+            {
+              title: 'Purchase',
+              permission:'Account:Transaction:Purchase',
+              link: 'Account/purchase',
             },
             {
               title: 'Sales',
+              permission:'Account:Transaction:Sales',
               link: 'Account/sales',
             },
             {
               title: 'Receipt',
+              permission:'Account:Transaction:Receipt',
               link: 'Account/receipt',
             },
             {
-              title: 'Purchase',
-              link: 'Account/purchase',
-            },
-            {
               title: 'Payment',
+              permission:'Account:Transaction:Payment',
               link: 'Account/payment',
             },
             {
-              title: 'Journal',
-              link: 'Account/journalVoucher',
-            },
-            {
-              title: 'Debit Note',
-              link: 'Account/debit-note',
+              title: 'Bank/Cash',
+              permission:'Account:Transaction:Bank',
+              link: 'Account/contra',
             },
             {
               title: 'Credit Note',
+              permission:'Account:Transaction:Credit',
               link: 'Account/credit-note',
-            },      
+            },  
+            {
+              title: 'Debit Note',
+              permission:'Account:Transaction:Debit',
+              link: 'Account/debit-note',
+            },
           ],
         },
         {
@@ -311,32 +344,8 @@ export const navcomponents=[
           
           ],
         },
-        {
-          title: 'Master',
-          permission:'Account:Master',
-          icon: 'layout-outline',
-          img:'../../../assets/images/master.png',
-          children: [
-            {
-              title: 'Ledger',
-              permission:'Account:Master:legder',
-              link: 'Account/ledger',
-              img:'../../../assets/images/ledger.png',
-            },
-            {
-              title: 'Group Ledger',
-              permission:'Account:Master:group',
-              link: 'Account/accountType',
-              img:'../../../assets/images/group-ledger.png',
-            },
-            {
-              title: 'Transaction Type',
-              link: 'Account/accounttransType',
-              permission:'Account:Master:legder:transactionType',
-              img:'../../../assets/images/transaction.png',
-            },
-          ],
-        },  ] },
+      ] 
+    },
     {
       title: 'Inventory',
       permission:'Inventory',
