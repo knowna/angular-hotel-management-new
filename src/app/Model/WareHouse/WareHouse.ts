@@ -7,5 +7,5 @@
 
 export interface IWareHouseType {
     Id: number,
-    name: string
+    Name: string
 }
