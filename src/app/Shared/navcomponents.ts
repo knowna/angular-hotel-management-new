@@ -415,7 +415,7 @@ export const navcomponents=[
           children: [
             {
               title: 'Warehouse',
-              link: 'Inventory/warehouses',
+              link: 'Inventory/WareHouse',
               permission: 'Inventory:Warehouse:Warehouse'
             },
             {

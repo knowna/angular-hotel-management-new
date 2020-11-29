@@ -184,6 +184,10 @@ import { AccountTypeService } from './components/account/master-ledger/services/
 import { AccountTransactionTypeComponent } from './components/account/account-transaction-type/account-transaction-type.component';
 import { InventoryItemComponent } from './components/InventoryDashboard/inventory-item/inventory-item.component';
 import { InventoryItemService } from './Service/Inventory/InventoryItem.service';
+import { UnitTypeComponent } from './components/InventoryDashboard/UnitType/UnitType.Component';
+import { WareHouseComponent } from './components/InventoryDashboard/warehouse/warehouse.component';
+import { WareHouseTypeComponent } from './components/InventoryDashboard/warehouse-type/warehousetype.component';
+import { RoomService } from './Service/Inventory/room.service';
 
 @NgModule({
   imports: [
@@ -275,9 +279,9 @@ import { InventoryItemService } from './Service/Inventory/InventoryItem.service'
     // PeriodicConsumptionComponent,
     // StockDamageComponent,
     // StockDamageDetailsComponent,
-    // UnitTypeComponent,
-    // WareHouseComponent,
-    // WareHouseTypeComponent,
+    UnitTypeComponent,
+    WareHouseComponent,
+    WareHouseTypeComponent,
     // WareHousesComponent,
     // PeriodicConsumptionItemComponent,
     // ContraComponent,
@@ -400,7 +404,8 @@ import { InventoryItemService } from './Service/Inventory/InventoryItem.service'
     TicketStoreService,
     TicketService,
     AccountTypeService,
-    InventoryItemService
+    InventoryItemService,
+    RoomService
   ],
 
   bootstrap: [AppComponent]

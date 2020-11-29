@@ -88,6 +88,9 @@ import { MasterLedgerComponent } from './components/account/master-ledger/master
 import { AccountTypeComponent } from './components/account/account-type/account-type.component';
 import { AccountTransactionTypeComponent } from './components/account/account-transaction-type/account-transaction-type.component';
 import { InventoryItemComponent } from './components/InventoryDashboard/inventory-item/inventory-item.component';
+import { UnitTypeComponent } from './components/InventoryDashboard/UnitType/UnitType.Component';
+import { WareHouseComponent } from './components/InventoryDashboard/warehouse/warehouse.component';
+import { WareHouseTypeComponent } from './components/InventoryDashboard/warehouse-type/warehousetype.component';
 
 
 const routes: Routes = [
@@ -257,16 +260,16 @@ const routes: Routes = [
     component: InventoryItemComponent,
     canActivate: [AuthGuard]
   },
-  // {
-  //   path: 'Inventory/category',
-  //   component: CategoryComponent,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Inventory/unittype',
-  //   component: UnitTypeComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'Inventory/category',
+    component: CategoryComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Inventory/unittype',
+    component: UnitTypeComponent,
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: 'Inventory/inventory-receipt',
   //   component: InventoryReceiptComponent,
@@ -287,21 +290,22 @@ const routes: Routes = [
   //   component: WareHouseComponent,
   //   canActivate: [AuthGuard]
   // },
-  // {
-  //   path: 'Inventory/WareHouse',
-  //   component: WareHouseComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'Inventory/WareHouse',
+    component: WareHouseComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Inventory/WareHouseType',
+    component: WareHouseTypeComponent,
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: 'Inventory/stockinhand',
   //   component: StockInHandComponent,
   //   canActivate: [AuthGuard]
   // },
-  // {
-  //   path: 'Inventory/WareHouseType',
-  //   component: WareHouseTypeComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  
   {
     path: 'Account/ledger',
     component: MasterLedgerComponent,
