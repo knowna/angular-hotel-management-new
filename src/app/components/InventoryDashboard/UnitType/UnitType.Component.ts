@@ -17,6 +17,7 @@ export class UnitTypeComponent implements OnInit {
     modalRef: BsModalRef;
     modalRef2: BsModalRef;
     unitTypes: UnitType[];
+    tempUnitTypes: UnitType[];
     unitType: UnitType;
     public unittype: Observable<UnitType>;
     msg: string;
@@ -27,6 +28,7 @@ export class UnitTypeComponent implements OnInit {
     modalBtnTitle: string;
     private formSubmitAttempt: boolean;
     private buttonDisabled: boolean;
+    searchKeyword='';
 
     constructor(private fb: FormBuilder, private acctransTypeService: AccountTransactionTypeService, private date: DatePipe, private modalService: BsModalService) {
         this.acctransTypeService.getAccountTypes().subscribe(data => { this.unittype = data })
@@ -44,7 +46,11 @@ export class UnitTypeComponent implements OnInit {
     LoadUnitTypes(): void {
         this.indLoading = true;
         this.acctransTypeService.get(Global.BASE_UNITTYPE_ENDPOINT)
-            .subscribe(unittypess => { this.unitTypes = unittypess; this.indLoading = false; },
+            .subscribe(unittypess => { 
+                this.unitTypes = unittypess;
+                this.tempUnitTypes = unittypess;
+
+                 this.indLoading = false; },
                 error => this.msg = <any>error);
     }
 
@@ -100,7 +106,6 @@ export class UnitTypeComponent implements OnInit {
     }
 
     deleteUnitType(id: number, template: TemplateRef<any>) {
-        debugger;
         this.dbops = DBOperation.delete;
         this.SetControlsState(true);
         this.modalTitle = "Confirm to Delete Unit Type?";
@@ -128,7 +133,6 @@ export class UnitTypeComponent implements OnInit {
 
     //Submit the Form
     onSubmit() {
-        debugger;
         this.msg = "";
         let unitType = this.unitTypeFrm
         this.formSubmitAttempt = true;
@@ -142,7 +146,7 @@ export class UnitTypeComponent implements OnInit {
 
                             if (data == 1) //Success
                             {
-                                debugger;
+                                alert("Data sucessfully added");
                                 this.LoadUnitTypes();
                                 this.formSubmitAttempt = false;
                                 this.modalRef.hide();
@@ -160,7 +164,7 @@ export class UnitTypeComponent implements OnInit {
                         data => {
                             if (data == 1) //Success
                             {
-                                debugger;
+                                alert("Data sucessfully updated");
                                 this.LoadUnitTypes();
                                 this.formSubmitAttempt = false;
                                 this.modalRef.hide();
@@ -173,7 +177,6 @@ export class UnitTypeComponent implements OnInit {
                     );
                     break;
                 case DBOperation.delete:
-                    debugger;
                     this.acctransTypeService.delete(Global.BASE_UNITTYPE_ENDPOINT, unitType.value.Id).subscribe(
                         data => {
                             if (data == 1) //Success
@@ -203,7 +206,6 @@ export class UnitTypeComponent implements OnInit {
 
 
     reset() {
-        //debugger;
         let control = this.unitTypeFrm.controls['Id'].value;
         if (control > 0) {
             this.buttonDisabled = true;
@@ -217,4 +219,26 @@ export class UnitTypeComponent implements OnInit {
     SetControlsState(isEnable: boolean) {
         isEnable ? this.unitTypeFrm.enable() : this.unitTypeFrm.disable();
     }
+
+    searchItem(){
+        this.searchKeyword =this.searchKeyword.trim();
+        if(this.searchKeyword=='' || this.searchKeyword==null ){
+            this.unitTypes = this.unitTypes;
+        }
+
+        let filteredMenus: any[] = [];
+        console.log(this.tempUnitTypes);
+        
+
+       filteredMenus = this.tempUnitTypes.filter(
+           item=>
+          {
+              
+           return (item.Name.toLowerCase().indexOf(this.searchKeyword.toLowerCase()) !== -1);
+          }
+          
+       );
+     
+       this.unitTypes = filteredMenus;
+        }   
 }
