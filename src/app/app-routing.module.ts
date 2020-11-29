@@ -87,6 +87,7 @@ import { SplitMergeComponent } from './components/POS-System/Order/split-merge/s
 import { MasterLedgerComponent } from './components/account/master-ledger/master-ledger.component';
 import { AccountTypeComponent } from './components/account/account-type/account-type.component';
 import { AccountTransactionTypeComponent } from './components/account/account-transaction-type/account-transaction-type.component';
+import { InventoryItemComponent } from './components/InventoryDashboard/inventory-item/inventory-item.component';
 
 
 const routes: Routes = [
@@ -251,11 +252,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   
-  // {
-  //   path: 'Inventory/inventory',
-  //   component: InventoryItemComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'Inventory/item',
+    component: InventoryItemComponent,
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: 'Inventory/category',
   //   component: CategoryComponent,

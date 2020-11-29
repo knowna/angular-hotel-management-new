@@ -47,6 +47,20 @@ export class LinksFilterPipe implements PipeTransform {
     'Account:Transaction:Bank',
     'Account:Transaction:Credit',
     'Account:Transaction:Debit',
+    'Inventory',
+    'Inventory:Transaction',
+    'Inventory:Report',
+    'Inventory:Master',
+    'Inventory:Warehouse',
+    'Inventory:Transaction:Receipt',
+    'Inventory:Transaction:Consumption',
+    'Inventory:Transaction:Stock',
+    'Inventory:Report:Stock',
+    'Inventory:Master:Item',
+    'Inventory:Master:Category',
+    'Inventory:Master:Unit',
+    'Inventory:Warehouse:Warehouse',
+    'Inventory:Warehouse:WareHouseType'
 
 
 ];

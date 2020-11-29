@@ -76,7 +76,6 @@ import { AccountTransactionTypeService } from './Service/Inventory/account-trans
 // import { InventoryReceiptDetailsComponent } from './components/InventoryDashboard/inventory-receipt/inventory-receiptdetails/inventory-receiptdetails.component';
 // import { UnitTypeComponent } from './components/InventoryDashboard/UnitType/UnitType.Component';
 // import { WareHouseComponent } from './components/InventoryDashboard/WareHouse/warehouse.component';
-// import { InventoryItemComponent } from './components/InventoryDashboard/inventory/inventory-item.component';
 // import { InventoryReceiptComponent } from './components/InventoryDashboard/inventory-receipt/inventory-receipt.component';
 // import { PeriodicConsumptionComponent } from './components/InventoryDashboard/periodic-consumption/periodic-consumption.component';
 // import { StockDamageComponent } from './components/InventoryDashboard/stock-damage/stock-damage.component';
@@ -183,6 +182,8 @@ import { MasterLedgerService } from './components/account/master-ledger/services
 import { AccountTypeComponent } from './components/account/account-type/account-type.component';
 import { AccountTypeService } from './components/account/master-ledger/services/account-type.service';
 import { AccountTransactionTypeComponent } from './components/account/account-transaction-type/account-transaction-type.component';
+import { InventoryItemComponent } from './components/InventoryDashboard/inventory-item/inventory-item.component';
+import { InventoryItemService } from './Service/Inventory/InventoryItem.service';
 
 @NgModule({
   imports: [
@@ -267,7 +268,7 @@ import { AccountTransactionTypeComponent } from './components/account/account-tr
     //INventoryComponents
     CategoryComponent,
     // InventoryDashboardComponent,
-    // InventoryItemComponent,
+    InventoryItemComponent,
     // StockInHandComponent,
     // InventoryReceiptComponent,
     // InventoryReceiptDetailsComponent,
@@ -398,7 +399,8 @@ import { AccountTransactionTypeComponent } from './components/account/account-tr
     //pos
     TicketStoreService,
     TicketService,
-    AccountTypeService
+    AccountTypeService,
+    InventoryItemService
   ],
 
   bootstrap: [AppComponent]
