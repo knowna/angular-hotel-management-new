@@ -18,6 +18,7 @@ export class InventoryItemComponent implements OnInit {
     @ViewChild("template") TemplateRef: TemplateRef<any>;
     modalRef: BsModalRef;
     InventoryItems: IInventoryItem[];
+    tempInventoryItems:IInventoryItem[];
     InventoryItem: IInventoryItem;
     UnitTypes: UnitType[];
     categories: ICategory[];
@@ -30,6 +31,7 @@ export class InventoryItemComponent implements OnInit {
     dbops: DBOperation;
     modalTitle: string;
     modalBtnTitle: string;
+    searchKeyword='';
     receiptProducts: any[] = [];
     ItemName: string = '';
 
@@ -57,7 +59,10 @@ export class InventoryItemComponent implements OnInit {
     LoadInventoryItems(): void {
         this.indLoading = true;
         this._inventoryService.get(Global.BASE_INVENTORY_ENDPOINT)
-            .subscribe(InventoryItems => { this.InventoryItems = InventoryItems; this.indLoading = false; },
+            .subscribe(InventoryItems => { 
+                this.InventoryItems = InventoryItems; 
+                this.tempInventoryItems =InventoryItems;
+                this.indLoading = false; },
             error => this.msg = <any>error);
     }
 
@@ -113,8 +118,10 @@ export class InventoryItemComponent implements OnInit {
         if (inventfrm.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
-                    this._inventoryService.post(Global.BASE_INVENTORY_ENDPOINT, formData._value).subscribe(
+                    this._inventoryService.post(Global.BASE_INVENTORY_ENDPOINT, formData.value).subscribe(
                         data => {
+                            console.log(data);
+                            
                             if (data == 1) //Success
                             {
                                 alert("Data successfully added.");
@@ -124,6 +131,8 @@ export class InventoryItemComponent implements OnInit {
                                 this.LoadInventoryItems();
                             }
                             else {
+                                
+                                
                                 alert("There is some issue in saving records, please contact to system administrator!");
                             }
 
@@ -135,7 +144,7 @@ export class InventoryItemComponent implements OnInit {
                     );
                     break;
                 case DBOperation.update:
-                    this._inventoryService.put(Global.BASE_INVENTORY_ENDPOINT, formData._value.Id, formData._value).subscribe(
+                    this._inventoryService.put(Global.BASE_INVENTORY_ENDPOINT, formData.value.Id, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -155,7 +164,7 @@ export class InventoryItemComponent implements OnInit {
                     );
                     break;
                 case DBOperation.delete:
-                    this._inventoryService.delete(Global.BASE_INVENTORY_ENDPOINT, formData._value.Id).subscribe(
+                    this._inventoryService.delete(Global.BASE_INVENTORY_ENDPOINT, formData.value.Id).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -213,4 +222,27 @@ export class InventoryItemComponent implements OnInit {
         this.modalRef.hide();
         // this.router.navigate(["InventoryDashboard/inventory"]);
     }
+
+
+    searchItem(){
+        this.searchKeyword =this.searchKeyword.trim();
+        if(this.searchKeyword=='' || this.searchKeyword==null ){
+            this.InventoryItems = this.InventoryItems;
+        }
+
+        let filteredMenus: any[] = [];
+
+       filteredMenus = this.tempInventoryItems.filter(
+           item=>
+          {
+              
+           return (item.Name.toLowerCase().indexOf(this.searchKeyword.toLowerCase()) !== -1);
+          }
+          
+       );
+     
+       this.InventoryItems = filteredMenus;
+        }   
+
+    
 }

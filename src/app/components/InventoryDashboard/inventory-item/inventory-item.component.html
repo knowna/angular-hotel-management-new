@@ -1,6 +1,6 @@
 ﻿<ng-template #template>
     <form class="panel-primary" novalidate (ngSubmit)="onSubmit(InventFrm)" [formGroup]="InventFrm">
-        <div class="modal-header panel-heading">
+        <div class="modal-header panel-heading" style="background-color: #364a70;">
             <h4 class="modal-title pull-left">{{modalTitle}}</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
                 <span aria-hidden="true">&times;</span>
@@ -8,107 +8,98 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-3">Name</label>
-                    <div class="col-md-8" style="margin-bottom: 10px;">
-                        <input type="text" class="form-control" placeholder="Name " formControlName="Name">
-                        <div class="alert alert-danger" *ngIf="InventFrm.get('Name').hasError('required') && formSubmitAttempt">
-                            Name is required
-                        </div>
+
+                <div class="col-md-4">
+                    <label>Name</label>
+                    <input type="text" class="form-control" placeholder="Name " formControlName="Name">
+                    <div class="alert alert-danger" *ngIf="InventFrm.get('Name').hasError('required') && formSubmitAttempt">
+                        Name is required
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+                    <label>Opening Stock</label>
+                    <input type="number" class="form-control" placeholder="Opening Stock" formControlName="OpeningStock">
+                    <div class="alert alert-danger" *ngIf="InventFrm.get('OpeningStock').hasError('required') && formSubmitAttempt">
+                        Opening Stock is required
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-3">Opening Stock</label>
-                    <div class="col-md-8" style="margin-bottom: 10px;">
-                        <input type="number" class="form-control" placeholder="Opening Stock" formControlName="OpeningStock">
-                        <div class="alert alert-danger" *ngIf="InventFrm.get('OpeningStock').hasError('required') && formSubmitAttempt">
-                            Opening Stock is required
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-3">Rate</label>
-                    <div class="col-md-8" style="margin-bottom: 10px;">
-                        <input type="number" class="form-control" placeholder="Opening Stock Rate" formControlName="OpeningStockRate">
+
+
+
+                <div class="col-md-4">
+                    <label>Rate</label>
+                    <input type="number" class="form-control" placeholder="Opening Stock Rate" formControlName="OpeningStockRate">
                         <div class="alert alert-danger" *ngIf="InventFrm.get('OpeningStockRate').hasError('required') && formSubmitAttempt">
                             Rate is required
                         </div>
+                </div>
+               
+            </div>
+          
+               
+            <div class="row mt-4">
+
+                <div class="col-md-4">
+                    <label>Amount</label>
+                    <input type="number" class="form-control" placeholder="Opening Stock Amount" formControlName="OpeningStockAmount" value="{{calculateGndAmount()}}">
+                </div>
+
+                <div class="col-md-4">
+                    <label>Purchase Unit Type:</label>
+                    <select class="form-control" formControlName="BaseUnit">
+                        <option *ngFor="let UnitType of UnitTypes" value={{UnitType.Name}}>{{UnitType.Name}}</option>
+                    </select>
+                    <div class="alert alert-danger" *ngIf="InventFrm.get('BaseUnit').hasError('required') && formSubmitAttempt">
+                        Purchase Unit Type is required
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-3">Amount</label>
-                    <div class="col-md-8" style="margin-bottom: 10px;">
-                        <input type="number" class="form-control" placeholder="Opening Stock Amount" formControlName="OpeningStockAmount" value="{{calculateGndAmount()}}">
+
+                <div class="col-md-4">
+                    <label>Transaction Unit Type:</label>
+                    <select class="form-control" formControlName="TransactionUnit">
+                        <option *ngFor="let UnitType of UnitTypes" value={{UnitType.Name}}>{{UnitType.Name}}</option>
+                    </select>
+                    <div class="alert alert-danger" *ngIf="InventFrm.get('TransactionUnit').hasError('required') && formSubmitAttempt">
+                        Transaction Unit Type is required
                     </div>
                 </div>
+
             </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-3">Purchase Unit Type:</label>
-                    <div class="col-sm-8" style="margin: inherit;">
-                        <select class="form-control" formControlName="BaseUnit">
-                            <option *ngFor="let UnitType of UnitTypes" value={{UnitType.Name}}>{{UnitType.Name}}</option>
-                        </select>
-                        <div class="alert alert-danger" *ngIf="InventFrm.get('BaseUnit').hasError('required') && formSubmitAttempt">
-                            Purchase Unit Type is required
-                        </div>
+          
+
+            <div class="row mt-4">
+
+                <div class="col-md-4">
+                    <label>Transaction Unit Divided:</label>
+                    <input type="number" class="form-control" placeholder="Transaction Unit Divided" formControlName="TransactionUnitMultiplier">
+                    <div class="alert alert-danger" *ngIf="InventFrm.get('TransactionUnitMultiplier').hasError('required') && formSubmitAttempt">
+                        Unit Divided is required
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-3">Transaction Unit Type:</label>
-                    <div class="col-sm-8" style="margin: inherit;">
-                        <select class="form-control" formControlName="TransactionUnit">
-                            <option *ngFor="let UnitType of UnitTypes" value={{UnitType.Name}}>{{UnitType.Name}}</option>
-                        </select>
-                        <div class="alert alert-danger" *ngIf="InventFrm.get('TransactionUnit').hasError('required') && formSubmitAttempt">
-                            Transaction Unit Type is required
-                        </div>
+
+
+                <div class="col-md-4">
+                    <label>Stock Limit</label>
+                    <input type="number" class="form-control" placeholder="Stock Limit" formControlName="StockLimit">
+                    <div class="alert alert-danger" *ngIf="InventFrm.get('StockLimit').hasError('required') && formSubmitAttempt">
+                        Stock Limit is required
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-3">Transaction Unit Divided:</label>
-                    <div class="col-sm-8" style="margin-bottom: 10px;">
-                        <input type="number" class="form-control" placeholder="Transaction Unit Divided" formControlName="TransactionUnitMultiplier">
-                        <div class="alert alert-danger" *ngIf="InventFrm.get('TransactionUnitMultiplier').hasError('required') && formSubmitAttempt">
-                            Unit Divided is required
-                        </div>
+
+                <div class="col-md-4">
+                    <label>Category:</label>
+                    <select ng-model="categories.Name" class="form-control" placeholder="Category " formControlName="Category">
+                        <option *ngFor="let categories of category" value={{categories.Name}}>{{categories.Name}}</option>
+                    </select>
+                    <div class="alert alert-danger" *ngIf="InventFrm.get('Category').hasError('required') && formSubmitAttempt">
+                        Category is required
                     </div>
                 </div>
+
             </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-3">Stock Limit</label>
-                    <div class="col-md-8" style="margin-bottom: 10px;">
-                        <input type="number" class="form-control" placeholder="Stock Limit" formControlName="StockLimit">
-                        <div class="alert alert-danger" *ngIf="InventFrm.get('StockLimit').hasError('required') && formSubmitAttempt">
-                            Stock Limit is required
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-3">Category:</label>
-                    <div class="col-md-8" style="text-align:left;">
-                        <select ng-model="categories.Name" class="form-control" placeholder="Category " formControlName="Category">
-                            <option *ngFor="let categories of category" value={{categories.Name}}>{{categories.Name}}</option>
-                        </select>
-                        <div class="alert alert-danger" *ngIf="InventFrm.get('Category').hasError('required') && formSubmitAttempt">
-                            Category is required
-                        </div>
-                    </div>
-                </div>
-            </div>
+           
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn btn-success pull-left">{{modalBtnTitle}}</button>
@@ -118,7 +109,7 @@
                 (click)="CloseForm()">
                 Cancel
             </button>
-            <!-- <a class="btn btn-danger" (click)="CloseForm()">Cancel</a> -->
+           
         </div>
     </form>
 </ng-template>
@@ -181,7 +172,10 @@
             <h2 class="header">Inventory Items</h2>
         </div>
         <div class="col-md-4">
-            <input type="text" class="form-control" placeholder="Search by Name">
+            <input  type="text" class="form-control"
+                    (keyup)="searchItem()" 
+                    [(ngModel)]="searchKeyword" 
+                    placeholder="Search by Name">
         </div>
         <div class="col-md-4">
             <button class="btn btn-success" (click)="addInventory()" style="float: right">

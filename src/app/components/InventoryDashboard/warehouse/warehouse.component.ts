@@ -41,7 +41,7 @@ export class WareHouseComponent implements OnInit {
         this.WarehouseFrm = this.fb.group({
             Id: [''],
             Name: ['', Validators.required],
-            WarehouseTypeId: ['', Validators.required],
+            WareHouseTypeId: ['', Validators.required],
             SortOrder: ['', Validators.required]
         });
         this.LoadRoom();
@@ -52,7 +52,8 @@ export class WareHouseComponent implements OnInit {
         this.indLoading = true;
         this._warehouseServices.get(Global.BASE_WAREHOUSEAPI_ENDPOINT)
             .subscribe(warehouses => {
-                this.warehouses = warehouses; this.indLoading = false;
+                this.warehouses = warehouses; 
+                this.indLoading = false;
             },
             error => this.msg = <any>error);
     }
@@ -62,7 +63,7 @@ export class WareHouseComponent implements OnInit {
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
         this.modalTitle = "Add New Room";
-        this.modalBtnTitle = "Save & Submit";
+        this.modalBtnTitle = "Save";
         this.WarehouseFrm.reset();
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
     }
@@ -71,7 +72,7 @@ export class WareHouseComponent implements OnInit {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Room";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.warehouse = this.warehouses.filter(x => x.Id == id)[0];
         this.WarehouseFrm.setValue(this.warehouse);
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
@@ -106,7 +107,7 @@ export class WareHouseComponent implements OnInit {
         if (WarehouseFrm.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
-                    this._warehouseServices.post(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData._value).subscribe(
+                    this._warehouseServices.post(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -125,7 +126,7 @@ export class WareHouseComponent implements OnInit {
                     );
                     break;
                 case DBOperation.update:
-                    this._warehouseServices.put(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData._value.Id, formData._value).subscribe(
+                    this._warehouseServices.put(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData.value.Id, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -144,7 +145,7 @@ export class WareHouseComponent implements OnInit {
                     );
                     break;
                 case DBOperation.delete:
-                    this._warehouseServices.delete(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData._value.Id).subscribe(
+                    this._warehouseServices.delete(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData.value.Id).subscribe(
                         data => {
                             if (data == 1) //Success
                             {

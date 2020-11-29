@@ -61,7 +61,7 @@ export class WareHouseTypeComponent implements OnInit {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit DepartmentName";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.warehousetype = this.warehousetypes.filter(x => x.Id == id)[0];
         this.warehousetypefrm.setValue(this.warehousetype);
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
@@ -96,7 +96,7 @@ export class WareHouseTypeComponent implements OnInit {
         if (roomtypefrm.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
-                    this._warehousetypeService.post(Global.BASE_WAREHOUSETYPE_ENDPOINT, formData._value).subscribe(
+                    this._warehousetypeService.post(Global.BASE_WAREHOUSETYPE_ENDPOINT, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -116,7 +116,7 @@ export class WareHouseTypeComponent implements OnInit {
                     );
                     break;
                 case DBOperation.update:
-                    this._warehousetypeService.put(Global.BASE_WAREHOUSETYPE_ENDPOINT, formData._value.Id, formData._value).subscribe(
+                    this._warehousetypeService.put(Global.BASE_WAREHOUSETYPE_ENDPOINT, formData.value.Id, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -135,7 +135,7 @@ export class WareHouseTypeComponent implements OnInit {
                     );
                     break;
                 case DBOperation.delete:
-                    this._warehousetypeService.delete(Global.BASE_WAREHOUSETYPE_ENDPOINT, formData._value.Id).subscribe(
+                    this._warehousetypeService.delete(Global.BASE_WAREHOUSETYPE_ENDPOINT, formData.value.Id).subscribe(
                         data => {
                             if (data == 1) //Success
                             {

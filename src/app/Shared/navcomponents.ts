@@ -349,12 +349,14 @@ export const navcomponents=[
     {
       title: 'Inventory',
       permission:'Inventory',
+      img:'../../../assets/images/inventory.png',
       // group: true,
       show: false,
       children: [
         {
           title: 'Transaction',
           permission:'Inventory:Transaction',
+          img:'../../../assets/images/inventory.png',
           icon: 'edit-2-outline',
           children: [
             {
@@ -378,21 +380,26 @@ export const navcomponents=[
           title: 'Master',
           icon: 'browser-outline',
           permission:'Inventory:Master',
+          img:'../../../assets/images/master.png',
           children: [
             {
               title: 'Item',
               link: 'Inventory/item',
-              permission: 'Inventory:Master:Item'
+              permission: 'Inventory:Master:Item',
+              img:'../../../assets/images/item.png',
+             
             },
             {
               title: 'Category',
               link: 'Inventory/category',
-              permission: 'Inventory:Master:Category'
+              permission: 'Inventory:Master:Category',
+              img:'../../../assets/images/category-inventory.png',
             },
             {
               title: 'Unit Type',
               link: 'Inventory/unittype',
-              permission: 'Inventory:Master:Unit'
+              permission: 'Inventory:Master:Unit',
+              img:'../../../assets/images/unitType.png',
             },      
           ],
         },
