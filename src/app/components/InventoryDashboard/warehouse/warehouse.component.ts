@@ -107,7 +107,7 @@ export class WareHouseComponent implements OnInit {
         if (WarehouseFrm.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
-                    this._warehouseServices.post(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData._value).subscribe(
+                    this._warehouseServices.post(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -126,7 +126,7 @@ export class WareHouseComponent implements OnInit {
                     );
                     break;
                 case DBOperation.update:
-                    this._warehouseServices.put(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData._value.Id, formData._value).subscribe(
+                    this._warehouseServices.put(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData.value.Id, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -145,7 +145,7 @@ export class WareHouseComponent implements OnInit {
                     );
                     break;
                 case DBOperation.delete:
-                    this._warehouseServices.delete(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData._value.Id).subscribe(
+                    this._warehouseServices.delete(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData.value.Id).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
