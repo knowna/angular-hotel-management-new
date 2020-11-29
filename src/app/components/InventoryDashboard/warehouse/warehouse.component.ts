@@ -41,7 +41,7 @@ export class WareHouseComponent implements OnInit {
         this.WarehouseFrm = this.fb.group({
             Id: [''],
             Name: ['', Validators.required],
-            WarehouseTypeId: ['', Validators.required],
+            WareHouseTypeId: ['', Validators.required],
             SortOrder: ['', Validators.required]
         });
         this.LoadRoom();
@@ -52,7 +52,8 @@ export class WareHouseComponent implements OnInit {
         this.indLoading = true;
         this._warehouseServices.get(Global.BASE_WAREHOUSEAPI_ENDPOINT)
             .subscribe(warehouses => {
-                this.warehouses = warehouses; this.indLoading = false;
+                this.warehouses = warehouses; 
+                this.indLoading = false;
             },
             error => this.msg = <any>error);
     }
@@ -62,7 +63,7 @@ export class WareHouseComponent implements OnInit {
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
         this.modalTitle = "Add New Room";
-        this.modalBtnTitle = "Save & Submit";
+        this.modalBtnTitle = "Save";
         this.WarehouseFrm.reset();
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
     }
@@ -71,7 +72,7 @@ export class WareHouseComponent implements OnInit {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Room";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.warehouse = this.warehouses.filter(x => x.Id == id)[0];
         this.WarehouseFrm.setValue(this.warehouse);
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });

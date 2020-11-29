@@ -61,7 +61,7 @@ export class WareHouseTypeComponent implements OnInit {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit DepartmentName";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.warehousetype = this.warehousetypes.filter(x => x.Id == id)[0];
         this.warehousetypefrm.setValue(this.warehousetype);
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
