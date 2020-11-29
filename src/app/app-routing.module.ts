@@ -85,6 +85,12 @@ import { FullMergeComponent } from './components/POS-System/Order/FullMerge/full
 import { PartialMergeComponent } from './components/POS-System/Order/partial-merge/partial-merge.component';
 import { SplitMergeComponent } from './components/POS-System/Order/split-merge/split-merge.component';
 import { MasterLedgerComponent } from './components/account/master-ledger/master-ledger.component';
+import { AccountTypeComponent } from './components/account/account-type/account-type.component';
+import { AccountTransactionTypeComponent } from './components/account/account-transaction-type/account-transaction-type.component';
+import { InventoryItemComponent } from './components/InventoryDashboard/inventory-item/inventory-item.component';
+import { UnitTypeComponent } from './components/InventoryDashboard/UnitType/UnitType.Component';
+import { WareHouseComponent } from './components/InventoryDashboard/warehouse/warehouse.component';
+import { WareHouseTypeComponent } from './components/InventoryDashboard/warehouse-type/warehousetype.component';
 
 
 const routes: Routes = [
@@ -249,21 +255,21 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   
-  // {
-  //   path: 'Inventory/inventory',
-  //   component: InventoryItemComponent,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Inventory/category',
-  //   component: CategoryComponent,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Inventory/unittype',
-  //   component: UnitTypeComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'Inventory/item',
+    component: InventoryItemComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Inventory/category',
+    component: CategoryComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Inventory/unittype',
+    component: UnitTypeComponent,
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: 'Inventory/inventory-receipt',
   //   component: InventoryReceiptComponent,
@@ -284,21 +290,22 @@ const routes: Routes = [
   //   component: WareHouseComponent,
   //   canActivate: [AuthGuard]
   // },
-  // {
-  //   path: 'Inventory/WareHouse',
-  //   component: WareHouseComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'Inventory/WareHouse',
+    component: WareHouseComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Inventory/WareHouseType',
+    component: WareHouseTypeComponent,
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: 'Inventory/stockinhand',
   //   component: StockInHandComponent,
   //   canActivate: [AuthGuard]
   // },
-  // {
-  //   path: 'Inventory/WareHouseType',
-  //   component: WareHouseTypeComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  
   {
     path: 'Account/ledger',
     component: MasterLedgerComponent,
@@ -351,21 +358,21 @@ const routes: Routes = [
   // //   component: CreditNoteComponent,
   // //   canActivate: [AuthGuard]
   // // },
-  // {
-  //   path: 'Account/accounttransType',
-  //   component: AccountTransactionTypeComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'Account/accounttransType',
+    component: AccountTransactionTypeComponent,
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: 'Account/account',
   //   component: AccountComponent,
   //   canActivate: [AuthGuard]
   // },
-  // {
-  //   path: 'Account/accountType',
-  //   component: AccountTypeComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'Account/accountType',
+    component: AccountTypeComponent,
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: 'Account/accountLedgerView',
   //   component: AccountLedgerViewComponent,

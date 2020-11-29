@@ -76,7 +76,6 @@ import { AccountTransactionTypeService } from './Service/Inventory/account-trans
 // import { InventoryReceiptDetailsComponent } from './components/InventoryDashboard/inventory-receipt/inventory-receiptdetails/inventory-receiptdetails.component';
 // import { UnitTypeComponent } from './components/InventoryDashboard/UnitType/UnitType.Component';
 // import { WareHouseComponent } from './components/InventoryDashboard/WareHouse/warehouse.component';
-// import { InventoryItemComponent } from './components/InventoryDashboard/inventory/inventory-item.component';
 // import { InventoryReceiptComponent } from './components/InventoryDashboard/inventory-receipt/inventory-receipt.component';
 // import { PeriodicConsumptionComponent } from './components/InventoryDashboard/periodic-consumption/periodic-consumption.component';
 // import { StockDamageComponent } from './components/InventoryDashboard/stock-damage/stock-damage.component';
@@ -98,7 +97,6 @@ import { SelectDropDownModule } from "ngx-select-dropdown";
 // import { PurchaseDetailsComponent } from './components/Accounts/purchase/purchaseDetail/purchaseDetail.component';
 // import { SalesBillingDetailComponent } from './components/Accounts/sales-billing/sales-billing-detail/sales-billing-details.component';
 // import { JournalVoucherDetailComponent } from './components/Accounts/journal/journalvoucher-details/journalvoucher-details.component';
-// import { AccountTypeComponent } from './components/Accounts/account-type/account-type.component';
 // import { AccountTransactionTypeComponent } from './components/Accounts/account-transaction-type/account-transaction-type.component';
 // import { AccountComponent } from './components/Accounts/account/account.component';
 // import { BalanceSheetComponent } from './components/Report/balance-sheet/balance-sheet.component';
@@ -181,6 +179,15 @@ import { ScreenMenuCategoryItemFilter } from './filters/screen-menu-category-ite
 import { NpDatepickerModule } from 'angular-nepali-datepicker';
 import { MasterLedgerComponent } from './components/account/master-ledger/master-ledger.component';
 import { MasterLedgerService } from './components/account/master-ledger/services/MasterLedger.service';
+import { AccountTypeComponent } from './components/account/account-type/account-type.component';
+import { AccountTypeService } from './components/account/master-ledger/services/account-type.service';
+import { AccountTransactionTypeComponent } from './components/account/account-transaction-type/account-transaction-type.component';
+import { InventoryItemComponent } from './components/InventoryDashboard/inventory-item/inventory-item.component';
+import { InventoryItemService } from './Service/Inventory/InventoryItem.service';
+import { UnitTypeComponent } from './components/InventoryDashboard/UnitType/UnitType.Component';
+import { WareHouseComponent } from './components/InventoryDashboard/warehouse/warehouse.component';
+import { WareHouseTypeComponent } from './components/InventoryDashboard/warehouse-type/warehousetype.component';
+import { RoomService } from './Service/Inventory/room.service';
 
 @NgModule({
   imports: [
@@ -265,16 +272,16 @@ import { MasterLedgerService } from './components/account/master-ledger/services
     //INventoryComponents
     CategoryComponent,
     // InventoryDashboardComponent,
-    // InventoryItemComponent,
+    InventoryItemComponent,
     // StockInHandComponent,
     // InventoryReceiptComponent,
     // InventoryReceiptDetailsComponent,
     // PeriodicConsumptionComponent,
     // StockDamageComponent,
     // StockDamageDetailsComponent,
-    // UnitTypeComponent,
-    // WareHouseComponent,
-    // WareHouseTypeComponent,
+    UnitTypeComponent,
+    WareHouseComponent,
+    WareHouseTypeComponent,
     // WareHousesComponent,
     // PeriodicConsumptionItemComponent,
     // ContraComponent,
@@ -291,8 +298,8 @@ import { MasterLedgerService } from './components/account/master-ledger/services
     // AccountDashboardComponent,
     // PurchaseDetailsComponent,
     // SalesBillingDetailComponent,
-    // AccountTypeComponent,
-    // AccountTransactionTypeComponent,
+    AccountTypeComponent,
+    AccountTransactionTypeComponent,
     // AccountComponent,
     // BalanceSheetComponent,
     // AccountBalanceSheetComponent,
@@ -396,6 +403,9 @@ import { MasterLedgerService } from './components/account/master-ledger/services
     //pos
     TicketStoreService,
     TicketService,
+    AccountTypeService,
+    InventoryItemService,
+    RoomService
   ],
 
   bootstrap: [AppComponent]

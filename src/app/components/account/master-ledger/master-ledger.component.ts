@@ -40,23 +40,18 @@ export class MasterLedgerComponent implements OnInit {
         this.masterLedgerFrm = this.fb.group({
             Id: [''],
             Name: ['', Validators.required],
-            UnderGroupMaster: ['', Validators.required],
-            InventoryValue: false,
-            MaintainBilByBill: false,
+            AccountTypeId: ['', Validators.required],
+            ForeignCurrencyId: [''],
             TaxClassificationName: [''],
-            TaxType: ['', Validators.required],
+            TaxType: [''],
             TaxRate: [''],
-            TraderLedNatureOfPurchase: ['', Validators.required],
-            TDSDeducteeType: ['', Validators.required],
-            TDSRateName: ['', Validators.required],
-            Address: ['', Validators.required],
-            District: ['', Validators.required],
-            City: ['', Validators.required],
-            Street: ['', Validators.required],
-            PanNo: ['', Validators.required],
-            Telephone: ['', Validators.required],
-            Email: ['', Validators.required],
-            Currency: ['', Validators.required],
+            GSTType: [''],
+            ServiceCategory: [''],
+            ExciseDutyType: [''],
+            TraderLedNatureOfPurchase: [''],
+            TDSDeducteeType: [''],
+            TDSRateName: [''],
+            LedgerFBTCategory: [''],
             IsBillWiseOn: [''],
             ISCostCentresOn: [''],
             IsInterestOn: [''],
@@ -81,8 +76,19 @@ export class MasterLedgerComponent implements OnInit {
             IsAbatementApplicable: [''],
             TDSDeducteeIsSpecialRate: [''],
             Audited: [],
-            Amount: ['', Validators.required]
-
+            SortPosition: [''],
+            OpeningBalance: [''],
+            InventoryValue: false,
+            MaintainBilByBill: false,
+            Address: [''],
+            District: [''],
+            City: [''],
+            Street: [''],
+            PanNo: [''],
+            Telephone: [''],
+            Email: [''],
+            Amount: ['', [Validators.required, Validators.pattern(/^[.\d]+$/)]],
+            // entityLists: ['', Validators.required],
         })
 
         this.LoadMasters();
@@ -91,15 +97,13 @@ export class MasterLedgerComponent implements OnInit {
 
     LoadMasters(): void {
         this.indLoading = true;
-        this._masterLedgerService.get(Global.BASE_MASTERLEDGER_ENDPOINT)
-            .subscribe(masterLedgers => { this.masterLedgers = masterLedgers;
-                
-                this.indLoading = false; },
-            error => 
-           
-            this.msg = <any>error
-            
-            );
+        this._masterLedgerService.get(Global.BASE_ACCOUNT_ENDPOINT)
+            .subscribe(masterLedgers => { 
+                this.masterLedgers = masterLedgers; 
+                console.log('the ledgers are ', this.masterLedgers)
+                this.indLoading = false; 
+            },
+            error => this.msg = <any>error);
     }
 
     addMasterLedger() {
