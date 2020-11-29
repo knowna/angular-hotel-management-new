@@ -1,5 +1,6 @@
-﻿import { Component, OnInit, ViewChild,TemplateRef } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { AccountTransType } from '../../../Model/AccountTransactionType/accountTransType';
 import { AccountType } from '../../../Model/AccountType/accountType';
 import { DBOperation } from '../../../Shared/enum';
 import { Observable } from 'rxjs/Rx';
@@ -7,66 +8,60 @@ import { Global } from '../../../Shared/global';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { DatePipe } from '@angular/common';
-import { AccountTypeService } from '../master-ledger/services/account-type.service';
+import { AccountTransactionTypeService } from 'src/app/Service/Inventory/account-trans-type.service';
 
 @Component({
-    templateUrl: './account-type.component.html'
+    templateUrl: './account-transaction-type.component.html'
 })
 
-export class AccountTypeComponent implements OnInit {
+export class AccountTransactionTypeComponent implements OnInit {
     @ViewChild('template') TemplateRef: TemplateRef<any>;
     @ViewChild('templateNested') TemplateRef2: TemplateRef<any>;
     modalRef: BsModalRef;
     modalRef2: BsModalRef;
-    accountTypes: AccountType[];
-    accountType: AccountType;
+    // public acctype: Observable<AccountType>;
+    acctype: AccountType[] = [];
+    accounttransTypes: AccountTransType[];
+    accounttransType: AccountTransType;
     msg: string;
     indLoading: boolean = false;
-    accTypeFrm: FormGroup;
+    acctransTypeFrm: FormGroup;
     dbops: DBOperation;
     modalTitle: string;
     modalBtnTitle: string;
     private formSubmitAttempt: boolean;
     private buttonDisabled: boolean;
 
-    constructor(private fb: FormBuilder, private accTypeService: AccountTypeService, private modalService: BsModalService, private date: DatePipe) {
-        // this.accTypeService.getaccounttypes().subscribe(data => { this.accountTypes = data });
+    constructor(private fb: FormBuilder, private acctransTypeService: AccountTransactionTypeService, private date: DatePipe, private modalService: BsModalService) {
+        this.acctransTypeService.getAccountTypes()
+        .subscribe(data =>{
+            this.acctype = data
+        })
     }
-
+    
     ngOnInit(): void {
-        this.accTypeFrm = this.fb.group({
+        this.acctransTypeFrm = this.fb.group({
             Id: [''],
-            Name: ['', Validators.required],
-            DefaultFilterType: [''],
-            WorkingRule: [''],
             SortOrder: [''],
-            UserString: [''],
-            Tags: [''],
-            UnderGroupLedger: ['', Validators.required],
-            NatureofGroup: ['', Validators.required],
-            GroupSubLedger: false,
-            DebitCreditBalanceReporting: false,
-            UsedforCalculation: false,
-            PurchaseInvoiceAllocation: false,
-            AFFECTSGROSSPROFIT: false,
-            ISBILLWISEON: false,
-            ISCOSTCENTRESON: false,
-            ISADDABLE: false,
-            ISREVENUE: false,
-            ISDEEMEDPOSITIVE: false,
-            TRACKNEGATIVEBALANCES: false,
-            ISCONDENSED: false,
-            AFFECTSSTOCK: false,
-            SORTPOSITION: false
+            SourceAccountTypeId: ['', Validators.required],
+            TargetAccountTypeId: ['', Validators.required],
+            DefaultSourceAccountId:[''],
+            DefaultTargetAccountId: [''],
+            ForeignCurrencyId: [''],
+            UserString:[''],
+            Name: [''],        
         });
-        this.LoadAccTypes();
+
+        this.LoadAcctransTypes();
     }
 
-    LoadAccTypes(): void {
-        debugger;
+
+
+
+    LoadAcctransTypes(): void {
         this.indLoading = true;
-        this.accTypeService.get(Global.BASE_ACCOUNTTYPE_ENDPOINT)
-            .subscribe(accounttypes => { this.accountTypes = accounttypes; this.indLoading = false; },
+        this.acctransTypeService.get(Global.BASE_ACCOUNTTRANSTYPE_ENDPOINT)
+            .subscribe(accounttransTypes => { this.accounttransTypes = accounttransTypes; this.indLoading = false; },
             error => this.msg = <any>error);
     }
 
@@ -81,7 +76,7 @@ export class AccountTypeComponent implements OnInit {
         $('#' + tableID).html(clonedHtml.html());
 
         // Specify file name
-        filename = filename ? filename + '.xls' : 'Account Type of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
+        filename = filename ? filename + '.xls' : 'Trial Balance of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
 
         // Create download link element
         downloadLink = document.createElement("a");
@@ -103,43 +98,27 @@ export class AccountTypeComponent implements OnInit {
         }
     }
 
-
-    addAccType() {
+    addAcctransType() {
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
-        this.modalTitle = "Add Group";
+        this.modalTitle = "Add Transaction Type";
         this.modalBtnTitle = "Save";
-        this.accTypeFrm.reset();
+        this.acctransTypeFrm.reset();
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class:'modal-lg'
+            class: 'modal-lg'
         });
-      
+
     }
-    editAccType(Id: number) {
-        debugger;
+    editAcctransType(Id: number) {
+       
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
-        this.modalTitle = "Edit Group";
+        this.modalTitle = "Edit Transaction Type";
         this.modalBtnTitle = "Save";
-        this.accountType = this.accountTypes.filter(x => x.Id == Id)[0];
-        this.accTypeFrm.setValue(this.accountType);
-        this.modalRef = this.modalService.show(this.TemplateRef, {
-            backdrop: 'static',
-            keyboard: false,
-            class:'modal-lg'
-        });
-    }
-
-    deleteAccType(id: number) {
-        this.dbops = DBOperation.delete;
-        this.SetControlsState(true);
-        this.modalTitle = "Confirm to Delete Group?";
-        this.modalBtnTitle = "Delete";
-        this.accountType = this.accountTypes.filter(x => x.Id == id)[0];
-       
-        this.accTypeFrm.setValue(this.accountType);
+        this.accounttransType = this.accounttransTypes.filter(x => x.Id == Id)[0];
+        this.acctransTypeFrm.setValue(this.accounttransType);
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
@@ -147,6 +126,21 @@ export class AccountTypeComponent implements OnInit {
         });
     }
 
+    deleteAcctransType(id: number) {
+        debugger;
+        this.dbops = DBOperation.delete;
+        this.SetControlsState(true);
+        this.modalTitle = "Confirm to Delete Transaction Type?";
+        this.modalBtnTitle = "Delete";
+        this.accounttransType = this.accounttransTypes.filter(x => x.Id == id)[0];
+        this.acctransTypeFrm.setValue(this.accounttransType);
+        this.modalRef = this.modalService.show(this.TemplateRef, {
+            backdrop: 'static',
+            keyboard: false,
+            class: 'modal-lg'
+        });
+    }
+    
     validateAllFields(formGroup: FormGroup) {
         Object.keys(formGroup.controls).forEach(field => {
             const control = formGroup.get(field);
@@ -157,7 +151,7 @@ export class AccountTypeComponent implements OnInit {
             }
         });
     }
-
+    
     //displays the confirm popup-window
     openModal2(template: TemplateRef<any>) {
         this.modalRef2 = this.modalService.show(template, { class: 'modal-sm' });
@@ -167,92 +161,128 @@ export class AccountTypeComponent implements OnInit {
     onSubmit() {
         debugger;
         this.msg = "";
-        let accountType = this.accTypeFrm
+        let accountType = this.acctransTypeFrm
         this.formSubmitAttempt = true;
 
         if (accountType.valid) {
             switch (this.dbops) {
-                case DBOperation.create:                  
-                    this.accTypeService.post(Global.BASE_ACCOUNTTYPE_ENDPOINT, accountType.value).subscribe(
+                case DBOperation.create:
+                   
+                    this.acctransTypeService.post(Global.BASE_ACCOUNTTRANSTYPE_ENDPOINT, accountType.value).subscribe(
+                        data => {
+
+                            if (data == 1) //Success
+
+                            {
+                                debugger;
+
+                                this.openModal2(this.TemplateRef2);
+                                this.LoadAcctransTypes();
+                            }
+                            else {
+                                // this.modal.backdrop;
+                                alert("There is some issue in saving records, please contact to system administrator!");
+                            }
+                            this.modalRef.hide();
+                            this.formSubmitAttempt = false;
+
+                        },
+
+                    );
+                    break;
+                case DBOperation.update:
+                    
+                    this.acctransTypeService.put(Global.BASE_ACCOUNTTRANSTYPE_ENDPOINT, accountType.value.Id, accountType.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
                                 debugger;
                                 this.openModal2(this.TemplateRef2);
-                                this.LoadAccTypes();
+                                this.LoadAcctransTypes();
                             }
                             else {
-                                // this.modal.backdrop;
-                                this.msg = "There is some issue in saving records, please contact to system administrator!";
+                                alert("There is some issue in saving records, please contact to system administrator!");
                             }
+
+                            this.modalRef.hide();
+                            this.formSubmitAttempt = false;
+
+                        },
+
+                    );
+
+                    break;
+                case DBOperation.delete:
+                    debugger;
+                    this.acctransTypeService.delete(Global.BASE_ACCOUNTTRANSTYPE_ENDPOINT, accountType.value.Id).subscribe(
+                        data => {
+                            if (data == 1) //Success
+                            {
+                                alert("Data deleted sucessfully");
+                                this.LoadAcctransTypes();
+                            }
+                            else {
+                                alert("There is some issue in saving records, please contact to system administrator!");
+                            }
+
                             this.modalRef.hide();
                             this.formSubmitAttempt = false;
 
                         },
                        
                     );
-                    break;
-                case DBOperation.update:
-                    this.accTypeService.put(Global.BASE_ACCOUNTTYPE_ENDPOINT, accountType.value.Id, accountType.value).subscribe(
-                        data => {
-                            if (data == 1) //Success
-                            {
-                                this.openModal2(this.TemplateRef2);
-                                this.LoadAccTypes();
-                            }
-                            else {
-                                alert("There is some issue in saving records, please contact to system administrator!");
-                            }
 
-                            this.modalRef.hide();
-                            this.formSubmitAttempt = false;
-                        },
-                    )
-                    break;
-                case DBOperation.delete:
-                    this.accTypeService.delete(Global.BASE_ACCOUNTTYPE_ENDPOINT, accountType.value.Id).subscribe(
-                        data => {
-                            if (data == 1)
-                            {
-                                alert("Data deleted sucessfully");
-                                this.LoadAccTypes();
-                            }
-                            else
-                            {
-                                alert("There is some issue in saving records, please contact to system administrator!");
-                            }
 
-                            this.modalRef.hide();
-                            this.formSubmitAttempt = false;
-                        }
-                    )
             }
+
+
+
         }
         else {
             this.validateAllFields(accountType);
         }
+
+        //this.acctransTypeService.delete(Global.BASE_ACCOUNTTRANSTYPE_ENDPOINT, accountType.value.Id).subscribe(
+        //    data => {
+        //        if (data == 1) //Success
+        //        {
+        //            this.msg = "Data successfully deleted.";
+        //            this.LoadAcctransTypes();
+        //        }
+        //        else {
+        //            this.msg = "There is some issue in saving records, please contact to system administrator!"
+        //        }
+
+        //        this.modalRef.hide();
+        //    },
+           
+
+        //);
+
     }
 
 
     confirm(): void {
         this.modalRef2.hide();
+        this.formSubmitAttempt = false;
     }
 
 
     reset() {
         //debugger;
-        let control = this.accTypeFrm.controls['Id'].value;
+        let control = this.acctransTypeFrm.controls['Id'].value;
         if (control > 0) {
             this.buttonDisabled = true;
         }
         else {
-            this.accTypeFrm.reset();
+            this.acctransTypeFrm.reset();
+            this.formSubmitAttempt = false;
 
         }
 
     }
     SetControlsState(isEnable: boolean) {
-        isEnable ? this.accTypeFrm.enable() : this.accTypeFrm.disable();
+        isEnable ? this.acctransTypeFrm.enable() : this.acctransTypeFrm.disable();
     }
 
 }

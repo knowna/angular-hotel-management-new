@@ -188,44 +188,51 @@ export const navcomponents=[
       group: true,
       img:'../../../assets/images/accounts.png',
       children: [
-       ,
         {
           title: 'Transaction',
-          permission:'Transaction',
+          permission:'Account:Transaction',
           icon: 'edit-2-outline',
           children: [
             {
-              title: 'Bank/Cash',
-              link: 'Account/contra',
+              title: 'Journal',
+              permission:'Account:Transaction:Journal',
+              link: 'Account/journalVoucher',
+            },
+            {
+              title: 'Purchase',
+              permission:'Account:Transaction:Purchase',
+              link: 'Account/purchase',
             },
             {
               title: 'Sales',
+              permission:'Account:Transaction:Sales',
               link: 'Account/sales',
             },
             {
               title: 'Receipt',
+              permission:'Account:Transaction:Receipt',
               link: 'Account/receipt',
             },
             {
-              title: 'Purchase',
-              link: 'Account/purchase',
-            },
-            {
               title: 'Payment',
+              permission:'Account:Transaction:Payment',
               link: 'Account/payment',
             },
             {
-              title: 'Journal',
-              link: 'Account/journalVoucher',
-            },
-            {
-              title: 'Debit Note',
-              link: 'Account/debit-note',
+              title: 'Bank/Cash',
+              permission:'Account:Transaction:Bank',
+              link: 'Account/contra',
             },
             {
               title: 'Credit Note',
+              permission:'Account:Transaction:Credit',
               link: 'Account/credit-note',
-            },      
+            },  
+            {
+              title: 'Debit Note',
+              permission:'Account:Transaction:Debit',
+              link: 'Account/debit-note',
+            },
           ],
         },
         {
@@ -336,78 +343,92 @@ export const navcomponents=[
               img:'../../../assets/images/transaction.png',
             },
           ],
-        },  ] },
+        }, 
+      ] 
+    },
     {
       title: 'Inventory',
       permission:'Inventory',
-      group: true,
-    }, 
-    {
-      title: 'Transaction',
-      permission:'Transaction',
-      icon: 'edit-2-outline',
+      // group: true,
+      show: false,
       children: [
         {
-          title: 'Receipt',
-          link: 'Inventory/inventory-receipt',
+          title: 'Transaction',
+          permission:'Inventory:Transaction',
+          icon: 'edit-2-outline',
+          children: [
+            {
+              title: 'Receipt',
+              link: 'Inventory/inventory-receipt',
+              permission: 'Inventory:Transaction:Receipt'
+            },
+            {
+              title: 'Consumption',
+              link: 'Inventory/consumption',
+              permission: 'Inventory:Transaction:Consumption'
+            },
+            {
+              title: 'Stock Damage',
+              link: 'Inventory/stock-damage',
+              permission: 'Inventory:Transaction:Stock'
+            },
+          ],
         },
         {
-          title: 'Consumption',
-          link: 'Inventory/consumption',
+          title: 'Master',
+          icon: 'browser-outline',
+          permission:'Inventory:Master',
+          children: [
+            {
+              title: 'Item',
+              link: 'Inventory/item',
+              permission: 'Inventory:Master:Item'
+            },
+            {
+              title: 'Category',
+              link: 'Inventory/category',
+              permission: 'Inventory:Master:Category'
+            },
+            {
+              title: 'Unit Type',
+              link: 'Inventory/unittype',
+              permission: 'Inventory:Master:Unit'
+            },      
+          ],
         },
         {
-          title: 'Stock Damage',
-          link: 'Inventory/stock-damage',
+          title: 'Report',
+          icon: 'keypad-outline',
+          permission:'Inventory:Report',
+          children: [
+            {
+              title: 'Stockin-hand',
+              link: 'Inventory/stockinhand',
+              permission: 'Inventory:Report:Stock'
+            },
+          ],
         },
-      ],
-    },
-    {
-      title: 'Report',
-      icon: 'keypad-outline',
-      permission:'Report',
-      children: [
-        {
-          title: 'Stockin-hand',
-          link: 'Inventory/stockinhand',
-        },
-      ],
-    },   
-    {
-      title: 'Master',
-      icon: 'browser-outline',
-      permission:'Master',
-      
-      children: [
-        {
-          title: 'Item',
-          link: 'Inventory/inventory',
-        },
-        {
-          title: 'Category',
-          link: 'Inventory/category',
-        },
-        {
-          title: 'Unit Type',
-          link: 'Inventory/unittype',
-        },      
-      ],
-    },
-    {
-      title: 'Warehouse',
-      icon: 'browser-outline',
-      permission:'Warehouse',
-      children: [
         {
           title: 'Warehouses',
-          link: 'Inventory/warehouses',
+          icon: 'browser-outline',
+          permission:'Inventory:Warehouse',
+          children: [
+            {
+              title: 'Warehouse',
+              link: 'Inventory/warehouses',
+              permission: 'Inventory:Warehouse:Warehouse'
+            },
+            {
+              title: 'Warehouse Type',
+              link: 'Inventory/WareHouseType',
+              permission: 'Inventory:Warehouse:WareHouseType'
+            },
+          ],
         },
-        {
-          title: 'Warehouse Type',
-          link: 'Inventory/WareHouseType',
-        },
-      ],
-    },
 
+      ]
+    }, 
+    
     {
       title: 'User Management',
       group: true,

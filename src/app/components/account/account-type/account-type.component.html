@@ -89,7 +89,7 @@
     <div class="row m-0 mt-2">
         <div class="col-sm-12 table-responsive">
             <div class="alert alert-info" role="alert" *ngIf="indLoading">
-                <img src="../../images/loading.gif" width="32" height="32" /> Loading...
+                <img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...
             </div>
             <table id="GroupLedgerTable" class='table table-bordered' *ngIf='accountTypes && accountTypes.length'>
                 <thead>
@@ -128,16 +128,80 @@
 
 
 <ng-template #template>
-    <form class="panel-primary" novalidate (ngSubmit)="onSubmit(accTypeFrm)" [formGroup]="accTypeFrm">
-        <div class="modal-header panel-heading">
+    <form novalidate (ngSubmit)="onSubmit(accTypeFrm)" [formGroup]="accTypeFrm">
+        <div class="modal-header">
             <h4 class="modal-title pull-left">{{modalTitle}}</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">
-            <div class="panel-body">
-                <div class="row form-verticle">
+            <div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Group Name</label>
+                            <input type="text" class="form-control" placeholder="GroupName" formControlName="Name">
+                            <div class="alert alert-danger" *ngIf="accTypeFrm.get('Name').hasError('required') && formSubmitAttempt">
+                                Group Name is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Under GroupLedger</label>
+                            <select class="form-control" placeholder="UnderGroupLedger" formControlName="UnderGroupLedger">
+                                <option value="0"></option>
+                                <option *ngFor="let accountTypes of accountTypes" value={{accountTypes.Id}}>{{accountTypes.Name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Nature of Group</label>
+                            <select class="form-control" placeholder="NatureofGroup" formControlName="NatureofGroup">
+                                <option>Assets</option>
+                                <option>Liabilities</option>
+                                <option>Income</option>
+                                <option>Expenses</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Default Filter Type: </label>
+                            <select class="form-control" placeholder="DefaultFilterType" formControlName="DefaultFilterType">
+                                <option value="0"></option>
+                                <option value="1">Debit</option>
+                                <option value="2">Credit</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">WorkingRule: </label>
+                            <select class="form-control" placeholder="WorkingRule" formControlName="WorkingRule">
+                                <option value="0"></option>
+                                <option value="1">Debit</option>
+                                <option value="2">Credit</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="from-group">
+                            <label class="control-label">Sort Order: </label>
+                            <select class="form-control" placeholder="SortOrder" formControlName="SortOrder">
+                                <option value="0"></option>
+                                <option value="1">Debit</option>
+                                <option value="2">Credit</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="row form-verticle">
                     <div class="col-md-12">
                         <div class="form-group col-md-4">
                             <label class="control-label col-md-12">Group Name:</label>
@@ -169,8 +233,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row form-verticle">
+                </div> -->
+                <!-- <div class="row form-verticle">
                     <div class="col-md-12">
                         <div class="col-md-4">
                             <div class="form-group">
@@ -209,9 +273,135 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <hr>
-                <div class="row form-horizontal">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="ISBILLWISEON" id="ISBILLWISEON" ng-model="grpLedgerFrm.ISBILLWISEON" formControlName="ISBILLWISEON">
+                            <label class="form-check-label" for="ISBILLWISEON">
+                                Is BillwiseOn
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="ISREVENUE" id="ISREVENUE" ng-model="grpLedgerFrm.ISREVENUE" formControlName="ISREVENUE">
+                            <label class="form-check-label" for="ISREVENUE">
+                                Is Revenue
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="ISADDABLE" id="ISADDABLE" ng-model="grpLedgerFrm.ISADDABLE" formControlName="ISADDABLE">
+                            <label class="form-check-label" for="ISADDABLE">
+                                Is Addable
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="ISCONDENSED" id="ISCONDENSED" ng-model="grpLedgerFrm.ISCONDENSED" formControlName="ISCONDENSED">
+                            <label class="form-check-label" for="ISCONDENSED">
+                                Is Condensed
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="AFFECTSSTOCK" id="AFFECTSSTOCK" ng-model="grpLedgerFrm.AFFECTSSTOCK" formControlName="AFFECTSSTOCK">
+                            <label class="form-check-label" for="AFFECTSSTOCK">
+                                AffectsStock
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="SORTPOSITION" id="SORTPOSITION" ng-model="grpLedgerFrm.SORTPOSITION" formControlName="SORTPOSITION">
+                            <label class="form-check-label" for="SORTPOSITION">
+                                SortPosition
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="DebitCreditBalanceReporting" id="DebitCreditBalanceReporting" ng-model="grpLedgerFrm.DebitCreditBalanceReporting" formControlName="DebitCreditBalanceReporting">
+                            <label class="form-check-label" for="DebitCreditBalanceReporting">
+                                DebitCredit BalanceReporting
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="UsedforCalculation" id="UsedforCalculation" ng-model="grpLedgerFrm.UsedforCalculation" formControlName="UsedforCalculation">
+                            <label class="form-check-label" for="UsedforCalculation">
+                                Used for Calculation
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="GroupSubLedger" id="GroupSubLedger" ng-model="grpLedgerFrm.GroupSubLedger" formControlName="GroupSubLedger">
+                            <label class="form-check-label" for="GroupSubLedger">
+                                Group Sub Ledger
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="PurchaseInvoiceAllocation" id="PurchaseInvoiceAllocation" ng-model="grpLedgerFrm.PurchaseInvoiceAllocation" formControlName="PurchaseInvoiceAllocation">
+                            <label class="form-check-label" for="PurchaseInvoiceAllocation">
+                                Purchase InvoiceAllocation
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="ISCOSTCENTRESON" id="ISCOSTCENTRESON" ng-model="grpLedgerFrm.ISCOSTCENTRESON" formControlName="ISCOSTCENTRESON">
+                            <label class="form-check-label" for="ISCOSTCENTRESON">
+                                Is Cost Centre On
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="ISDEEMEDPOSITIVE" id="ISDEEMEDPOSITIVE" ng-model="grpLedgerFrm.ISDEEMEDPOSITIVE" formControlName="ISDEEMEDPOSITIVE">
+                            <label class="form-check-label" for="ISDEEMEDPOSITIVE">
+                                Is Demmed Positive
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="AFFECTSGROSSPROFIT" id="AFFECTSGROSSPROFIT" ng-model="grpLedgerFrm.AFFECTSGROSSPROFIT" formControlName="AFFECTSGROSSPROFIT">
+                            <label class="form-check-label" for="AFFECTSGROSSPROFIT">
+                                Affects GrossProfit
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"  name="TRACKNEGATIVEBALANCES" id="TRACKNEGATIVEBALANCES" ng-model="grpLedgerFrm.TRACKNEGATIVEBALANCES" formControlName="TRACKNEGATIVEBALANCES">
+                            <label class="form-check-label" for="TRACKNEGATIVEBALANCES">
+                                Track Negative Balances
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="row form-horizontal">
                     <div class="form-group">
                         <label class="control-label col-md-3">
                             Is BillwiseOn
@@ -306,12 +496,12 @@
                             <input type="checkbox" name="TRACKNEGATIVEBALANCES" ng-model="grpLedgerFrm.TRACKNEGATIVEBALANCES" class="form-control" formControlName="TRACKNEGATIVEBALANCES">
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="modal-footer">
             <div>
-                <button type="button" class="btn btn-danger pull-right" [disabled]="buttonDisabled" (click)="reset(); modalRef.hide();">Cancel</button>
+                <button type="button" class="btn btn-danger pull-right ml-2" [disabled]="buttonDisabled" (click)="reset(); modalRef.hide();">Cancel</button>
                 <button type="submit" [disabled]="accTypeFrm.invalid" class="btn btn-success pull-left"> {{modalBtnTitle}}</button>
             </div>
         </div>
