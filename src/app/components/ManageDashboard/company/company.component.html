@@ -103,9 +103,9 @@
                             <button class="btn btn-primary btn-sm" (click)="editCompany(company.Id,template)">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteCompany(company.Id,template)">
+                            <!-- <button class="btn btn-danger btn-sm ml-2" (click)="deleteCompany(company.Id,template)">
                                 <i class="fa fa-trash"></i>
-                            </button>
+                            </button> -->
                             <!-- <span>
                                 <img src="../../../../assets/images/Edit.png" (click)="editCompany(company.Id,template)" height="32" width="32" />
                             </span>
@@ -161,7 +161,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label class="control-label">Name(English)</label>
-                        <input class="col-md-3 form-control" formControlName="NameEnglish" />
+                        <input class="form-control" formControlName="NameEnglish" />
                         <div class="alert alert-danger" *ngIf="companyForm.get('NameEnglish').hasError('required') && formSubmitAttempt">
                             English Name field is required
                         </div>
@@ -171,7 +171,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label class="control-label">Name(Nepali)</label>
-                        <input class="col-md-3 form-control" formControlName="NameNepali" />
+                        <input class="form-control" formControlName="NameNepali" />
                         <div class="alert alert-danger" *ngIf="companyForm.get('NameNepali').hasError('required') && formSubmitAttempt">
                             Nepali Name field is required
                         </div>
@@ -182,7 +182,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label class="control-label">Address:</label>
+                        <label class="control-label">Address</label>
                         <input type="text" class="form-control" placeholder="" formControlName="Address">
                         <div class="alert alert-danger" *ngIf="companyForm.get('Address').hasError('required') && formSubmitAttempt">
                             Address field is required
@@ -191,31 +191,18 @@
                 </div>
 
                 <div class="col-md-4">
-                    
-                </div>
-
-                <div class="col-md-4">
-                    
-                </div>
-            </div>
-            <div class="row">
-                
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-4">Street:</label>
-                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                    <div class="form-group">
+                        <label class="control-label">Street</label>
                         <input type="text" class="form-control" placeholder="" formControlName="Street">
                         <div class="alert alert-danger" *ngIf="companyForm.get('Street').hasError('required') && formSubmitAttempt">
                             Street field is required
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-4">City:</label>
-                    <div class="col-sm-8" style="padding-bottom: 10px;">
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">City</label>
                         <input type="text" class="form-control" placeholder="" formControlName="City">
                         <div class="alert alert-danger" *ngIf="companyForm.get('City').hasError('required') && formSubmitAttempt">
                             City field is required
@@ -223,32 +210,29 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-4">District:</label>
-                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">District</label>
                         <input type="text" class="form-control" placeholder="" formControlName="District">
                         <div class="alert alert-danger" *ngIf="companyForm.get('District').hasError('required') && formSubmitAttempt">
                             District field is required
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-4">Phone No:</label>
-                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">Phone No</label>
                         <input type="text" class="form-control" placeholder="" formControlName="Phone">
                         <div class="alert alert-danger" *ngIf="companyForm.get('Phone').hasError('required') && formSubmitAttempt">
                             Phone No. field is required
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-4">Email:</label>
-                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">Email</label>
                         <input type="text" class="form-control" placeholder="" formControlName="Email">
                         <div class="alert alert-danger" *ngIf="companyForm.get('Email').hasError('required') && formSubmitAttempt">
                             Email field is required
@@ -256,32 +240,30 @@
                     </div>
                 </div>
             </div>
+
+
             <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-4">PAN/VAT:</label>
-                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">PAN/VAT</label>
                         <input type="text" class="form-control" placeholder="" formControlName="Pan_Vat">
                         <div class="alert alert-danger" *ngIf="companyForm.get('Pan_Vat').hasError('required') && formSubmitAttempt">
                             PAN/VAT field is required
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-4">IRD Username:</label>
-                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">IRD Username</label>
                         <input type="text" class="form-control" placeholder="" formControlName="IRD_UserName">
                         <div class="alert alert-danger" *ngIf="companyForm.get('IRD_UserName').hasError('required') && formSubmitAttempt">
                             IRD Username field is required
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-4">IRD Password:</label>
-                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">IRD Password</label>
                         <input type="text" class="form-control" placeholder="" formControlName="IRD_Password">
                         <div class="alert alert-danger" *ngIf="companyForm.get('IRD_Password').hasError('required') && formSubmitAttempt">
                             IDR Password field is required
@@ -289,26 +271,29 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-4">Identity:</label>
-                    <div class="col-sm-8" style="padding-bottom: 10px;">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <app-file-upload #fileUpload [extraFormData]="companyForm" [uploadUrl]="uploadUrl"></app-file-upload>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4">Identity:</label>
+                        <div class="col-sm-8" style="padding-bottom: 10px;">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <app-file-upload #fileUpload [extraFormData]="companyForm" [uploadUrl]="uploadUrl"></app-file-upload>
+                                </div>
+                                <div class="col-md-4">
+                                    <button style="margin-top: 20px;" type="button" class="btn btn-sm btn-default pull-right" (click)="clearFile()">Clear</button>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <button style="margin-top: 20px;" type="button" class="btn btn-sm btn-default pull-right" (click)="clearFile()">Clear</button>
-                            </div>
-                        </div>
-                        <div class="row" *ngIf="company?.File">
-                            <div class="col-md-6">
-                                <img (click)="viewFile(company.File,imageView)" [src]="company.File" style="height:32px;border-radius:5px;" />
-                            </div>
-                            <div class="col-md-6">
-                                <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile(company.Id)">
-                                    <i class="fa fa-times">&nbsp;Delete</i>
-                                </button>
+                            <div class="row" *ngIf="company?.File">
+                                <div class="col-md-6">
+                                    <img (click)="viewFile(company.File,imageView)" [src]="company.File" style="height:32px;border-radius:5px;" />
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-sm btn-danger" (click)="deleteFile(company.Id)">
+                                        <i class="fa fa-times">&nbsp;Delete</i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -318,7 +303,8 @@
         <div class="modal-footer">
             <div>
                 <button type="submit" class="btn btn-success pull-left">{{modalBtnTitle}}</button>
-                <a class="btn btn-danger pull-right" (click)="modalRef.hide()">Cancel</a>
+                <button type="button" class="btn btn-danger ml-2" (click)="modalRef.hide()">Cancel</button>
+                <!-- <a class="btn btn-danger pull-right" (click)="modalRef.hide()">Cancel</a> -->
             </div>
         </div>
     </form>

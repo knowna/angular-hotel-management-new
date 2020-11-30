@@ -37,6 +37,7 @@
     </div>
 </div> -->
 
+
 <div class="container" style="padding-top: 20px;">
     <div class="row m-0 mt-3">
         <div class="col-md-4">
@@ -105,13 +106,19 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- <div class="col-md-6" style="z-index: 1600 !important;">
+                    <np-datepicker
+                        language="en">
+                    </np-datepicker>
+                </div> -->
                 
             </div>
         </div>
         <div class="modal-footer">
             <div>
                 <button type="submit" class="btn btn-success pull-left">{{modalBtnTitle}}</button>
-                <button class="btn btn-danger ml-2" (click)="modalRef.hide()">Cancel</button>
+                <button type="button" class="btn btn-danger ml-2" (click)="modalRef.hide()">Cancel</button>
                 <!-- <a class="btn btn-danger pull-right" (click)="modalRef.hide()">Cancel</a> -->
             </div>
         </div>

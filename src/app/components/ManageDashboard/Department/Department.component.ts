@@ -27,6 +27,8 @@ export class DepartmentComponent implements OnInit {
     modalBtnTitle: string;
     modalRef: BsModalRef;
 
+    public sfromDate: string;
+
     constructor(private fb: FormBuilder, private _departmentService: DepartmentService, private modalService: BsModalService) { }
 
     ngOnInit(): void {
