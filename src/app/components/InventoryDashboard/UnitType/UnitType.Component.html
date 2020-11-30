@@ -1,25 +1,26 @@
-﻿<div class="row m-0 mt-3">
-    <div class="col-md-4">
-        <!-- <h4>Menu Configure</h4> -->
-        <h2 class="header">Add Unit Type</h2>
+﻿<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <!-- <h4>Menu Configure</h4> -->
+            <h2 class="header">Unit Type</h2>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control"
+            (keyup)="searchItem()" 
+            [(ngModel)]="searchKeyword" 
+            placeholder="Search by Name">
+        </div>
+        <!-- <div class="col-md-6">
+        </div> -->
+        <div class="col-md-4">
+            <button class="btn btn-success" (click)="addUnitType(template)" style="float: right">
+                <strong>
+                    <i class="fa fa-plus"></i>
+                    Add
+                </strong>
+            </button>
+        </div>
     </div>
-    <div class="col-md-4">
-        <input type="text" class="form-control"
-        (keyup)="searchItem()" 
-        [(ngModel)]="searchKeyword" 
-        placeholder="Search by Name">
-    </div>
-    <!-- <div class="col-md-6">
-    </div> -->
-    <div class="col-md-4">
-        <button class="btn btn-success" (click)="addUnitType(template)" style="float: right">
-            <strong>
-                <i class="fa fa-plus"></i>
-                Add
-            </strong>
-        </button>
-    </div>
-</div>
 
 
     <div class="row m-0 mt-2">
@@ -30,7 +31,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Action</th>
-                       
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -53,7 +54,7 @@
             <!-- <div *ngIf='menus && menus.length==0' class="alert alert-info" role="alert">No record found!</div> -->
         </div>
     </div>
-
+</div>
 <!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
         Add Unit Type
@@ -103,9 +104,9 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-2">Name:</label>
-                    <div class="col-sm-9">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Name</label>
                         <input type="text" class="form-control" placeholder="" formControlName="Name">
                         <div class="alert alert-danger" *ngIf="unitTypeFrm.get('Name').hasError('required') && formSubmitAttempt">
                             Name is required
@@ -117,7 +118,7 @@
         <div class="modal-footer">
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success pull-left" [disabled]="unitTypeFrm.invalid">{{modalBtnTitle}}</button>
-                <button type="reset" class="btn btn-danger" (click)="cancel()">Cancel</button>
+                <button type="reset" class="btn btn-danger" (click)="modalRef.hide()">Cancel</button>
             </div>
         </div>
     </form>

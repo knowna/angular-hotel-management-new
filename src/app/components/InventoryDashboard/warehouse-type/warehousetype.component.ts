@@ -18,7 +18,9 @@ import { RoomService } from 'src/app/Service/Inventory/room.service';
 
 
 export class WareHouseTypeComponent implements OnInit {
-    warehousetypes: IWareHouseType[];
+    warehousetypes: IWareHouseType[] = [];
+    tempWarehousetypes: IWareHouseType[] = [];
+
     warehousetype: IWareHouseType;
     msg: string;
     indLoading: boolean = false;
@@ -28,6 +30,8 @@ export class WareHouseTypeComponent implements OnInit {
     modalTitle: string;
     modalBtnTitle: string;
     modalRef: BsModalRef;
+
+    searchKeyword = '';
 
     constructor(private fb: FormBuilder, private _warehousetypeService: RoomService, private modalService: BsModalService) { }
 
@@ -43,10 +47,13 @@ export class WareHouseTypeComponent implements OnInit {
         this.indLoading = true;
         this._warehousetypeService.get(Global.BASE_WAREHOUSETYPE_ENDPOINT)
             .subscribe(warehousetypes => {
-                this.warehousetypes = warehousetypes; this.indLoading = false;
+                this.warehousetypes = warehousetypes; 
+                this.tempWarehousetypes = warehousetypes; 
+                this.indLoading = false;
             },
             error => this.msg = <any>error);
     }
+
     openModal(template: TemplateRef<any>) {
 
         this.dbops = DBOperation.create;
@@ -96,7 +103,7 @@ export class WareHouseTypeComponent implements OnInit {
         if (roomtypefrm.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
-                    this._warehousetypeService.post(Global.BASE_WAREHOUSETYPE_ENDPOINT, formData._value).subscribe(
+                    this._warehousetypeService.post(Global.BASE_WAREHOUSETYPE_ENDPOINT, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -116,7 +123,7 @@ export class WareHouseTypeComponent implements OnInit {
                     );
                     break;
                 case DBOperation.update:
-                    this._warehousetypeService.put(Global.BASE_WAREHOUSETYPE_ENDPOINT, formData._value.Id, formData._value).subscribe(
+                    this._warehousetypeService.put(Global.BASE_WAREHOUSETYPE_ENDPOINT, formData.value.Id, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -135,7 +142,7 @@ export class WareHouseTypeComponent implements OnInit {
                     );
                     break;
                 case DBOperation.delete:
-                    this._warehousetypeService.delete(Global.BASE_WAREHOUSETYPE_ENDPOINT, formData._value.Id).subscribe(
+                    this._warehousetypeService.delete(Global.BASE_WAREHOUSETYPE_ENDPOINT, formData.value.Id).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -164,5 +171,22 @@ export class WareHouseTypeComponent implements OnInit {
     SetControlsState(isEnable: boolean) {
         isEnable ? this.warehousetypefrm.enable() : this.warehousetypefrm.disable();
     }
+
+    searchItem(){
+        this.searchKeyword =this.searchKeyword.trim();
+        if(this.searchKeyword=='' || this.searchKeyword==null ){
+            this.warehousetypes = this.warehousetypes;
+        }
+
+        let filteredWareHouseTypes: any[] = [];
+
+        filteredWareHouseTypes = this.tempWarehousetypes.filter(
+            item=>{
+                return (item.Name.toLowerCase().indexOf(this.searchKeyword.toLowerCase()) !== -1);
+            }
+        );
+       this.warehousetypes = filteredWareHouseTypes;
+    }   
+
 
 }

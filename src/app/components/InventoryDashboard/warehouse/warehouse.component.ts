@@ -19,8 +19,9 @@ import { RoomService } from 'src/app/Service/Inventory/room.service';
 
 export class WareHouseComponent implements OnInit {
     warehouses: IWareHouse[];
+    tempWarehouses: IWareHouse[];
     warehouse: IWareHouse;
-    warehousetypes: IWareHouseType[];
+    warehousetypes: IWareHouseType[] = [];
     warehousetype: IWareHouseType;
     msg: string;
     indLoading: boolean = false;
@@ -30,6 +31,8 @@ export class WareHouseComponent implements OnInit {
     modalTitle: string;
     modalBtnTitle: string;
     modalRef: BsModalRef;
+
+    searchKeyword = '';
 
     constructor(private fb: FormBuilder, private _warehouseServices: RoomService, private modalService: BsModalService) {
         this._warehouseServices.getWareHouseType().subscribe(data => {
@@ -44,15 +47,31 @@ export class WareHouseComponent implements OnInit {
             WareHouseTypeId: ['', Validators.required],
             SortOrder: ['', Validators.required]
         });
+        this.LoadWarehousetype();
         this.LoadRoom();
     }
 
-    LoadRoom(): void {
 
+    LoadWarehousetype(): void {
+        this.indLoading = true;
+        this._warehouseServices.get(Global.BASE_WAREHOUSETYPE_ENDPOINT)
+            .subscribe(warehousetypes => {
+                this.warehousetypes = warehousetypes; 
+            },
+            error => this.msg = <any>error);
+    }
+
+    getWareHouseType(wareHouseTypeId: number) {
+        let type = this.warehousetypes.find(t => t.Id == wareHouseTypeId);
+        return type;
+    }
+
+    LoadRoom(): void {
         this.indLoading = true;
         this._warehouseServices.get(Global.BASE_WAREHOUSEAPI_ENDPOINT)
             .subscribe(warehouses => {
                 this.warehouses = warehouses; 
+                this.tempWarehouses = warehouses;
                 this.indLoading = false;
             },
             error => this.msg = <any>error);
@@ -107,7 +126,7 @@ export class WareHouseComponent implements OnInit {
         if (WarehouseFrm.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
-                    this._warehouseServices.post(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData._value).subscribe(
+                    this._warehouseServices.post(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -126,7 +145,7 @@ export class WareHouseComponent implements OnInit {
                     );
                     break;
                 case DBOperation.update:
-                    this._warehouseServices.put(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData._value.Id, formData._value).subscribe(
+                    this._warehouseServices.put(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData.value.Id, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -145,7 +164,7 @@ export class WareHouseComponent implements OnInit {
                     );
                     break;
                 case DBOperation.delete:
-                    this._warehouseServices.delete(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData._value.Id).subscribe(
+                    this._warehouseServices.delete(Global.BASE_WAREHOUSEAPI_ENDPOINT, formData.value.Id).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -174,5 +193,22 @@ export class WareHouseComponent implements OnInit {
     SetControlsState(isEnable: boolean) {
         isEnable ? this.WarehouseFrm.enable() : this.WarehouseFrm.disable();
     }
+
+
+    searchItem(){
+        this.searchKeyword =this.searchKeyword.trim();
+        if(this.searchKeyword=='' || this.searchKeyword==null ){
+            this.warehouses = this.warehouses;
+        }
+
+        let filteredWareHouses: any[] = [];
+
+        filteredWareHouses = this.tempWarehouses.filter(
+            item=>{
+                return (item.Name.toLowerCase().indexOf(this.searchKeyword.toLowerCase()) !== -1);
+            }
+        );
+       this.warehouses = filteredWareHouses;
+    }   
 
 }
