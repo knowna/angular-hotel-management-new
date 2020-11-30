@@ -72,11 +72,11 @@ export class POSSaleBillingComponent implements OnInit {
     fromDateNew: any;
 
     startFormatter: DateFormatter = (sfromDate) => {
-        return `${ sfromDate.year }.${ sfromDate.month }.${ sfromDate.day }`;
+        return `${ sfromDate.year }.${ (sfromDate.month*1 + 1) }.${ sfromDate.day }`;
     }
 
     endFormatter: DateFormatter = (stoDate) => {
-        return `${ stoDate.year }.${ stoDate.month }.${ stoDate.day }`;
+        return `${ stoDate.year }.${ (stoDate.month*1 + 1) }.${ stoDate.day }`;
     }
 
 
@@ -99,8 +99,8 @@ export class POSSaleBillingComponent implements OnInit {
    *  Get the list of filtered journals by the form and to date
    */
     filterJournalByDate(sfromdate: any, stodate: any) {
-        sfromdate = sfromdate.year + '.' + sfromdate.month + '.' + sfromdate.day;
-        stodate = stodate.year + '.' + stodate.month + '.' + stodate.day;
+        sfromdate = sfromdate.year + '.' + (sfromdate.month*1 + 1) + '.' + sfromdate.day;
+        stodate = stodate.year + '.' + (stodate.month*1 + 1) + '.' + stodate.day;
         
         // console.log('the start date is', sfromdate);
         // console.log('the end date is', stodate);
