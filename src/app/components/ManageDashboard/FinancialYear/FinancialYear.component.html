@@ -1,4 +1,4 @@
-﻿<div class='panel panel-primary'>
+﻿<!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
         Financial Year
     </div>
@@ -51,10 +51,77 @@
             </div>
         </div>
     </div>
+</div> -->
+
+
+<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header"> Financial Year</h2>
+        </div>
+        <div class="col-md-4">
+            <input  type="text" class="form-control"
+                    (keyup)="searchItem()" 
+                    [(ngModel)]="searchKeyword" 
+                    placeholder="Search by Name">
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-success" (click)="openModal(template)" style="float: right">
+                <strong>
+                    <i class="fa fa-plus"></i>
+                    Add
+                </strong>
+            </button>
+        </div>
+    </div>
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <table class='table table-bordered' *ngIf='FinancialYears && FinancialYears.length'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Nepali Start Date</th>
+                        <th>Nepali End Date</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let fy of FinancialYears">
+                        <td>{{ fy.Name }}</td>
+                        <td>{{ fy.NepaliStartDate }}</td>
+                        <td>{{ fy.NepaliEndDate }}</td>
+                        <td>{{ fy.StartDate | date: 'dd/MM/yyyy' }}</td>
+                        <td>{{ fy.EndDate | date: 'dd/MM/yyyy' }}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" (click)="editFinancialYear(fy.Id,template)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteFinancialYear(fy.Id,template)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <!-- <span><img src="../../images/Edit.png" (click)="editInventory(InventoryItem.Id)" height="60" width="60" /></span>
+                            <span><img src="../../images/Delete.png" (click)="deleteInventory(InventoryItem.Id)" height="60" width="60" /></span> -->
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf='FinancialYears && FinancialYears.length==0' class="alert alert-info" role="alert">No record found!</div>
+        </div>
+    </div>
 </div>
+
+
+
+
+
+
+
 <ng-template #template>
     <form class="panel-primary" novalidate (ngSubmit)="onSubmit(FYearFrm)" [formGroup]="FYearFrm">
-        <div class="modal-header panel-heading">
+        <div class="modal-header panel-heading"  style="background-color: #364a70;">
             <h4 class="modal-title pull-left">{{modalTitle}}</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
                 <span aria-hidden="true">&times;</span>
@@ -62,57 +129,79 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-4">Start Date:</label>
-                    <div class="col-sm-6" style="padding-bottom: 10px;">
-                        <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker formControlName="StartDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+
+                <div class="col-6">
+                    <label>Start Date:</label>
+                    <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker formControlName="StartDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
                         <div class="text-danger" *ngIf="FYearFrm.get('StartDate').hasError('required') && formSubmitAttempt">
                             Start Date is required
                         </div>
-                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-4">End Date:</label>
-                    <div class="col-sm-6" style="padding-bottom: 10px;">
-                        <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker formControlName="EndDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+
+
+                <div class="col-6">
+                    <label>End Date:</label>
+                    <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker formControlName="EndDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
                         <div class="text-danger" *ngIf="FYearFrm.get('EndDate').hasError('required') && formSubmitAttempt">
                             End Date is required
                         </div>
-                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-4">Name:</label>
-                    <div class="col-sm-8" style="padding-bottom: 10px;">
-                        <input type="text" class="form-control" placeholder="" formControlName="Name">
-                        <div class="text-danger" *ngIf="(FYearFrm.get('Name').hasError('InvalidYear') || FYearFrm.get('Name').hasError('required')) && formSubmitAttempt">
-                            Financial year must be in YYYY.YYY format.
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-4">Nepali Start Date:</label>
-                    <div class="col-sm-8" style="padding-bottom: 10px;">
-                        <input type="text" class="form-control" placeholder="" formControlName="NepaliStartDate">
+
+                
+            </div>  
+            
+            <div class="row mt-4">
+
+                <div class="col-6">
+                    <label>Nepali Start Date:</label>
+                    <input type="text" class="form-control" placeholder="YYYY.MM.DD" formControlName="NepaliStartDate">
                         <div class="text-danger" *ngIf="(FYearFrm.get('NepaliStartDate').hasError('InvaliDate') || FYearFrm.get('NepaliStartDate').hasError('required')) && formSubmitAttempt">
                             Add Nepali Start Date in YYYY.MM.DD format.
                         </div>
+                </div>
+
+                <div class="col-6">
+                    <label>Nepali End Date:</label>
+                    <input type="text" class="form-control" placeholder="YYYY.MM.DD" formControlName="NepaliEndDate">
+                    <div class="text-danger" *ngIf="(FYearFrm.get('NepaliEndDate').hasError('InvaliDate')  || FYearFrm.get('NepaliEndDate').hasError('required')) && formSubmitAttempt">
+                        Add Nepali End Date in YYYY.MM.DD format.
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <label>Name:</label>
+                    <input type="text" class="form-control" placeholder="YYYY.YYY format" formControlName="Name">
+                    <div class="text-danger" *ngIf="(FYearFrm.get('Name').hasError('InvalidYear') || FYearFrm.get('Name').hasError('required')) && formSubmitAttempt">
+                        Financial year must be in YYYY.YYY format.
+                    </div>
+
+                </div>
+            </div>
+
+
+                <!-- <div class="form-group">
+                   
+                    <div class="col-sm-6" style="padding-bottom: 10px;">
+                        
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-4">Nepali End Date:</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" placeholder="" formControlName="NepaliEndDate">
-                        <div class="text-danger" *ngIf="(FYearFrm.get('NepaliEndDate').hasError('InvaliDate')  || FYearFrm.get('NepaliEndDate').hasError('required')) && formSubmitAttempt">
-                            Add Nepali End Date in YYYY.MM.DD format.
-                        </div>
-                    </div>
-                </div>
-            </div>
+                   
+                    <div class="col-sm-6" style="padding-bottom: 10px;">
+                        
+                    </div> -->
+                <!-- </div> -->
+                
+               
+            <!-- </div> -->
         </div>
         <div class="modal-footer">
             <div>
                 <button type="submit" class="btn btn-success pull-left">{{modalBtnTitle}}</button>
-                <button type="button" class="btn btn-danger pull-right" (click)="modalRef.hide()">Cancel</button>
+                <button type="button" class="btn btn-danger pull-right ml-2" (click)="modalRef.hide()">Cancel</button>
             </div>
         </div>
     </form>

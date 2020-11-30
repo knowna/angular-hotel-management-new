@@ -1,4 +1,4 @@
-﻿<div class='panel panel-primary'>
+﻿<!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
         DEPARTMENT
     </div>
@@ -35,7 +35,58 @@
             </div>
         </div>
     </div>
+</div> -->
+
+
+<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Department</h2>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="Search by Name">
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-success" (click)="openModal(template)" style="float: right">
+                <strong>
+                    <i class="fa fa-plus"></i>
+                    Add
+                </strong>
+            </button>
+        </div>
+    </div>
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <table  class='table table-bordered' *ngIf='departments && departments.length'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let department of departments">
+                        <td>{{department.Name}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" (click)="editDepartment(department.Id,template)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteDepartment(department.Id,template)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <!-- <span><img src="../../../../assets/images/Edit.png" (click)="editDepartment(department.Id,template)" height="60" width="60" /></span>
+                            <span><img src="../../../../assets/images/Delete.png" (click)="deleteDepartment(department.Id,template)" height="60" width="60" /></span> -->
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf='departments && departments.length==0' class="alert alert-info" role="alert">No record found!</div>
+        </div>
+    </div>
 </div>
+
+
 <ng-template #template>
     <form class="form-horizontal" novalidate (ngSubmit)="onSubmit(DepartFrm)" [formGroup]="DepartFrm">
         <div class="modal-header">
@@ -46,21 +97,29 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-2">Name:</label>
-                    <div class="col-sm-9">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Name</label>
                         <input type="text" class="form-control" placeholder="" formControlName="Name">
                         <div class="alert alert-danger" *ngIf="DepartFrm.get('Name').hasError('required') && formSubmitAttempt">
                             Name is required
                         </div>
                     </div>
                 </div>
+
+                <!-- <div class="col-md-6" style="z-index: 1600 !important;">
+                    <np-datepicker
+                        language="en">
+                    </np-datepicker>
+                </div> -->
+                
             </div>
         </div>
         <div class="modal-footer">
             <div>
                 <button type="submit" class="btn btn-success pull-left">{{modalBtnTitle}}</button>
-                <a class="btn btn-danger pull-right" (click)="modalRef.hide()">Cancel</a>
+                <button type="button" class="btn btn-danger ml-2" (click)="modalRef.hide()">Cancel</button>
+                <!-- <a class="btn btn-danger pull-right" (click)="modalRef.hide()">Cancel</a> -->
             </div>
         </div>
     </form>

@@ -13,6 +13,8 @@ export class DepartmentService {
     }
 
     post(url: string, model: any): Observable<any> {
+        console.log(model);
+        
         let body = JSON.stringify(model);
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let options = { headers: headers };

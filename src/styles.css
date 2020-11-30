@@ -1,5 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 
+.datepicker {z-index: 1151 !important ;}
+    
+
+
+
   #preloader {
       position: fixed;
       top: 0;

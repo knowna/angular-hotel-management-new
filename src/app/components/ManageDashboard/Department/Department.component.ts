@@ -27,12 +27,22 @@ export class DepartmentComponent implements OnInit {
     modalBtnTitle: string;
     modalRef: BsModalRef;
 
+    public sfromDate: string;
+
     constructor(private fb: FormBuilder, private _departmentService: DepartmentService, private modalService: BsModalService) { }
 
     ngOnInit(): void {
         this.DepartFrm = this.fb.group({
             Id: [''],
-            Name: ['', Validators.required]
+            Name: ['', Validators.required],
+
+            PriceTag: [''],
+            ScreenMenuId: [''],
+            SortOrder: [''],
+            TicketCreationMethod: [''],
+            TicketTypeId: [''],
+            UserString: [''],
+            WarehouseId: [''],
         });
         this.LoadDepartment();
     }
@@ -41,7 +51,11 @@ export class DepartmentComponent implements OnInit {
          
         this.indLoading = true;
         this._departmentService.get(Global.BASE_DEPARTMENT_ENDPOINT)
-            .subscribe(departments => { this.departments = departments; this.indLoading = false; },
+            .subscribe(departments => { 
+                this.departments = departments; 
+                console.log('dep', this.departments)
+                this.indLoading = false; 
+            },
             error => this.msg = error);
     }
 
@@ -49,7 +63,7 @@ export class DepartmentComponent implements OnInit {
 
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
-        this.modalTitle = "Add New Department";
+        this.modalTitle = "Add Department";
         this.modalBtnTitle = "Save";
         this.DepartFrm.reset();
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
@@ -59,8 +73,8 @@ export class DepartmentComponent implements OnInit {
          
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
-        this.modalTitle = "Edit DepartmentName";
-        this.modalBtnTitle = "Update";
+        this.modalTitle = "Edit Department";
+        this.modalBtnTitle = "Save";
         this.department = this.departments.filter(x => x.Id == id)[0];
         this.DepartFrm.setValue(this.department);
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
