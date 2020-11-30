@@ -1,5 +1,6 @@
 ﻿import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DateFormatter } from 'angular-nepali-datepicker';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
@@ -25,6 +26,15 @@ export class FinancialYearComponent implements OnInit {
     modalTitle: string;
     modalBtnTitle: string;
     modalRef: BsModalRef;
+    searchKeyword='';
+
+    startFormatter: DateFormatter = (sfromDate) => {
+        return `${ sfromDate.year }.${ (sfromDate.month*1 + 1) }.${ sfromDate.day }`;
+    }
+
+    endFormatter: DateFormatter = (stoDate) => {
+        return `${ stoDate.year }.${ (stoDate.month*1 + 1) }.${ stoDate.day }`;
+    }
 
     constructor(private fb: FormBuilder, private _departmentService: DepartmentService, private modalService: BsModalService) { }
 
@@ -51,7 +61,7 @@ export class FinancialYearComponent implements OnInit {
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
         this.modalTitle = "Add Financial Year";
-        this.modalBtnTitle = "Save & Submit";
+        this.modalBtnTitle = "Save";
         this.FYearFrm.reset();
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
     }
@@ -60,7 +70,7 @@ export class FinancialYearComponent implements OnInit {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Financial Year";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.financialyear = this.FinancialYears.filter(x => x.Id == id)[0];
         this.FYearFrm.controls.Id.setValue(this.financialyear.Id);        
         this.FYearFrm.controls.Name.setValue(this.financialyear.Name);
@@ -128,6 +138,8 @@ export class FinancialYearComponent implements OnInit {
         });
     }
 
+   
+
     onSubmit(formData: any) {
         this.msg = "";
         this.formSubmitAttempt = true;
@@ -138,6 +150,8 @@ export class FinancialYearComponent implements OnInit {
         if (fyearfrm.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
+                    console.log(formData.value);
+                    
                     this._departmentService.post(Global.BASE_FINANCIAL_YEAR_ENDPOINT, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
@@ -203,4 +217,10 @@ export class FinancialYearComponent implements OnInit {
     SetControlsState(isEnable: boolean) {
         isEnable ? this.FYearFrm.enable() : this.FYearFrm.disable();
     }
+
+    addFiscalyear(){
+
+    }
+
+    searchItem(){}
 }
