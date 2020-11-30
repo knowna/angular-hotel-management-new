@@ -110,9 +110,9 @@ export class CompanyComponent implements OnInit {
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
         this.modalTitle = "Add Company";
-        this.modalBtnTitle = "Save & Submit";
+        this.modalBtnTitle = "Save";
         this.companyForm.reset();
-        this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
+        this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false ,class: 'modal-lg'});
     }
 
     viewFile(fileUrl, template: TemplateRef<any>) {
@@ -125,7 +125,7 @@ export class CompanyComponent implements OnInit {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Company";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.company = this.companies.filter(x => x.Id == id)[0];
         this.companyForm.controls.Id.setValue(this.company.Id);
         this.companyForm.controls.BranchCode.setValue(this.company.BranchCode);
@@ -141,7 +141,7 @@ export class CompanyComponent implements OnInit {
         this.companyForm.controls.Pan_Vat.setValue(this.company.Pan_Vat);
         this.companyForm.controls.Phone.setValue(this.company.Phone);
 
-        this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
+        this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false ,class: 'modal-lg'});
     }
 
     deleteCompany(id: number, template: TemplateRef<any>) {
@@ -163,7 +163,7 @@ export class CompanyComponent implements OnInit {
         this.companyForm.controls.NameNepali.setValue(this.company.NameNepali);
         this.companyForm.controls.Pan_Vat.setValue(this.company.Pan_Vat);
         this.companyForm.controls.Phone.setValue(this.company.Phone);
-        this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
+        this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false ,class: 'modal-lg'});
     }
 
     validateAllFields(formGroup: FormGroup) {

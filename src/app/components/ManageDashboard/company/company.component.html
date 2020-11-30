@@ -1,4 +1,4 @@
-﻿<div class='panel panel-primary'>
+﻿<!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
         Company Details
     </div>
@@ -55,7 +55,72 @@
             </div>
         </div>
     </div>
+</div> -->
+
+<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Company Details</h2>
+        </div>
+        <div class="col-md-4">
+            <!-- <input type="text" class="form-control" placeholder="Search by Name"> -->
+        </div>
+        <div class="col-md-4" *ngIf="companies && companies.length == 0">
+            <button class="btn btn-success" (click)="openModal(template)" style="float: right">
+                <strong>
+                    <i class="fa fa-plus"></i>
+                    Add
+                </strong>
+            </button>
+        </div>
+    </div>
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="isLoading">
+                <img src="../../../../assets/images/loading.gif" width="32" height="32" />Loading...
+            </div>
+            <table class="table table-bordered" *ngIf='companies && companies.length'>
+                <thead>
+                    <tr>
+                        <th>Branch Code</th>
+                        <th>Name(English)</th>
+                        <th>Name(Nepali)</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Vat/Pan</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let company of companies">
+                        <td>{{company.BranchCode}}</td>
+                        <td>{{company.NameEnglish}}</td>
+                        <td class="text-nepali">{{company.NameNepali}}</td>
+                        <td>{{company.Phone}}</td>
+                        <td>{{company.Email}}</td>
+                        <td>{{company.Pan_Vat}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" (click)="editCompany(company.Id,template)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteCompany(company.Id,template)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <!-- <span>
+                                <img src="../../../../assets/images/Edit.png" (click)="editCompany(company.Id,template)" height="32" width="32" />
+                            </span>
+                            <span>
+                                <img src="../../../../assets/images/Delete.png" (click)="deleteCompany(company.Id,template)" height="32" width="32" />
+                            </span> -->
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf='companies && companies.length==0' class="alert alert-info" role="alert">No record found!</div>
+        </div>
+    </div>
 </div>
+
 
 <ng-template #imageView>
     <div class="modal-header">
@@ -83,31 +148,29 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-4">Branch Code:</label>
-                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">Branch Code</label>
                         <input type="text" class="form-control" placeholder="" formControlName="BranchCode">
                         <div class="alert alert-danger" *ngIf="companyForm.get('BranchCode').hasError('required') && formSubmitAttempt">
                             BranchCode field is required
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-4">Name(English):</label>
-                    <div class="col-sm-8" style="padding-bottom: 10px;">
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">Name(English)</label>
                         <input class="col-md-3 form-control" formControlName="NameEnglish" />
                         <div class="alert alert-danger" *ngIf="companyForm.get('NameEnglish').hasError('required') && formSubmitAttempt">
                             English Name field is required
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-4">Name(Nepali):</label>
-                    <div class="col-sm-8" style="padding-bottom: 10px;">
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">Name(Nepali)</label>
                         <input class="col-md-3 form-control" formControlName="NameNepali" />
                         <div class="alert alert-danger" *ngIf="companyForm.get('NameNepali').hasError('required') && formSubmitAttempt">
                             Nepali Name field is required
@@ -115,16 +178,28 @@
                     </div>
                 </div>
             </div>
+            
             <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-4">Address:</label>
-                    <div class="col-sm-8" style="padding-bottom: 10px;">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">Address:</label>
                         <input type="text" class="form-control" placeholder="" formControlName="Address">
                         <div class="alert alert-danger" *ngIf="companyForm.get('Address').hasError('required') && formSubmitAttempt">
                             Address field is required
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-4">
+                    
+                </div>
+
+                <div class="col-md-4">
+                    
+                </div>
+            </div>
+            <div class="row">
+                
             </div>
             <div class="row">
                 <div class="form-group">
