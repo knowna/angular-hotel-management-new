@@ -1,0 +1,140 @@
+﻿<!-- <div class='panel panel-primary'>
+    <div class='panel-heading'>
+        RoomType
+    </div>
+    <div class='panel-body'>
+        <div class='table-responsive'>
+            <div style="padding-bottom:10px">
+                <img src="../../images/Add.png" (click)="openModal(template)" height="60" width="60" />
+                <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../images/loading.gif" width="32" height="32" /> Loading...</div>
+                <div *ngIf='roomtypes && roomtypes.length==0' class="alert alert-info" role="alert">No record found!</div>
+                <table class='table table-striped' *ngIf='roomtypes && roomtypes.length'>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let roomtype of roomtypes">
+                            <td>{{roomtype.Name}}</td>
+                            <td>
+                                <span><img src="../../images/Edit.png" (click)="editroomtype(roomtype.Id,template)" height="60" width="60" /></span>
+                                <span><img src="../../images/Delete.png" (click)="deleteroomtype(roomtype.Id,template)" height="60" width="60" /></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                </div>
+            </div>
+            <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{msg}}
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+
+
+<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header"> Table / RoomType</h2>
+        </div>
+        <div class="col-md-4">
+            <input  type="text" class="form-control"
+                    (keyup)="searchItem()" 
+                    [(ngModel)]="searchKeyword" 
+                    placeholder="Search by Name">
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-success" (click)="openModal(template)" style="float: right">
+                <strong>
+                    <i class="fa fa-plus"></i>
+                    Add
+                </strong>
+            </button>
+        </div>
+    </div>
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <table class='table table-bordered'  *ngIf='roomtypes && roomtypes.length'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let roomtype of roomtypes">
+                        <td>{{roomtype.Name}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" (click)="editroomtype(roomtype.Id,template)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteroomtype(roomtype.Id,template)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <!-- <span><img src="../../images/Edit.png" (click)="editInventory(InventoryItem.Id)" height="60" width="60" /></span>
+                            <span><img src="../../images/Delete.png" (click)="deleteInventory(InventoryItem.Id)" height="60" width="60" /></span> -->
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf='roomtypes && roomtypes.length==0' class="alert alert-info" role="alert">No record found!</div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<ng-template #template>
+    <form class="form-horizontal" novalidate (ngSubmit)="onSubmit(roomtypefrm)" [formGroup]="roomtypefrm">
+        <div class="modal-header" style="background-color: #364a70;">
+            <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-2">Name:</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" placeholder="" formControlName="Name">
+                        <div class="alert alert-danger" *ngIf="roomtypefrm.get('Name').hasError('required') && formSubmitAttempt">
+                            Name is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success pull-left">{{modalBtnTitle}}</button>
+            <button 
+                type="button"
+                class="btn btn-danger"
+                (click)="CloseForm()">
+                Cancel
+            </button>
+           
+        </div>
+    </form>
+</ng-template>
+

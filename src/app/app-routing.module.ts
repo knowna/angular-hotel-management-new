@@ -91,6 +91,7 @@ import { InventoryItemComponent } from './components/InventoryDashboard/inventor
 import { UnitTypeComponent } from './components/InventoryDashboard/UnitType/UnitType.Component';
 import { WareHouseComponent } from './components/InventoryDashboard/warehouse/warehouse.component';
 import { WareHouseTypeComponent } from './components/InventoryDashboard/warehouse-type/warehousetype.component';
+import { RoomTypeComponent } from './components/ManageDashboard/roomType/RoomType.component';
 
 
 const routes: Routes = [
@@ -252,6 +253,11 @@ const routes: Routes = [
   {
     path: 'managedashboard/department',
     component: DepartmentComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'managedashboard/table-room',
+    component: RoomTypeComponent,
     canActivate: [AuthGuard]
   },
   
