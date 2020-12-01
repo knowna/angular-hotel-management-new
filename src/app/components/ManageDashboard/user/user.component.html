@@ -1,36 +1,22 @@
 ﻿
 
-
- <div class="row m-0 mt-3">
-    <div class="col-md-4">
-        <!-- <h4>Menu Configure</h4> -->
-        <h2 class="header">User Management</h2>
+<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">User Management</h2>
+        </div>
+        <div class="col-md-4">
+            <!-- <input type="text" class="form-control" placeholder="Search by Name" [(ngModel)]="name"> -->
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-success" (click)="addUser()" style="float: right">
+                <strong>
+                    <i class="fa fa-plus"></i>
+                    Add
+                </strong>
+            </button>
+        </div>
     </div>
-    <div class="col-md-4">
-        <!-- <input type="text" class="form-control" placeholder="Search by Name" [(ngModel)]="name"> -->
-    </div>
-    <!-- <div class="col-md-6">
-    </div> -->
-    <div class="col-md-4">
-        <button class="btn btn-success" (click)="addUser()" style="float: right">
-            <strong>
-                <i class="fa fa-plus"></i>
-                Add
-            </strong>
-        </button>
-    </div>
-</div>
-
-<div class='panel panel-primary'>
-    <div class='panel-heading'>
-        <h4></h4>
-    </div>
-
-
-
-
-    
-
 
     <div class="row m-0 mt-2">
         <div class="col-sm-12 table-responsive">
@@ -38,33 +24,28 @@
             <table class='table table-bordered'>
                 <thead>
                     <tr>
-                        <th class="text-center">Name</th>
-                        <th class="text-center">UserName</th>
-                        <th class="text-center">Actions</th>
+                        <th>Name</th>
+                        <th>UserName</th>
+                        <th>Email</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            Nona
-                        </td>
-                        <td> Subedi</td>
-                        <td>njfjjf</td>
-                    </tr>
-                    <!-- <tr *ngFor="let users of user; let i = index">
+                    <tr *ngFor="let users of user; let i = index">
                         <td>{{users.FullName}}</td>
                         <td>{{users.UserName}}</td>
+                        <td>{{users.Email}}</td>
                         <td>
 
-                            <button class="btn btn-primary btn-sm" (click)="editUser(users.UserId)">
+                            <button class="btn btn-primary btn-sm" (click)="editUser(users.Id)">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteUser(users.UserId)">
+                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteUser(users.Id)">
                                 <i class="fa fa-trash"></i>
                             </button>
                             
                         </td>
-                    </tr> -->
+                    </tr>
                 </tbody>
             </table>
             <!-- <div *ngIf='menus && menus.length==0' class="alert alert-info" role="alert">No record found!</div> -->
@@ -72,12 +53,14 @@
     </div>
 
 
-   
+    
 </div>
+
+
 <ng-template #template>
     <form class="form-verticle" novalidate (ngSubmit)="onSubmit(userFrm)" [formGroup]="userFrm">
         <div class="modal-header" style="background-color: #364a70;">
-            <h4 class="modal-title pull-left">User</h4>
+            <h4 class="modal-title pull-left">{{modalTitle}}</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -86,8 +69,13 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="control-label">First Name:</label>
-                        <div class="input-group">
+                        <label class="control-label">First Name</label>
+                        <input type="text" class="form-control" placeholder="Full Name" formControlName="FirstName" setAutoFocus>
+                        <div class="alert alert-danger mt-1" *ngIf="userFrm.get('FirstName').hasError('required') && formSubmitAttempt">
+                            First Name is required
+                        </div>
+
+                        <!-- <div class="input-group">
                             <span class="input-group-addon">
                                 <strong>
                                     <i class="fa fa-user"></i>&nbsp;
@@ -97,14 +85,18 @@
                         </div>
                         <div class="help-block" *ngIf="userFrm.get('FirstName').hasError('required') && formSubmitAttempt">
                             First Name is required
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="control-label">Last Name:</label>
-                        <div class="input-group">
+                        <label class="control-label">Last Name</label>
+                        <input type="text" class="form-control" placeholder="Last Name" formControlName="LastName" setAutoFocus>
+                        <div class="alert alert-danger mt-1" *ngIf="userFrm.get('LastName').hasError('required') && formSubmitAttempt">
+                            Last Name is required
+                        </div>
+                        <!-- <div class="input-group">
                             <span class="input-group-addon">
                                 <strong>
                                     <i class="fa fa-user"></i>&nbsp;
@@ -114,17 +106,24 @@
                         </div>
                         <div class="help-block" *ngIf="userFrm.get('LastName').hasError('required') && formSubmitAttempt">
                             First Name is required
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 
             </div>
-            <div class="row">
 
+            <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="control-label">Email:</label>
-                        <div class="input-group">
+                        <label class="control-label">Email</label>
+                        <input type="text" class="form-control" placeholder="Email" formControlName="Email">
+                        <div class="alert alert-danger mt-1" *ngIf="userFrm.get('Email').hasError('required') && formSubmitAttempt">
+                            Email is required
+                        </div> 
+                        <div class="text-danger" *ngIf="Email.errors?.pattern">
+                           Not a valid email
+                        </div> 
+                        <!-- <div class="input-group">
                             <span class="input-group-addon">
                                 <strong>
                                     <i class="fa fa-envelope"></i>&nbsp;
@@ -137,27 +136,40 @@
                         </div> 
                         <div class="text-danger" *ngIf="Email.errors?.pattern">
                            Not a valid email
-                          </div> 
+                        </div>  -->
                     </div>
                 </div>
 
-
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="control-label">Role Name:</label>
-                        <div class="input-group">
+                        <label class="control-label">Username</label>
+                        <input type="text" class="form-control" placeholder="Username" formControlName="UserName">
+                        <div class="alert alert-danger mt-1" *ngIf="userFrm.get('UserName').hasError('required') && formSubmitAttempt">
+                            Username is required
+                        </div>
+                        <!-- <div class="input-group">
                             <span class="input-group-addon">
                                 <strong>
                                     <i class="fa fa-user"></i>&nbsp;
                                 </strong>
                             </span>
-                            <input type="test" class="form-control" placeholder="role" formControlName="RoleName">
+                            <input type="text" class="form-control" placeholder="UserName" formControlName="UserName">
                         </div>
-                        <div class="help-block" *ngIf="userFrm.get('RoleName').hasError('required') && formSubmitAttempt">
+                        <div class="help-block" *ngIf="userFrm.get('UserName').hasError('required') && formSubmitAttempt">
+                            user name is required
+                        </div> -->
+                    </div>
+                </div>
+
+                <!-- <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Role Name</label>
+                        <input type="test" class="form-control" placeholder="role" formControlName="RoleName">
+                        <div class="alert alert-danger mt-1" *ngIf="userFrm.get('RoleName').hasError('required') && formSubmitAttempt">
                             Role name is required
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- <div class="col-md-6">
                     <div class="form-group">
@@ -178,28 +190,19 @@
                
             </div>
             <div class="row">
+                
 
-                <div class="col-md-6">
+                <div class="col-md-6" *ngIf="modalTitle != 'Edit User'">
                     <div class="form-group">
-                        <label class="control-label">User Name:</label>
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <strong>
-                                    <i class="fa fa-user"></i>&nbsp;
-                                </strong>
-                            </span>
-                            <input type="text" class="form-control" placeholder="UserName" formControlName="UserName">
+                        <label class="control-label">Password</label>
+                        <input type="password" class="form-control" placeholder="Password" formControlName="Password">
+                        <div class="alert alert-danger mt-1" *ngIf="userFrm.get('Password').hasError('required') && formSubmitAttempt">
+                            Password is required
                         </div>
-                        <div class="help-block" *ngIf="userFrm.get('UserName').hasError('required') && formSubmitAttempt">
-                            user name is required
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label">Password:</label>
-                        <div class="input-group">
+                        <div class="text-danger" *ngIf="Password.errors?.pattern">
+                            Password must have min length 6 with one digit, one capital letter & one special character
+                        </div> 
+                        <!-- <div class="input-group">
                             <span class="input-group-addon">
                                 <strong>
                                     <i class="fa fa-key"></i>&nbsp;
@@ -212,18 +215,22 @@
                         </div>
                         <div class="text-danger" *ngIf="Password.errors?.pattern">
                             Password must have min length 6 with one digit, one capital letter & one special character
-                           </div> 
+                        </div>  -->
                     </div>
                 </div>
 
              
-            </div>
+            <!-- </div>
 
-            <div class="row">
-                <div class="col-md-6">
+            <div class="row" *ngIf="modalTitle != 'Edit User'"> -->
+                <div class="col-md-6" *ngIf="modalTitle != 'Edit User'">
                     <div class="form-group">
-                        <label class="control-label"> Confirm Password:</label>
-                        <div class="input-group">
+                        <label class="control-label">Confirm Password</label>
+                        <input type="password" (keyup)="passwordMatch()" class="form-control" placeholder="ConfirmPassword" formControlName="ConfirmPassword">
+                        <div class="text-danger" *ngIf="passwordNotMatch">
+                            Password do not match 
+                        </div>
+                        <!-- <div class="input-group">
                             <span class="input-group-addon">
                                 <strong>
                                     <i class="fa fa-key"></i>&nbsp;
@@ -233,14 +240,14 @@
                         </div>
                         <div class="help-block text-danger" *ngIf="passwordNotMatch">
                             Password do not match 
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="modal-footer">
-            <button type="submit" class="btn btn-success" [disabled]="buttonDisabled">Save User Details </button>
+            <button type="submit" class="btn btn-success" [disabled]="buttonDisabled">{{modalBtnTitle}}</button>
             <button type="button" class="btn btn-danger" (click)="modalRef.hide()">Cancel</button>
         </div>
     </form>

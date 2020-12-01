@@ -1,8 +1,10 @@
 ﻿import { IUserRole } from './userRole';
 
 export interface IUser {
-    UserId: number,
+    Id: number,
     FullName: string,
+    FirstName: string,
+    LastName: string,
     UserName: string
     Password: string,
     Email: string,
