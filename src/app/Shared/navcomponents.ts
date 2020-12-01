@@ -419,15 +419,18 @@ export const navcomponents=[
           title: 'Warehouses',
           icon: 'browser-outline',
           permission:'Inventory:Warehouse',
+          img:'../../../assets/images/warehouses.png',
           children: [
             {
               title: 'Warehouse',
               link: 'Inventory/WareHouse',
-              permission: 'Inventory:Warehouse:Warehouse'
+              permission: 'Inventory:Warehouse:Warehouse',
+              img:'../../../assets/images/warehouse.png',
             },
             {
               title: 'Warehouse Type',
               link: 'Inventory/WareHouseType',
+              img:'../../../assets/images/warehouseType.png',
               permission: 'Inventory:Warehouse:WareHouseType'
             },
           ],
@@ -497,6 +500,12 @@ export const navcomponents=[
               link: '/managedashboard/department',
               permission: 'Manage:management:department',
               img:'../../../assets/images/department.png',
+            },
+            {
+              title: 'Table/Room Type',
+              link: '/managedashboard/table-room',
+              permission: 'Manage:management:table-room-type',
+              img:'../../../assets/images/manage-roomtype.png',
             },
             {
               title: 'Financial Year',

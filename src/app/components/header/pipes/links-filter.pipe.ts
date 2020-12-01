@@ -31,6 +31,7 @@ export class LinksFilterPipe implements PipeTransform {
     'Manage:user:user roles',
     'Manage:management',
     'Manage:management:department',
+    'Manage:management:table-room-type',
     'Manage:management : financial year',
     'Manage:management: company',
     'Account / Finance',

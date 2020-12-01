@@ -56,7 +56,11 @@
     public static BASE_ORDERSCancel_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/OrderCancel/';
     public static BASE_SCREENORDERS_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/ScreenOrderController/';
     public static BASE_JOURNALVOUCHER_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/AccountTransactionAPI/';
-    public static BASE_USERACCOUNT_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/UserAccountAPI/';
+    public static BASE_USERACCOUNT_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/UserAccountAPI/GetUsers/';
+    public static BASE_USERACCOUNT_CREATE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/UserAccountAPI/CreateUser/';
+    public static BASE_USERACCOUNT_UPDATE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/UserAccountAPI/EditUser/';
+    
+
     public static BASE_LOGIN_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/LoginAPI/';
     public static BASE_PURCHASEORDER_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/PurchaseOrderAPI/';
     public static BASE_PURCHASE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/PurchaseAPI/';
@@ -74,7 +78,7 @@
     public static BASE_JOURNALVOUCHERGET_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/AccountTransactionAPI/Get/';
     public static BASE_PURCHASEORDERDETAILS_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/PurchaseOrderDetailsAPI/';
     public static BASE_PURCHASEDETAILS_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/PurchaseDetailsAPI/';
-    public static BASE_ROOMTYPE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/RoomTypeAPI/';
+    public static BASE_ROOMTYPE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/ReservationRoomType/';
     public static BASE_ROOMAPI_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/RoomAPI/';
     public static BASE_ROOMBOOKAPI_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/RoomBooking/';
     public static BASE_WAREHOUSEAPI_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/WareHouseAPI/';

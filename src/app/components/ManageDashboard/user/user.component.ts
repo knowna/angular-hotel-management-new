@@ -39,7 +39,7 @@ export class UserComponent implements OnInit {
 
     ngOnInit(): void {
         this.userFrm = this.fb.group({
-            UserId: [''],
+            Id: [''],
             FirstName: ['', Validators.required],
             LastName: ['', Validators.required],
             UserName: ['', Validators.required],
@@ -56,66 +56,75 @@ export class UserComponent implements OnInit {
     }
 
     get Email() {
-        
         return this.userFrm.controls.Email;
-      }
+    }
 
-      get Password() {
-        
-        return this.userFrm.controls.Password;
-      }
+    get Password() {
+    return this.userFrm.controls.Password;
+    }
 
     LoadUsers(): void {
         this.indLoading = true;
         this._userService.get(Global.BASE_USERACCOUNT_ENDPOINT)
-            .subscribe(user => { this.user = user;
-                console.log(this.users);
-                
-                
-                this.indLoading = false; console.log(user) },
-            error =>{this.msg = error,
-                this.indLoading=false} );
+            .subscribe(user => { 
+                this.user = user;
+                this.indLoading = false; 
+                console.log(user) 
+            },
+            error =>{
+                this.msg = error,
+                this.indLoading=false
+            } );
     }
 
     addUser() {
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
         this.modalTitle = "Add User";
-        this.modalBtnTitle = "Add";
+        this.modalBtnTitle = "Save";
         this.userFrm.reset();
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
-            keyboard: false
+            keyboard: false,
+            class:'modal-lg'
         });
     }
 
     editUser(Id: number) {
-         ;
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit User";
-        this.modalBtnTitle = "Update";
-        this.users = this.user.filter(x => x.UserId == Id)[0];
-        this.userFrm.setValue(this.users);
+        this.modalBtnTitle = "Save";
+        this.users = this.user.filter(x => x.Id == Id)[0];
+        this.userFrm.controls['Id'].setValue(this.users.Id);
+        this.userFrm.controls['FirstName'].setValue(this.users.FirstName);
+        this.userFrm.controls['LastName'].setValue(this.users.LastName);
+        this.userFrm.controls['UserName'].setValue(this.users.UserName);
+        // this.userFrm.controls['Password'].setValue(this.users.Password);
+        this.userFrm.controls['Email'].setValue(this.users.Email);
+        // console.log('the found user is', this.users);
+
+        // this.userFrm.setValue(this.users);
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
-            keyboard: false
+            keyboard: false,
+            class:'modal-lg'
         });
 
      
     }
 
     deleteUser(Id: number) {
-         ;
         this.dbops = DBOperation.delete;
         this.SetControlsState(false);
         this.modalTitle = "Confirm to Delete User?";
         this.modalBtnTitle = "Delete";
-        this.users = this.user.filter(x => x.UserId == Id)[0];
+        this.users = this.user.filter(x => x.Id == Id)[0];
         this.userFrm.setValue(this.users);
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
-            keyboard: false
+            keyboard: false,
+            class:'modal-lg'
         });
     }
 
@@ -149,7 +158,6 @@ export class UserComponent implements OnInit {
     }
 
     onSubmit(formData:any) {
-         ;
         this.formSubmitAttempt = true;
         this.msg = "";
         let users = this.userFrm
@@ -159,11 +167,12 @@ export class UserComponent implements OnInit {
                 case DBOperation.create:
                     console.log(formData.value);
                     
-                    this._userService.post(Global.BASE_USERACCOUNT_ENDPOINT, formData.value, ).subscribe(
+                    this._userService.post(Global.BASE_USERACCOUNT_CREATE_ENDPOINT, formData.value, ).subscribe(
                         data => {
                             if (data == 1)
                             {
-                                this.openModal2(this.TemplateRef2); 
+                                alert("Data successfully added.");
+                                // this.openModal2(this.TemplateRef2); 
                                 this.LoadUsers();
                                 this.formSubmitAttempt = false;
                             }
@@ -178,7 +187,7 @@ export class UserComponent implements OnInit {
                     break;
                 case DBOperation.update:
                      
-                    this._userService.put(Global.BASE_USERACCOUNT_ENDPOINT, formData.value.UserId, formData.value, ).subscribe(
+                    this._userService.put(Global.BASE_USERACCOUNT_UPDATE_ENDPOINT, formData.value.Id, formData.value, ).subscribe(
                         data => {
                             if (data == 1) //Success
                             {

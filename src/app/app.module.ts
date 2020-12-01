@@ -188,6 +188,7 @@ import { UnitTypeComponent } from './components/InventoryDashboard/UnitType/Unit
 import { WareHouseComponent } from './components/InventoryDashboard/warehouse/warehouse.component';
 import { WareHouseTypeComponent } from './components/InventoryDashboard/warehouse-type/warehousetype.component';
 import { RoomService } from './Service/Inventory/room.service';
+import { RoomTypeComponent } from './components/ManageDashboard/roomType/RoomType.component';
 
 @NgModule({
   imports: [
@@ -242,6 +243,7 @@ import { RoomService } from './Service/Inventory/room.service';
     HeaderComponent,
     NavbarComponent,
     TestComponent,
+    RoomTypeComponent,
     MasterLedgerComponent,
     PagenotfoundComponent,
     // CheckInComponent,
