@@ -74,7 +74,7 @@
     public static BASE_JOURNALVOUCHERGET_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/AccountTransactionAPI/Get/';
     public static BASE_PURCHASEORDERDETAILS_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/PurchaseOrderDetailsAPI/';
     public static BASE_PURCHASEDETAILS_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/PurchaseDetailsAPI/';
-    public static BASE_ROOMTYPE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/RoomTypeAPI/';
+    public static BASE_ROOMTYPE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/ReservationRoomType/';
     public static BASE_ROOMAPI_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/RoomAPI/';
     public static BASE_ROOMBOOKAPI_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/RoomBooking/';
     public static BASE_WAREHOUSEAPI_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/WareHouseAPI/';
