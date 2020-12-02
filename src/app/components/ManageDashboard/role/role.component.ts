@@ -34,7 +34,7 @@ export class RoleComponent implements OnInit {
 
     ngOnInit(): void {
         this.RoleFrm = this.fb.group({
-            RoleId: [''],
+            Id: [''],
             RoleName: [''],
             Description: [''],
             CreatedOn: [''],
@@ -50,18 +50,23 @@ export class RoleComponent implements OnInit {
     LoadRoles(): void {
         this.indLoading = true;
         this._roleService.get(Global.BASE_ROLES_ENDPOINT)
-            .subscribe(roles => { this.roles = roles; this.indLoading = false; },
-            error =>{this.msg = error,
-                        this.indLoading=false,
-                        console.log("Error:"+error)    
-                    } );
+            .subscribe(roles => { 
+                this.roles = roles; 
+                console.log('the roles are', this.roles)
+                this.indLoading = false; 
+            },
+            error =>{
+                this.msg = error,
+                this.indLoading=false,
+                console.log("Error:"+error)    
+            } );
     }
 
     addRoles() {
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
-        this.modalTitle = "Add UserRole";
-        this.modalBtnTitle = "Add";
+        this.modalTitle = "Add Role";
+        this.modalBtnTitle = "Save";
         this.RoleFrm.reset();
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
@@ -71,12 +76,11 @@ export class RoleComponent implements OnInit {
     }
 
     editUserRole(Id: number) {
-         ;
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
-        this.modalTitle = "Edit UserRole";
-        this.modalBtnTitle = "Update";
-        this.role = this.roles.filter(x => x.RoleId == Id)[0];
+        this.modalTitle = "Edit Role";
+        this.modalBtnTitle = "Save";
+        this.role = this.roles.filter(x => x.Id == Id)[0];
         this.RoleFrm.setValue(this.role);
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
@@ -92,7 +96,7 @@ export class RoleComponent implements OnInit {
         this.SetControlsState(true);
         this.modalTitle = "Confirm to Delete?";
         this.modalBtnTitle = "Delete";
-        this.role = this.roles.filter(x => x.RoleId == id)[0];
+        this.role = this.roles.filter(x => x.Id == id)[0];
         this.RoleFrm.setValue(this.role);
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',

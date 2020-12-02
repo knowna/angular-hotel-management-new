@@ -1,5 +1,5 @@
 ﻿export interface IRole {
-    RoleId: number,
+    Id: number,
     RoleName: string,
     Description: string,
     Selected: boolean,
