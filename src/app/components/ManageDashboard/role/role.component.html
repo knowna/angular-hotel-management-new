@@ -1,4 +1,65 @@
-﻿<div class="container">
+﻿<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Manage Roles</h2>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="Search by Name">
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-success" (click)="addRoles()" style="float: right">
+                <strong>
+                    <i class="fa fa-plus"></i>
+                    Add
+                </strong>
+            </button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="indLoading">
+                <img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...
+            </div>
+            <table class='table table-bordered' *ngIf='roles && roles.length'>
+                <thead>
+                    <tr>
+                        <th>Role Name</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let role of roles">
+                        <td>{{role.RoleName}}</td>
+                        <td>{{role.Name}}</td>
+                        <td>{{role.Description}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" (click)="editUserRole(role.Id)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteUserRole(role.Id)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <!-- <span>
+                                <img src="../../../../assets/images/EditUser.png" (click)="editUserRole(role.RoleId)" height="32" width="32" style="cursor: pointer;" />
+                            </span>
+                            <span>
+                                <img src="../../../../assets/images/DeleteUser.png" (click)="deleteUserRole(role.RoleId)" height="32" width="32" style="cursor: pointer;" />
+                            </span> -->
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf='roles && roles.length==0' class="alert alert-info" role="alert">No record found!</div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- <div class="container">
     <div class='panel panel-primary'>
         <div class='panel-heading'>
             Manage Roles
@@ -38,7 +99,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <ng-template #template>
     <form class="panel-primary" novalidate (ngSubmit)="onSubmit(RoleFrm)" [formGroup]="RoleFrm">
@@ -102,7 +163,7 @@
         </div>
         <div class="modal-footer">
             <div>
-                <button type="button" class="btn btn-danger pull-right" [disabled]="buttonDisabled" (click)="reset();modalRef.hide();">Cancel</button>
+                <button type="button" class="btn btn-danger pull-right ml-2" [disabled]="buttonDisabled" (click)="modalRef.hide();">Cancel</button>
                 <button type="submit" class="btn btn-success pull-left">{{modalBtnTitle}} </button>
             </div>
         </div>
