@@ -213,7 +213,7 @@ export class FullMergeComponent implements OnInit {
     
     showDetail(order){
         order.ItemList = [];
-        order.Orders = [];
+        order.Orders = []
         this.orderApi.loadOrdersNew(order.Id)
         .subscribe(
             data => {

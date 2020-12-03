@@ -45,7 +45,7 @@ export class RoleComponent implements OnInit {
             // LastChangedDate: [''],
             // LastChangedBy: [''],
             // Selected: [''],
-            IsSysAdmin: [false],
+            IsSysAdmin: [''],
 
             Name:[''],
             IsAdd:[''],
@@ -134,12 +134,14 @@ export class RoleComponent implements OnInit {
         let Role = this.RoleFrm;
         this.formSubmitAttempt = true;
 
+        console.log('post data',formData.value)
+
         if (Role.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
                     this._roleService.post(Global.BASE_ROLES_ADD_ENDPOINT, formData.value).subscribe(
                         data => {
-                            console.log('data',formData.value)
+                            console.log('response',data);
                             if (data == 1) //Success
                             {
                                 this.openModal2(this.TemplateRef2);
@@ -149,6 +151,7 @@ export class RoleComponent implements OnInit {
                                 this.msg = "There is some issue in creating records, please contact to system administrator!"
                             }
 
+                            // this.RoleFrm.reset();
                             this.modalRef.hide();
                             this.formSubmitAttempt = false;
 
