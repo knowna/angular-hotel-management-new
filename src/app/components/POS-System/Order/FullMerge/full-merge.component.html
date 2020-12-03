@@ -12,7 +12,7 @@
     <div class="card"> -->
         <div class="row m-0">
             
-            <div class="col-sm-6 ml-auto mr-auto" style="margin: inherit;">
+            <div class="col-sm-5 ml-auto mr-auto" style="margin: inherit;">
                 <span> Merge Ticket from:  </span>
                 <ngx-select-dropdown
                     (change)="secondaryChanged($event)"
@@ -22,7 +22,7 @@
                 </ngx-select-dropdown>
             </div>  
 
-            <div class="col-sm-6 ml-auto mr-auto" style="margin: inherit;">
+            <div class="col-sm-5 ml-auto mr-auto" style="margin: inherit;">
                 <span> Merge To Ticket:  </span>
                 <ngx-select-dropdown
                     (change)="primaryChanged($event)"
@@ -30,13 +30,16 @@
                     [config]="config"
                     [options]="primaryOrderList">
                 </ngx-select-dropdown>
-            </div>   
+            </div> 
+            <div class="col-md-2 mr-auto">
+                <button type="button" (click)="merge()" style="float: right;"  class="btn btn-success mt-4 w-100">Merge </button>
+            </div>  
 
 
             
         </div>
 
-        <div class="row m-0 mt-4">
+        <!-- <div class="row m-0 mt-4">
             <div class="col-11">
 
             </div>
@@ -44,27 +47,23 @@
                 <button type="button" (click)="merge()" style="float: right;"  class="btn btn-success">Merge </button>
 
             </div>
-        </div>
+        </div> -->
 
 
-        <div class="row m-0 mt-5">
-            <h6  class="font-weight-bold ml-3"> All unsettled tickets  </h6> 
-        </div>
+      
 
         
-        <div *ngFor="let order of tempPrimaryOrderList" class="ml-3 mb-2 mt-2 row card">
-            <div class="card-body" style="cursor: pointer;">
-                <span (click)="showDetail(order);order.show = !order.show" style="width:100%"> 
-                    <i 
-                        class="fa" 
-                        [class.fa-chevron-right]="!order.show"
-                        [class.fa-chevron-down]="order.show">
-                    </i>
-                    {{order.Name}}  {{order.TicketId}}
+        <div class="ml-3 mb-2 mt-2 row m-0">
+
+          
+            <div *ngIf="deatilSecondaryTicket.Name" class="card col-md-5 mt-1" style="cursor: pointer;">
+                <span style="width:100%"> 
+                    
+                    {{deatilSecondaryTicket?.Name}}  {{deatilSecondaryTicket?.TicketId}}
                 </span>
 
-                <div *ngIf="order.show && order.Orders.length > 0">
-                    <div *ngFor="let o of order.Orders">
+                <div *ngIf="deatilSecondaryTicket?.orders.length > 0" class="mb-3">
+                    <div *ngFor="let o of deatilSecondaryTicket.orders">
                         <table>
                             <caption style="caption-side:top">
                                 Order No: {{o.OrderNumber}},
@@ -80,48 +79,74 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of o.OrderItems">
+                                 <tr *ngFor="let item of o.OrderItems">
                                     <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
                                     <td>{{item.Qty}}</td>
                                     <td>{{item.UnitPrice}}</td>
                                     <td>{{item.TotalAmount}}</td>
+                                </tr> 
+                                <tr *ngIf="o.OrderItems.length==0" class="text-center">
+                                    No record found!!
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div> 
 
-                <!-- <div *ngIf="order.show && order.ItemList.length > 0">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Qty</th>
-                                <th>Unit Price</th>
-                                <th>Total Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let item of order.ItemList">
-                                <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
-                                <td>{{item.Qty}}</td>
-                                <td>{{item.UnitPrice}}</td>
-                                <td>{{item.TotalAmount}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div> -->
+               
 
-                <div *ngIf="order.show && order.Orders?.length == 0" class="text-center">
-                    No record found!!
-                </div>
+               
+                
+            </div>
+           
+
+            <div *ngIf="detailPrimaryTicket.Name" class="card col-md-5 mt-1 ml-3" style="cursor: pointer;">
+                <span style="width:100%"> 
+                    
+                    {{detailPrimaryTicket?.Name}}  {{detailPrimaryTicket?.TicketId}}
+                </span>
+
+                <div *ngIf="detailPrimaryTicket.orders?.length > 0"  class="mb-3">
+                    <div *ngFor="let o of detailPrimaryTicket.orders">
+                        <table>
+                            <caption style="caption-side:top">
+                                Order No: {{o.OrderNumber}},
+                                {{o.UserId}} -
+                                {{o.OrderOpeningTime}}
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Qty</th>
+                                    <th>Unit Price</th>
+                                    <th>Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                 <tr *ngFor="let item of o.OrderItems">
+                                    <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
+                                    <td>{{item.Qty}}</td>
+                                    <td>{{item.UnitPrice}}</td>
+                                    <td>{{item.TotalAmount}}</td>
+                                </tr> 
+                                <tr *ngIf="o.OrderItems.length==0" class="text-center">
+                                    No record found!!
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> 
+                 </div>  
+
+               
+
+              
                 
             </div>
             
         </div>
 
         
-        <div *ngIf="showOrders" class="row m-0 mb-2">
+        <!-- <div *ngIf="showOrders" class="row m-0 mb-2">
             <div *ngFor="let item of order.OrderItems;index as i " class="row">
                 <table class="table table-borderless">
                     <tr>
@@ -130,7 +155,7 @@
                 </table>
             </div>
 
-        </div>
+        </div> -->
 
 
     <!-- </div> -->
