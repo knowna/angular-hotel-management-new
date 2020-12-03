@@ -116,3 +116,7 @@ cursor: pointer;
 .icon{
   float: right;
 }
+
+.wid{
+  width:50px;
+}
