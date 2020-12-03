@@ -33,7 +33,7 @@ export class UsersService {
             headers
          };
       //  const options =  ({ headers  });
-        return this.http.put(url + id, body, options).pipe(
+        return this.http.put(url + '?id=' +id, body, options).pipe(
                  catchError(this.handleError));
     }
 
@@ -44,7 +44,7 @@ export class UsersService {
             headers
          };
      //   const options = new HttpHeaders({headers });
-        return this.http.delete(url + id, options).pipe(
+        return this.http.delete(url + '?id=' + id, options).pipe(
                  catchError(this.handleError));
     }
 

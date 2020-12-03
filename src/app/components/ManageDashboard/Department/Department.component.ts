@@ -17,6 +17,7 @@ import { Global } from '../../../Shared/global';
 
 export class DepartmentComponent implements OnInit {
     departments: IDepartment[];
+    tempDepartments: IDepartment[];
     department: IDepartment;
     msg: string;
     indLoading: boolean = false;
@@ -29,6 +30,8 @@ export class DepartmentComponent implements OnInit {
 
     public sfromDate: string;
 
+    searchKeyword='';
+
     constructor(private fb: FormBuilder, private _departmentService: DepartmentService, private modalService: BsModalService) { }
 
     ngOnInit(): void {
@@ -36,6 +39,7 @@ export class DepartmentComponent implements OnInit {
             Id: [''],
             Name: ['', Validators.required],
 
+            DepartmentTypeId: [''],
             PriceTag: [''],
             ScreenMenuId: [''],
             SortOrder: [''],
@@ -53,7 +57,7 @@ export class DepartmentComponent implements OnInit {
         this._departmentService.get(Global.BASE_DEPARTMENT_ENDPOINT)
             .subscribe(departments => { 
                 this.departments = departments; 
-                console.log('dep', this.departments)
+                this.tempDepartments = departments;
                 this.indLoading = false; 
             },
             error => this.msg = error);
@@ -176,4 +180,21 @@ export class DepartmentComponent implements OnInit {
         isEnable ? this.DepartFrm.enable() : this.DepartFrm.disable();
     }
    
+
+    searchItem(){
+        this.searchKeyword = this.searchKeyword.trim();
+        if(this.searchKeyword == '' || this.searchKeyword == null ){
+            this.departments = this.departments;
+        }
+
+        let filteredDepartments: any[] = [];
+
+        filteredDepartments = this.tempDepartments.filter(
+            department=>{
+                return (department.Name.toLowerCase().indexOf(this.searchKeyword.toLowerCase()) !== -1);
+            }
+        );
+        this.departments = filteredDepartments;
+    }
+
 }

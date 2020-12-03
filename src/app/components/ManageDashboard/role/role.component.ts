@@ -19,6 +19,7 @@ export class RoleComponent implements OnInit {
     modalRef: BsModalRef;
     modalRef2: BsModalRef;
     roles: IRole[];
+    tempRoles: IRole[];
     role: IRole;
     msg: string;
     indLoading: boolean = false;
@@ -30,19 +31,27 @@ export class RoleComponent implements OnInit {
     public buttonDisabled: boolean;
     formattedDate: any;
 
+    searchKeyword='';
+
     constructor(private fb: FormBuilder, private _roleService: RoleService, private date: DatePipe, private modalService: BsModalService) { }
 
     ngOnInit(): void {
         this.RoleFrm = this.fb.group({
-            RoleId: [''],
-            RoleName: [''],
+            Id: [''],
+            // RoleName: [''],
             Description: [''],
-            CreatedOn: [''],
-            CreatedBy: [''],
-            LastChangedDate: [''],
-            LastChangedBy: [''],
-            Selected: [''],
-            IsSysAdmin: ['']
+            // CreatedOn: [''],
+            // CreatedBy: [''],
+            // LastChangedDate: [''],
+            // LastChangedBy: [''],
+            // Selected: [''],
+            IsSysAdmin: [false],
+
+            Name:[''],
+            IsAdd:[''],
+            IsDelete:[''],
+            IsEdit:[''],
+            IsView:['']
         });
         this.LoadRoles();
     }
@@ -50,54 +59,58 @@ export class RoleComponent implements OnInit {
     LoadRoles(): void {
         this.indLoading = true;
         this._roleService.get(Global.BASE_ROLES_ENDPOINT)
-            .subscribe(roles => { this.roles = roles; this.indLoading = false; },
-            error =>{this.msg = error,
-                        this.indLoading=false,
-                        console.log("Error:"+error)    
-                    } );
+            .subscribe(roles => { 
+                this.roles = roles; 
+                this.tempRoles = roles;
+                console.log('the roles are', this.roles)
+                this.indLoading = false; 
+            },
+            error =>{
+                this.msg = error,
+                this.indLoading=false,
+                console.log("Error:"+error)    
+            } );
     }
 
     addRoles() {
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
-        this.modalTitle = "Add UserRole";
-        this.modalBtnTitle = "Add";
+        this.modalTitle = "Add Role";
+        this.modalBtnTitle = "Save";
         this.RoleFrm.reset();
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class: 'modal-xl'
+            class: 'modal-lg'
         });
     }
 
     editUserRole(Id: number) {
-         ;
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
-        this.modalTitle = "Edit UserRole";
-        this.modalBtnTitle = "Update";
-        this.role = this.roles.filter(x => x.RoleId == Id)[0];
+        this.modalTitle = "Edit Role";
+        this.modalBtnTitle = "Save";
+        this.role = this.roles.filter(x => x.Id == Id)[0];
         this.RoleFrm.setValue(this.role);
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class: 'modal-xl'
+            class: 'modal-lg'
         });
 
     }
 
     deleteUserRole(id: number) {
-         ;
         this.dbops = DBOperation.delete;
         this.SetControlsState(true);
         this.modalTitle = "Confirm to Delete?";
         this.modalBtnTitle = "Delete";
-        this.role = this.roles.filter(x => x.RoleId == id)[0];
+        this.role = this.roles.filter(x => x.Id == id)[0];
         this.RoleFrm.setValue(this.role);
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class: 'modal-xl'
+            class: 'modal-lg'
         });
     }
 
@@ -124,11 +137,11 @@ export class RoleComponent implements OnInit {
         if (Role.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
-                    this._roleService.post(Global.BASE_ROLES_ENDPOINT, formData.value).subscribe(
+                    this._roleService.post(Global.BASE_ROLES_ADD_ENDPOINT, formData.value).subscribe(
                         data => {
+                            console.log('data',formData.value)
                             if (data == 1) //Success
                             {
-                                 ;
                                 this.openModal2(this.TemplateRef2);
                                 this.LoadRoles();
                             }
@@ -199,6 +212,22 @@ export class RoleComponent implements OnInit {
 
     SetControlsState(isEnable: boolean) {
         isEnable ? this.RoleFrm.enable() : this.RoleFrm.disable();
+    }
+
+    searchItem(){
+        this.searchKeyword = this.searchKeyword.trim();
+        if(this.searchKeyword == '' || this.searchKeyword == null ){
+            this.roles = this.roles;
+        }
+
+        let filteredRoles: any[] = [];
+
+        filteredRoles = this.tempRoles.filter(
+            role => {
+                return (role.Name.toLowerCase().indexOf(this.searchKeyword.toLowerCase()) !== -1);
+            }
+        );
+        this.roles = filteredRoles;
     }
 
 }
