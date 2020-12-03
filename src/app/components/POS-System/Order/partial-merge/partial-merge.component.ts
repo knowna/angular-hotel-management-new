@@ -18,6 +18,7 @@ export class PartialMergeComponent implements OnInit {
   moveToOrderItems=[];
   primaryOrderList=[];
   secondaryOrderList=[];
+  deatilSecondaryTicket:any={'orders':[]};
   orders =[];
   showOrders=false;
   productList = [];
@@ -133,9 +134,25 @@ export class PartialMergeComponent implements OnInit {
 
   secondaryChanged(event){
     this.secondaryTicket = event.value;
-    console.log(this.secondaryTicket);
+    this.deatilSecondaryTicket =event.value;
+    this.showDetailSecondary(event.value);
   }
 
+
+
+  showDetailSecondary(order){
+    
+    this.deatilSecondaryTicket.orders = [];
+    this.orderApi.loadOrdersNew(order.Id)
+    .subscribe(
+        data => {
+           this.deatilSecondaryTicket.orders = data;
+
+           
+        
+           
+    })
+}
   moveOrder(item){
     
 

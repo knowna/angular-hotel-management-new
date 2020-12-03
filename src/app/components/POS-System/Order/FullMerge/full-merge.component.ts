@@ -18,7 +18,9 @@ export class FullMergeComponent implements OnInit {
     currentYear: any;
 
     productList = [];
-
+    deatilSecondaryTicket:any={'orders':[]};
+    
+    detailPrimaryTicket:any={'orders':[]};
     orders:Order[]=[];
     showOrders=false;
     ticketIdTobeDeleted=0;
@@ -92,7 +94,6 @@ export class FullMergeComponent implements OnInit {
             this.secondaryOrderList = data;
             this.tempPrimaryOrderList= data;
             this.tempSecondaryOrderList= data;
-            console.log(this.primaryOrderList);
             
                 
             }
@@ -100,6 +101,12 @@ export class FullMergeComponent implements OnInit {
     }
    
     secondaryChanged(event){
+
+        // console.log(event);
+
+        // this.showSelectedTicketDetail(event.value.TicketId);
+        this.deatilSecondaryTicket =event.value;
+        
         let secondarySelectedTicket;
         this.ticketIdTobeDeleted = event.value.Id;
 
@@ -117,16 +124,21 @@ export class FullMergeComponent implements OnInit {
             .subscribe(
                 data => {
                     data.forEach(order => {
+                        
                         this.moveFromOrderItems =order.OrderItems;
                     });
                 }
             )
+
+         this.showDetail(event.value);   
         
     }
 
     primaryChanged(event){
         let primarySelectedTicket;
         this.primaryTicket = event.value;
+        this.detailPrimaryTicket =event.value;
+        
 
         primarySelectedTicket = this.secondaryOrderList.find( ticket=> ticket.Id ==this.primaryTicket.Id);
 
@@ -147,12 +159,13 @@ export class FullMergeComponent implements OnInit {
                         this.moveToOrderItems.push(order);
                     });
                 });
-                console.log(this.primaryTicket);
 
                 // this.calculateTotalCost(this.moveToOrderItems);
                 
             }
         )
+
+        this.showDetailPrimary(event.value);   
     }
 
     merge(){
@@ -163,6 +176,9 @@ export class FullMergeComponent implements OnInit {
 
         
     }
+
+
+    
 
     calculateTotalCost(OrderItems){
         let total =0;
@@ -212,22 +228,52 @@ export class FullMergeComponent implements OnInit {
 
     
     showDetail(order){
-        order.ItemList = [];
-        order.Orders = [];
+        // order.ItemList = [];
+        this.deatilSecondaryTicket.orders = [];
         this.orderApi.loadOrdersNew(order.Id)
         .subscribe(
             data => {
                this.orders = data;
-               order.Orders = this.orders;
-               console.log('the orders are', order.Orders);
-               this.orders.forEach(o => {
-                   o.OrderItems.forEach(item => {
-                    order.ItemList.push(item)
-                   });
-                  
-               });
+               console.log(this.orders);
+               this.deatilSecondaryTicket.orders = this.orders;
+               console.log(this.deatilSecondaryTicket.orders);
                
-               console.log('the ', order)
+            //    order.Orders = this.orders;
+            //    console.log('the orders are', order.Orders);
+            //    this.orders.forEach(o => {
+            //        o.OrderItems.forEach(item => {
+            //         order.ItemList.push(item)
+            //        });
+                  
+            //    });
+               
+        })
+    }
+
+
+    showDetailPrimary(primaryOrder){
+        console.log(primaryOrder);
+        
+        this.detailPrimaryTicket.orders = [];
+        this.orderApi.loadOrdersNew(primaryOrder.Id)
+        .subscribe(
+            data => {
+                console.log(data);
+            //    this.orders = data;
+            //    console.log(data);
+               
+               this.detailPrimaryTicket.orders = data;
+
+               
+            //    order.Orders = this.orders;
+            //    console.log('the orders are', order.Orders);
+            //    this.orders.forEach(o => {
+            //        o.OrderItems.forEach(item => {
+            //         order.ItemList.push(item)
+            //        });
+                  
+            //    });
+               
         })
     }
   
