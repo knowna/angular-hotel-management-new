@@ -6,7 +6,12 @@
             <h2 class="header">User Management</h2>
         </div>
         <div class="col-md-4">
-            <!-- <input type="text" class="form-control" placeholder="Search by Name" [(ngModel)]="name"> -->
+            <input 
+                type="text" 
+                class="form-control" 
+                placeholder="Search by User Name" 
+                (keyup)="searchItem()" 
+                [(ngModel)]="searchKeyword" >
         </div>
         <div class="col-md-4">
             <button class="btn btn-success" (click)="addUser()" style="float: right">
@@ -190,9 +195,17 @@
                
             </div>
             <div class="row">
-                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Role Name</label>
+                        <input type="test" class="form-control" placeholder="Role Name" formControlName="RoleName">
+                        <div class="alert alert-danger mt-1" *ngIf="userFrm.get('RoleName').hasError('required') && formSubmitAttempt">
+                            Role name is required
+                        </div>
+                    </div>
+                </div>
 
-                <div class="col-md-6" *ngIf="modalTitle != 'Edit User'">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label class="control-label">Password</label>
                         <input type="password" class="form-control" placeholder="Password" formControlName="Password">
@@ -223,7 +236,7 @@
             <!-- </div>
 
             <div class="row" *ngIf="modalTitle != 'Edit User'"> -->
-                <div class="col-md-6" *ngIf="modalTitle != 'Edit User'">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label class="control-label">Confirm Password</label>
                         <input type="password" (keyup)="passwordMatch()" class="form-control" placeholder="ConfirmPassword" formControlName="ConfirmPassword">

@@ -8,6 +8,7 @@
     public static BASE_USER_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/userapi/';
     public static BASE_USERROLE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/userRoleAPI/';
     public static BASE_ROLES_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/HotelRole/GetRoles/';
+    public static BASE_ROLES_ADD_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/HotelRole/PostRole/';
     public static BASE_INVENTORY_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/InventoryItemAPI/';
     public static BASE_STOCKINHAND_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/StockInHand/';
     public static BASE_MENUITEM_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/MenuItemAPI/';
@@ -59,6 +60,7 @@
     public static BASE_USERACCOUNT_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/UserAccountAPI/GetUsers/';
     public static BASE_USERACCOUNT_CREATE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/UserAccountAPI/CreateUser/';
     public static BASE_USERACCOUNT_UPDATE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/UserAccountAPI/EditUser/';
+    public static BASE_USERACCOUNT_DELETE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/UserAccountAPI/DeleteUser/';
     
 
     public static BASE_LOGIN_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/LoginAPI/';
