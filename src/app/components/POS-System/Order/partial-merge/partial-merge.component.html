@@ -52,7 +52,7 @@
         </div>
 
         <div class="row m-0">
-            <div class="col-md-8">
+            <div class="col-md-6">
                <div class="row m-0">
                    <div *ngFor="let order of tempPrimaryOrderList" class="col-md-12 card">
                        <div class="card-body" style="cursor: pointer;">
@@ -97,30 +97,7 @@
                                 </div>
                             </div>
 
-                           <!-- <div *ngIf="order.show && order.ItemList.length > 0">
-                               <table>
-                                   <thead>
-                                       <tr>
-                                           <th> move This Item</th>
-                                           <th>change quantity </th>
-                                           <th>Name</th>
-                                           <th>Qty</th>
-                                           <th>Unit Price</th>
-                                           <th>Total Price</th>
-                                       </tr>
-                                   </thead>
-                                   <tbody>
-                                       <tr *ngFor="let item of order.ItemList;index as i">
-                                           <td>  <input  [id]="'item'+i" type="checkbox"(change)="moveOrder(item)"> </td>
-                                           <td> <input [disabled]="item.Qty==1" type="text"> </td>
-                                           <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
-                                           <td>{{item.Qty}}</td>
-                                           <td>{{item.UnitPrice}}</td>
-                                           <td>{{item.TotalAmount}}</td>
-                                       </tr>
-                                   </tbody>
-                               </table>
-                           </div> -->
+                          
            
                            <div *ngIf="order.show && order.Orders?.length == 0" class="text-center">
                                No record found!!
@@ -134,7 +111,7 @@
 
                </div>
             </div>
-            <div class="col-md-4" style="margin: inherit;">
+            <div class="col-md-5" style="margin: inherit;">
                 <div class="row">
                     <div class="col-sm-12">
                         <span> Merge To Ticket:  </span>
@@ -147,15 +124,66 @@
                     </div>
                     
                 </div>
-                <div class="row mt-5">
-                    <div class="col-sm-12">
+                <div class="row mt-1 m-0">
+
+                    <div *ngIf="deatilSecondaryTicket.Name != null"  class="card col-sm-12 mt-3" style="cursor: pointer;">
+                        <span class="mt-2" style="width:100%"> 
+                            
+                            {{deatilSecondaryTicket?.Name}}  {{deatilSecondaryTicket?.TicketId}}
+                        </span>
+        
+                        <div *ngIf="deatilSecondaryTicket?.orders.length > 0" class="mb-3">
+                            <div *ngFor="let o of deatilSecondaryTicket.orders">
+                                <table>
+                                    <caption style="caption-side:top">
+                                        Order No: {{o.OrderNumber}},
+                                        {{o.UserId}} -
+                                        {{o.OrderOpeningTime}}
+                                    </caption>
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Qty</th>
+                                            <th>Unit Price</th>
+                                            <th>Total Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <tr *ngFor="let item of o.OrderItems">
+                                            <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
+                                            <td>{{item.Qty}}</td>
+                                            <td>{{item.UnitPrice}}</td>
+                                            <td>{{item.TotalAmount}}</td>
+                                        </tr> 
+                                        <tr *ngIf="o.OrderItems.length==0" class="text-center">
+                                            No record found!!
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> 
+        
+                       
+        
+                       
+                        
+                    </div>
+
+                    <!-- <div class="col-sm-12 mt-2">
                         <button type="button" class="btn btn-success" (click)="partialMerge()">
                             Merge
                         </button>
-                    </div>
+                    </div> -->
                 </div>
                 
             </div> 
+
+            <div class="col-md-1 mr-0">
+                
+                    <button type="button" class="btn btn-success mt-4 w-100" (click)="partialMerge()">
+                        Merge
+                    </button>
+            </div>
             
 
         </div>
