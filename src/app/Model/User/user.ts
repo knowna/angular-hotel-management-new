@@ -13,4 +13,6 @@ export interface IUser {
     ResetPassword: boolean,
     Token:string,
     Roles:IUserRole[];
+    RoleName: string;
+    ConfirmPassword: string;
 }

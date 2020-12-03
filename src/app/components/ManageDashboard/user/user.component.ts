@@ -19,6 +19,7 @@ export class UserComponent implements OnInit {
     modalRef: BsModalRef;
     modalRef2: BsModalRef;
     user: IUser[];
+    tempUser: IUser[];
     users: IUser;
     msg: string;
     indLoading: boolean = false;
@@ -34,6 +35,7 @@ export class UserComponent implements OnInit {
 
     checkPattern : CheckPattern = new CheckPattern();
  
+    searchKeyword='';
 
     constructor(private fb: FormBuilder, private _userService: UsersService, private modalService: BsModalService) { }
 
@@ -43,7 +45,7 @@ export class UserComponent implements OnInit {
             FirstName: ['', Validators.required],
             LastName: ['', Validators.required],
             UserName: ['', Validators.required],
-            RoleName: ['', Validators.required],
+            RoleName: [''],
             Password: ['', [Validators.required,Validators.pattern(this.checkPattern.passwordPattern)]],
             Email: ['', [Validators.required,Validators.pattern(this.checkPattern.emailPatternError)]],
             ConfirmPassword: ['', Validators.required],
@@ -68,6 +70,7 @@ export class UserComponent implements OnInit {
         this._userService.get(Global.BASE_USERACCOUNT_ENDPOINT)
             .subscribe(user => { 
                 this.user = user;
+                this.tempUser = user;
                 this.indLoading = false; 
                 console.log(user) 
             },
@@ -100,7 +103,9 @@ export class UserComponent implements OnInit {
         this.userFrm.controls['FirstName'].setValue(this.users.FirstName);
         this.userFrm.controls['LastName'].setValue(this.users.LastName);
         this.userFrm.controls['UserName'].setValue(this.users.UserName);
-        // this.userFrm.controls['Password'].setValue(this.users.Password);
+        this.userFrm.controls['RoleName'].setValue('');
+        this.userFrm.controls['Password'].setValue(this.users.Password);
+        this.userFrm.controls['ConfirmPassword'].setValue(this.users.Password);
         this.userFrm.controls['Email'].setValue(this.users.Email);
         // console.log('the found user is', this.users);
 
@@ -120,7 +125,15 @@ export class UserComponent implements OnInit {
         this.modalTitle = "Confirm to Delete User?";
         this.modalBtnTitle = "Delete";
         this.users = this.user.filter(x => x.Id == Id)[0];
-        this.userFrm.setValue(this.users);
+        // this.userFrm.setValue(this.users);
+        this.userFrm.controls['Id'].setValue(this.users.Id);
+        this.userFrm.controls['FirstName'].setValue(this.users.FirstName);
+        this.userFrm.controls['LastName'].setValue(this.users.LastName);
+        this.userFrm.controls['UserName'].setValue(this.users.UserName);
+        this.userFrm.controls['RoleName'].setValue('');
+        this.userFrm.controls['Password'].setValue(this.users.Password);
+        this.userFrm.controls['ConfirmPassword'].setValue(this.users.Password);
+        this.userFrm.controls['Email'].setValue(this.users.Email);
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
@@ -160,7 +173,7 @@ export class UserComponent implements OnInit {
     onSubmit(formData:any) {
         this.formSubmitAttempt = true;
         this.msg = "";
-        let users = this.userFrm
+        let users = this.userFrm;
 
         if (users.valid) {
             switch (this.dbops) {
@@ -169,7 +182,7 @@ export class UserComponent implements OnInit {
                     
                     this._userService.post(Global.BASE_USERACCOUNT_CREATE_ENDPOINT, formData.value, ).subscribe(
                         data => {
-                            if (data == 1)
+                            if (data != null)
                             {
                                 alert("Data successfully added.");
                                 // this.openModal2(this.TemplateRef2); 
@@ -177,7 +190,8 @@ export class UserComponent implements OnInit {
                                 this.formSubmitAttempt = false;
                             }
                             else {
-                                this.msg = "There is some issue in saving records, please contact to system administrator!"
+                                // this.msg = "There is some issue in saving records, please contact to system administrator!"
+                                alert("There is some issue in saving records, please contact to system administrator!");
                             }
 
                             this.modalRef.hide();
@@ -186,17 +200,18 @@ export class UserComponent implements OnInit {
                     );
                     break;
                 case DBOperation.update:
-                     
                     this._userService.put(Global.BASE_USERACCOUNT_UPDATE_ENDPOINT, formData.value.Id, formData.value, ).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
-                                this.msg = "Data updated successfully.";
+                                alert("Data updated successfully.");
+                                // this.msg = "Data updated successfully.";
                                 this.LoadUsers();
                                 
                             }
                             else {
-                                this.msg = "There is some issue in saving records, please contact to system administrator!"
+                                // this.msg = "There is some issue in saving records, please contact to system administrator!"
+                                alert("There is some issue in saving records, please contact to system administrator!");
                             }
                             this.modalRef.hide();
                             this.formSubmitAttempt = false;
@@ -205,16 +220,17 @@ export class UserComponent implements OnInit {
                     );
                     break;
                 case DBOperation.delete:
-                     ;
-                    this._userService.delete(Global.BASE_USER_ENDPOINT, formData.value.UserId).subscribe(
+                    this._userService.delete(Global.BASE_USERACCOUNT_DELETE_ENDPOINT, formData.value.Id).subscribe(
                         data => {
+                            console.log('the delete data', data)
                             if (data == 1) //Success
                             {
                                 this.msg = "Data successfully deleted.";
                                 this.LoadUsers();
                             }
                             else {
-                                this.msg = "There is some issue in saving records, please contact to system administrator!"
+                                // this.msg = "There is some issue in saving records, please contact to system administrator!"
+                                alert("There is some issue in saving records, please contact to system administrator!");
                             }
                             this.modalRef.hide();
                             this.formSubmitAttempt = false;
@@ -245,5 +261,22 @@ export class UserComponent implements OnInit {
 
     SetControlsState(isEnable: boolean) {
         isEnable ? this.userFrm.enable() : this.userFrm.disable();
+    }
+
+
+    searchItem(){
+        this.searchKeyword = this.searchKeyword.trim();
+        if(this.searchKeyword == '' || this.searchKeyword == null ){
+            this.user = this.user;
+        }
+
+        let filteredUsers: any[] = [];
+
+        filteredUsers = this.tempUser.filter(
+            user=>{
+                return (user.UserName.toLowerCase().indexOf(this.searchKeyword.toLowerCase()) !== -1);
+            }
+        );
+        this.user = filteredUsers;
     }
 }
