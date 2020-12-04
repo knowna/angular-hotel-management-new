@@ -70,49 +70,49 @@
 
 
 
-                        <div *ngIf="detailPrimaryTicket.Name != null"  class="card col-sm-12 mt-3" style="cursor: pointer;">
-                            <span class="mt-2" style="width:100%"> 
-                                
-                                {{detailPrimaryTicket?.Name}}  {{detailPrimaryTicket?.TicketId}}
-                            </span>
-            
-                            <div *ngIf="detailPrimaryTicket.orders?.length > 0" class="mb-3">
-                                <div *ngFor="let o of detailPrimaryTicket.orders">
-                                    <table>
-                                        <caption style="caption-side:top">
-                                            Order No: {{o.OrderNumber}},
-                                            {{o.UserId}} -
-                                            {{o.OrderOpeningTime}}
-                                        </caption>
-                                        <thead>
-                                            <tr>
-                                                <th> move This Item</th>
-                                                <th>change quantity </th>
-                                                <th>Name</th>
-                                                <th>Qty</th>
-                                                <th>Unit Price</th>
-                                                <th>Total Price</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let item of o.OrderItems">
-                                                <td>  <input  [id]="'item'+i" type="checkbox"(change)="moveOrder(item)"> </td>
-                                                <td> <input [disabled]="item.Qty==1" type="text"> </td>
-                                                <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
-                                                <td>{{item.Qty}}</td>
-                                                <td>{{item.UnitPrice}}</td>
-                                                <td>{{item.TotalAmount}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div> 
-            
-                           
-            
-                           
-                            
+                <div *ngIf="detailPrimaryTicket.Name != null"  class="card col-sm-12 mt-3" style="cursor: pointer;">
+                    <span class="mt-2" style="width:100%"> 
+                        
+                        {{detailPrimaryTicket?.Name}}  {{detailPrimaryTicket?.TicketId}}
+                    </span>
+    
+                    <div *ngIf="detailPrimaryTicket.orders?.length > 0" class="mb-3">
+                        <div *ngFor="let o of detailPrimaryTicket.orders">
+                            <table>
+                                <caption style="caption-side:top">
+                                    Order No: {{o.OrderNumber}},
+                                    {{o.UserId}} -
+                                    {{o.OrderOpeningTime}}
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th> move This Item</th>
+                                        <th>change quantity </th>
+                                        <th>Name</th>
+                                        <th>Qty</th>
+                                        <th>Unit Price</th>
+                                        <th>Total Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of o.OrderItems">
+                                        <td>  <input  [id]="'item'+i" type="checkbox"(change)="moveOrder(item)"> </td>
+                                        <td> <input [disabled]="item.Qty==1" type="text"> </td>
+                                        <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
+                                        <td>{{item.Qty}}</td>
+                                        <td>{{item.UnitPrice}}</td>
+                                        <td>{{item.TotalAmount}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
+                    </div> 
+    
+                    
+    
+                    
+                    
+                </div>
 
 
 
