@@ -19,6 +19,7 @@ export class PartialMergeComponent implements OnInit {
   primaryOrderList=[];
   secondaryOrderList=[];
   deatilSecondaryTicket:any={'orders':[]};
+  detailPrimaryTicket:any={'orders':[]};
   orders =[];
   showOrders=false;
   productList = [];
@@ -98,7 +99,9 @@ export class PartialMergeComponent implements OnInit {
     )
   }
 
-  showDetail(order){
+  showDetail(event){
+    this.detailPrimaryTicket =event.value;
+    let order = event.value;
     this.secondaryItemList =[];
     this.secondaryOrderList = [...this.tempSecondaryOrderList];
     order.ItemList = [];
@@ -112,15 +115,17 @@ export class PartialMergeComponent implements OnInit {
     this.orderApi.loadOrdersNew(order.Id)
     .subscribe(
         data => {
-           this.orders = data;
-           order.Orders = this.orders;
-           console.log('the order s ss', this.orders)
-           this.orders.forEach(o => {
-               o.OrderItems.forEach(item => {      
-                order.ItemList.push(item)
-               });
+          console.log(data);
+          
+           this.detailPrimaryTicket.orders = data;
+          //  order.Orders = this.orders;
+          //  console.log('the order s ss', this.orders)
+          //  this.orders.forEach(o => {
+          //      o.OrderItems.forEach(item => {      
+          //       order.ItemList.push(item)
+          //      });
               
-           });
+          //  });
     })
 
     this.primaryItemList = order.ItemList;
