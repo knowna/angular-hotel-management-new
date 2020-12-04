@@ -177,11 +177,7 @@ import { ScreenMenuCategoryItemFilter } from './filters/screen-menu-category-ite
 // import { TicketService } from './Service/Billing/ticket.service';\
 
 import { NpDatepickerModule } from 'angular-nepali-datepicker';
-import { MasterLedgerComponent } from './components/account/master-ledger/master-ledger.component';
-import { MasterLedgerService } from './components/account/master-ledger/services/MasterLedger.service';
-import { AccountTypeComponent } from './components/account/account-type/account-type.component';
-import { AccountTypeService } from './components/account/master-ledger/services/account-type.service';
-import { AccountTransactionTypeComponent } from './components/account/account-transaction-type/account-transaction-type.component';
+import { AccountTypeComponent } from './components/account/master/account-type/account-type.component';
 import { InventoryItemComponent } from './components/InventoryDashboard/inventory-item/inventory-item.component';
 import { InventoryItemService } from './Service/Inventory/InventoryItem.service';
 import { UnitTypeComponent } from './components/InventoryDashboard/UnitType/UnitType.Component';
@@ -189,6 +185,13 @@ import { WareHouseComponent } from './components/InventoryDashboard/warehouse/wa
 import { WareHouseTypeComponent } from './components/InventoryDashboard/warehouse-type/warehousetype.component';
 import { RoomService } from './Service/Inventory/room.service';
 import { RoomTypeComponent } from './components/ManageDashboard/roomType/RoomType.component';
+import { MasterLedgerComponent } from './components/account/master/master-ledger/master-ledger.component';
+import { AccountTransactionTypeComponent } from './components/account/master/account-transaction-type/account-transaction-type.component';
+import { MasterLedgerService } from './components/account/master/master-ledger/services/MasterLedger.service';
+import { AccountTypeService } from './components/account/master/master-ledger/services/account-type.service';
+import { AccountTransValuesService } from './Service/accountTransValues.service';
+import { JournalVoucherService } from './Service/journalVoucher.service';
+import { JournalVouchercomponent } from './components/account/Transaction/journal/journaVoucher.component';
 
 @NgModule({
   imports: [
@@ -249,6 +252,7 @@ import { RoomTypeComponent } from './components/ManageDashboard/roomType/RoomTyp
     // CheckInComponent,
     FileUploadComponent,
     MenuCategoryComponent1,
+    JournalVouchercomponent,
 
     // RoomStatusComponent,
     // ReservationComponent,
@@ -380,7 +384,9 @@ import { RoomTypeComponent } from './components/ManageDashboard/roomType/RoomTyp
     LoginService,
     UsersService,
     UserStoreService,
-    AccountTransactionTypeService
+    AccountTransactionTypeService,
+    AccountTransValuesService,
+    JournalVoucherService
     ,
     DatePipe,
    
