@@ -8,7 +8,11 @@
     CreatedBy: string,
     LastChangedDate: Date,
     LastChangedBy: string,
-    IsSysAdmin: boolean
+    IsSysAdmin: boolean,
+    IsAdd:boolean,
+    IsDelete:boolean,
+    IsEdit:boolean,
+    IsView:boolean
 }
 
 export interface IScreenRoleName {
