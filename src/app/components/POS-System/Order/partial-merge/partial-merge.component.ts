@@ -115,7 +115,6 @@ export class PartialMergeComponent implements OnInit {
     this.orderApi.loadOrdersNew(order.Id)
     .subscribe(
         data => {
-          console.log(data);
           
            this.detailPrimaryTicket.orders = data;
           //  order.Orders = this.orders;
@@ -169,13 +168,10 @@ export class PartialMergeComponent implements OnInit {
       this.secondaryItemList.push(item);
     }
 
-    console.log('the primary list are', this.tempPrimaryItemList);
-    console.log('the secondary list are',this.secondaryItemList);
     
   }
 
   partialMerge() {
-    console.log('the selected ticket is', this.selectedTicket)
     let mainItemList = [...this.tempPrimaryItemList];
     
     let ListOrderItemPartial=[];
