@@ -84,14 +84,15 @@ import { ScreenMenuItemComponent } from './components/POS-System/Menu/MenuItem/S
 import { FullMergeComponent } from './components/POS-System/Order/FullMerge/full-merge.component';
 import { PartialMergeComponent } from './components/POS-System/Order/partial-merge/partial-merge.component';
 import { SplitMergeComponent } from './components/POS-System/Order/split-merge/split-merge.component';
-import { MasterLedgerComponent } from './components/account/master-ledger/master-ledger.component';
-import { AccountTypeComponent } from './components/account/account-type/account-type.component';
-import { AccountTransactionTypeComponent } from './components/account/account-transaction-type/account-transaction-type.component';
+import { AccountTypeComponent } from './components/account/master/account-type/account-type.component';
 import { InventoryItemComponent } from './components/InventoryDashboard/inventory-item/inventory-item.component';
 import { UnitTypeComponent } from './components/InventoryDashboard/UnitType/UnitType.Component';
 import { WareHouseComponent } from './components/InventoryDashboard/warehouse/warehouse.component';
 import { WareHouseTypeComponent } from './components/InventoryDashboard/warehouse-type/warehousetype.component';
 import { RoomTypeComponent } from './components/ManageDashboard/roomType/RoomType.component';
+import { MasterLedgerComponent } from './components/account/master/master-ledger/master-ledger.component';
+import { AccountTransactionTypeComponent } from './components/account/master/account-transaction-type/account-transaction-type.component';
+import { JournalVouchercomponent } from './components/account/Transaction/journal/journaVoucher.component';
 
 
 const routes: Routes = [
@@ -349,11 +350,11 @@ const routes: Routes = [
   //   component: PaymentComponent,
   //   canActivate: [AuthGuard]
   // },
-  // {
-  //   path: 'Account/journalVoucher',
-  //   component: JournalVouchercomponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'Account/journalVoucher',
+    component: JournalVouchercomponent,
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: 'Account/debit-note',
   //   component: DebitNoteComponent,

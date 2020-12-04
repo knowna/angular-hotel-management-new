@@ -19,6 +19,7 @@ export class PartialMergeComponent implements OnInit {
   primaryOrderList=[];
   secondaryOrderList=[];
   deatilSecondaryTicket:any={'orders':[]};
+  detailPrimaryTicket:any={'orders':[]};
   orders =[];
   showOrders=false;
   productList = [];
@@ -98,7 +99,9 @@ export class PartialMergeComponent implements OnInit {
     )
   }
 
-  showDetail(order){
+  showDetail(event){
+    this.detailPrimaryTicket =event.value;
+    let order = event.value;
     this.secondaryItemList =[];
     this.secondaryOrderList = [...this.tempSecondaryOrderList];
     order.ItemList = [];
@@ -112,15 +115,16 @@ export class PartialMergeComponent implements OnInit {
     this.orderApi.loadOrdersNew(order.Id)
     .subscribe(
         data => {
-           this.orders = data;
-           order.Orders = this.orders;
-           console.log('the order s ss', this.orders)
-           this.orders.forEach(o => {
-               o.OrderItems.forEach(item => {      
-                order.ItemList.push(item)
-               });
+          
+           this.detailPrimaryTicket.orders = data;
+          //  order.Orders = this.orders;
+          //  console.log('the order s ss', this.orders)
+          //  this.orders.forEach(o => {
+          //      o.OrderItems.forEach(item => {      
+          //       order.ItemList.push(item)
+          //      });
               
-           });
+          //  });
     })
 
     this.primaryItemList = order.ItemList;
@@ -146,31 +150,24 @@ export class PartialMergeComponent implements OnInit {
     this.orderApi.loadOrdersNew(order.Id)
     .subscribe(
         data => {
-           this.deatilSecondaryTicket.orders = data;
-
-           
-        
-           
+          this.deatilSecondaryTicket.orders = data;
     })
 }
   moveOrder(item){
-    
-
     if(this.secondaryItemList.includes(item)) {
       const idx = this.secondaryItemList.indexOf(item);
       this.secondaryItemList.splice(idx,1);
-
     }else{
       this.secondaryItemList.push(item);
     }
+  }
 
-    console.log('the primary list are', this.tempPrimaryItemList);
-    console.log('the secondary list are',this.secondaryItemList);
-    
+  quantityChanged(event,item) {
+    console.log('the event is', event);
+    console.log('the item is', item);
   }
 
   partialMerge() {
-    console.log('the selected ticket is', this.selectedTicket)
     let mainItemList = [...this.tempPrimaryItemList];
     
     let ListOrderItemPartial=[];

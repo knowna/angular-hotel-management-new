@@ -12,6 +12,8 @@ export class HeaderComponent implements OnInit{
 
     public clicked=false;
     openChild = false;
+
+    closeSidebar = false;
     public clickeditem:[];
 
 

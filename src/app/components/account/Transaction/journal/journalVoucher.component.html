@@ -1,0 +1,218 @@
+﻿<!-- <accountdashboard-app></accountdashboard-app> -->
+<ng-template #template>
+    <form novalidate (ngSubmit)="onSubmit(journalFrm)" [formGroup]="journalFrm" class="panel-primary">
+        <div class="modal-header" style="background-color: #364a70;">
+            <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <!-- <div class="hidden">
+                <input type="number" class="hidden" formControlName="Id" />
+                <input type="text" class="hidden" formControlName="Amount" />
+                <input type="text" class="hidden" placeholder="Voucher No" formControlName="AccountTransactionDocumentId" />
+            </div> -->
+            <div class="row">
+                <!-- <label class=" font-weight-bold ml-2">Voucher Type:</label> -->
+                <div class="form-group col-md-6">
+                    <label class=" font-weight-bold ml-2">Voucher Type:</label>
+                    <input type="text" class="form-control" formControlName="Name" readonly="true">
+                    <div class="text-danger" *ngIf="journalFrm.get('Name'). hasError('required') && formSubmitAttempt">
+                        Voucher Type is required
+                    </div>
+                </div>
+                <!-- <label class=" font-weight-bold">Voucher Date:</label> -->
+                <div class="form-group col-md-6">
+                    <label class=" font-weight-bold">Voucher Date:</label>
+                    <input type="text" class="form-control" placeholder="DD/MM/YYYY" bsDatepicker formControlName="Date" />
+                    <div class="text-danger" *ngIf="journalFrm.get('Date'). hasError('required') && formSubmitAttempt">
+                        Date is required
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="container col-md-12">
+                    <div formArrayName="AccountTransactionValues" class="panel panel-default container-padding">
+                        <br>
+                        <!-- <div class="col-md-2 custom-padding">
+                            <strong>Dr/Cr</strong>
+                        </div>
+                        <div class="col-md-5 custom-padding">
+                            <strong>Particular</strong>
+                        </div>
+                        <div class="col-md-2 custom-padding">
+                            <strong>Debit</strong>
+                        </div>
+                        <div class="col-md-2 custom-padding">
+                            <strong>Credit</strong>
+                        </div>
+                        <div class="col-md-1 custom-padding">
+                            <strong>&nbsp;</strong>
+                        </div>
+                        <br> -->
+                        <div *ngFor="let AccountTransactionValue of journalFrm.controls.AccountTransactionValues.controls; let i=index"
+                            [formGroupName]="i">
+                            <div class="row">
+                                <div class="col-md-2 custom-padding">
+                                    <label class="font-weight-bold"> Dr/Cr</label>
+                                    <select class="form-control" formControlName="entityLists" (change)="enableDisable(journalFrm.controls.AccountTransactionValues.controls[i].controls)">
+                                        <option *ngFor="let entityList of entityLists" [ngValue]="entityList.name">{{ entityList.name }}</option>
+                                    </select>
+                                    <div *ngIf="!journalFrm.controls.AccountTransactionValues.controls[i].controls.entityLists.valid" class="text-danger">
+                                        Select Dr/Cr
+                                    </div>
+                                </div>
+                                <div class="col-md-5 custom-padding">
+                                    <label class="font-weight-bold">Account</label>
+                                    <select class="form-control " formControlName="AccountId">
+                                        <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option>
+                                    </select>
+                                    <div *ngIf="!journalFrm.controls.AccountTransactionValues.controls[i].controls.AccountId.valid" class="text-danger">
+                                        Select the Name
+                                    </div>
+                                </div>
+                                <div class="col-md-2 custom-padding">
+                                    <label class="font-weight-bold">Debit</label>
+                                    <input type="number" class="form-control" placeholder="Debit" formControlName="Debit" />
+                                </div>
+                                <div class="col-md-2 custom-padding">
+                                    <label class="font-weight-bold">Credit</label>
+                                    <input type="number" class="form-control" placeholder="Credit" formControlName="Credit">
+                                </div>
+                                <div class="col-md-1 custom-padding text-center" style="padding-top: 7px !important;">
+                                    <span *ngIf="journalFrm.controls.AccountTransactionValues.controls.length > 1" class="fa fa-window-close" (click)="removeAccount(i)"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="padding:12px">
+                                <span class="btn btn-success pull-right" (click)="addAccountValues()">Add Row</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7 textarea-container">
+                    <textarea class="form-control" name="Description" formControlName="Description" rows="4" placeholder="Add Voucher description here..."></textarea>
+                    <div class="help-block alert alert-danger" *ngIf="journalFrm.get('Description'). hasError('required') && formSubmitAttempt">
+                        Voucher description is required.
+                    </div>
+                </div>
+                <div class="col-md-2 custom-padding debit-total">
+                    <input type="number" class="form-control" placeholder="Total" value="{{sumDebit()}}" readonly="true" />
+                </div>
+                <div class="col-md-2 custom-padding credit-total">
+                    <input type="number" class="form-control" placeholder="Total" value="{{sumCredit()}}" readonly="true" />
+                </div>
+                <div class="col-md-1">&nbsp;</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div>
+                <button type="submit" class="btn btn-success pull-left"> {{modalBtnTitle}}</button>
+                <button class="btn btn-danger pull-right" [disabled]="buttonDisabled" (click)="reset(); modalRef.hide()" aria-label="Close">Cancel</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        Journal Voucher
+    </div>
+
+    <div style="background-color: #364a70;color:white">
+        <div class='table-responsive'>
+            <div style="padding-bottom:10px">
+                <div class="row">
+                    <div class="col-md-4">
+                        <button class="btn btn-success mt-3 ml-3" (click)="addJournalVoucher()">
+                            <i class="fa fa-plus"></i>
+                            Add
+
+                        </button>
+                        <!-- <div (click)="addJournalVoucher()" style="cursor: pointer"> -->
+                            <!-- <span>
+                                <img src="../../images/Add.png" height="60" width="60" />
+                            </span>
+                            Add Journal Voucher -->
+                        <!-- </div> -->
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row" style="padding-top: 17px;">
+                            <div class="col-md-2">
+                                Filter By Date:
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" placeholder="DD/MM/YYYY" bsDatepicker [(ngModel)]="fromDate" />
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" placeholder="DD/MM/YYYY" bsDatepicker [(ngModel)]="toDate" />
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-success" (click)="filterJournalByDate()"> GO</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-info" role="alert" *ngIf="indLoading">
+                <img src="../../images/loading.gif" width="32" height="32" /> Loading...
+            </div>
+            <div *ngIf='journalVoucher && journalVoucher.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <!-- Voucher list table starts -->
+            <table class='table' *ngIf='journalVoucher && journalVoucher.length' style="border: 2px solid #ddd;">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th width="400">Particular</th>
+                        <th>Voucher Type</th>
+                        <th>Voucher No.</th>
+                        <th>Debit Amount</th>
+                        <th>Credit Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let voucher of journalVoucher">
+                    <tr style="background:#eceaea">
+                        <td>{{ voucher.VDate }}</td>
+                        <td>{{ voucher.Name }}</td>
+                        <td>{{ voucher.VType }}</td>
+                        <td>{{ voucher.VoucherNo }}</td>
+                        <td colspan="2">&nbsp;</td>
+                        <td>
+                            <img src="../../images/Edit.png" (click)="editJournalVoucher(voucher.Id)" title="Edit Voucher" height="24" width="24" />
+                            <img src="../../images/Delete.png" (click)="deleteJournalVoucher(voucher.Id)" title="Delete Voucher" height="24" width="24"
+                            />
+                        </td>
+                    </tr>
+                    <tr *ngFor="let transaction of voucher.AccountTransactionValues">
+                        <td>&nbsp;</td>
+                        <td colspan="3">{{ transaction.Name }}</td>
+                        <td>{{ transaction.DebitAmount.toFixed(2) }}</td>
+                        <td>{{ transaction.CreditAmount.toFixed(2) }}</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- Voucher list table ends -->
+        </div>
+        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
+    </div>
+</div>
+
+<ng-template #templateNested>
+    <div class="modal-body text-center">
+        <p>Data saved sucessfully!</p>
+        <button type="button" class="btn btn-default" (click)="confirm()">Ok</button>
+    </div>
+</ng-template>

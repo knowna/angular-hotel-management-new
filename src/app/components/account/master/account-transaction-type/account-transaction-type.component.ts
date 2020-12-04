@@ -1,14 +1,14 @@
 ﻿import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { AccountTransType } from '../../../Model/AccountTransactionType/accountTransType';
-import { AccountType } from '../../../Model/AccountType/accountType';
-import { DBOperation } from '../../../Shared/enum';
 import { Observable } from 'rxjs/Rx';
-import { Global } from '../../../Shared/global';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { DatePipe } from '@angular/common';
 import { AccountTransactionTypeService } from 'src/app/Service/Inventory/account-trans-type.service';
+import { AccountType } from 'src/app/Model/AccountType/accountType';
+import { AccountTransType } from 'src/app/Model/AccountTransactionType/accountTransType';
+import { DBOperation } from 'src/app/Shared/enum';
+import { Global } from 'src/app/Shared/global';
 
 @Component({
     templateUrl: './account-transaction-type.component.html'
