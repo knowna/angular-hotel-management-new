@@ -150,25 +150,21 @@ export class PartialMergeComponent implements OnInit {
     this.orderApi.loadOrdersNew(order.Id)
     .subscribe(
         data => {
-           this.deatilSecondaryTicket.orders = data;
-
-           
-        
-           
+          this.deatilSecondaryTicket.orders = data;
     })
 }
   moveOrder(item){
-    
-
     if(this.secondaryItemList.includes(item)) {
       const idx = this.secondaryItemList.indexOf(item);
       this.secondaryItemList.splice(idx,1);
-
     }else{
       this.secondaryItemList.push(item);
     }
+  }
 
-    
+  quantityChanged(event,item) {
+    console.log('the event is', event);
+    console.log('the item is', item);
   }
 
   partialMerge() {

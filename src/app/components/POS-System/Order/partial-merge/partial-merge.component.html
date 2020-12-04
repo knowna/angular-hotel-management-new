@@ -48,31 +48,28 @@
 
 
         <div class="row m-0 mt-5">
-            <h6  class="font-weight-bold ml-3">  All unsettled tickets  </h6> 
+            <div class="col-sm-12">
+                <h6  class="font-weight-bold">  All unsettled tickets  </h6> 
+            </div>
         </div>
 
         <div class="row m-0">
             <div class="col-md-6">
-               <div class="row m-0">
-
-
-                <div class="col-sm-12">
-                    <span> Merge To Ticket:  </span>
-                    <ngx-select-dropdown
-                        (change)="showDetail($event)"
-                        [multiple]="false"
-                        [config]="config"
-                        [options]="tempPrimaryOrderList">
-                    </ngx-select-dropdown>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <span> Merge From Ticket:  </span>
+                        <ngx-select-dropdown
+                            (change)="showDetail($event)"
+                            [multiple]="false"
+                            [config]="config"
+                            [options]="tempPrimaryOrderList">
+                        </ngx-select-dropdown>
+                    </div>
                 </div>
 
-
-
-
-
-                <div *ngIf="detailPrimaryTicket.Name != null"  class="card col-sm-12 mt-3" style="cursor: pointer;">
+               
+                <div *ngIf="detailPrimaryTicket.Name != null"  class="col-sm-12 card mt-3" style="cursor: pointer;">
                     <span class="mt-2" style="width:100%"> 
-                        
                         {{detailPrimaryTicket?.Name}}  {{detailPrimaryTicket?.TicketId}}
                     </span>
     
@@ -86,8 +83,8 @@
                                 </caption>
                                 <thead>
                                     <tr>
-                                        <th> move This Item</th>
-                                        <th>change quantity </th>
+                                        <th>Move This Item</th>
+                                        <th>Change Quantity </th>
                                         <th>Name</th>
                                         <th>Qty</th>
                                         <th>Unit Price</th>
@@ -96,8 +93,8 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let item of o.OrderItems">
-                                        <td>  <input  [id]="'item'+i" type="checkbox"(change)="moveOrder(item)"> </td>
-                                        <td> <input [disabled]="item.Qty==1" type="text"> </td>
+                                        <td><input  [id]="'item'+i" type="checkbox"> </td>
+                                        <td><input [disabled]="item.Qty==1" type="text" (keypress)="quantityChanged($event,item)"> </td>
                                         <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
                                         <td>{{item.Qty}}</td>
                                         <td>{{item.UnitPrice}}</td>
@@ -113,64 +110,8 @@
                     
                     
                 </div>
-
-
-
-
-
-                           <!-- <span (click)="showDetail(order);order.show = !order.show" style="width:100%"> 
-                               <i 
-                                   class="fa" 
-                                   [class.fa-chevron-right]="!order.show"
-                                   [class.fa-chevron-down]="order.show">
-                               </i>
-                               {{order.Name}}  {{order.TicketId}}
-                           </span> -->
-
-                            <!-- <div *ngIf="order.Orders.length > 0">
-                                <div *ngFor="let o of order.Orders">
-                                    <table>
-                                        <caption style="caption-side:top">
-                                            Order No: {{o.OrderNumber}},
-                                            {{o.UserId}} -
-                                            {{o.OrderOpeningTime}}
-                                        </caption>
-                                        <thead>
-                                            <tr>
-                                                <th> move This Item</th>
-                                                <th>change quantity </th>
-                                                <th>Name</th>
-                                                <th>Qty</th>
-                                                <th>Unit Price</th>
-                                                <th>Total Price</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let item of o.OrderItems">
-                                                <td>  <input  [id]="'item'+i" type="checkbox"(change)="moveOrder(item)"> </td>
-                                                <td> <input [disabled]="item.Qty==1" type="text"> </td>
-                                                <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
-                                                <td>{{item.Qty}}</td>
-                                                <td>{{item.UnitPrice}}</td>
-                                                <td>{{item.TotalAmount}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div> -->
-
-                          
-           
-                           <!-- <div *ngIf="order.show && order.Orders?.length == 0" class="text-center">
-                               No record found!!
-                           </div> -->
-                           
-                     
-                       
-                   
-
-               </div>
             </div>
+
             <div class="col-md-5" style="margin: inherit;">
                 <div class="row">
                     <div class="col-sm-12">
@@ -239,12 +180,10 @@
             </div> 
 
             <div class="col-md-1 mr-0">
-                
-                    <button type="button" class="btn btn-success mt-4 w-100" (click)="partialMerge()">
-                        Merge
-                    </button>
+                <button type="button" class="btn btn-success mt-4 w-100" (click)="partialMerge()">
+                    Merge
+                </button>
             </div>
-            
 
         </div>
 
