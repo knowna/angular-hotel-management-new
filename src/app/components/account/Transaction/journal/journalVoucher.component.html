@@ -1,28 +1,30 @@
 ﻿<!-- <accountdashboard-app></accountdashboard-app> -->
 <ng-template #template>
     <form novalidate (ngSubmit)="onSubmit(journalFrm)" [formGroup]="journalFrm" class="panel-primary">
-        <div class="modal-header panel-heading">
+        <div class="modal-header" style="background-color: #364a70;">
             <h4 class="modal-title pull-left">{{modalTitle}}</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">
-            <div class="hidden">
+            <!-- <div class="hidden">
                 <input type="number" class="hidden" formControlName="Id" />
                 <input type="text" class="hidden" formControlName="Amount" />
                 <input type="text" class="hidden" placeholder="Voucher No" formControlName="AccountTransactionDocumentId" />
-            </div>
+            </div> -->
             <div class="row">
-                <label class="control-label col-md-2">Voucher Type:</label>
-                <div class="form-group col-md-4">
+                <!-- <label class=" font-weight-bold ml-2">Voucher Type:</label> -->
+                <div class="form-group col-md-6">
+                    <label class=" font-weight-bold ml-2">Voucher Type:</label>
                     <input type="text" class="form-control" formControlName="Name" readonly="true">
                     <div class="text-danger" *ngIf="journalFrm.get('Name'). hasError('required') && formSubmitAttempt">
                         Voucher Type is required
                     </div>
                 </div>
-                <label class="control-label col-md-2">Voucher Date:</label>
-                <div class="form-group col-md-4">
+                <!-- <label class=" font-weight-bold">Voucher Date:</label> -->
+                <div class="form-group col-md-6">
+                    <label class=" font-weight-bold">Voucher Date:</label>
                     <input type="text" class="form-control" placeholder="DD/MM/YYYY" bsDatepicker formControlName="Date" />
                     <div class="text-danger" *ngIf="journalFrm.get('Date'). hasError('required') && formSubmitAttempt">
                         Date is required
@@ -33,7 +35,7 @@
                 <div class="container col-md-12">
                     <div formArrayName="AccountTransactionValues" class="panel panel-default container-padding">
                         <br>
-                        <div class="col-md-2 custom-padding">
+                        <!-- <div class="col-md-2 custom-padding">
                             <strong>Dr/Cr</strong>
                         </div>
                         <div class="col-md-5 custom-padding">
@@ -48,11 +50,12 @@
                         <div class="col-md-1 custom-padding">
                             <strong>&nbsp;</strong>
                         </div>
-                        <br>
-                        <div class="panel-body" *ngFor="let AccountTransactionValue of journalFrm.controls.AccountTransactionValues.controls; let i=index"
+                        <br> -->
+                        <div *ngFor="let AccountTransactionValue of journalFrm.controls.AccountTransactionValues.controls; let i=index"
                             [formGroupName]="i">
                             <div class="row">
                                 <div class="col-md-2 custom-padding">
+                                    <label class="font-weight-bold"> Dr/Cr</label>
                                     <select class="form-control" formControlName="entityLists" (change)="enableDisable(journalFrm.controls.AccountTransactionValues.controls[i].controls)">
                                         <option *ngFor="let entityList of entityLists" [ngValue]="entityList.name">{{ entityList.name }}</option>
                                     </select>
@@ -61,6 +64,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-5 custom-padding">
+                                    <label class="font-weight-bold">Account</label>
                                     <select class="form-control " formControlName="AccountId">
                                         <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option>
                                     </select>
@@ -69,9 +73,11 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2 custom-padding">
+                                    <label class="font-weight-bold">Debit</label>
                                     <input type="number" class="form-control" placeholder="Debit" formControlName="Debit" />
                                 </div>
                                 <div class="col-md-2 custom-padding">
+                                    <label class="font-weight-bold">Credit</label>
                                     <input type="number" class="form-control" placeholder="Credit" formControlName="Credit">
                                 </div>
                                 <div class="col-md-1 custom-padding text-center" style="padding-top: 7px !important;">
@@ -117,17 +123,22 @@
         Journal Voucher
     </div>
 
-    <div class='panel-body'>
+    <div style="background-color: #364a70;color:white">
         <div class='table-responsive'>
             <div style="padding-bottom:10px">
                 <div class="row">
                     <div class="col-md-4">
-                        <div (click)="addJournalVoucher()" style="cursor: pointer">
-                            <span>
+                        <button class="btn btn-success mt-3 ml-3" (click)="addJournalVoucher()">
+                            <i class="fa fa-plus"></i>
+                            Add
+
+                        </button>
+                        <!-- <div (click)="addJournalVoucher()" style="cursor: pointer"> -->
+                            <!-- <span>
                                 <img src="../../images/Add.png" height="60" width="60" />
                             </span>
-                            Add Journal Voucher
-                        </div>
+                            Add Journal Voucher -->
+                        <!-- </div> -->
                     </div>
                     <div class="col-md-8">
                         <div class="row" style="padding-top: 17px;">
