@@ -77,7 +77,7 @@ export class RoleComponent implements OnInit {
         this.SetControlsState(true);
         this.modalTitle = "Add Role";
         this.modalBtnTitle = "Save";
-        // this.RoleFrm.reset();
+        this.RoleFrm.reset();
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
@@ -150,23 +150,34 @@ export class RoleComponent implements OnInit {
         let Role = this.RoleFrm;
         this.formSubmitAttempt = true;
 
-        console.log('post data',formData)
+        // console.log('post data',formData)
 
         if (Role.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
-                    this._roleService.post(Global.BASE_ROLES_ADD_ENDPOINT, formData.value).subscribe(
+                    let roleData = {
+                        "Name":formData.value.Name,
+                        "Description":formData.value.Description,
+                        "IsAdd":formData.value.IsAdd,
+                        "IsDelete":formData.value.IsDelete,
+                        "IsEdit":formData.value.IsEdit,
+                        "IsSysAdmin":formData.value.IsSysAdmin,
+                        "IsView":formData.value.IsView
+                    }
+                    this._roleService.post(Global.BASE_ROLES_ADD_ENDPOINT, roleData).subscribe(
                         data => {
                             console.log('response',data);
                             if (data == 1) //Success
                             {
-                                this.openModal2(this.TemplateRef2);
+                                // this.openModal2(this.TemplateRef2);
+                                this.msg = "Data successfully saved.";
                                 this.LoadRoles();
                             }
                             else {
                                 this.msg = "There is some issue in creating records, please contact to system administrator!"
                             }
 
+                            alert(this.msg);
                             // this.RoleFrm.reset();
                             this.modalRef.hide();
                             this.formSubmitAttempt = false;
@@ -180,11 +191,13 @@ export class RoleComponent implements OnInit {
                             if (data == 1) //Success
                             {
                                 this.msg = "Data successfully updated.";
+                                // this.openModal2(this.TemplateRef2);
                                 this.LoadRoles();
                             }
                             else {
                                 this.msg = "There is some issue in updating records, please contact to system administrator!"
                             }
+                            alert(this.msg);
                             this.modalRef.hide();
                             this.formSubmitAttempt = false;
                         },
@@ -202,6 +215,7 @@ export class RoleComponent implements OnInit {
                                 this.msg = "There is some issue in deleting records, please contact to system administrator!"
                             }
 
+                            alert(this.msg);
                             this.modalRef.hide();
                             this.formSubmitAttempt = false;
                         },

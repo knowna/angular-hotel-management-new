@@ -29,7 +29,7 @@
             <table class='table table-bordered' *ngIf='roles && roles.length'>
                 <thead>
                     <tr>
-                        <th>Role Name</th>
+                        <!-- <th>Role Name</th> -->
                         <th>Name</th>
                         <th>Description</th>
                         <th>Action</th>
@@ -37,7 +37,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let role of roles">
-                        <td>{{role.RoleName}}</td>
+                        <!-- <td>{{role.RoleName}}</td> -->
                         <td>{{role.Name}}</td>
                         <td>{{role.Description}}</td>
                         <td>
@@ -153,7 +153,7 @@
 
             <label class="control-label">Permission</label>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox"  name="Add" id="Add" ng-model="RoleFrm.IsAdd" formControlName="IsAdd">
                         <label class="form-check-label" for="Add">
@@ -161,7 +161,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox"  name="Edit" id="Edit" ng-model="RoleFrm.IsEdit" formControlName="IsEdit">
                         <label class="form-check-label" for="Edit">
@@ -169,7 +169,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox"  name="Delete" id="Delete" ng-model="RoleFrm.IsDelete" formControlName="IsDelete">
                         <label class="form-check-label" for="Delete">
@@ -177,7 +177,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox"  name="View" id="View" ng-model="RoleFrm.IsView" formControlName="IsView">
                         <label class="form-check-label" for="View">
