@@ -42,15 +42,14 @@ export class RoleService {
         let body = JSON.stringify(model);
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let options = ({ headers: headers });
-        return this._http.put(url + Id, body, options).pipe(
+        return this._http.put(url + '?id=' +Id, body, options).pipe(
                 catchError(this.handleError));
     }
 
     delete(url: string, id: number): Observable<any> {
-         ;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let options = ({ headers: headers });
-        return this._http.delete(url + id, options).pipe(
+        return this._http.delete(url + '?id=' + id, options).pipe(
                 catchError(this.handleError));
     }
 

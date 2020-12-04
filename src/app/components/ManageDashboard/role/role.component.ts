@@ -45,7 +45,7 @@ export class RoleComponent implements OnInit {
             // LastChangedDate: [''],
             // LastChangedBy: [''],
             // Selected: [''],
-            IsSysAdmin: [false],
+            IsSysAdmin: false,
 
             Name:[''],
             IsAdd:[''],
@@ -91,7 +91,15 @@ export class RoleComponent implements OnInit {
         this.modalTitle = "Edit Role";
         this.modalBtnTitle = "Save";
         this.role = this.roles.filter(x => x.Id == Id)[0];
-        this.RoleFrm.setValue(this.role);
+        // this.RoleFrm.setValue(this.role);
+        this.RoleFrm.controls['Id'].setValue(this.role.Id);
+        this.RoleFrm.controls['Name'].setValue(this.role.Name);
+        this.RoleFrm.controls['Description'].setValue(this.role.Description);
+        this.RoleFrm.controls['IsSysAdmin'].setValue(this.role.IsSysAdmin);
+        this.RoleFrm.controls['IsAdd'].setValue(this.role.IsAdd);
+        this.RoleFrm.controls['IsDelete'].setValue(this.role.IsDelete);
+        this.RoleFrm.controls['IsEdit'].setValue(this.role.IsEdit);
+        this.RoleFrm.controls['IsView'].setValue(this.role.IsView);
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
@@ -106,7 +114,15 @@ export class RoleComponent implements OnInit {
         this.modalTitle = "Confirm to Delete?";
         this.modalBtnTitle = "Delete";
         this.role = this.roles.filter(x => x.Id == id)[0];
-        this.RoleFrm.setValue(this.role);
+        // this.RoleFrm.setValue(this.role);
+        this.RoleFrm.controls['Id'].setValue(this.role.Id);
+        this.RoleFrm.controls['Name'].setValue(this.role.Name);
+        this.RoleFrm.controls['Description'].setValue(this.role.Description);
+        this.RoleFrm.controls['IsSysAdmin'].setValue(this.role.IsSysAdmin);
+        this.RoleFrm.controls['IsAdd'].setValue(this.role.IsAdd);
+        this.RoleFrm.controls['IsDelete'].setValue(this.role.IsDelete);
+        this.RoleFrm.controls['IsEdit'].setValue(this.role.IsEdit);
+        this.RoleFrm.controls['IsView'].setValue(this.role.IsView);
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
@@ -134,21 +150,35 @@ export class RoleComponent implements OnInit {
         let Role = this.RoleFrm;
         this.formSubmitAttempt = true;
 
+        // console.log('post data',formData)
+
         if (Role.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
-                    this._roleService.post(Global.BASE_ROLES_ADD_ENDPOINT, formData.value).subscribe(
+                    let roleData = {
+                        "Name":formData.value.Name,
+                        "Description":formData.value.Description,
+                        "IsAdd":formData.value.IsAdd,
+                        "IsDelete":formData.value.IsDelete,
+                        "IsEdit":formData.value.IsEdit,
+                        "IsSysAdmin":formData.value.IsSysAdmin,
+                        "IsView":formData.value.IsView
+                    }
+                    this._roleService.post(Global.BASE_ROLES_ADD_ENDPOINT, roleData).subscribe(
                         data => {
-                            console.log('data',formData.value)
+                            console.log('response',data);
                             if (data == 1) //Success
                             {
-                                this.openModal2(this.TemplateRef2);
+                                // this.openModal2(this.TemplateRef2);
+                                this.msg = "Data successfully saved.";
                                 this.LoadRoles();
                             }
                             else {
                                 this.msg = "There is some issue in creating records, please contact to system administrator!"
                             }
 
+                            alert(this.msg);
+                            // this.RoleFrm.reset();
                             this.modalRef.hide();
                             this.formSubmitAttempt = false;
 
@@ -156,25 +186,25 @@ export class RoleComponent implements OnInit {
                     );
                     break;
                 case DBOperation.update:
-                     ;
-                    this._roleService.put(Global.BASE_ROLES_ENDPOINT, formData.value.RoleId, formData.value).subscribe(
+                    this._roleService.put(Global.BASE_ROLES_EDIT_ENDPOINT, formData.value.Id, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
                                 this.msg = "Data successfully updated.";
+                                // this.openModal2(this.TemplateRef2);
                                 this.LoadRoles();
                             }
                             else {
                                 this.msg = "There is some issue in updating records, please contact to system administrator!"
                             }
+                            alert(this.msg);
                             this.modalRef.hide();
                             this.formSubmitAttempt = false;
                         },
                     )
                     break;
                 case DBOperation.delete:
-                     ;
-                    this._roleService.delete(Global.BASE_ROLES_ENDPOINT, formData.value.RoleId).subscribe(
+                    this._roleService.delete(Global.BASE_ROLES_DELETE_ENDPOINT, formData.value.Id).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -185,6 +215,7 @@ export class RoleComponent implements OnInit {
                                 this.msg = "There is some issue in deleting records, please contact to system administrator!"
                             }
 
+                            alert(this.msg);
                             this.modalRef.hide();
                             this.formSubmitAttempt = false;
                         },

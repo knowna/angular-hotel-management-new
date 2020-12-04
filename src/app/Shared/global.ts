@@ -9,6 +9,8 @@
     public static BASE_USERROLE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/userRoleAPI/';
     public static BASE_ROLES_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/HotelRole/GetRoles/';
     public static BASE_ROLES_ADD_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/HotelRole/PostRole/';
+    public static BASE_ROLES_EDIT_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/HotelRole/EditRole/';
+    public static BASE_ROLES_DELETE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/HotelRole/DeleteRole/';
     public static BASE_INVENTORY_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/InventoryItemAPI/';
     public static BASE_STOCKINHAND_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/StockInHand/';
     public static BASE_MENUITEM_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/MenuItemAPI/';
