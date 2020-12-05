@@ -4,7 +4,10 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { Global } from '../Shared/global';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 
 @Injectable()
@@ -15,36 +18,31 @@ export class JournalVoucherService {
 
 
     get(url: string): Observable<any> {
-        return this._http.get(url);
-            // .map((response: Response) => <any>response.json())
-            // .do(data => console.log("All: " + JSON.stringify(data)))
-            // .catch(this.handleError);
+        return this._http.get(url).pipe(
+            catchError(this.handleError));
     }
 
 
 
     post(url: string, model: any): Observable<any> {
-        // debugger;
         let body = JSON.stringify(model);
-        // let headers = new Headers({ 'Content-Type': 'application/json' });
-        // let options = new RequestOptions({ headers: headers });
-        return this._http.post(url, body)
-    //         .map((response: Response) => <any>response.json())
-    //         .catch(this.handleError);
-     }
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let options = ({ headers: headers });
+        return this._http.post(url, body, options).pipe(
+
+            catchError(this.handleError));
+    }
 
     put(url: string, id: number, model: any): Observable<any> {
-        // debugger;
         let body = JSON.stringify(model);
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        // let options = new RequestOptions({ headers: headers });
-        return this._http.put(url + id, body)
-            // .map((response: Response) => <any>response.json())
-            // .catch(this.handleError);
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let options = ({ headers: headers });
+        return this._http.put(url + id, body, options).pipe(
+
+            catchError(this.handleError));
     }
 
     RemoveTransactionValues(url: string, id: number) {
-        debugger;
         let headers = new Headers({ 'Content-Type': 'application/json' });
         // let options = new RequestOptions({ headers: headers });
         return this._http.delete(url + id)
@@ -54,13 +52,10 @@ export class JournalVoucherService {
 
 
     getAccounts():any {
-
-        return this._http.get("/api/AccountAPI/get")
-            // .map((responseData) => responseData.json());
+        return this._http.get(Global.BASE_HOST_ENDPOINT+ "/api/AccountAPI/get")
     } 
 
     delete(url: string, model: any): Observable<any> {
-        debugger;
         let body = JSON.stringify(model);
         let headers = new Headers({ 'Content-Type': 'application/json' });
         // let options = new RequestOptions({ headers: headers, body: body });
@@ -70,10 +65,10 @@ export class JournalVoucherService {
     }
 
 
-    // private handleError(error: Response) {
-    //     console.error(error);
-    //     return Observable.throw(error.json().error || 'Server error');
-    // }
+    private handleError(error: HttpErrorResponse) {
+        return throwError(error.message || 'Server error');
+    }
+    
 
 
 

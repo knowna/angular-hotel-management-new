@@ -1,0 +1,168 @@
+﻿<!-- <div class="row">
+    <label class="control-label col-md-2">
+        <strong>Account/Ledger:</strong>
+    </label>
+    <div class="col-md-4" style="float: left; margin-bottom: 10px;">
+        <select [(ngModel)]="selectedName" class="form-control" (change)="SearchLedgerTransaction($event.target.value)">
+            <option value=""></option>
+            <option *ngFor="let accounts of accountledger" [value]="accounts.Id">
+                {{accounts.Name}}
+            </option>
+        </select>
+        <br />
+    </div>
+</div>
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        Ledger
+    </div>
+    <div class='panel-body'>
+        <div class='table-responsive'>
+            <div style="padding-bottom:10px">
+                <div class="pull-right">
+                    <button *ngIf='LedgerViews && LedgerViews.length' class="btn btn-primary pull-left" (click)="exportTableToExcel('LedgerTable')"> Export</button>
+                </div>
+                <br>
+                <br>
+                <div class="alert alert-info" role="alert" *ngIf="inLoading"><img src="../../images/loading.gif" width="32" height="32" /> Loading...</div>
+                <div *ngIf='LedgerViews && LedgerViews.length==0' class="alert alert-info" role="alert">No record found!</div>
+                <table id="LedgerTable" class='table table-striped' *ngIf='LedgerViews && LedgerViews.length'>
+                    <thead>
+                        <tr>
+                            <th colspan="6" class="text-center">
+                                <strong>{{ company?.NameEnglish }}</strong>
+                                <br />
+                                {{selectedAccountName()}} Account Ledger View
+                                <br />
+                                {{ currentYear?.NepaliStartDate }} - {{ currentYear?.NepaliEndDate }}
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>Date</th>
+                            <th>Particular</th>
+                            <th>V. Type</th>
+                            <th>V. No.</th>
+                            <th class="text-right">Debit</th>
+                            <th class="text-right">Credit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let customerType of LedgerViews">
+                            <td>{{customerType.VDate}}</td>
+                            <td>{{customerType.Name}}</td>
+                            <td>{{customerType.VType}}</td>
+                            <td>{{customerType.VNumber}}</td>
+                            <td *ngIf="customerType.Debit !=0">{{customerType.Debit.toFixed(2)}}</td>
+                            <td *ngIf="customerType.Debit ==0"></td>
+                            <td *ngIf="customerType.Credit !=0">{{customerType.Credit.toFixed(2)}}</td>
+                            <td *ngIf="customerType.Credit ==0"></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4"> <strong>Total</strong></td>
+                            <td><span ng-show='discussionsSelect == "total"'> {{ calcDebitTotal(LedgerViews).toFixed(2) }} </span></td>
+                            <td><span ng-show='discussionsSelect == "total"'> {{ calcCreditTotal(LedgerViews).toFixed(2) }} </span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"> <strong>Closing Balance</strong></td>
+                            <td *ngIf="calcLedgerTotal(LedgerViews).toFixed(2) > 0">{{calcLedgerTotal(LedgerViews).toFixed(2)}} <strong>Debit</strong></td>
+                            <td *ngIf="calcLedgerTotal(LedgerViews).toFixed(2) < 0">{{calcLedgerTotal(LedgerViews).toFixed(2)}}<strong>Credit</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div>
+                </div>
+            </div>
+            <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{msg}}
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="container" style="padding-top: 20px;">
+    <div class="row m-0">
+        <div class="col-md-4">
+            <h2 class="header">Ledger</h2>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4" *ngIf='LedgerViews && LedgerViews.length'>
+            <button class="btn btn-primary" (click)="exportTableToExcel('LedgerTable')" style="float: right">Export</button>
+        </div>
+    </div>
+
+    <div class="row m-0">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">
+                    <strong>Account/Ledger</strong>
+                </label>
+                <select [(ngModel)]="selectedName" class="form-control" (change)="SearchLedgerTransaction($event.target.value)">
+                    <option value="">Select</option>
+                    <option *ngFor="let accounts of accountledger" [value]="accounts.Id">
+                        {{accounts.Name}}
+                    </option>
+                </select>
+            </div>
+        </div>
+       
+    </div>
+
+    <div class="row m-0">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="inLoading"><img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <div *ngIf='LedgerViews && LedgerViews.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table id="LedgerTable" class='table table-bordered' *ngIf='LedgerViews && LedgerViews.length'>
+                <thead>
+                    <tr>
+                        <th colspan="6" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                            <br />
+                            {{selectedAccountName()}} Account Ledger View
+                            <br />
+                            {{ currentYear?.NepaliStartDate }} - {{ currentYear?.NepaliEndDate }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Date</th>
+                        <th>Particular</th>
+                        <th>V. Type</th>
+                        <th>V. No.</th>
+                        <th class="text-right">Debit</th>
+                        <th class="text-right">Credit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let customerType of LedgerViews">
+                        <td>{{customerType.VDate}}</td>
+                        <td>{{customerType.Name}}</td>
+                        <td>{{customerType.VType}}</td>
+                        <td>{{customerType.VNumber}}</td>
+                        <td *ngIf="customerType.Debit !=0">{{customerType.Debit.toFixed(2)}}</td>
+                        <td *ngIf="customerType.Debit ==0"></td>
+                        <td *ngIf="customerType.Credit !=0">{{customerType.Credit.toFixed(2)}}</td>
+                        <td *ngIf="customerType.Credit ==0"></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4"> <strong>Total</strong></td>
+                        <td><span ng-show='discussionsSelect == "total"'> {{ calcDebitTotal(LedgerViews).toFixed(2) }} </span></td>
+                        <td><span ng-show='discussionsSelect == "total"'> {{ calcCreditTotal(LedgerViews).toFixed(2) }} </span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"> <strong>Closing Balance</strong></td>
+                        <td *ngIf="calcLedgerTotal(LedgerViews).toFixed(2) > 0">{{calcLedgerTotal(LedgerViews).toFixed(2)}} <strong>Debit</strong></td>
+                        <td *ngIf="calcLedgerTotal(LedgerViews).toFixed(2) < 0">{{calcLedgerTotal(LedgerViews).toFixed(2)}}<strong>Credit</strong></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+   
+</div>

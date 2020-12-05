@@ -1,0 +1,75 @@
+﻿<accountdashboard-app></accountdashboard-app>
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        BALANCE SHEET
+    </div>
+    <div class='panel-body'>
+        <div class='table-responsive'>
+            <div style="padding-bottom:10px">
+                <div class="pull-right">
+                    <button *ngIf='balanceSheet && balanceSheet.length' class="btn btn-primary pull-left" (click)="exportTableToExcel('balancesheetTable')"> Export</button>
+                </div>
+                <br>
+                <br>
+                <div class="alert alert-info" role="alert" *ngIf="isLoading">
+                    <img src="../../images/loading.gif" width="32" height="32" /> Loading... </div>
+                <div *ngIf='balanceSheet && balanceSheet.length==0' class="alert alert-info" role="alert">No record found!</div>
+                <table id="balancesheetTable" class='table table-responsive table-bordered' *ngIf='balanceSheet && balanceSheet.length'>
+                    <thead>
+                        <tr>
+                            <th colspan="6" class="text-center">
+                                <strong>{{ company?.NameEnglish }}</strong>
+                                <br/> Balance Sheet
+                                <br/> {{ currentYear?.NepaliStartDate }} - {{ currentYear?.NepaliEndDate }}
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colspan="3">Libalities</th>
+                            <th colspan="3">Assets</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3">
+                                <table class="table">
+                                    <tbody class="inner-table">
+                                        <tr *ngFor="let data of balanceSheet[0]['Lability']">
+                                            <td>{{ data.Name }}</td>
+                                            <td align="right">{{ data.Amount.toFixed(2)}}</td>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td colspan="3">
+                                <table class="table">
+                                    <tbody class="inner-table">
+                                        <tr *ngFor="let data of balanceSheet[0]['Asset']">
+                                            <td>{{ data.Name }}</td>
+                                            <td align="right">{{ data.Amount.toFixed(2)}}</td>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Libalities Total:</td>
+                            <td align="right">{{ calculateTotal( balanceSheet[0]['Lability']).toFixed(2) }} </td>
+                            <td colspan="2">Assets Total:</td>
+                            <td align="right">{{ calculateTotal( balanceSheet[0]['Asset']).toFixed(2) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{msg}}
+            </div>
+        </div>
+    </div>
+</div>

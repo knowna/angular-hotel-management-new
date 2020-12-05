@@ -48,6 +48,22 @@ export class LinksFilterPipe implements PipeTransform {
     'Account:Transaction:Bank',
     'Account:Transaction:Credit',
     'Account:Transaction:Debit',
+    'Account:Report',
+    'Account:Report:Day',
+    'Account:Report:Ledger',
+    'Account:Report:TrialBalance',
+    'Account:Report:CashFlow',
+    'Account:Report:FundFlow',
+    'Account:Report:ProfitLoss',
+    'Account:Report:BalanceSheet',
+    'Account:Report:SaleBook',
+    'Account:Report:SaleItemWise',
+    'Account:Report:SaleDateWise',
+    'Account:Report:SaleCustomerWise',
+    'Account:Report:PurchaseBook',
+    'Account:Report:MaterializedView',
+    'Account:Report:BillReturnView',
+
     'Inventory',
     'Inventory:Transaction',
     'Inventory:Report',
@@ -61,8 +77,8 @@ export class LinksFilterPipe implements PipeTransform {
     'Inventory:Master:Category',
     'Inventory:Master:Unit',
     'Inventory:Warehouse:Warehouse',
-    'Inventory:Warehouse:WareHouseType'
-
+    'Inventory:Warehouse:WareHouseType',
+    
 
 ];
 

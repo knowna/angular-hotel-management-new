@@ -1,0 +1,116 @@
+﻿<accountdashboard-app></accountdashboard-app>
+<div class="row">
+    <label class="control-label col-md-2" align="right">
+        <strong>Month:</strong>
+    </label>
+    <div class="col-md-4" style="float: left; margin-bottom: 10px;">
+        <select [(ngModel)]="selectedMonths" class="form-control" (change)="SearchLedgerTransaction($event.target.value)">
+            <option value=""></option>
+            <option *ngFor="let Month of Months" [value]="Month.Name">
+                {{Month.Name}}
+            </option>
+        </select>
+    </div>
+</div>
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        Sales Book
+    </div>
+    <div class='panel-body'>
+        <div class='table-responsive'>
+            <div style="padding-bottom:10px">
+                <div class="pull-right">
+                    <button *ngIf='SaleBooks && SaleBooks.length' class="btn btn-primary pull-left" (click)="exportTableToExcel('SalesBookTable')"> Export</button>
+                </div>
+                <br>
+                <br>
+                <div class="alert alert-info" role="alert" *ngIf="isLoading"><img src="../../images/loading.gif" width="32" height="32" /> Loading...</div>
+                <div *ngIf='SaleBooks && SaleBooks.length==0' class="alert alert-info" role="alert">No record found!</div>
+                <table id="SalesBookTable" class='table table-striped' *ngIf='SaleBooks && SaleBooks.length'>
+                    <thead>
+                        <tr>
+                            <th colspan="10" class="text-center">
+                                <strong>{{ company?.NameEnglish }}</strong>
+                                <br /> {{selectedMonths}} Sales Book
+                                <br /> {{ currentYear?.NepaliStartDate }} - {{ currentYear?.NepaliEndDate }}
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colspan="4" align="center">
+                                <strong>Invoice</strong>
+                            </th>
+                            <th align="center">
+                                <strong>
+                                    Total Sales
+                                </strong>
+                            </th>
+                            <th align="center">
+                                <strong>
+                                    Non Taxable Sales
+                                </strong>
+                            </th>
+                            <th align="center">
+                                <strong>
+                                    Export Sales
+                                </strong>
+                            </th>
+                            <th align="center">
+                                <strong>
+                                    Discount
+                                </strong>
+                            </th>
+                            <th colspan="2" align="center">
+                                <strong>
+                                    Taxable Sales
+                                </strong>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>Date</th>
+                            <th>Bill No.</th>
+                            <th align="center">Buyer's Name</th>
+                            <th align="center">Buyer's PAN Number</th>
+                            <th class="text-right">(Rs.)</th>
+                            <th class="text-right">(Rs.)</th>
+                            <th class="text-right">(Rs.)</th>
+                            <th class="text-right">(Rs.)</th>
+                            <th class="text-right">Amount (Rs.)</th>
+                            <th class="text-right">Tax (Rs.)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let SaleBook of SaleBooks">
+                            <td>{{SaleBook.VDate | date: 'yyyy.MM.dd'}}</td>
+                            <td>{{SaleBook.BillNo}}</td>
+                            <td>{{SaleBook.BuyerName}}</td>
+                            <td>{{SaleBook.BuyerPAN}}</td>
+                            <td align="right">{{SaleBook.TotalSale.toFixed(2)}}</td>
+                            <td align="right">{{SaleBook.NonTaxableSale.toFixed(2)}}</td>
+                            <td align="right">{{SaleBook.ExportSale.toFixed(2)}}</td>
+                            <td align="right">{{SaleBook.Discount.toFixed(2)}}</td>
+                            <td align="right">{{SaleBook.TaxableAmount.toFixed(2)}}</td>
+                            <td align="right">{{SaleBook.Tax.toFixed(2)}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" align="right"> <strong>Total</strong></td>
+                            <td align="right"><span ng-show='discussionsSelect == "total"'> {{ calcTotalSale(SaleBooks).toFixed(2) }} </span></td>
+                            <td align="right"><span ng-show='discussionsSelect == "total"'> {{ calcNonTaxableSaleTotal(SaleBooks).toFixed(2) }} </span></td>
+                            <td align="right"><span ng-show='discussionsSelect == "total"'> {{ calcExportSaleTotal(SaleBooks).toFixed(2) }} </span></td>
+                            <td align="right"><span ng-show='discussionsSelect == "total"'> {{ calcDiscountTotal(SaleBooks).toFixed(2) }} </span></td>
+                            <td align="right"><span ng-show='discussionsSelect == "total"'> {{ calcTaxableAmountTotal(SaleBooks).toFixed(2) }} </span></td>
+                            <td align="right"><span ng-show='discussionsSelect == "total"'> {{ calcTaxAmountTotal(SaleBooks).toFixed(2) }} </span></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{msg}}
+            </div>
+        </div>
+    </div>
+</div>

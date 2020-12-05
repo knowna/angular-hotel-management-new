@@ -93,6 +93,7 @@ import { RoomTypeComponent } from './components/ManageDashboard/roomType/RoomTyp
 import { MasterLedgerComponent } from './components/account/master/master-ledger/master-ledger.component';
 import { AccountTransactionTypeComponent } from './components/account/master/account-transaction-type/account-transaction-type.component';
 import { JournalVouchercomponent } from './components/account/Transaction/journal/journaVoucher.component';
+import { AccountLedgerViewComponent } from './components/account/Report/LedgerView/AccountLedgerView.Component';
 
 
 const routes: Routes = [
@@ -380,11 +381,11 @@ const routes: Routes = [
     component: AccountTypeComponent,
     canActivate: [AuthGuard]
   },
-  // {
-  //   path: 'Account/accountLedgerView',
-  //   component: AccountLedgerViewComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'Account/accountLedgerView',
+    component: AccountLedgerViewComponent,
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: 'Account/TrialBalance',
   //   component: TrialBalanceComponent,

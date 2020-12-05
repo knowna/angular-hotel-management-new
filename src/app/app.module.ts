@@ -192,6 +192,7 @@ import { AccountTypeService } from './components/account/master/master-ledger/se
 import { AccountTransValuesService } from './Service/accountTransValues.service';
 import { JournalVoucherService } from './Service/journalVoucher.service';
 import { JournalVouchercomponent } from './components/account/Transaction/journal/journaVoucher.component';
+import { AccountLedgerViewComponent } from './components/account/Report/LedgerView/AccountLedgerView.Component';
 
 @NgModule({
   imports: [
@@ -310,7 +311,7 @@ import { JournalVouchercomponent } from './components/account/Transaction/journa
     // BalanceSheetComponent,
     // AccountBalanceSheetComponent,
     // BillReturnViewComponent,
-    // AccountLedgerViewComponent,
+    AccountLedgerViewComponent,
     // MaterializedViewComponent,
     // AccountProfitAndLossComponent,
     // AccountSaleBookComponent,

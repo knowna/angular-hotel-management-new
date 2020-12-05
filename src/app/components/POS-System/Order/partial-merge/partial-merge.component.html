@@ -93,8 +93,8 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let item of o.OrderItems">
-                                        <td><input  [id]="'item'+i" type="checkbox"> </td>
-                                        <td><input [disabled]="item.Qty==1" type="text" (keypress)="quantityChanged($event,item)"> </td>
+                                        <td><input  [id]="'item'+i" type="checkbox" (change)="moveOrder(item)"> </td>
+                                        <td><input [disabled]="item.Qty==1" type="text" (keyup)="quantityChanged($event,item)"> </td>
                                         <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
                                         <td>{{item.Qty}}</td>
                                         <td>{{item.UnitPrice}}</td>

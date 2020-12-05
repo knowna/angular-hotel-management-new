@@ -1,0 +1,41 @@
+﻿<accountdashboard-app></accountdashboard-app>
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        Balance Sheet
+    </div>
+    <div class='panel-body'>
+        <div class='table-responsive'>
+            <div style="padding-bottom:10px">
+                <div class="alert alert-info" role="alert" *ngIf="inLoading"><img src="../../images/loading.gif" width="32" height="32" /> Loading...</div>
+                <!--<div *ngIf='BalanceSheet && BalanceSheets.length==0' class="alert alert-info" role="alert">No record found!</div>-->
+                <!--<table class='table table-striped' *ngIf='BalanceSheet && BalanceSheets.length'>
+                    <thead>
+                        <tr>
+                            <th>Particular</th>
+                            <th></th>
+                            <th></th>
+                            <th align="right">Amount (Rs.)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let BL of BalanceSheet">
+                            <td *ngIf="BL.Bold =='Yes'"><strong>{{BL.Name}}</strong> </td>
+                            <td *ngIf="BL.Bold =='No'">{{BL.Name}} </td>
+                            <td></td>
+                            <td align="right" *ngIf="BL.Amount !=0">{{PL.Amount.toFixed(2)}}</td>
+                            <td align="right" *ngIf="BL.Amount ==0"></td>
+                        </tr>
+                    </tbody>
+                </table>-->
+                <div>
+                </div>
+            </div>
+            <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{msg}}
+            </div>
+        </div>
+    </div>
+</div>

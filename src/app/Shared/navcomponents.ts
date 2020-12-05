@@ -237,84 +237,80 @@ export const navcomponents=[
         },
         {
           title: 'Report',
-          permission:'Report',
+          permission:'Account:Report',
           icon: 'keypad-outline',
           link: '/pages/ui-features',
           children: [
             {
-              title: 'Account',
-              icon: 'grid-outline',
-              children:[
-                {
-                  title: 'Day Book',
-                  link: 'Account/journalVoucher',
-                },
-                {
-                  title: 'Ledger',
-                  link: 'Account/accountLedgerView',
-                },
-                {
-                  title: 'Trial Balance',
-                  link: 'Account/TrialBalance',
-                },
-                {
-                  title: 'Profit & Loss',
-                  link: 'Account/ProfitLoss',
-                },
-                {
-                  title: 'Balance Sheet',
-                  link: 'Account/BalanceSheet',
-                },
-                {
-                  title: 'Cash Flow',
-                  link: 'Account/journalVoucher',
-                },
-                {
-                  title: 'Fund Flow',
-                  link: 'Account/journalVoucher',
-                },
-              ],
+              title: 'Day Book',
+              link: 'Account/journalVoucher',
+              permission:'Account:Report:Day'
             },
             {
-              title: 'Sale / Purchase',
-              icon: 'grid-outline',
-              children:[
-                {
-                  title: 'Sales Book',
-                  link: 'Account/SaleBook',
-                },
-                {
-                  title: 'Item Wise',
-                  link: 'Account/SaleItemWise',
-                },
-                {
-                  title: 'Date Wise',
-                  link: 'Account/SaleDateWise',
-                },
-                {
-                  title: 'Customer',
-                  link: 'Account/SaleCustomerWise',
-                },
-              ],
+              title: 'Ledger',
+              link: 'Account/accountLedgerView',
+              permission:'Account:Report:Ledger'
             },
             {
-              title: 'Miscellaneous',
-              icon: 'grid-outline',
-              children:[
-                {
-                  title: 'Purchase Book',
-                  link: 'Account/PurchaseBook',
-                },
-                {
-                  title: 'Materialized View',
-                  link: 'Account/MaterializedView',
-                },
-                {
-                  title: 'Bill Return View',
-                  link: 'Account/BillReturnView',
-                },
-              ],
-            },      
+              title: 'Trial Balance',
+              link: 'Account/TrialBalance',
+              permission:'Account:Report:TrialBalance'
+            },
+            {
+              title: 'Cash Flow',
+              link: 'Account/journalVoucher',
+              permission:'Account:Report:CashFlow'
+            },
+            {
+              title: 'Fund Flow',
+              link: 'Account/journalVoucher',
+              permission:'Account:Report:FundFlow'
+            },
+            {
+              title: 'Profit & Loss',
+              link: 'Account/ProfitLoss',
+              permission:'Account:Report:ProfitLoss'
+            },
+            {
+              title: 'Balance Sheet',
+              link: 'Account/BalanceSheet',
+              permission:'Account:Report:BalanceSheet'
+            },
+            {
+              title: 'Sales Book',
+              link: 'Account/SaleBook',
+              permission:'Account:Report:SaleBook'
+            },
+            {
+              title: 'Sales Item Wise',
+              link: 'Account/SaleItemWise',
+              permission:'Account:Report:SaleItemWise'
+            },
+            {
+              title: 'Sales Date Wise',
+              link: 'Account/SaleDateWise',
+              permission:'Account:Report:SaleDateWise'
+            },
+            {
+              title: 'Sales Customer Wise',
+              link: 'Account/SaleCustomerWise',
+              permission:'Account:Report:SaleCustomerWise'
+            },
+            {
+              title: 'Purchase Book',
+              link: 'Account/PurchaseBook',
+              permission:'Account:Report:PurchaseBook'
+            },
+            {
+              title: 'Materialized View',
+              link: 'Account/MaterializedView',
+              permission:'Account:Report:MaterializedView'
+            },
+            {
+              title: 'Bill Return View',
+              link: 'Account/BillReturnView',
+              permission:'Account:Report:BillReturnView'
+            },     
           
           ],
         },
