@@ -258,12 +258,12 @@ export const navcomponents=[
             },
             {
               title: 'Cash Flow',
-              link: 'Account/journalVoucher',
+              link: 'Account/SaleBook',
               permission:'Account:Report:CashFlow'
             },
             {
               title: 'Fund Flow',
-              link: 'Account/journalVoucher',
+              link: 'Account/SaleBook',
               permission:'Account:Report:FundFlow'
             },
             {

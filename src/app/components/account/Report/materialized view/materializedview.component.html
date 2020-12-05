@@ -1,5 +1,120 @@
-﻿<accountdashboard-app></accountdashboard-app>
-<div class="row">
+﻿<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Materialized View</h2>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4"*ngIf='materializedViews && materializedViews.length'>
+            <button *ngIf='materializedViews && materializedViews.length' class="btn btn-primary pull-left" (click)="exportTableToExcel('MaterializedViewTable')" style="float: right"> Export</button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">
+                    <strong>Month</strong>
+                </label>
+                <select [(ngModel)]="selectedMonths" class="form-control" (change)="SearchLedgerTransaction($event.target.value)">
+                    <option value="">Select</option>
+                    <option *ngFor="let Month of Months" [value]="Month.Name">
+                        {{Month.Name}}
+                    </option>
+                </select>
+            </div>
+        </div>
+       
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="isLoading"><img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <div *ngIf='materializedViews && materializedViews.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table id="MaterializedViewTable" class='table table-bordered' *ngIf='materializedViews && materializedViews.length'>
+                <thead>
+                    <tr>
+                        <th colspan="11" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                            <br /> {{selectedMonths}} Materialized View
+                            <br /> {{ currentYear?.NepaliStartDate }} - {{ currentYear?.NepaliEndDate }}
+                        </th>
+                        <th colspan="12"></th>
+                    </tr>
+                    <tr>
+                        <th colspan="13" align="center">
+                            <strong>Invoice</strong>
+                        </th>
+                        <th align="center">
+                            <strong>
+                                Total_Amount
+                            </strong>
+                        </th>
+                        <th align="center">
+                            <strong>
+                                Amount MaterializedView
+                            </strong>
+                        </th>
+                        <th align="center">
+                            <strong>
+                                Discount
+                            </strong>
+                        </th>
+                        <th colspan="7" align="center">
+                            <strong>
+                                Taxable MaterializedView
+                            </strong>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Date</th>
+                        <th>Bill No.</th>
+                        <th align="center">Customer_name</th>
+                        <th align="center">Customer_Pan</th>
+                        <th align="center">Entered_By</th>
+                        <th align="center">Fiscal_Year</th>
+                        <th align="center">Is_bill_Active</th>
+                        <th align="center">IS_Bill_Printed</th>
+                        <th align="center">Is_realtime</th>
+                        <th align="center">Printed_by</th>
+                        <th align="center">Printed_Time</th>
+                        <th align="center">Sync_with_IRD</th>
+                        <th class="text-right">(Rs.)</th>
+                        <th class="text-right">(Rs.)</th>
+                        <th class="text-right">(Rs.)</th>
+                        <th class="text-right">(Rs.)</th>
+                        <th class="text-right">Taxable_Amount (Rs.)</th>
+                        <th class="text-right">Tax_Amount (Rs.)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let MView of materializedViews">
+                        <td>{{MView.Bill_Date | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{MView.Bill_no}}</td>
+                        <td>{{MView.Customer_name}}</td>
+                        <td>{{MView.Customer_Pan}}</td>
+                        <td>{{MView.Entered_By}}</td>
+                        <td>{{MView.Fiscal_Year}}</td>
+                        <td>{{MView.Is_bill_Active}}</td>
+                        <td>{{MView.IS_Bill_Printed}}</td>
+                        <td>{{MView.Is_realtime}}</td>
+                        <td>{{MView.Printed_by}}</td>
+                        <td>{{MView.Printed_Time | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{MView.Sync_with_IRD}}</td>
+                        <td>&nbsp;</td>
+                        <td align="right">{{MView.Total_Amount.toFixed(2)}}</td>
+                        <td align="right">{{MView.Amount.toFixed(2)}}</td>
+                        <td align="right">{{MView.Discount.toFixed(2)}}</td>
+                        <td align="right">{{MView.Taxable_Amount.toFixed(2)}}</td>
+                        <td align="right">{{MView.Tax_Amount.toFixed(2)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- <div class="row">
     <label class="control-label col-md-2" align="right">
         <strong>Month:</strong>
     </label>
@@ -113,4 +228,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->

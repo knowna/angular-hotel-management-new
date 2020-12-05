@@ -50,6 +50,10 @@ export class JournalVoucherService {
             // .catch(this.handleError);
     }
 
+    getAccountMonths(): any {
+        return this._http.get(Global.BASE_HOST_ENDPOINT + "/api/NepaliMonthAPI/get");
+    }
+
 
     getAccounts():any {
         return this._http.get(Global.BASE_HOST_ENDPOINT+ "/api/AccountAPI/get")

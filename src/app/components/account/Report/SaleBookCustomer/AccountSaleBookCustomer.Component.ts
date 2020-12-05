@@ -2,12 +2,12 @@
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
-import { JournalVoucherService } from '../../../Service/journalVoucher.service';
-import { Account } from '../../../Model/Account/account';
-import { SaleBookCustomer } from '../../../Model/SaleBook';
 import { Observable } from 'rxjs/Rx';
-import { Global } from '../../../Shared/global';
 import { DatePipe } from '@angular/common';
+import { SaleBookCustomer } from 'src/app/Model/SaleBook';
+import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
+import { Global } from 'src/app/Shared/global';
+import { Account } from 'src/app/Model/Account/account';
 
 @Component({
     templateUrl: './AccountSaleBookCustomer.Component.html'
@@ -22,7 +22,7 @@ export class AccountSaleBookCustomer {
     msg: string;
     isLoading: boolean = false;
     modalRef: BsModalRef;
-    selectedName: any = null;
+    selectedName: any = "";
     /**
      * Sale Book Constructor
      */

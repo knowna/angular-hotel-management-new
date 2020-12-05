@@ -1,5 +1,4 @@
-﻿<accountdashboard-app></accountdashboard-app>
-<div class='panel panel-primary'>
+﻿<!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
         Trial Balance Sheet
     </div>
@@ -12,7 +11,7 @@
                 <br>
                 <br>
                 <div class="alert alert-info" role="alert" *ngIf="isLoading">
-                    <img src="../../images/loading.gif" width="32" height="32" /> Loading...
+                    <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
                 </div>
                 <div *ngIf='TrialBalances && TrialBalances.length==0' class="alert alert-info" role="alert">No record found!</div>
                 <table id="TrialBalanceTable" class='table table-striped' *ngIf='TrialBalances && TrialBalances.length'>
@@ -25,23 +24,23 @@
                             </th>
                         </tr>
                         <tr>
-                            <th align="left">Name</th>
-                            <th align="right" style="text-align: right;">Debit</th>
-                            <th align="right" style="text-align: right;">Credit</th>
+                            <th>Name</th>
+                            <th style="text-align: right;">Debit</th>
+                            <th style="text-align: right;">Credit</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let rm of TrialBalances">
-                            <td align="left">{{rm.Name}}</td>
-                            <td align="right">{{rm.Debit.toFixed(2)}}</td>
-                            <td align="right">{{rm.Credit.toFixed(2)}}</td>
+                            <td>{{rm.Name}}</td>
+                            <td>{{rm.Debit.toFixed(2)}}</td>
+                            <td>{{rm.Credit.toFixed(2)}}</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td align="right"> <strong>Total</strong></td>
-                            <td align="right"><span ng-show='discussionsSelect == "total"'> {{ calcDebitTotal(TrialBalances).toFixed(2) }} </span></td>
-                            <td align="right"><span ng-show='discussionsSelect == "total"'> {{ calcCreditTotal(TrialBalances).toFixed(2) }} </span></td>
+                            <td> <strong>Total</strong></td>
+                            <td><span ng-show='discussionsSelect == "total"'> {{ calcDebitTotal(TrialBalances).toFixed(2) }} </span></td>
+                            <td><span ng-show='discussionsSelect == "total"'> {{ calcCreditTotal(TrialBalances).toFixed(2) }} </span></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -56,4 +55,55 @@
             </div>
         </div>
     </div>
+</div> -->
+
+<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Trial Balance Sheet</h2>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4" *ngIf='TrialBalances && TrialBalances.length'>
+            <button *ngIf='TrialBalances && TrialBalances.length' class="btn btn-primary" (click)="exportTableToExcel('TrialBalanceTable')" style="float: right"> Export</button>
+        </div>
+    </div>
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="isLoading">
+                <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
+            </div>
+            <div *ngIf='TrialBalances && TrialBalances.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table id="TrialBalanceTable" class='table table-bordered' *ngIf='TrialBalances && TrialBalances.length'>
+                <thead>
+                    <tr>
+                        <th colspan="3" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                            <br /> Trial Balance Sheet
+                            <br /> {{ currentYear?.NepaliStartDate }} - {{ currentYear?.NepaliEndDate }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let rm of TrialBalances">
+                        <td>{{rm.Name}}</td>
+                        <td>{{rm.Debit.toFixed(2)}}</td>
+                        <td>{{rm.Credit.toFixed(2)}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td> <strong>Total</strong></td>
+                        <td><span ng-show='discussionsSelect == "total"'> {{ calcDebitTotal(TrialBalances).toFixed(2) }} </span></td>
+                        <td><span ng-show='discussionsSelect == "total"'> {{ calcCreditTotal(TrialBalances).toFixed(2) }} </span></td>
+                    </tr>
+                </tfoot>
+            </table>  
+        </div>
+    </div>
+
 </div>

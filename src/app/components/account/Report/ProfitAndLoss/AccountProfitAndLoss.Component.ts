@@ -2,12 +2,12 @@
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
-import { JournalVoucherService } from '../../../Service/journalVoucher.service';
 
-import { ProfitAndLoss } from '../../../Model/ProfitAndLoss';
 import { Observable } from 'rxjs/Rx';
-import { Global } from '../../../Shared/global';
 import { DatePipe } from '@angular/common';
+import { ProfitAndLoss } from 'src/app/Model/ProfitAndLoss';
+import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
+import { Global } from 'src/app/Shared/global';
 
 @Component({
     templateUrl: './AccountProfitAndLoss.Component.html'
@@ -40,9 +40,8 @@ export class AccountProfitAndLossComponent implements OnInit {
     }
 
     LoadProfitAndLoss(): void {
-        debugger
         this._ProfitAndLossService.get(Global.BASE_ACCOUNTPROFITANDLOSS_ENDPOINT + "?FinancialYear=" + (this.currentYear['Name'] || ''))
-            .subscribe(ProfitAndLosss => { debugger; this.profitandloss = ProfitAndLosss; this.inLoading = false; },
+            .subscribe(ProfitAndLosss => { this.profitandloss = ProfitAndLosss; this.inLoading = false; },
                 error => this.msg = <any>error);
     }
 

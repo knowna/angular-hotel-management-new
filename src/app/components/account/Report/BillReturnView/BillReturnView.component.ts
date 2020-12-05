@@ -1,14 +1,14 @@
 ﻿import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { AccountService } from '../../../Service/account.service';
-import { BillReturnViewModel } from '../../../Model/BIllReturnView';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
-import { DBOperation } from '../../../Shared/enum';
 import { Observable } from 'rxjs/Rx';
-import { Global } from '../../../Shared/global';
 import { DatePipe } from '@angular/common';
+import { BillReturnViewModel } from 'src/app/Model/BIllReturnView';
+import { DBOperation } from 'src/app/Shared/enum';
+import { AccountService } from '../../services/account.service';
+import { Global } from 'src/app/Shared/global';
 
 @Component({
     templateUrl: './BillReturnView.component.html'

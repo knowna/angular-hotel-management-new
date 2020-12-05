@@ -1,5 +1,41 @@
-﻿<accountdashboard-app></accountdashboard-app>
-<div class='panel panel-primary'>
+﻿<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Profit &amp; Loss</h2>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4" *ngIf='profitandloss && profitandloss.length'>
+            <button class="btn btn-primary" (click)="exportTableToExcel('ProfitLossTable')" style="float: right"> Export</button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="inLoading"><img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <div *ngIf='profitandloss && profitandloss.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table id="ProfitLossTable" class='table table-bordered' *ngIf='profitandloss && profitandloss.length'>
+                <thead>
+                    <tr>
+                        <th>Particular</th>
+                        <th style="text-align: right;">Amount (Rs.)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let PL of profitandloss">
+                        <td *ngIf="PL.Bold =='Yes'"><strong>{{PL.Name}}</strong> </td>
+                        <td *ngIf="PL.Bold =='No'">{{PL.Name}} </td>
+                        <td align="right" *ngIf="PL.Amount !=0">{{PL.Amount.toFixed(2)}}</td>
+                        <td align="right" *ngIf="PL.Amount ==0"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
         Profit &amp; Loss
     </div>
@@ -40,4 +76,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->

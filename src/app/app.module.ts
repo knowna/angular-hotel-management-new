@@ -193,6 +193,17 @@ import { AccountTransValuesService } from './Service/accountTransValues.service'
 import { JournalVoucherService } from './Service/journalVoucher.service';
 import { JournalVouchercomponent } from './components/account/Transaction/journal/journaVoucher.component';
 import { AccountLedgerViewComponent } from './components/account/Report/LedgerView/AccountLedgerView.Component';
+import { TrialBalanceComponent } from './components/account/Report/TrialBalance/TrialBalance.component';
+import { AccountService } from './components/account/services/account.service';
+import { AccountSaleBookComponent } from './components/account/Report/SaleBook/AccountSaleBook.Component';
+import { AccountProfitAndLossComponent } from './components/account/Report/ProfitAndLoss/AccountProfitAndLoss.Component';
+import { BalanceSheetComponent } from './components/account/Report/balance-sheet/balance-sheet.component';
+import { CategorysService } from './components/account/services/Category.services';
+import { AccountSaleBookItem } from './components/account/Report/SaleBookItem/AccountSaleBookItem.Component';
+import { AccountSaleBookDaywise } from './components/account/Report/SaleBookDate/AccountSaleBookDatewise.Component';
+import { AccountSaleBookCustomer } from './components/account/Report/SaleBookCustomer/AccountSaleBookCustomer.Component';
+import { MaterializedViewComponent } from './components/account/Report/materialized view/materializedview.component';
+import { BillReturnViewComponent } from './components/account/Report/BillReturnView/BillReturnView.component';
 
 @NgModule({
   imports: [
@@ -308,24 +319,24 @@ import { AccountLedgerViewComponent } from './components/account/Report/LedgerVi
     AccountTypeComponent,
     AccountTransactionTypeComponent,
     // AccountComponent,
-    // BalanceSheetComponent,
+    BalanceSheetComponent,
     // AccountBalanceSheetComponent,
-    // BillReturnViewComponent,
+    BillReturnViewComponent,
     AccountLedgerViewComponent,
-    // MaterializedViewComponent,
-    // AccountProfitAndLossComponent,
-    // AccountSaleBookComponent,
+    MaterializedViewComponent,
+    AccountProfitAndLossComponent,
+    AccountSaleBookComponent,
     // AccountSaleBookCustomer,
-    // AccountSaleBookDaywise,
-    // AccountSaleBookItem,
-    // TrialBalanceComponent,
+    AccountSaleBookDaywise,
+    AccountSaleBookItem,
+    TrialBalanceComponent,
     // MasterLedgerComponent,
     // SalesComponent,
     // SalesBillingComponent,
     // SalesBillingDetailComponent,
     // AccountSaleBookComponent,
     // AccountSaleBookDaywise,
-    // AccountSaleBookCustomer,
+    AccountSaleBookCustomer,
     // AccountSaleBookItem,
     // AccountLedgerViewComponent,
     // BillReturnViewComponent,
@@ -414,7 +425,9 @@ import { AccountLedgerViewComponent } from './components/account/Report/LedgerVi
     TicketService,
     AccountTypeService,
     InventoryItemService,
-    RoomService
+    RoomService,
+    AccountService,
+    CategorysService
   ],
 
   bootstrap: [AppComponent]

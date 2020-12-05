@@ -1,5 +1,83 @@
-﻿<accountdashboard-app></accountdashboard-app>
-<div class='panel panel-primary'>
+﻿<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Sales Item Wise</h2>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-md-2">
+            Filter By Date:
+        </div>
+        <div class="col-md-3">
+            <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [(ngModel)]="fromDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+        </div>
+        <div class="col-md-3">
+            <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [(ngModel)]="toDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-success" (click)="SearchLedgerTransaction()"> GO</button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary pull-left" (click)="exportTableToExcel('SalesItemTable')"> Export</button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="isLoading"><img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <div *ngIf='SaleBooks && SaleBooks.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table id="SalesItemTable" class='table table-bordered' *ngIf='SaleBooks && SaleBooks.length'>
+                <thead>
+                    <tr>
+                        <th colspan="4" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th align="center">
+                            <strong>Name</strong>
+                        </th>
+                        <th align="center">
+                            <strong>
+                                Qty (UT)
+                            </strong>
+                        </th>
+                        <th align="center">
+                            <strong>
+                                Rate
+                            </strong>
+                        </th>
+                        <th align="center">
+                            <strong>
+                                Total
+                            </strong>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let SaleBook of SaleBooks">
+                        <td>{{SaleBook.ItemName}}</td>
+                        <td>{{SaleBook.Quantity}}</td>
+                        <!-- <td>{{SaleBook.UnitType}}</td> -->
+                        <td>{{SaleBook.Rate}}</td>
+                        <td align="right">{{SaleBook.Amount.toFixed(2)}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" align="right"> <strong>Total</strong></td>
+                        <td align="right"><span ng-show='discussionsSelect == "total"'> {{ calcTotalSale(SaleBooks).toFixed(2) }} </span></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
         Sales Item Wise
     </div>
@@ -82,4 +160,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->

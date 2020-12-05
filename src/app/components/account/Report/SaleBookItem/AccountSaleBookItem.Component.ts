@@ -2,12 +2,12 @@
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
-import { JournalVoucherService } from '../../../Service/journalVoucher.service';
 
-import { SalesBillItem } from '../../../Model/SaleBook';
 import { Observable } from 'rxjs/Rx';
-import { Global } from '../../../Shared/global';
 import { DatePipe } from '@angular/common';
+import { SalesBillItem } from 'src/app/Model/SaleBook';
+import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
+import { Global } from 'src/app/Shared/global';
 
 @Component({
     templateUrl: './AccountSaleBookItem.Component.html'

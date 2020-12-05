@@ -1,5 +1,63 @@
-﻿ <accountdashboard-app></accountdashboard-app>
-<div class='panel panel-primary'>
+﻿<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">BillReturn View</h2>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4" *ngIf='billReturnViews && billReturnViews.length'>
+            <button  class="btn btn-primary" (click)="exportTableToExcel('TrialBalanceTable')" style="float: right"> Export</button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="isLoading">
+                <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
+            </div>
+            <div *ngIf='billReturnViews && billReturnViews.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table id="TrialBalanceTable" class='table table-bordered' *ngIf='billReturnViews && billReturnViews.length'>
+                <thead>
+                    <tr>
+                        <th colspan="8" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                            <br /> BillReturn View
+                            <br /> {{ currentYear?.NepaliStartDate }} - {{ currentYear?.NepaliEndDate }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th style="text-align: center;">Date</th>
+                        <th style="text-align: center;">Name</th>
+                        <th style="text-align: center;">Voucher Type</th>
+                        <th style="text-align: center;">Voucher No.</th>
+                        <th style="text-align: right;">Credit Amount</th>
+                        <th style="text-align: right;">Debit Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let rm of billReturnViews">
+                        <td align="center">{{rm.datetimeclient | date: 'dd/MM/yyyy'}}</td>
+                        <td align="center">{{rm.buyer_name}}</td>
+                        <td align="center">{{rm.username}}</td>
+                        <td align="center">{{rm.ref_invoice_number}}</td>
+                        <td align="right">{{rm.excisable_amount.toFixed(2)}}</td>
+                        <td align="right">{{rm.export_sales.toFixed(2)}}</td>
+                    </tr>
+                </tbody>
+                    <tfoot>
+                        <tr>
+                            <td align="right" colspan="4"> <strong style="margin-right: 60px;">Total</strong></td>
+                            <td align="right"><span style="float: right;" ng-show='discussionsSelect == "total"'> {{ calcDebitTotal(billReturnViews).toFixed(2) }} </span></td>
+                            <td align="right"><span style="float: right;" ng-show='discussionsSelect == "total"'> {{ calcCreditTotal(billReturnViews).toFixed(2) }} </span></td>
+                        </tr>
+                    </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
         BillReturn View
     </div>
@@ -62,4 +120,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->

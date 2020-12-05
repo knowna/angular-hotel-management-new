@@ -1,12 +1,12 @@
 ﻿import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { CategorysService } from '../../../Service/Category.services';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 import { Observable } from 'rxjs/Rx';
-import { Global } from '../../../Shared/global';
 import { DatePipe } from '@angular/common';
+import { Global } from 'src/app/Shared/global';
+import { CategorysService } from '../../services/Category.services';
 
 @Component({
     templateUrl: './balance-sheet.component.html',

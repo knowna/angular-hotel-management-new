@@ -1,5 +1,73 @@
-﻿<accountdashboard-app></accountdashboard-app>
-<div class='panel panel-primary'>
+﻿<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Balance Sheet</h2>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4" *ngIf='balanceSheet && balanceSheet.length'>
+            <button class="btn btn-primary" (click)="exportTableToExcel('balancesheetTable')" style="float: right"> Export</button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="isLoading">
+                <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading... </div>
+            <div *ngIf='balanceSheet && balanceSheet.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table id="balancesheetTable" class='table table-bordered' *ngIf='balanceSheet && balanceSheet.length'>
+                <thead>
+                    <tr>
+                        <th colspan="6" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                            <br/> Balance Sheet
+                            <br/> {{ currentYear?.NepaliStartDate }} - {{ currentYear?.NepaliEndDate }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="3">Libalities</th>
+                        <th colspan="3">Assets</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="3">
+                            <table class="table">
+                                <tbody class="inner-table">
+                                    <tr *ngFor="let data of balanceSheet[0]['Lability']">
+                                        <td>{{ data.Name }}</td>
+                                        <td align="right">{{ data.Amount.toFixed(2)}}</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td colspan="3">
+                            <table class="table">
+                                <tbody class="inner-table">
+                                    <tr *ngFor="let data of balanceSheet[0]['Asset']">
+                                        <td>{{ data.Name }}</td>
+                                        <td align="right">{{ data.Amount.toFixed(2)}}</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Libalities Total:</td>
+                        <td align="right">{{ calculateTotal( balanceSheet[0]['Lability']).toFixed(2) }} </td>
+                        <td colspan="2">Assets Total:</td>
+                        <td align="right">{{ calculateTotal( balanceSheet[0]['Asset']).toFixed(2) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
         BALANCE SHEET
     </div>
@@ -72,4 +140,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->

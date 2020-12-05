@@ -2,13 +2,13 @@
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
-import { NepaliMonth } from '../../../Model/NepaliMonth';
-import { JournalVoucherService } from '../../../Service/journalVoucher.service';
 
-import { MaterializedView } from '../../../Model/materializedview';
 import { Observable } from 'rxjs/Rx';
-import { Global } from '../../../Shared/global';
 import { DatePipe } from '@angular/common';
+import { MaterializedView } from 'src/app/Model/materializedview';
+import { NepaliMonth } from 'src/app/Model/NepaliMonth';
+import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
+import { Global } from 'src/app/Shared/global';
 
 @Component({
     templateUrl: './materializedview.Component.html'
@@ -23,7 +23,7 @@ export class MaterializedViewComponent {
     isLoading: boolean = false;
     public Months: Observable<NepaliMonth>;
     modalRef: BsModalRef;
-    selectedMonths: any = null;
+    selectedMonths: any = "";
     /**
      * Sale Book Constructor
      */

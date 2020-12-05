@@ -1,14 +1,14 @@
 ﻿import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { AccountService } from '../../../Service/account.service';
-import { TrialBalance } from '../../../Model/TrialBalance';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
-import { DBOperation } from '../../../Shared/enum';
 import { Observable } from 'rxjs/Rx';
-import { Global } from '../../../Shared/global';
 import { DatePipe } from '@angular/common';
+import { Global } from 'src/app/Shared/global';
+import { TrialBalance } from 'src/app/Model/TrialBalance';
+import { DBOperation } from 'src/app/Shared/enum';
+import { AccountService } from '../../services/account.service';
 
 @Component({
     templateUrl: './TrialBalance.component.html'
@@ -38,7 +38,6 @@ export class TrialBalanceComponent implements OnInit {
     }
 
     LoadTrialBalance(): void {
-        debugger
         this.isLoading = true;
         this._TrialBalancesService.get(Global.BASE_ACCOUNTTRIALBALANCE_ENDPOINT + "?FinancialYear=" + (this.currentYear['Name'] || ''))
             .subscribe(TrialBalances => { this.TrialBalances = TrialBalances; this.isLoading = false; },
@@ -81,7 +80,6 @@ export class TrialBalanceComponent implements OnInit {
 
 
     calcDebitTotal(TrialBalances) {
-        debugger
         var TotalDebit = 0;
         for (var i = 0; i < TrialBalances.length; i++) {
             TotalDebit = TotalDebit + parseFloat(TrialBalances[i].Debit);
@@ -89,7 +87,6 @@ export class TrialBalanceComponent implements OnInit {
         return TotalDebit;
     }
     calcCreditTotal(TrialBalances) {
-        debugger
         var TotalCredit = 0;
         for (var i = 0; i < TrialBalances.length; i++) {
             TotalCredit = TotalCredit + parseFloat(TrialBalances[i].Credit);
