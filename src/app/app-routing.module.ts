@@ -93,6 +93,16 @@ import { RoomTypeComponent } from './components/ManageDashboard/roomType/RoomTyp
 import { MasterLedgerComponent } from './components/account/master/master-ledger/master-ledger.component';
 import { AccountTransactionTypeComponent } from './components/account/master/account-transaction-type/account-transaction-type.component';
 import { JournalVouchercomponent } from './components/account/Transaction/journal/journaVoucher.component';
+import { AccountLedgerViewComponent } from './components/account/Report/LedgerView/AccountLedgerView.Component';
+import { TrialBalanceComponent } from './components/account/Report/TrialBalance/TrialBalance.component';
+import { AccountSaleBookComponent } from './components/account/Report/SaleBook/AccountSaleBook.Component';
+import { AccountProfitAndLossComponent } from './components/account/Report/ProfitAndLoss/AccountProfitAndLoss.Component';
+import { BalanceSheetComponent } from './components/account/Report/balance-sheet/balance-sheet.component';
+import { AccountSaleBookItem } from './components/account/Report/SaleBookItem/AccountSaleBookItem.Component';
+import { AccountSaleBookDaywise } from './components/account/Report/SaleBookDate/AccountSaleBookDatewise.Component';
+import { AccountSaleBookCustomer } from './components/account/Report/SaleBookCustomer/AccountSaleBookCustomer.Component';
+import { MaterializedViewComponent } from './components/account/Report/materialized view/materializedview.component';
+import { BillReturnViewComponent } from './components/account/Report/BillReturnView/BillReturnView.component';
 
 
 const routes: Routes = [
@@ -380,62 +390,61 @@ const routes: Routes = [
     component: AccountTypeComponent,
     canActivate: [AuthGuard]
   },
-  // {
-  //   path: 'Account/accountLedgerView',
-  //   component: AccountLedgerViewComponent,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Account/TrialBalance',
-  //   component: TrialBalanceComponent,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Account/ProfitLoss',
-  //   component: AccountProfitAndLossComponent,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Account/BalanceSheet',
-  //   component: BalanceSheetComponent,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Account/SaleBook',
-  //   component: SalesBillingComponent,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Account/SaleItemWise',
-  //   component: AccountSaleBookItem,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Account/SaleDateWise',
-  //   component: AccountSaleBookDaywise,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Account/SaleCustomerWise',
-  //   component: AccountSaleBookCustomer,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Account/PurchaseBook',
-  //   component: SalesComponent,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Account/MaterializedView',
-  //   component: MaterializedViewComponent,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Account/BillReturnView',
-  //   component: BillReturnViewComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
+  {
+    path: 'Account/accountLedgerView',
+    component: AccountLedgerViewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/TrialBalance',
+    component: TrialBalanceComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/ProfitLoss',
+    component: AccountProfitAndLossComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/BalanceSheet',
+    component: BalanceSheetComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/SaleBook',
+    component: AccountSaleBookComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/SaleItemWise',
+    component: AccountSaleBookItem,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/SaleDateWise',
+    component: AccountSaleBookDaywise,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/SaleCustomerWise',
+    component: AccountSaleBookCustomer,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/PurchaseBook',
+    component: AccountSaleBookComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/MaterializedView',
+    component: MaterializedViewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/BillReturnView',
+    component: BillReturnViewComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: 'pos-dashboard/:tabName',
     component: POSDashboardComponent,

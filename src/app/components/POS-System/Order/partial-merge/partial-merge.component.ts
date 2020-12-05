@@ -163,7 +163,6 @@ export class PartialMergeComponent implements OnInit {
   }
 
   quantityChanged(event,item) {
-    console.log('the event is', event);
     console.log('the item is', item);
   }
 
