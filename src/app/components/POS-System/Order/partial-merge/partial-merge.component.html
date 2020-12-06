@@ -73,9 +73,9 @@
                         {{detailPrimaryTicket?.Name}}  {{detailPrimaryTicket?.TicketId}}
                     </span>
     
-                    <div *ngIf="detailPrimaryTicket.orders?.length > 0" class="mb-3">
+                    <div *ngIf="detailPrimaryTicket.orders?.length > 0" class="table-responsive mb-3">
                         <div *ngFor="let o of detailPrimaryTicket.orders">
-                            <table>
+                            <table class="table">
                                 <caption style="caption-side:top">
                                     Order No: {{o.OrderNumber}},
                                     {{o.UserId}} -
@@ -83,7 +83,7 @@
                                 </caption>
                                 <thead>
                                     <tr>
-                                        <th>Move This Item</th>
+                                        <!-- <th>Move This Item</th> -->
                                         <th>Change Quantity </th>
                                         <th>Name</th>
                                         <th>Qty</th>
@@ -93,8 +93,8 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let item of o.OrderItems">
-                                        <td><input  [id]="'item'+i" type="checkbox" (change)="moveOrder(item)"> </td>
-                                        <td><input [disabled]="item.Qty==1" type="text" (keyup)="quantityChanged($event,item)"> </td>
+                                        <!-- <td><input  [id]="'item'+i" type="checkbox" (change)="moveOrder(item)"> </td> -->
+                                        <td><input [disabled]="item.Qty < 1" type="number" [(ngModel)]="item.newQty" (keyup)="quantityChanged(item)" min="1"> </td>
                                         <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
                                         <td>{{item.Qty}}</td>
                                         <td>{{item.UnitPrice}}</td>
@@ -133,9 +133,9 @@
                             {{deatilSecondaryTicket?.Name}}  {{deatilSecondaryTicket?.TicketId}}
                         </span>
         
-                        <div *ngIf="deatilSecondaryTicket?.orders.length > 0" class="mb-3">
+                        <div *ngIf="deatilSecondaryTicket?.orders.length > 0" class="table-responsive mb-3">
                             <div *ngFor="let o of deatilSecondaryTicket.orders">
-                                <table>
+                                <table class="table">
                                     <caption style="caption-side:top">
                                         Order No: {{o.OrderNumber}},
                                         {{o.UserId}} -

@@ -119,21 +119,20 @@ export class PartialMergeComponent implements OnInit {
            this.detailPrimaryTicket.orders = data;
           //  order.Orders = this.orders;
           //  console.log('the order s ss', this.orders)
-          //  this.orders.forEach(o => {
-          //      o.OrderItems.forEach(item => {      
-          //       order.ItemList.push(item)
-          //      });
-              
-          //  });
+          this.detailPrimaryTicket.orders.forEach(o => {
+            o.OrderItems.forEach(item => {      
+              this.detailPrimaryTicket.ItemList.push(item)
+            });
+          });
     })
 
-    this.primaryItemList = order.ItemList;
+    this.primaryItemList = this.detailPrimaryTicket.ItemList;
     this.tempPrimaryItemList = this.primaryItemList;
   }
-    getProductById(products: any[], productId: number) {
-      var product = this.productList.find(product => product.Id === productId);
-      
-      return product;
+
+  getProductById(products: any[], productId: number) {
+    var product = this.productList.find(product => product.Id === productId);
+    return product;
   }
 
   secondaryChanged(event){
@@ -162,8 +161,30 @@ export class PartialMergeComponent implements OnInit {
     }
   }
 
-  quantityChanged(event,item) {
-    console.log('the item is', item);
+  quantityChanged(item) {
+    if(item.newQty > 0) {
+      if(this.secondaryItemList.includes(item)) {
+        if(item.newQty > item.Qty) {
+          item.newQty = item.Qty;
+          this.toastrService.info('Maximum quantity allowed is ' + item.Qty);
+        }
+      }else{
+        if(item.newQty <= item.Qty){
+          this.secondaryItemList.push(item);
+        }else{
+          this.toastrService.info('Sorry you cannot add more than the total quantity i.e '+ item.Qty);
+        }
+      }
+    }else{
+      if(item.newQty != null) {
+        const idx = this.secondaryItemList.indexOf(item);
+        this.secondaryItemList.splice(idx,1);
+      }
+      
+    }
+
+    // console.log('the secondary list are', this.secondaryItemList);
+    
   }
 
   partialMerge() {
@@ -179,9 +200,18 @@ export class PartialMergeComponent implements OnInit {
     let vatAmountPrimary =0;
     let grandTotalPrimary =0;
 
-    // let UnSubmittedOrder = this.getUnSubmittedOrder(this.ordersNew);
+    console.log('the secondary list' , this.secondaryItemList);
+    console.log('the primary', mainItemList)
     this.secondaryItemList.forEach(item => {
-      mainItemList = mainItemList.filter(i => i.Id != item.Id);
+      if(item.Qty == item.newQty) {
+        const idx = mainItemList.indexOf(item);
+        mainItemList.splice(idx,1);
+        // mainItemList = mainItemList.filter
+      }
+      else{
+
+      }
+      // mainItemList = mainItemList.filter(i => i.Id != item.Id);
     });
     
 
@@ -191,7 +221,7 @@ export class PartialMergeComponent implements OnInit {
       let total =0;
       let unitprice = product.UnitPrice;
     
-      total =total +(product.Qty*product.UnitPrice);
+      total =total +(product.newQty*product.UnitPrice);
       ticketTotalWithoutVatPartial=ticketTotalWithoutVatPartial+ total;
 
     
@@ -203,7 +233,7 @@ export class PartialMergeComponent implements OnInit {
           "OrderDescription":'',
           "OrderId":  0,
           "ItemId": product.ItemId,
-          "Qty": product.Qty,
+          "Qty": product.newQty,
           "UnitPrice": unitprice,
           "TotalAmount": total,
           "Tags": "New Order",
@@ -240,7 +270,7 @@ export class PartialMergeComponent implements OnInit {
       let total =0;
       let unitprice = product.UnitPrice;
     
-      total =total +(product.Qty*product.UnitPrice);
+      total =total +((product.Qty - product.newQty)*product.UnitPrice);
       ticketTotalWithoutVatPrimary=ticketTotalWithoutVatPrimary+ total;
 
     
@@ -252,7 +282,7 @@ export class PartialMergeComponent implements OnInit {
           "OrderDescription":product.OrderDescription,
           "OrderId":  product.OrderId,
           "ItemId": product.ItemId,
-          "Qty": product.Qty,
+          "Qty": product.Qty - product.newQty,
           "UnitPrice": unitprice,
           "TotalAmount": total,
           "Tags": "New Order",
@@ -291,16 +321,16 @@ export class PartialMergeComponent implements OnInit {
     console.log('primary is', MainOrderItemRequest);
     console.log('partial is', PartialOrderItemRequest);
     console.log('the details is', details);
-    this.mergeService.partialMerge(details)
-      .subscribe(
-        data => {
-          this.toastrService.success('Partial merged successfully!');
-          window.location.reload();
-        },
-        error => {
-          console.error('the error is', error);
-        }
-      )
+    // this.mergeService.partialMerge(details)
+    //   .subscribe(
+    //     data => {
+    //       this.toastrService.success('Partial merged successfully!');
+    //       window.location.reload();
+    //     },
+    //     error => {
+    //       console.error('the error is', error);
+    //     }
+    //   )
     
   }
 
