@@ -36,7 +36,6 @@ export class AccountSaleBookCustomer {
         return this.accountledger.find(x => x.Id == this.selectedName).Name;
     }
     SearchLedgerTransaction(CurrentLedgerId: string) {
-        debugger
         this.isLoading = true;
         this._journalvoucherService.get(Global.BASE_ACCOUNTSALEBOOK_ENDPOINT + '?CustomerId=' + CurrentLedgerId + "&&FinancialYear=" + (this.currentYear['Name']) + "&&CustomerReport=CustomerReport" + "&&report=report")
             .subscribe(SB => {

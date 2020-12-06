@@ -98,7 +98,6 @@ export class AccountSaleBookComponent {
         return TotalExportSaleSale;
     }
     calcDiscountTotal(SaleBooks) {
-        debugger
         var TotalDiscountSale = 0;
         for (var i = 0; i < SaleBooks.length; i++) {
             TotalDiscountSale = TotalDiscountSale + parseFloat(SaleBooks[i].Discount);
