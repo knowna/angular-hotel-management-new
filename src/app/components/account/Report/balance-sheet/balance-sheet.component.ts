@@ -41,7 +41,6 @@ export class BalanceSheetComponent implements OnInit {
         this._categoryService.get(Global.BASE_BALANCE_SHEET_ENDPOINT + "?FinancialYear=" + (this.currentYear['Name'] || ''))
             .subscribe(
                 balanceSheet => { 
-                    debugger
                     this.balanceSheet = balanceSheet; 
                     this.isLoading = false; 
                 },
@@ -53,7 +52,6 @@ export class BalanceSheetComponent implements OnInit {
      * Caltulate the total from the list of items
      */
     calculateTotal (arraydata: any[]) : string {
-        debugger
         if (arraydata.length) {
             return arraydata.reduce(function(total, currentValue) {
                 return total + currentValue.Amount;

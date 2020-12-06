@@ -83,7 +83,6 @@ export class AccountSaleBookDaywise {
         return TotalSale;
     }
     changefromDate(event: any) {
-        debugger
         let vardate = event.getDate();
         let varmonth = event.getMonth();
         let varYear = event.getFullYear();
@@ -91,7 +90,6 @@ export class AccountSaleBookDaywise {
         console.log(event);
     }
     changeToDate(event: any) {
-        debugger
         let vardate = event.getDate();
         let varmonth = event.getMonth();
         let varYear = event.getFullYear();

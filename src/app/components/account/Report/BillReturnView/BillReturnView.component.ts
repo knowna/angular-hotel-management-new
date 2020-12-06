@@ -38,10 +38,9 @@ export class BillReturnViewComponent {
     }
 
     LoadTrialBalance(): void {
-        debugger
         this.isLoading = true;
         this._TrialBalancesService.get(Global.BASE_ACCOUNT_BillReturnView_ENDPOINT + "?FinancialYear=" + (this.currentYear['Name'] || ''))
-            .subscribe(billReturnViews => { debugger; this.billReturnViews = billReturnViews; this.isLoading = false; },
+            .subscribe(billReturnViews => { this.billReturnViews = billReturnViews; this.isLoading = false; },
             error => this.msg = <any>error);
     }
 
@@ -80,7 +79,6 @@ export class BillReturnViewComponent {
     }
 
     calcDebitTotal(billReturnViews) {
-        debugger
         var TotalDebit = 0;
         for (var i = 0; i < billReturnViews.length; i++) {
             TotalDebit = TotalDebit + parseFloat(billReturnViews[i].excisable_amount);
@@ -88,7 +86,6 @@ export class BillReturnViewComponent {
         return TotalDebit;
     }
     calcCreditTotal(billReturnViews) {
-        debugger
         var TotalCredit = 0;
         for (var i = 0; i < billReturnViews.length; i++) {
             TotalCredit = TotalCredit + parseFloat(billReturnViews[i].export_sales);
