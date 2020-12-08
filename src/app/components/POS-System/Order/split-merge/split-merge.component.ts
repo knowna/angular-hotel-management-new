@@ -268,17 +268,17 @@ export class SplitMergeComponent implements OnInit {
     console.log('primary is', MainOrderItemRequest);
     console.log('partial is', PartialOrderItemRequest);
     console.log('the details is', details);
-    this.mergeService.splitOrder(details)
-      .subscribe(
-        data => {
-          console.log('the data is', data)
-          this.toastrService.success('Order splited successfully!');
-          window.location.reload();
-        },
-        error => {
-          console.error('the error is', error);
-        }
-      )
+    // this.mergeService.splitOrder(details)
+    //   .subscribe(
+    //     data => {
+    //       console.log('the data is', data)
+    //       this.toastrService.success('Order splited successfully!');
+    //       window.location.reload();
+    //     },
+    //     error => {
+    //       console.error('the error is', error);
+    //     }
+    //   )
   }
 
   getUnSubmittedOrder(orders: Order[]) {
