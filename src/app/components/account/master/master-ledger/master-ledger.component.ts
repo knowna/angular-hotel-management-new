@@ -88,6 +88,9 @@ export class MasterLedgerComponent implements OnInit {
             Telephone: [''],
             Email: [''],
             Amount: ['', [Validators.required, Validators.pattern(/^[.\d]+$/)]],
+            DRCR: [''],
+            UnderGroupMaster:[''],
+            Currency:['']
             // entityLists: ['', Validators.required],
         })
 
@@ -110,7 +113,7 @@ export class MasterLedgerComponent implements OnInit {
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
         this.modalTitle = "Add New Master Ledger";
-        this.modalBtnTitle = "Add";
+        this.modalBtnTitle = "Save";
         this.masterLedgerFrm.reset();
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
@@ -123,12 +126,15 @@ export class MasterLedgerComponent implements OnInit {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Group Ledger";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.masterLedger = this.masterLedgers.filter(x => x.Id == Id)[0];
+        this.masterLedgerFrm.controls['UnderGroupMaster'].setValue('');
         this.masterLedgerFrm.setValue(this.masterLedger);
+        
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
-            keyboard: false
+            keyboard: false,
+            class: 'modal-lg'
         });
     }
 
@@ -205,13 +211,14 @@ export class MasterLedgerComponent implements OnInit {
     }
 
     reset() {
+        this.modalRef.hide();
         //debugger;
-        let control = this.masterLedgerFrm.controls['Id'].value;
-        if (control > 0) {
-            this.buttonDisabled = true;
-        } else {
-            this.masterLedgerFrm.reset();
-        }
+        // let control = this.masterLedgerFrm.controls['Id'].value;
+        // if (control > 0) {
+        //     this.buttonDisabled = true;
+        // } else {
+        //     this.masterLedgerFrm.reset();
+        // }
     }
     SetControlsState(isEnable: boolean) {
         isEnable ? this.masterLedgerFrm.enable() : this.masterLedgerFrm.disable();

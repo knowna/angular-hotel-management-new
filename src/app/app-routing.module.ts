@@ -103,6 +103,13 @@ import { AccountSaleBookDaywise } from './components/account/Report/SaleBookDate
 import { AccountSaleBookCustomer } from './components/account/Report/SaleBookCustomer/AccountSaleBookCustomer.Component';
 import { MaterializedViewComponent } from './components/account/Report/materialized view/materializedview.component';
 import { BillReturnViewComponent } from './components/account/Report/BillReturnView/BillReturnView.component';
+import { PurchaseComponent } from './components/account/Transaction/purchase/purchase.component';
+import { SalesBillingComponent } from './components/account/Transaction/sales-billing/sales-billing.component';
+import { ReceiptComponent } from './components/account/Transaction/receipt/receipt.component';
+import { PaymentComponent } from './components/account/Transaction/payment/payment.component';
+import { ContraComponent } from './components/account/Transaction/contra/contra.component';
+import { CreditNoteComponent } from './components/account/Transaction/credit-note/cerdit-note.component';
+import { DebitNoteComponent } from './components/account/Transaction/debit-note/debit-note.component';
 
 
 const routes: Routes = [
@@ -330,51 +337,51 @@ const routes: Routes = [
 
   },
 
-  // {
-  //   path: 'Account/contra',
-  //   component: ContraComponent,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Account/receipt',
-  //   component: ReceiptComponent,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Account/sales',
-  //   component: SalesComponent,
-  //   canActivate: [AuthGuard],
-  // },
+  {
+    path: 'Account/contra',
+    component: ContraComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/receipt',
+    component: ReceiptComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/sales',
+    component: SalesBillingComponent,
+    canActivate: [AuthGuard],
+  },
   // {
   //   path: 'Account/sales/detail/:id',
   //   component: SalesDetailComponent,
   //   canActivate: [AuthGuard]
   // },
-  // {
-  //   path: 'Account/purchase',
-  //   component: PurchaseComponent,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Account/payment',
-  //   component: PaymentComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'Account/purchase',
+    component: PurchaseComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/payment',
+    component: PaymentComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: 'Account/journalVoucher',
     component: JournalVouchercomponent,
     canActivate: [AuthGuard]
   },
-  // {
-  //   path: 'Account/debit-note',
-  //   component: DebitNoteComponent,
-  //   canActivate: [AuthGuard]
-  // },
-  // // {
-  // //   path: 'Account/credit-note',
-  // //   component: CreditNoteComponent,
-  // //   canActivate: [AuthGuard]
-  // // },
+  {
+    path: 'Account/debit-note',
+    component: DebitNoteComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/credit-note',
+    component: CreditNoteComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: 'Account/accounttransType',
     component: AccountTransactionTypeComponent,

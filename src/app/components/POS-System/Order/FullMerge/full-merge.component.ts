@@ -101,6 +101,7 @@ export class FullMergeComponent implements OnInit {
     }
    
     secondaryChanged(event){
+        this.moveFromOrderItems = [];
 
         // console.log(event);
 
@@ -124,7 +125,6 @@ export class FullMergeComponent implements OnInit {
             .subscribe(
                 data => {
                     data.forEach(order => {
-                        
                         this.moveFromOrderItems =order.OrderItems;
                     });
                 }
@@ -135,6 +135,7 @@ export class FullMergeComponent implements OnInit {
     }
 
     primaryChanged(event){
+        this.moveToOrderItems = [];
         let primarySelectedTicket;
         this.primaryTicket = event.value;
         this.detailPrimaryTicket =event.value;
@@ -155,9 +156,9 @@ export class FullMergeComponent implements OnInit {
                     this.moveToOrderItems =order.OrderItems;
                     console.log(this.moveFromOrderItems);
                     
-                    this.moveFromOrderItems.forEach(order => {
-                        this.moveToOrderItems.push(order);
-                    });
+                    // this.moveFromOrderItems.forEach(order => {
+                    //     this.moveToOrderItems.push(order);
+                    // });
                 });
 
                 // this.calculateTotalCost(this.moveToOrderItems);
@@ -169,6 +170,7 @@ export class FullMergeComponent implements OnInit {
     }
 
     merge(){
+        debugger;
         this.moveFromOrderItems.forEach(order => {
             this.moveToOrderItems.push(order)
         });
@@ -195,9 +197,7 @@ export class FullMergeComponent implements OnInit {
             "TicketId":this.primaryTicket.Id,
             "TableId":this.primaryTicket.TableId,
             "CustomerId":this.primaryTicket.CustomerId,
-           "OrderId":orderId,
-                
-           
+            "OrderId":orderId,
             "TicketTotal":total,
             "Discount":0,
             "ServiceCharge":0,

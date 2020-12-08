@@ -40,9 +40,18 @@ export class JournalVouchercomponent implements OnInit {
     public fromDate: string;
     public toDate: string;
 
+    public currentYear: any = {};
+    public currentUser: any = {};
+    public company: any = {};
+
     constructor(private fb: FormBuilder, private _journalvoucherService: JournalVoucherService, private _accountTransValues:AccountTransValuesService, private date: DatePipe, private modalService: BsModalService) {
-        this.fromDate = '01/01/2018';
-        this.toDate = '12/30/2018';
+        // this.fromDate = '01/01/2018';
+        // this.toDate = '12/30/2018';
+        this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
+        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        this.company = JSON.parse(localStorage.getItem('company'));
+        this.fromDate = this.currentYear['NepaliStartDate'];
+        this.toDate = this.currentYear['NepaliEndDate'];
         this.entityLists = [
             { id: 0, name: 'Dr' },
             { id: 1, name: 'Cr' }
@@ -89,7 +98,6 @@ export class JournalVouchercomponent implements OnInit {
      * Open Add New Journal Voucher Form Modal
      */
     addJournalVoucher() {
-        debugger;
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
         this.modalTitle = "Add Journal Voucher";
@@ -150,7 +158,6 @@ export class JournalVouchercomponent implements OnInit {
      * Delete Existing Journal Voucher
      */
     deleteJournalVoucher(id: number) {
-        debugger;
         this.dbops = DBOperation.delete;
         this.SetControlsState(true);
         this.modalTitle = "Confirm to Delete?";
@@ -169,7 +176,6 @@ export class JournalVouchercomponent implements OnInit {
         this.journalFrm.controls['AccountTransactionValues'] = this.fb.array([]);
         const control = <FormArray>this.journalFrm.controls['AccountTransactionValues'];
 
-        debugger;
         for (let i = 0; i < this.journalVouchers.AccountTransactionValues.length; i++) {
             let valuesFromServer = this.journalVouchers.AccountTransactionValues[i];
             let instance = this.fb.group(valuesFromServer);
@@ -279,7 +285,6 @@ export class JournalVouchercomponent implements OnInit {
      * @param data 
      */
     enableDisable(data: any) {
-        debugger;
         if (data.entityLists.value == 'Dr') {
             data.Debit.enable();
             data.Credit.disable();
@@ -304,7 +309,6 @@ export class JournalVouchercomponent implements OnInit {
      * @param formData 
      */
     onSubmit(formData: any) {
-        debugger;
         this.msg = "";
         let journal = this.journalFrm;
         this.formSubmitAttempt = true;
@@ -339,7 +343,6 @@ export class JournalVouchercomponent implements OnInit {
 
                     break;
                 case DBOperation.update:
-                    debugger;
                     let journalObj = {
                         Id: this.journalFrm.controls['Id'].value,
                         VoucherDate: this.journalFrm.controls['Date'].value,
@@ -422,7 +425,6 @@ export class JournalVouchercomponent implements OnInit {
      * Resets the journal form
      */
     reset() {
-        debugger;
         let control = this.journalFrm.controls['Id'].value;
         if (control > 0) {
             this.buttonDisabled = true;
@@ -451,7 +453,7 @@ export class JournalVouchercomponent implements OnInit {
      */
     filterJournalByDate () {
         this.indLoading = true;
-        this._journalvoucherService.get(Global.BASE_JOURNALVOUCHER_ENDPOINT + '?fromDate=' + this.fromDate + '&toDate=' + this.toDate + '&TransactionId=' + 5)
+        this._journalvoucherService.get(Global.BASE_JOURNALVOUCHER_ENDPOINT + '?fromDate=' + this.fromDate + '&toDate=' + this.toDate + '&TransactionTypeId=' + 5)
             .subscribe(journalVoucher => { 
                 this.indLoading = false; 
                 return this.journalVoucher = journalVoucher; 

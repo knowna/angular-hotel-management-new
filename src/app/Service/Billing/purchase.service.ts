@@ -49,7 +49,7 @@ export class PurchaseService {
     }
 
 
-    getInventoryItems() {
+    getInventoryItems():any {
         return this._http.get("/api/InventoryItemAPI/get")
             .pipe(
                 catchError(this.handleError)
@@ -63,7 +63,7 @@ export class PurchaseService {
             )
     }
 
-    getAccounts() {
+    getAccounts():any {
 
         return this._http.get("/api/AccountAPI/get")
             .pipe(
