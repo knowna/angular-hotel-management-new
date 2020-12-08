@@ -145,11 +145,17 @@
                             <div class="col-md-2">
                                 Filter By Date:
                             </div>
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <input type="text" class="form-control" placeholder="DD/MM/YYYY" bsDatepicker [(ngModel)]="fromDate" />
                             </div>
                             <div class="col-md-4">
                                 <input type="text" class="form-control" placeholder="DD/MM/YYYY" bsDatepicker [(ngModel)]="toDate" />
+                            </div> -->
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" value="" [(ngModel)]="fromDate" placeholder="yyyy.mm.dd">
+                            </div>
+                            <div class="col-md-4">
+                                <input class="form-control" type="text" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" placeholder="yyyy.mm.dd" [(ngModel)]="toDate" />
                             </div>
                             <div class="col-md-2">
                                 <button class="btn btn-success" (click)="filterJournalByDate()"> GO</button>

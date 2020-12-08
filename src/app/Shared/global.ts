@@ -3,6 +3,7 @@
 
     // public static BASE_HOST_ENDPOINT='http://localhost:8080';
     public static BASE_HOST_ENDPOINT='http://hotel.dcubeitsolution.com';
+    public static BASE_HOST_ACCOUNT_ENDPOINT = 'http://account.dcubeitsolution.com';
 
     public static BASE_NEPALIMONTH_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/NepaliMonthAPI/';
     public static BASE_USER_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/userapi/';
@@ -41,7 +42,7 @@
 
 
     public static BASE_ADD_ORDERlIST_ENDPOINT = Global.BASE_HOST_ENDPOINT+'/api/OrderMultiItemAPI/PostMultiOrder/'
-    public static BASE_MASTERLEDGER_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/MasterLedgerAPI/';
+    public static BASE_MASTERLEDGER_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/AccountAPI/';
     public static BASE_INVENTORYISSUE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/InventoryIssueAPI/';
     public static BASE_MENUCATEGORY_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/MenuCategoryAPI/';
     public static BASE_MENUSCATEOGRY_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/MenusCategoryAPI/';
@@ -58,7 +59,7 @@
     public static BASE_ORDERSMove_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/OrderMove/';
     public static BASE_ORDERSCancel_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/OrderCancel/';
     public static BASE_SCREENORDERS_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/ScreenOrderController/';
-    public static BASE_JOURNALVOUCHER_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/AccountTransactionAPI/';
+    public static BASE_JOURNALVOUCHER_ENDPOINT=Global.BASE_HOST_ACCOUNT_ENDPOINT+ '/api/AccountTransactionAPI/';
     public static BASE_USERACCOUNT_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/UserAccountAPI/GetUsers/';
     public static BASE_USERACCOUNT_CREATE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/UserAccountAPI/CreateUser/';
     public static BASE_USERACCOUNT_UPDATE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/UserAccountAPI/EditUser/';

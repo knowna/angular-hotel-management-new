@@ -65,7 +65,11 @@ export class AccountTypeComponent implements OnInit {
     LoadAccTypes(): void {
         this.indLoading = true;
         this.accTypeService.get(Global.BASE_ACCOUNTTYPE_ENDPOINT)
-            .subscribe(accounttypes => { this.accountTypes = accounttypes; this.indLoading = false; },
+            .subscribe(accounttypes => { 
+                this.accountTypes = accounttypes; 
+                console.log('llll', this.accountTypes)
+                this.indLoading = false; 
+            },
             error => this.msg = <any>error);
     }
 

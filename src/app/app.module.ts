@@ -204,6 +204,16 @@ import { AccountSaleBookDaywise } from './components/account/Report/SaleBookDate
 import { AccountSaleBookCustomer } from './components/account/Report/SaleBookCustomer/AccountSaleBookCustomer.Component';
 import { MaterializedViewComponent } from './components/account/Report/materialized view/materializedview.component';
 import { BillReturnViewComponent } from './components/account/Report/BillReturnView/BillReturnView.component';
+import { PurchaseDetailsService } from './Service/Billing/PurchaseDetails.service';
+import { PurchaseComponent } from './components/account/Transaction/purchase/purchase.component';
+import { PurchaseDetailsComponent } from './components/account/Transaction/purchase/purchaseDetail/purchaseDetail.component';
+import { SalesBillingComponent } from './components/account/Transaction/sales-billing/sales-billing.component';
+import { SalesBillingDetailComponent } from './components/account/Transaction/sales-billing/sales-billing-detail/sales-billing-details.component';
+import { ReceiptComponent } from './components/account/Transaction/receipt/receipt.component';
+import { PaymentComponent } from './components/account/Transaction/payment/payment.component';
+import { ContraComponent } from './components/account/Transaction/contra/contra.component';
+import { CreditNoteComponent } from './components/account/Transaction/credit-note/cerdit-note.component';
+import { DebitNoteComponent } from './components/account/Transaction/debit-note/debit-note.component';
 
 @NgModule({
   imports: [
@@ -302,20 +312,19 @@ import { BillReturnViewComponent } from './components/account/Report/BillReturnV
     WareHouseTypeComponent,
     // WareHousesComponent,
     // PeriodicConsumptionItemComponent,
-    // ContraComponent,
+    ContraComponent,
     // SalesComponent,
     // SalesDetailComponent,
-    // ReceiptComponent,
-    // PurchaseComponent,
-    // PurchaseDetailsComponent,
-    // PurchaseComponent,
-    // PaymentComponent,
+    ReceiptComponent,
+    PurchaseComponent,
+    PurchaseDetailsComponent,
+    PaymentComponent,
+    CreditNoteComponent,
     // JournalVouchercomponent,
     // JournalVoucherDetailComponent,
-    // DebitNoteComponent,
+    DebitNoteComponent,
     // AccountDashboardComponent,
-    // PurchaseDetailsComponent,
-    // SalesBillingDetailComponent,
+    SalesBillingDetailComponent,
     AccountTypeComponent,
     AccountTransactionTypeComponent,
     // AccountComponent,
@@ -332,7 +341,7 @@ import { BillReturnViewComponent } from './components/account/Report/BillReturnV
     TrialBalanceComponent,
     // MasterLedgerComponent,
     // SalesComponent,
-    // SalesBillingComponent,
+    SalesBillingComponent,
     // SalesBillingDetailComponent,
     // AccountSaleBookComponent,
     // AccountSaleBookDaywise,
@@ -420,6 +429,7 @@ import { BillReturnViewComponent } from './components/account/Report/BillReturnV
     UserRoleService,
     AccountTransactionTypeService,
     PurchaseService,
+    PurchaseDetailsService,
     //pos
     TicketStoreService,
     TicketService,
