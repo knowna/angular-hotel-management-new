@@ -1,47 +1,40 @@
-﻿<div class='panel panel-primary'>
-    <div class='panel-heading'> Sales Billing </div>
-    <div>
-        <div class='table-responsive' style="min-height: 400px;">
-            <div style="padding-bottom:10px">
-                <div class="row">
-                    <div class="col-md-3">
-                        <button class="btn btn-success mt-3 ml-3" (click)="addPurchase()">
-                            <i class="fa fa-plus"></i>
-                            Add
-                        </button>
-                        <!-- <div (click)="addPurchase()" style="cursor: pointer">
-                            <span>
-                                <img src="../../images/Add.png" height="60" width="60" />
-                            </span>
-                            Add Sales Billing
-                        </div> -->
-                    </div>
-                    <div class="col-md-9">
-                        <div class="row" style="padding-top: 17px;">
-                            <div class="col-md-2">
-                                Filter By Date:
-                            </div>
-                            <div class="col-md-3">
-                                <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [(ngModel)]="fromDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
-                            </div>
-                            <div class="col-md-3">
-                                <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [(ngModel)]="toDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
-                            </div>
-                            <div class="col-md-2">
-                                <button class="btn btn-success" (click)="filterPurchasesByDate()"> GO</button>
-                            </div>
-                            <div class="col-md-2">
-                                <button class="btn btn-primary pull-left" (click)="exportTableToExcel('salesTable')"> Export</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+﻿<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Sales Billing</h2>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-md-2">
+            <button class="btn btn-success" (click)="addPurchase()">
+                <i class="fa fa-plus"></i>
+                Add
+            </button>
+        </div>
+        <div class="col-md-2">
+            Filter By Date:
+        </div>
+        <div class="col-md-2">
+            <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [(ngModel)]="fromDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+        </div>
+        <div class="col-md-2">
+            <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [(ngModel)]="toDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-success" (click)="filterPurchasesByDate()"> GO</button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary" (click)="exportTableToExcel('salesTable')" style="float: right;"> Export</button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
             <div class="alert alert-info" role="alert" *ngIf="indLoading">
-                <img src="../../images/loading.gif" width="32" height="32" /> Loading...
+                <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
             </div>
             <div *ngIf='SalesBilling && SalesBilling.length==0' class="alert alert-info" role="alert">No record found!</div>
-            <!-- Voucher list table starts -->
             <table id="salesTable" class='table' *ngIf='SalesBilling && SalesBilling.length' style="border: 2px solid #ddd;">
                 <thead>
                     <tr>
@@ -92,7 +85,107 @@
                     </tr>
                 </tfoot>
             </table>
-            <!-- Voucher list table ends -->
+        </div>
+
+        <!-- <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div> -->
+    </div>
+</div>
+
+
+<!-- <div class='panel panel-primary'>
+    <div class='panel-heading'> Sales Billing </div>
+    <div>
+        <div class='table-responsive' style="min-height: 400px;">
+            <div style="padding-bottom:10px">
+                <div class="row">
+                    <div class="col-md-3">
+                        <button class="btn btn-success mt-3 ml-3" (click)="addPurchase()">
+                            <i class="fa fa-plus"></i>
+                            Add
+                        </button>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="padding-top: 17px;">
+                            <div class="col-md-2">
+                                Filter By Date:
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [(ngModel)]="fromDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [(ngModel)]="toDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-success" (click)="filterPurchasesByDate()"> GO</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-primary pull-left" (click)="exportTableToExcel('salesTable')"> Export</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-info" role="alert" *ngIf="indLoading">
+                <img src="../../images/loading.gif" width="32" height="32" /> Loading...
+            </div>
+            <div *ngIf='SalesBilling && SalesBilling.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table id="salesTable" class='table' *ngIf='SalesBilling && SalesBilling.length' style="border: 2px solid #ddd;">
+                <thead>
+                    <tr>
+                        <th colspan="12" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                            <br /> Sales Billing
+                            <br /> {{ currentYear?.NepaliStartDate }} - {{ currentYear?.NepaliEndDate }}
+                        </th>
+                    </tr>
+                    <tr style="background: #bcd1e2;">
+                        <th>Date</th>
+                        <th>Bill No.</th>
+                        <th style="text-align: right">Amount</th>
+                        <th style="text-align: right">Discount</th>
+                        <th style="text-align: right">VAT</th>
+                        <th style="text-align: right">Grand Total</th>
+                        <th style="text-align: center">File</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let row of SalesBilling">
+                    <tr style="background:#eceaea">
+                        <td>{{ row.Date | date: 'dd/MM/yyyy' }}</td>
+                        <td>{{row.ref_invoice_number}}</td>
+                        <td align="right">{{calcaAmount(row.NetAmount, row.Discount).toFixed(2)}}</td>
+                        <td hidden align="right">{{row.NetAmount.toFixed(2)}}</td>
+                        <td align="right">{{row.Discount.toFixed(2)}}</td>
+                        <td align="right">{{row.VATAmount.toFixed(2)}}</td>
+                        <td align="right">{{calculateGrandAmount(row.VATAmount, row.NetAmount).toFixed(2)}}</td>
+                        <td align="center" class="export-no-display">
+                            <img *ngIf="row.File" (click)="viewFile(row.File,imageView)" [src]="row.File" alt="Document" style="height:30px; border-radius:5px;" />
+                            <span *ngIf="row.File == ''">Not Added</span>
+                        </td>
+                        <td class="export-no-display">
+                            <img src="../../images/Edit.png" (click)="editPurchase(row.Id)" title="Edit Voucher" height="32" width="32" />
+                            <img src="../../images/Delete.png" (click)="deletePurchase(row.Id)" title="Delete Voucher" height="32" width="32" />
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td align="right" colspan="2"> <strong style="margin-right: 60px;">Total</strong></td>
+                        <td align="right"><span ng-show='discussionsSelect == "total"'> {{ calcAmount(SalesBilling).toFixed(2) }} </span></td>
+                        <td align="right"><span ng-show='discussionsSelect == "total"'> {{ calcDiscountTotal(SalesBilling).toFixed(2) }} </span></td>
+                        <td align="right"><span ng-show='discussionsSelect == "total"'> {{ calcVATAmount(SalesBilling).toFixed(2) }} </span></td>
+                        <td align="right"><span ng-show='discussionsSelect == "total"'> {{ calcGrandAmount(SalesBilling).toFixed(2) }} </span></td>
+                        <td align="right" colspan="2"></td>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
         <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -103,7 +196,7 @@
             {{msg}}
         </div>
     </div>
-</div>
+</div> -->
 
 <ng-template #template>
     <form novalidate (ngSubmit)="onSubmit(fileUpload)" [formGroup]="salesBillingForm" class="panel-primary">
@@ -122,7 +215,7 @@
                     <input type="text" class="form-control" formControlName="Name" readonly="true">
                 </div>
                 <div class="hidden">
-                    <input type="text" class="hidden" placeholder="Sales No" formControlName="AccountTransactionDocumentId" />
+                    <input type="hidden" class="hidden" placeholder="Sales No" formControlName="AccountTransactionDocumentId" />
                 </div>
                 <label class="control-label col-md-2">
                     <strong>Sales Date:</strong>
@@ -154,66 +247,95 @@
                 </div>
             </div>
             <br />
+
+            
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
-
                         <div formArrayName="SalesOrderDetails">
                             <div class="salesBillingDetail">
-                                <div class="col-md-4">
-                                    <label>
-                                        <strong>Name of Item *</strong>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label>
-                                        <strong>Quantity *</strong>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label>
-                                        <strong>Rate *</strong>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label>
-                                        <strong>Amount *</strong>
-                                    </label>
+                                <div class="row">
+                                    <div class="col-md-11">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label>
+                                                    <strong>Name of Item *</strong>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label>
+                                                    <strong>Quantity *</strong>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label>
+                                                    <strong>Rate *</strong>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>
+                                                    <strong>Amount *</strong>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        &nbsp;
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row" *ngFor="let PurchaseDetail of salesBillingForm.controls.SalesOrderDetails.controls; let i=index">
-                                <div class="col-md-12" [formGroupName]="i">
+
+                            <div *ngFor="let PurchaseDetail of salesBillingForm.controls.SalesOrderDetails.controls; let i=index">
+                                <div class="row" [formGroupName]="i">
                                     <div class="col-md-11">
                                         <my-salesBillingDetail-list [group]="salesBillingForm.controls.SalesOrderDetails.controls[i]"></my-salesBillingDetail-list>
                                     </div>
-                                    <div class="col-md-1">
-                                        <span *ngIf="salesBillingForm.controls.SalesOrderDetails.controls.length > 1" style="cursor: pointer; font-size: 30px; margin-top: 43px; margin-right: 100px;" class="fa fa-window-close pull-right" (click)="removePurchaseitems(i)"></span>
+                                    <div class="col-md-1 text-center">
+                                        <span *ngIf="salesBillingForm.controls.SalesOrderDetails.controls.length > 1" style="cursor: pointer; font-size: 30px;" class="fa fa-window-close pull-right" (click)="removePurchaseitems(i)"></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-12 text-right" style="padding:12px 180px">
+                            <div class="col-md-11 text-right">
                                 <button type="button" class="btn btn-success" [disabled]="salesBillingForm.controls.SalesOrderDetails.invalid" (click)="addPurchaseitems()">Sales Item +</button>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="col-md-3"></div>
-                                <label class="col-md-2">
-                                    <strong style="float: right;">Total Amount:</strong>
-                                </label>
-                                <div class="form-group col-md-4 pull-right" style="margin-right: 150px;">
-                                    <input type="number" class="form-control" placeholder="Total" formControlName="Amount" value="{{calculateAmount()}}"
-                                           readonly="true" />
-                                </div>
+                        <div class="row mt-2">
+                            <label class="col-md-6">
+                                <strong style="float: right;">Total Amount:</strong>
+                            </label>
+                            <div class="form-group col-md-5 pull-right">
+                                <input type="number" class="form-control" placeholder="Total" formControlName="Amount" value="{{calculateAmount()}}"
+                                        readonly="true" />
                             </div>
                         </div>
 
-                        <div class="row" *ngIf="!PercentAmount">
-                            <div class="col-md-12">
+                        <div class="row mt-2" *ngIf="!PercentAmount">
+                            <div class="col-md-6">
+                                <strong style="float: right;">Discount:</strong> 
+                            </div>
+
+                            <div class="col-md-3">
+                                <input type="number" class="form-control" placeholder="0.00 or percentage (%)" formControlName="Discount" />
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>(%)</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input id="chkVisible" type="checkbox" class="form-control" formControlName="IsDiscountPercentage" (change)="getDiscountPercent()" [checked]="IsDiscountPercentage == false" />
+                                    </div>
+                                </div>
+                                <!-- <p>(%)</p>
+                                <input id="chkVisible" type="checkbox" class="form-control" formControlName="IsDiscountPercentage" (change)="getDiscountPercent()" [checked]="IsDiscountPercentage == false" /> -->
+                            </div>
+
+                            <!-- <div class="col-md-12">
                                 <div class="col-md-3"></div>
                                 <label class="col-md-2" for="chkVisible">
                                     <strong style="float: right;">Discount:</strong>
@@ -225,11 +347,17 @@
                                     <p style="margin-left: 625px;margin-top: -20px;">(%)</p>
                                     <input id="chkVisible" type="checkbox" class="form-control" style="margin-left: 650px; margin-top: -35px;" formControlName="IsDiscountPercentage" (change)="getDiscountPercent()" [checked]="IsDiscountPercentage == false" />
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
-                        <div id="body" class="row" *ngIf="!Discount" [style.visibility]="IsDiscountPercentage ? 'hidden' : 'visible'">
-                            <div class="col-md-12">
+                        <div id="body" class="row mt-2" *ngIf="!Discount" [style.visibility]="IsDiscountPercentage ? 'hidden' : 'visible'">
+                            <div class="col-md-6">
+                                <strong style="float: right;">Percent Amount:</strong>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="number" class="form-control" placeholder="Percent Amount" formControlName="PercentAmount" />
+                            </div>
+                            <!-- <div class="col-md-12">
                                 <div class="col-md-3"></div>
                                 <label class="col-md-2">
                                     <strong style="float: right;">Percent Amount:</strong>
@@ -237,11 +365,18 @@
                                 <div class="form-group col-md-4 pull-right" style="margin-right: 150px;">
                                     <input type="number" class="form-control" placeholder="Percent Amount" formControlName="PercentAmount" />
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-12">
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <strong style="float: right;">Net Total:</strong>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="number" class="form-control" placeholder="Net Total" formControlName="NetAmount" value="{{calculateNetAmount(salesBillingForm.controls)}}"
+                                readonly="true" />
+                            </div>
+                            <!-- <div class="col-md-12">
                                 <div class="col-md-3"></div>
                                 <label class="col-md-2">
                                     <strong style="float: right;">Net Total:</strong>
@@ -250,11 +385,18 @@
                                     <input type="number" class="form-control" placeholder="Net Total" formControlName="NetAmount" value="{{calculateNetAmount(salesBillingForm.controls)}}"
                                            readonly="true" />
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-12">
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <strong style="float: right;">VAT (13%):</strong>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="number" class="form-control" placeholder="VAT Total" formControlName="VATAmount" value="{{calculateVATAmount(salesBillingForm.controls)}}"
+                                readonly="true" />
+                            </div>
+                            <!-- <div class="col-md-12">
                                 <div class="col-md-3"></div>
                                 <label class="col-md-2">
                                     <strong style="float: right;">VAT (13%):</strong>
@@ -263,11 +405,18 @@
                                     <input type="number" class="form-control" placeholder="VAT Total" formControlName="VATAmount" value="{{calculateVATAmount(salesBillingForm.controls)}}"
                                            readonly="true" />
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-12">
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <strong style="float: right;">Grand Total:</strong>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="number" class="form-control" placeholder="Grand Total" formControlName="GrandAmount" value="{{calculateGndAmount(salesBillingForm.controls)}}"
+                                readonly="true" />
+                            </div>
+                            <!-- <div class="col-md-12">
                                 <div class="col-md-3"></div>
                                 <label class="col-md-2">
                                     <strong style="float: right;">Grand Total:</strong>
@@ -276,7 +425,7 @@
                                     <input type="number" class="form-control" placeholder="Grand Total" formControlName="GrandAmount" value="{{calculateGndAmount(salesBillingForm.controls)}}"
                                            readonly="true" />
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                     </div>
@@ -285,23 +434,23 @@
         </div>
 
         <div class="row">
-            <div class="form-group col-md-8">
-                <textarea name="Description" formControlName="Description" class="form-control" rows="4" cols="50" style="margin: 15px;"></textarea>
+            <div class="form-group col-md-7">
+                <textarea name="Description" formControlName="Description" class="form-control" rows="4" cols="50" style="margin-left: 15px;"></textarea>
                 <div class="text-danger" *ngIf="salesBillingForm.get('Description').hasError('required') && formSubmitAttempt">
                     Description is required
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="col-md-12 custom-padding">
+                <!-- <div class="col-md-12 custom-padding"> -->
                     <app-file-upload #fileUpload [extraFormData]="salesBillingForm" [uploadUrl]="uploadUrl" [dropMessage]="dropMessage"></app-file-upload>
-                </div>
+                <!-- </div> -->
             </div>
         </div>
 
         <div class="modal-footer">
             <div>
                 <button type="submit" class="btn btn-success pull-left" [disabled]="salesBillingForm.invalid">{{modalBtnTitle}} </button>
-                <button type="button" class="btn btn-danger pull-right" (click)="reset(); modalRef.hide();">Cancel</button>
+                <button type="button" class="btn btn-danger pull-right ml-2" (click)="reset(); modalRef.hide();">Cancel</button>
             </div>
         </div>
     </form>

@@ -14,14 +14,12 @@ export class PurchaseDetailsComponent {
 
     constructor(private _purchaseService: PurchaseService) {
         this._purchaseService.getInventoryItems().subscribe(data => {
-            debugger
             this.inventoryItem = data 
         });
     }
 
     // calculate Purchase Amount//
     calculateAmount(purchaseDetails: any) {
-        debugger;
         return purchaseDetails.PurchaseAmount.setValue(purchaseDetails.Quantity.value * purchaseDetails.PurchaseRate.value);
     }
     searchChange($event) {

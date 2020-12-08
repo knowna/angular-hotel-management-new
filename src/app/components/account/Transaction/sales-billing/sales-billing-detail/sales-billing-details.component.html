@@ -1,29 +1,28 @@
-﻿<br />
-<div [formGroup]="SaleOrderDetails">
+﻿<div style="margin-bottom: 10px;" [formGroup]="SaleOrderDetails" class="row">
     <div class="col-md-4">
-        <label>
+        <!-- <label>
             <strong>Name of Item:</strong>
-        </label>
-        <select class="col-md-3 form-control" formControlName="ItemId" (blur)="calcRate(SaleOrderDetails.controls)">
+        </label> -->
+        <select class="form-control" formControlName="ItemId" (blur)="calcRate(SaleOrderDetails.controls)">
             <option class="form-control" *ngFor="let inventoryitems of inventoryItem" [value]="inventoryitems.Id">{{inventoryitems.Name}}</option>
         </select>
     </div>
     <div class="col-md-2">
-        <label>
+        <!-- <label>
             <strong>Quantity:</strong>
-        </label>
+        </label> -->
         <input type="number" class="form-control" formControlName="Qty" (blur)="calculateAmount(SaleOrderDetails.controls)" />
     </div>
     <div class="col-md-2">
-        <label>
+        <!-- <label>
             <strong>Rate:</strong>
-        </label>
-        <input type="number" class="form-control" formControlName="UnitPrice" (blur)="calculateAmount(SaleOrderDetails.controls)" readonly="true" />
+        </label> -->
+        <input type="number" class="form-control" formControlName="UnitPrice" (blur)="calculateAmount(SaleOrderDetails.controls)"/>
     </div>
-    <div class="col-md-3">
-        <label>
+    <div class="col-md-4">
+        <!-- <label>
             <strong>Amount:</strong>
-        </label>
+        </label> -->
         <input type="number" class="form-control" formControlName="TotalAmount" readonly="true" />
     </div>
 </div>
