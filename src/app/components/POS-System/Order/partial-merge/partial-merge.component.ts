@@ -104,35 +104,28 @@ export class PartialMergeComponent implements OnInit {
     let order = event.value;
     this.secondaryItemList =[];
     this.secondaryOrderList = [...this.tempSecondaryOrderList];
-    order.ItemList = [];
-    order.Orders = [];
+
     this.selectedTicket = order;
     this.tempPrimaryOrderList.forEach(tick => (tick.Id != this.selectedTicket.Id) ? (tick.show = false) : (order.show));
 
     this.secondaryOrderList.splice(this.secondaryOrderList.indexOf(order),1);
     this.secondaryOrderList = [...this.secondaryOrderList];
 
-    this.deatilSecondaryTicket.ItemList = [];
+    this.detailPrimaryTicket.ItemList = [];
 
     this.orderApi.loadOrdersNew(order.Id)
     .subscribe(
         data => {
-          
-           this.detailPrimaryTicket.orders = data;
-          //  order.Orders = this.orders;
-          //  console.log('the order s ss', this.orders)
+          this.detailPrimaryTicket.orders = data;
           this.detailPrimaryTicket.orders.forEach(o => {
             o.OrderItems.forEach(item => {      
               console.log('inside left', item)
-              this.deatilSecondaryTicket.ItemList.push(item);
-              this.secondaryItemList.push(item);
+              this.detailPrimaryTicket.ItemList.push(item);
             });
           });
-    })
+    });
 
-    console.log('main main', this.deatilSecondaryTicket.ItemList);
-    // this.primaryItemList = this.detailPrimaryTicket.ItemList;
-    // this.tempPrimaryItemList = this.primaryItemList;
+    console.log('main main', this.detailPrimaryTicket.ItemList);
   }
 
   getProductById(products: any[], productId: number) {
@@ -149,23 +142,26 @@ export class PartialMergeComponent implements OnInit {
 
 
   showDetailSecondary(order){
-    
     this.deatilSecondaryTicket.orders = [];
+    this.deatilSecondaryTicket.ItemList = [];
+    this.primaryItemList = [];
+
     this.orderApi.loadOrdersNew(order.Id)
     .subscribe(
         data => {
           this.deatilSecondaryTicket.orders = data;
           this.deatilSecondaryTicket.orders.forEach(o => {
             o.OrderItems.forEach(item => {      
-              this.detailPrimaryTicket.ItemList.push(item)
+              this.deatilSecondaryTicket.ItemList.push(item)
             });
           });
 
-          this.primaryItemList = this.detailPrimaryTicket.ItemList;
+          this.primaryItemList = this.deatilSecondaryTicket.ItemList;
           this.tempPrimaryItemList = this.primaryItemList;
           console.log('the se',this.tempPrimaryItemList)
     })
-}
+  }
+
   moveOrder(item){
     if(this.secondaryItemList.includes(item)) {
       const idx = this.secondaryItemList.indexOf(item);
@@ -177,39 +173,51 @@ export class PartialMergeComponent implements OnInit {
 
   quantityChanged(item) {
     console.log('item is', item);
-    
-    
-    console.log('before quantity changed', this.secondaryItemList);
-    
-    if(item.newQty > 0) {
-      if(this.secondaryItemList.includes(item)) {
-        if(item.newQty > item.Qty) {
-          item.newQty = item.Qty;
-          this.toastrService.info('Maximum quantity allowed is ' + item.Qty);
-        }
-      }else{
-        if(item.newQty <= item.Qty){
-          this.secondaryItemList.push(item);
-        }else{
-          this.toastrService.info('Sorry you cannot add more than the total quantity i.e '+ item.Qty);
+    console.log('before quantity changed', this.detailPrimaryTicket.ItemList);
+
+    let product = this.detailPrimaryTicket.ItemList.find(p => p.Id == item.Id);
+
+    if(product.newQty > 0) {
+      if(product.newQty > product.Qty) {
+        product.newQty = product.Qty;
+        this.toastrService.info('Maximum quantity allowed is ' + product.Qty);
+      }else if(product.newQty == product.Qty) {
+        let length : any = 0;
+        this.detailPrimaryTicket.ItemList.forEach(item => {
+          if(item.newQty == item.Qty) {
+            length += 1;
+          }
+        });
+        if(length == this.detailPrimaryTicket.ItemList.length){
+          product.newQty = 1;
+          this.toastrService.info('Sorry, you cannot merge every items.Please perform full merge for this feature'); 
         }
       }
-    }else{
-      // if(item.newQty == null) {
-      //   const idx = this.secondaryItemList.indexOf(item);
-      //   this.secondaryItemList.splice(idx,1);
-      // }
-      
     }
-    this.secondaryItemList = [...this.secondaryItemList];
+    
+    // if(item.newQty > 0) {
+    //   if(this.detailPrimaryTicket.ItemList.includes(item)) {
+    //     if(item.newQty > item.Qty) {
+    //       item.newQty = item.Qty;
+    //       this.toastrService.info('Maximum quantity allowed is ' + item.Qty);
+    //     }
+    //   }else{
+    //     if(item.newQty <= item.Qty){
+    //       this.detailPrimaryTicket.ItemList.push(item);
+    //     }else{
+    //       this.toastrService.info('Sorry you cannot add more than the total quantity i.e '+ item.Qty);
+    //     }
+    //   }
+    // }
+    this.detailPrimaryTicket.ItemList = [...this.detailPrimaryTicket.ItemList];
 
-    console.log('the secondary after list are', this.secondaryItemList);
+    console.log('the secondary after list are', this.detailPrimaryTicket.ItemList);
     
   }
 
   partialMerge() {
-    console.log('details', this.deatilSecondaryTicket.ItemList);
-    console.log('the secondary list' , this.secondaryItemList);
+    console.log('the from list' , this.detailPrimaryTicket.ItemList);
+    console.log('the to list', this.deatilSecondaryTicket.ItemList);
     let mainItemList = [...this.tempPrimaryItemList];
     
     let ListOrderItemPartial=[];
@@ -224,15 +232,17 @@ export class PartialMergeComponent implements OnInit {
 
     // console.log('the secondary list' , this.secondaryItemList);
     console.log('the primary', mainItemList)
-    this.secondaryItemList.forEach(item => {
+    this.detailPrimaryTicket.ItemList.forEach(item => {
       if(item.Qty == item.newQty) {
-        const idx = this.secondaryItemList.indexOf(item);
-        this.secondaryItemList.splice(idx,1);
+        const idx = this.detailPrimaryTicket.ItemList.indexOf(item);
+        this.detailPrimaryTicket.ItemList.splice(idx,1);
         // mainItemList.splice(idx,1);
         // mainItemList = mainItemList.filter
       }else if(item.newQty == null) {
         item.newQty = 1;
       }
+
+      mainItemList.push(item);
       
       // mainItemList = mainItemList.filter(i => i.Id != item.Id);
     });
@@ -240,7 +250,7 @@ export class PartialMergeComponent implements OnInit {
 
 
     //for partial
-    this.secondaryItemList.forEach(product => {
+    this.detailPrimaryTicket.ItemList.forEach(product => {
       let total =0;
         console.log('the seco', product)
         let unitprice = product.UnitPrice;
@@ -253,9 +263,9 @@ export class PartialMergeComponent implements OnInit {
             "Id":0,
             "UserId": this.currentUser.UserName,
             "FinancialYear": this.currentYear.Name,
-            "OrderNumber": 0,
+            "OrderNumber": product.OrderNumber,
             "OrderDescription":'',
-            "OrderId":  0,
+            "OrderId":  product.OrderId,
             "ItemId": product.ItemId,
             "Qty": (product.Qty - product.newQty),
             "UnitPrice": unitprice,
@@ -270,7 +280,7 @@ export class PartialMergeComponent implements OnInit {
     vatAmountPartial =(0.13*ticketTotalWithoutVatPartial);
     grandTotalPartial = vatAmountPartial+ticketTotalWithoutVatPartial;
 
-    let PartialOrderItemRequest = {
+    let MainOrderItemRequest = {
       // "TicketId":this.secondaryTicket.Id,
       // "TableId":this.secondaryTicket.TableId,
       // "CustomerId":this.secondaryTicket.CustomerId,
@@ -298,14 +308,29 @@ export class PartialMergeComponent implements OnInit {
       total =total +((newQuantity)*product.UnitPrice);
       ticketTotalWithoutVatPrimary=ticketTotalWithoutVatPrimary+ total;
 
+      let orderId : any;
+      let orderNumber: any;
+
+      if(product.newQty) {
+        if(product.newQty == product.Qty) {
+          orderId = product.OrderId;
+          orderNumber = product.OrderNumber;
+        }else{
+          orderId = 0;
+          orderNumber = 0;
+        }
+      }else{
+        orderId = product.OrderId;
+        orderNumber = product.OrderNumber;
+      }
     
       let OrderItem = {
           "Id":product.Id,
           "UserId": this.currentUser.UserName,
           "FinancialYear": this.currentYear.Name,
-          "OrderNumber": product.OrderNumber,
+          "OrderNumber": orderNumber,
           "OrderDescription":product.OrderDescription,
-          "OrderId":  product.OrderId,
+          "OrderId":  orderId,
           "ItemId": product.ItemId,
           "Qty": product.newQty ?  product.newQty : product.Qty,
           "UnitPrice": unitprice,
@@ -322,7 +347,7 @@ export class PartialMergeComponent implements OnInit {
 
 
 
-    let MainOrderItemRequest = {
+    let SplitOrderItemRequest = {
       // "TicketId":this.selectedTicket.Id,
       // "TableId":this.selectedTicket.TableId,
       // "CustomerId":this.selectedTicket.CustomerId,
@@ -343,22 +368,22 @@ export class PartialMergeComponent implements OnInit {
 
     let details = {
       "MainOrderItemRequest" : MainOrderItemRequest,
-      "SplitOrderItemRequest" : PartialOrderItemRequest
+      "SplitOrderItemRequest" : SplitOrderItemRequest
     }
 
     console.log('primary is', MainOrderItemRequest);
-    console.log('partial is', PartialOrderItemRequest);
+    console.log('partial is', SplitOrderItemRequest);
     console.log('the details is', details);
-    // this.mergeService.partialMerge(details)
-    //   .subscribe(
-    //     data => {
-    //       this.toastrService.success('Partial merged successfully!');
-    //       window.location.reload();
-    //     },
-    //     error => {
-    //       console.error('the error is', error);
-    //     }
-    //   )
+    this.mergeService.partialMerge(details)
+      .subscribe(
+        data => {
+          this.toastrService.success('Partial merged successfully!');
+          window.location.reload();
+        },
+        error => {
+          console.error('the error is', error);
+        }
+      )
     
   }
 
