@@ -209,7 +209,7 @@ export class SalesBillingComponent implements OnInit {
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
         this.modalTitle = "Add Sales Billing";
-        this.modalBtnTitle = "Save & Submit";
+        this.modalBtnTitle = "Save";
         this.reset();
         this.salesBillingForm.controls['Name'].setValue('Direct Sales');
         this.modalRef = this.modalService.show(this.TemplateRef, {
@@ -233,7 +233,7 @@ export class SalesBillingComponent implements OnInit {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Sales Billing";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.getSalesDetails(Id)
             .subscribe((SalesBilling: AccountTrans) => {
                 this.indLoading = false;

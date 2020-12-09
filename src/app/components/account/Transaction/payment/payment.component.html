@@ -1,49 +1,40 @@
-﻿<div class='panel panel-primary'>
-    <div class='panel-heading'>
-        Payment
+﻿<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Payment</h2>
+        </div>
     </div>
-    <div>
-        <div class='table-responsive' style="min-height: 400px;">
-            <div style="padding-bottom:10px">
-                <div class="row">
-                    <div class="col-md-3">
-                        <button class="btn btn-success mt-3 ml-3" (click)="addPayment()">
-                            <i class="fa fa-plus"></i>
-                            Add
-                        </button>
-                        <!-- <div (click)="addPayment()" style="cursor: pointer">
-                            <span>
-                                <img src="../../images/Add.png" height="60" width="60" />
-                            </span>
-                            Add Payment
-                        </div> -->
-                    </div>
-                    <div class="col-md-9">
-                        <div class="row" style="padding-top: 17px;">
-                            <div class="col-md-2">
-                                Filter By Date:
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" class="form-control" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" value="" [(ngModel)]="sfromDate" placeholder="yyyy.mm.dd">
-                            </div>
-                            <div class="col-md-3">
-                                <input class="form-control" type="text" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" placeholder="yyyy.mm.dd" [(ngModel)]="stoDate" />
-                            </div>
-                            <div class="col-md-2">
-                                <button class="btn btn-success" (click)="loadPaymentList(sfromDate, stoDate)"> GO</button>
-                            </div>
-                            <div class="col-md-2">
-                                <button class="btn btn-primary pull-left" (click)="exportTableToExcel('voucherTable')"> Export</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-md-2">
+            <button class="btn btn-success" (click)="addPayment()">
+                <i class="fa fa-plus"></i>
+                Add
+            </button>
+        </div>
+        <div class="col-md-2">
+            Filter By Date:
+        </div>
+        <div class="col-md-2">
+            <input type="text" class="form-control" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" value="" [(ngModel)]="sfromDate" placeholder="yyyy.mm.dd">
+        </div>
+        <div class="col-md-2">
+            <input class="form-control" type="text" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" placeholder="yyyy.mm.dd" [(ngModel)]="stoDate" />
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-success" (click)="loadPaymentList(sfromDate, stoDate)"> GO</button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary pull-left" (click)="exportTableToExcel('voucherTable')" style="float: right;"> Export</button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
             <div class="alert alert-info" role="alert" *ngIf="indLoading">
-                <img src="../../images/loading.gif" width="32" height="32" /> Loading...
+                <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
             </div>
             <div *ngIf='paymentList && paymentList.length==0' class="alert alert-info" role="alert">No record found!</div>
-            <!-- Voucher list table starts -->
             <table id="voucherTable" class='table table-striped' *ngIf='paymentList && paymentList.length' style="border: 2px solid #ddd;">
                 <thead>
                     <tr>
@@ -90,7 +81,6 @@
                     </tr>
                 </tbody>
             </table>
-            <!-- Voucher list table ends -->
         </div>
         <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -102,6 +92,105 @@
         </div>
     </div>
 </div>
+
+
+
+<!-- <div class='panel panel-primary'>
+    <div class='panel-heading'>
+        Payment
+    </div>
+    <div>
+        <div class='table-responsive' style="min-height: 400px;">
+            <div style="padding-bottom:10px">
+                <div class="row">
+                    <div class="col-md-3">
+                        <button class="btn btn-success mt-3 ml-3" (click)="addPayment()">
+                            <i class="fa fa-plus"></i>
+                            Add
+                        </button>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="padding-top: 17px;">
+                            <div class="col-md-2">
+                                Filter By Date:
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" value="" [(ngModel)]="sfromDate" placeholder="yyyy.mm.dd">
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-control" type="text" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" placeholder="yyyy.mm.dd" [(ngModel)]="stoDate" />
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-success" (click)="loadPaymentList(sfromDate, stoDate)"> GO</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-primary pull-left" (click)="exportTableToExcel('voucherTable')"> Export</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-info" role="alert" *ngIf="indLoading">
+                <img src="../../images/loading.gif" width="32" height="32" /> Loading...
+            </div>
+            <div *ngIf='paymentList && paymentList.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table id="voucherTable" class='table table-striped' *ngIf='paymentList && paymentList.length' style="border: 2px solid #ddd;">
+                <thead>
+                    <tr>
+                        <th colspan="8" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                            <br/> Payment Voucher
+                            <br/> {{ sfromDate }} - {{ stoDate }}
+                        </th>
+                    </tr>
+                    <tr style="background: #bcd1e2;">
+                        <th>Date</th>
+                        <th>Particular</th>
+                        <th>Voucher Type</th>
+                        <th>Voucher No.</th>
+                        <th>Debit (Rs.)</th>
+                        <th>Credit (Rs.)</th>
+                        <th class="export-no-display">File</th>
+                        <th class="export-no-display">Actions</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let row of paymentList">
+                    <tr style="background:#eceaea">
+                        <td>{{ row.VDate | date: 'yyyy.MM.dd' }}</td>
+                        <td>{{ row.Name }}</td>
+                        <td>{{ row.VType }}</td>
+                        <td>{{ row.VoucherNo }}</td>
+                        <td colspan="2">&nbsp;</td>
+                        <td class="export-no-display">
+                            <img *ngIf="row.File" (click)="viewFile(row.File,imageView)" [src]="row.File" alt="Document" style="height:30px; border-radius:5px;"
+                            />
+                            <span *ngIf="row.File == ''">Not Added</span>
+                        </td>
+                        <td class="export-no-display">
+                            <img src="../../images/Edit.png" (click)="editPayment(row.Id)" title="Edit Voucher" height="32" width="32" />
+                            <img src="../../images/Delete.png" (click)="deletePayment(row.Id)" title="Delete Voucher" height="32" width="32" />
+                        </td>
+                    </tr>
+                    <tr *ngFor="let transaction of row.AccountTransactionValues">
+                        <td>&nbsp;</td>
+                        <td colspan="3">{{ transaction.Name }}</td>
+                        <td>{{ transaction.DebitAmount !== 0 ? transaction.DebitAmount.toFixed(2) : '' }}</td>
+                        <td>{{ transaction.CreditAmount !== 0 ? transaction.CreditAmount.toFixed(2) : '' }}</td>
+                        <td class="export-no-display" colspan="3">&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
+    </div>
+</div> -->
 
 <!-- Add/Edit Payment Modal Template -->
 <ng-template #template>
