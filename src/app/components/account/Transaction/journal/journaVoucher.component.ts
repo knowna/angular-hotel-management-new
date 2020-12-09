@@ -11,10 +11,10 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { AccountTrans } from 'src/app/Model/AccountTransaction/accountTrans';
 import { DBOperation } from 'src/app/Shared/enum';
 import { Global } from 'src/app/Shared/global';
-import { EntityMock, Account } from 'src/app/Model/Account/account';
-import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
+import { Account, EntityMock } from 'src/app/Model/Account/account';
 import { AccountTransValuesService } from 'src/app/Service/accountTransValues.service';
 import { FileService } from 'src/app/Service/file.service';
+import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
 
 // Accessing global variable
 type CSV = any[][];
@@ -678,8 +678,7 @@ export class JournalVouchercomponent implements OnInit {
     config = {
         displayKey: 'Name', // if objects array passed which key to be displayed defaults to description
         search: true,
-        limitTo: 1000,
-        height: '200px'
+        limitTo: 1000
     };
     DropdownChange($event, i: number) {
         var ii = i;

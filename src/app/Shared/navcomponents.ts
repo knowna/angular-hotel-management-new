@@ -445,7 +445,7 @@ export const navcomponents=[
     {
       title: 'Manage',
       icon: 'lock-outline',
-      img:'../../../assets/images/manage.png',
+      img:'../../../assets/images/category.png',
       permission:'Manage',
       children: [
         {
