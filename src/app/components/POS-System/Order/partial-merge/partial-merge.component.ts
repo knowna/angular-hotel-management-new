@@ -243,7 +243,7 @@ export class PartialMergeComponent implements OnInit {
           this.detailPrimaryTicket.ItemList.splice(idx,1);
           // mainItemList.splice(idx,1);
           // mainItemList = mainItemList.filter
-        }else if(item.newQty == null) {
+        }else if(!item.newQty) {
           item.newQty = 1;
         }
 
@@ -390,16 +390,16 @@ export class PartialMergeComponent implements OnInit {
 
     if(originalLengthOfList != length) {
       console.log('done');
-      this.mergeService.partialMerge(details)
-        .subscribe(
-          data => {
-            this.toastrService.success('Partial merged successfully!');
-            window.location.reload();
-          },
-          error => {
-            console.error('the error is', error);
-          }
-        )
+      // this.mergeService.partialMerge(details)
+      //   .subscribe(
+      //     data => {
+      //       this.toastrService.success('Partial merged successfully!');
+      //       window.location.reload();
+      //     },
+      //     error => {
+      //       console.error('the error is', error);
+      //     }
+      //   )
     }else {
       console.log('not done done');
     }
