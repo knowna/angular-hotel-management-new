@@ -7,7 +7,7 @@
             </button>
         </div>
         <div class="modal-body">
-            <div class="hidden">
+            <div class="hidden" style="display: none;">
                 <input type="number" class="hidden" formControlName="Id" />
                 <input type="text" class="hidden" formControlName="Amount" />
                 <input type="text" class="hidden" placeholder="Credit Note No" formControlName="AccountTransactionDocumentId" />
@@ -36,6 +36,9 @@
                 <div class="container col-md-12">
                     <div formArrayName="AccountTransactionValues" class="panel panel-default container-padding">
                         <br>
+                        <div class="row">
+
+                        
                         <div class="col-md-1 custom-padding">
                             <strong>Dr/Cr</strong>
                         </div>
@@ -54,8 +57,9 @@
                         <div class="col-md-1 custom-padding">
                             <strong>&nbsp;</strong>
                         </div>
+                        </div>
                         <br />
-                        <div class="panel-body" *ngFor="let AccountTransactionValue of debitNoteFrm.controls.AccountTransactionValues.controls; let i=index"
+                        <div *ngFor="let AccountTransactionValue of debitNoteFrm.controls.AccountTransactionValues.controls; let i=index"
                              [formGroupName]="i">
                             <div class="row">
                                 <div class="col-md-1 custom-padding">
@@ -67,7 +71,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-3 custom-padding">
-                                    <!--<ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="AccountId" [config]="config" [options]="account"></ngx-select-dropdown>-->
+                                    <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="AccountId" [config]="config" [options]="account"></ngx-select-dropdown>
                                     <div *ngIf="!debitNoteFrm.controls.AccountTransactionValues.controls[i].controls.AccountId.valid  && formSubmitAttempt" class="text-danger">
                                         Select the Particular
                                     </div>
@@ -85,7 +89,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-1 custom-padding text-center" style="padding-top: 7px !important;">
-                                    <span *ngIf="debitNoteFrm.controls.AccountTransactionValues.controls.length > 1" style="font-size: 30px; margin-right: 15px; margin-top: -5px;" class="glyphicon glyphicon-remove pull-right"
+                                    <span *ngIf="debitNoteFrm.controls.AccountTransactionValues.controls.length > 1" style="font-size: 30px;" class="fa fa-window-close pull-right"
                                           (click)="removeAccount(i)"></span>
                                 </div>
                             </div>
@@ -122,7 +126,7 @@
         <div class="modal-footer">
             <div>
                 <button type="submit" class="btn btn-success pull-left" [disabled]="debitNoteFrm.invalid"> {{modalBtnTitle}}</button>
-                <button type="button" class="btn btn-danger pull-right" (click)="reset(); modalRef.hide()" aria-label="Close">Cancel</button>
+                <button type="button" class="btn btn-danger pull-right ml-2" (click)="reset(); modalRef.hide()" aria-label="Close">Cancel</button>
             </div>
         </div>
     </form>

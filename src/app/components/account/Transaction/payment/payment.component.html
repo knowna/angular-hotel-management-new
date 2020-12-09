@@ -225,7 +225,7 @@
             </div>
             <br />
             <div class="row">
-                <label class="control-label col-md-2">
+                <label class="control-label col-md-2 text-right">
                     <strong>Account:</strong>
                 </label>
                 <div class="form-group col-md-4">
@@ -237,26 +237,29 @@
             </div>
             <div clsdd="col-md-12">
                 <div formArrayName="AccountTransactionValues" class="panel panel-default">
-                    <div class="col-md-4">
-                        <label>
-                            <strong>Account:</strong>
-                        </label>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>
+                                <strong>Account:</strong>
+                            </label>
+                        </div>
+                        <div class="col-md-3">
+                            <label>
+                                <strong>Debit:</strong>
+                            </label>
+                        </div>
+                        <div class="col-md-4">
+                            <label>
+                                <strong>Description</strong>
+                            </label>
+                        </div>
+                        <div class="col-md-1">
+                            <label>&nbsp;</label>
+                        </div>
                     </div>
-                    <div class="col-md-3">
-                        <label>
-                            <strong>Debit:</strong>
-                        </label>
-                    </div>
-                    <div class="col-md-4">
-                        <label>
-                            <strong>Description</strong>
-                        </label>
-                    </div>
-                    <div class="col-md-1">
-                        <label>&nbsp;</label>
-                    </div>
+
                     <div *ngFor="let AccountTransactionValue of paymentFrm.controls.AccountTransactionValues.controls; let i=index" [formGroupName]="i">
-                        <div>
+                        <div class="row">
                             <div class="hidden">
                                 <input type="number" class="form-control" placeholder="Credit" formControlName="Credit" readonly="true" />
                             </div>
@@ -272,7 +275,7 @@
                                     Amount is required
                                 </div>
                             </div>
-                            <div class="form-group col-md-4" style="padding-left: 0;">
+                            <div class="form-group col-md-4">
                                 <textarea class="form-control" name="Description" rows="2" formControlName="Description" placeholder="Payment transaction description here..."></textarea>
                                 <div class="help-block alert alert-danger" *ngIf="!paymentFrm.controls.AccountTransactionValues.controls[i].controls.Description.valid && formSubmitAttempt">
                                     Transaction description is required.

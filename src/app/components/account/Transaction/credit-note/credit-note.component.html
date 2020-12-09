@@ -37,7 +37,7 @@
                     <strong>Customer: </strong>
                 </label>
                 <div class="form-group col-md-4">
-                    <!--<ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="SourceAccountTypeId" (change)="fillCustomerInvoice($event)" [config]="config" [options]="customeraccount"></ngx-select-dropdown>-->
+                    <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="SourceAccountTypeId" (change)="fillCustomerInvoice($event)" [config]="config" [options]="customeraccount"></ngx-select-dropdown>
                     <!--<select class="form-control " (change)="fillCustomerInvoice($event)" formControlName="SourceAccountTypeId">
                         <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option>
                     </select>-->
@@ -60,23 +60,25 @@
             <div class="row">
                 <div class="container col-md-12">
                     <div formArrayName="AccountTransactionValues" class="panel panel-default container-padding">
-                        <div class="col-md-4 custom-padding">
-                            <strong>Account:</strong>
-                        </div>
-                        <div class="col-md-3 custom-padding">
-                            <strong>Debit:</strong>
-                        </div>
-                        <div class="col-md-4 custom-padding">
-                            <strong>Description:</strong>
-                        </div>
-                        <div class="col-md-1 custom-padding">
-                            <strong>&nbsp;</strong>
+                        <div class="row">
+                            <div class="col-md-4 custom-padding">
+                                <strong>Account:</strong>
+                            </div>
+                            <div class="col-md-3 custom-padding">
+                                <strong>Debit:</strong>
+                            </div>
+                            <div class="col-md-4 custom-padding">
+                                <strong>Description:</strong>
+                            </div>
+                            <div class="col-md-1 custom-padding">
+                                <strong>&nbsp;</strong>
+                            </div>
                         </div>
                         <br>
-                        <div class="panel-body" *ngFor="let AccountTransactionValue of cerditNoteFrm.controls.AccountTransactionValues.controls; let i=index" [formGroupName]="i">
+                        <div *ngFor="let AccountTransactionValue of cerditNoteFrm.controls.AccountTransactionValues.controls; let i=index" [formGroupName]="i">
                             <div class="row">
                                 <div class="col-md-4 custom-padding">
-                                    <!--<ngx-select-dropdown (searchChange)="searchChangeAccountId($event)" formControlName="AccountId" [config]="configAccount" [options]="account"></ngx-select-dropdown>-->
+                                    <ngx-select-dropdown (searchChange)="searchChangeAccountId($event)" formControlName="AccountId" [config]="configAccount" [options]="account"></ngx-select-dropdown>
                                     <div *ngIf="!cerditNoteFrm.controls.AccountTransactionValues.controls[i].controls.AccountId.valid && formSubmitAttempt" class="text-danger">
                                         Select the Account
                                     </div>
@@ -87,7 +89,7 @@
                                         Enter the Amount
                                     </div>
                                 </div>
-                                <div class="hidden">
+                                <div class="hidden" style="display: none;">
                                     <input type="number" class="form-control" placeholder="Credit" formControlName="Credit">
                                 </div>
                                 <div class="col-md-4 custom-padding">
@@ -134,7 +136,7 @@
         <div class="modal-footer">
             <div>
                 <button type="submit" class="btn btn-success pull-left" [disabled]="cerditNoteFrm.invalid"> {{modalBtnTitle}}</button>
-                <button type="button" class="btn btn-danger pull-right" (click)="reset(); modalRef.hide()" aria-label="Close">Cancel</button>
+                <button type="button" class="btn btn-danger pull-right ml-2" (click)="reset(); modalRef.hide()" aria-label="Close">Cancel</button>
             </div>
         </div>
     </form>

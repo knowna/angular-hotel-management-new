@@ -664,6 +664,7 @@ export class DebitNoteComponent implements OnInit {
     config = {
         displayKey: 'Name', // if objects array passed which key to be displayed defaults to description
         search: true,
-        limitTo: 1000
+        limitTo: 1000,
+        height: '200px'
     };
 }
