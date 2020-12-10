@@ -1,9 +1,9 @@
 ﻿import { Component, Input } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { JournalVoucherService } from '../../../../Service/journalVoucher.service';
-import {EntityMock } from '../../../../Model/AccountTransaction/accountTrans';
 //import { AccountType } from '../../Model/AccountType/accountType';
 import { Observable } from 'rxjs/Rx';
+import { EntityMock } from 'src/app/Model/Account/account';
+import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
 @Component({
     selector: 'my-journaldetail-list',
     templateUrl: './journalvoucher-details.component.html'

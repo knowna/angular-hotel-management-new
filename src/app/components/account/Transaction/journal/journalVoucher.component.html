@@ -173,7 +173,7 @@
                 <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
             </div>
             <div *ngIf='journalVoucher && journalVoucher.length==0' class="alert alert-info" role="alert">No record found!</div>
-            <table id="voucherTable" class='table' *ngIf='journalVoucher && journalVoucher.length' style="border: 2px solid #ddd;">
+            <table id="voucherTable" class='table table-bordered' *ngIf='journalVoucher && journalVoucher.length' style="border: 2px solid #ddd;">
                 <thead>
                     <tr>
                         <th>Date</th>
@@ -193,9 +193,17 @@
                         <td>{{ voucher.VoucherNo }}</td>
                         <td colspan="2">&nbsp;</td>
                         <td>
-                            <img src="../../images/Edit.png" (click)="editJournalVoucher(voucher.Id)" title="Edit Voucher" height="24" width="24" />
+                            <div class="d-flex">
+                                <button class="btn btn-primary btn-sm" (click)="editJournalVoucher(voucher.Id)">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm ml-2" (click)="deleteJournalVoucher(voucher.Id)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                            <!-- <img src="../../images/Edit.png" (click)="editJournalVoucher(voucher.Id)" title="Edit Voucher" height="24" width="24" />
                             <img src="../../images/Delete.png" (click)="deleteJournalVoucher(voucher.Id)" title="Delete Voucher" height="24" width="24"
-                            />
+                            /> -->
                         </td>
                     </tr>
                     <tr *ngFor="let transaction of voucher.AccountTransactionValues">
