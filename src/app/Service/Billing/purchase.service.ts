@@ -57,7 +57,7 @@ export class PurchaseService {
             )
     }
 
-    getSalesItems() {
+    getSalesItems():any {
         return this._http.get(Global.BASE_HOST_ENDPOINT + "/api/MenuCategoryItemAPI")
             .pipe(
                 catchError(this.handleError)

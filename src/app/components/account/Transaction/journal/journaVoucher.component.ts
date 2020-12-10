@@ -278,8 +278,8 @@ export class JournalVouchercomponent implements OnInit {
     editJournalVoucher(Id: number) {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
-        this.modalTitle = "Edit";
-        this.modalBtnTitle = "Update";
+        this.modalTitle = "Edit Journal";
+        this.modalBtnTitle = "Save";
         this.reset();
         this.getJournalVoucher(Id)
             .subscribe((journalVoucher: AccountTrans) => {

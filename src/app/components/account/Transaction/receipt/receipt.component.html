@@ -67,8 +67,16 @@
                             <span *ngIf="row.File == ''">Not Added</span>
                         </td>
                         <td class="export-no-display">
-                            <img src="../../images/Edit.png" (click)="editReceipt(row.Id)" title="Edit Voucher" height="32" width="32" />
-                            <img src="../../images/Delete.png" (click)="deleteReceipt(row.Id)" title="Delete Voucher" height="32" width="32" />
+                            <div class="d-flex">
+                                <button class="btn btn-primary btn-sm" (click)="editReceipt(row.Id)">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm ml-2" (click)="deleteReceipt(row.Id)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                            <!-- <img src="../../images/Edit.png" (click)="editReceipt(row.Id)" title="Edit Voucher" height="32" width="32" />
+                            <img src="../../images/Delete.png" (click)="deleteReceipt(row.Id)" title="Delete Voucher" height="32" width="32" /> -->
                         </td>
                     </tr>
                     <tr *ngFor="let transaction of row.AccountTransactionValues">
