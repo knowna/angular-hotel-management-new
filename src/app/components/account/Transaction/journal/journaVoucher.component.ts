@@ -239,6 +239,8 @@ export class JournalVouchercomponent implements OnInit {
                 journalVoucher => {
                     this.indLoading = false;
                     journalVoucher.map((voucher) => voucher['File'] = Global.BASE_HOST_ENDPOINT + Global.BASE_FILE_UPLOAD_ENDPOINT + '?Id=' + voucher.Id + '&ApplicationModule=JournalVoucher');
+
+                    console.log('the journals are', journalVoucher)
                     return this.journalVoucher = journalVoucher;
                 },
                 error => this.msg = <any>error
@@ -283,9 +285,12 @@ export class JournalVouchercomponent implements OnInit {
         this.reset();
         this.getJournalVoucher(Id)
             .subscribe((journalVoucher: AccountTrans) => {
+                console.log('the journal voucher is', journalVoucher)
                 this.indLoading = false;
                 this.journalFrm.controls['Id'].setValue(journalVoucher.Id);
-                this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
+                // this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
+                this.journalFrm.controls['Name'].setValue(journalVoucher.AccountTransactionType);
+
                 this.journalFrm.controls['Date'].setValue(journalVoucher.AccountTransactionValues[0]['NVDate']);
                 this.journalFrm.controls['AccountTransactionDocumentId'].setValue(journalVoucher.AccountTransactionDocumentId);
                 this.journalFrm.controls['Description'].setValue(journalVoucher.Description);
@@ -300,7 +305,8 @@ export class JournalVouchercomponent implements OnInit {
                     let valuesFromServer = journalVoucher.AccountTransactionValues[i];
                     let instance = this.fb.group(valuesFromServer);
                     if (this.currentaccount !== undefined) {
-                        instance.controls["AccountId"].setValue(this.currentaccount.Name);
+                        // instance.controls["AccountId"].setValue(this.currentaccount.Name);
+                        instance.controls["AccountId"].setValue(this.currentaccount.Id);
                     }
 
                     if (valuesFromServer['entityLists'] === "Dr") {
@@ -335,13 +341,16 @@ export class JournalVouchercomponent implements OnInit {
             .subscribe((journalVoucher: AccountTrans) => {
                 this.indLoading = false;
                 this.journalFrm.controls['Id'].setValue(journalVoucher.Id);
-                this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
+                // this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
+                this.journalFrm.controls['Name'].setValue(journalVoucher.AccountTransactionType);
+
                 this.journalFrm.controls['AccountTransactionDocumentId'].setValue(journalVoucher.AccountTransactionDocumentId);
                 this.journalFrm.controls['Description'].setValue(journalVoucher.Description);
                 this.journalFrm.controls['Amount'].setValue(journalVoucher.Amount);
                 this.journalFrm.controls['drTotal'].setValue(journalVoucher.drTotal);
                 this.journalFrm.controls['crTotal'].setValue(journalVoucher.crTotal);
-                this.journalFrm.controls['Date'].setValue(new Date(journalVoucher.AccountTransactionValues[0]['Date']));
+                // this.journalFrm.controls['Date'].setValue(new Date(journalVoucher.AccountTransactionValues[0]['Date']));
+                this.journalFrm.controls['Date'].setValue(journalVoucher.AccountTransactionValues[0]['NVDate']);
 
                 this.journalFrm.controls['AccountTransactionValues'] = this.fb.array([]);
                 const control = <FormArray>this.journalFrm.controls['AccountTransactionValues'];
@@ -357,7 +366,8 @@ export class JournalVouchercomponent implements OnInit {
                         instance.controls['Debit'].disable();
                     }
                     if (this.currentaccount !== undefined) {
-                        instance.controls["AccountId"].setValue(this.currentaccount.Name);
+                        // instance.controls["AccountId"].setValue(this.currentaccount.Name);
+                        instance.controls["AccountId"].setValue(this.currentaccount.Id);
                     }
                     control.push(instance);
                 }
@@ -481,9 +491,9 @@ export class JournalVouchercomponent implements OnInit {
 
         this.formSubmitAttempt = true;
 
-        if (!this.voucherDateValidator(journal.get('Date').value)) {
-            return false;
-        }
+        // if (!this.voucherDateValidator(journal.get('Date').value)) {
+        //     return false;
+        // }
 
         journal.get('FinancialYear').setValue(this.currentYear['Name'] || '');
         journal.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
@@ -499,26 +509,28 @@ export class JournalVouchercomponent implements OnInit {
             }
             const control = <FormArray>this.journalFrm.controls['AccountTransactionValues'].value;
             const controls = <FormArray>this.journalFrm.controls['AccountTransactionValues'];
-            for (var i = 0; i < control.length; i++) {
-                let Id = control[i]['Id'];
-                if (Id > 0) {
-                    let CurrentAccount = control[i]['AccountId'];
-                    this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
-                    let CurrentAccountId = this.currentaccount.Id;
-                    let currentaccountvoucher = control[i];
-                    let instance = this.fb.group(currentaccountvoucher);
-                    instance.controls["AccountId"].setValue(CurrentAccountId);
-                    controls.push(instance);
-                }
-                else {
-                    let xcurrentaccountvoucher = control[i]['AccountId'];
-                    let currentaccountvoucher = control[i];
-                    let instance = this.fb.group(currentaccountvoucher);
-                    this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
-                    instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
-                    controls.push(instance);
-                }
-            }
+
+            console.log('the list of the details are', control);
+            // for (var i = 0; i < control.length; i++) {
+            //     let Id = control[i]['Id'];
+            //     if (Id > 0) {
+            //         let CurrentAccount = control[i]['AccountId'];
+            //         this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
+            //         let CurrentAccountId = this.currentaccount.Id;
+            //         let currentaccountvoucher = control[i];
+            //         let instance = this.fb.group(currentaccountvoucher);
+            //         instance.controls["AccountId"].setValue(CurrentAccountId);
+            //         controls.push(instance);
+            //     }
+            //     else {
+            //         let xcurrentaccountvoucher = control[i]['AccountId'];
+            //         let currentaccountvoucher = control[i];
+            //         let instance = this.fb.group(currentaccountvoucher);
+            //         this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
+            //         instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
+            //         controls.push(instance);
+            //     }
+            // }
             let JournalObject = {
                 Id: this.journalFrm.controls['Id'].value,
                 Date: this.journalFrm.controls['Date'].value,
@@ -554,6 +566,7 @@ export class JournalVouchercomponent implements OnInit {
                                         this.formSubmitAttempt = false;
                                         this.reset();
                                     }
+                                    alert('Data saved successfully!');
                                     this.modalRef.hide();
                                     this.loadJournalVoucherList(this.fromDate, this.toDate);
                                 } else {
@@ -580,6 +593,7 @@ export class JournalVouchercomponent implements OnInit {
                                     this.formSubmitAttempt = false;
                                     this.reset();
                                 }
+                                alert('Data updated successfully!');
                                 this.modalRef.hide();
                                 this.loadJournalVoucherList(this.fromDate, this.toDate);
                             } else {
@@ -589,6 +603,8 @@ export class JournalVouchercomponent implements OnInit {
                     );
                     break;
                 case DBOperation.delete:
+                    console.log(JournalObject);
+                    
                     this._journalvoucherService.delete(Global.BASE_JOURNALVOUCHER_ENDPOINT, JournalObject).subscribe(
                         data => {
                             if (data == 1) {

@@ -1,5 +1,6 @@
 ﻿export class Account{
     Id: number;
+    AccountId: string;
     Name: string;
     AccountTypeId: number;
     ForeignCurrencyId: number;

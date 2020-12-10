@@ -55,7 +55,7 @@
             </div>
             <div *ngIf='purchase && purchase.length==0' class="alert alert-info" role="alert">No record found!</div>
             <!-- Voucher list table starts -->
-            <table id="purchaseTable" class='table' *ngIf='purchase && purchase.length' style="border: 2px solid #ddd;">
+            <table id="purchaseTable" class='table table-bordered' *ngIf='purchase && purchase.length' style="border: 2px solid #ddd;">
                 <thead>
                     <tr>
                         <th colspan="8" class="text-center">
@@ -88,8 +88,17 @@
                             <span *ngIf="row.File == ''">Not Added</span>
                         </td>
                         <td class="export-no-display">
-                            <img src="../../images/Edit.png" (click)="editPurchase(row.Id)" title="Edit Voucher" height="32" width="32" />
-                            <img src="../../images/Delete.png" (click)="deletePurchase(row.Id)" title="Delete Voucher" height="32" width="32" />
+                            <div class="d-flex">
+                                <button class="btn btn-primary btn-sm" (click)="editPurchase(row.Id)">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm ml-2" (click)="deletePurchase(row.Id)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+
+                            <!-- <img src="../../images/Edit.png" (click)="editPurchase(row.Id)" title="Edit Voucher" height="32" width="32" />
+                            <img src="../../images/Delete.png" (click)="deletePurchase(row.Id)" title="Delete Voucher" height="32" width="32" /> -->
                         </td>
                     </tr>
                     <tr *ngFor="let transaction of row.AccountTransactionValues">
@@ -365,7 +374,10 @@
                             </div>
                         </div>
                         <div class="col-md-3 custom-padding">
-                            <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="AccountId" [config]="config" [options]="account"></ngx-select-dropdown>
+                            <!-- <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="AccountId" [config]="config" [options]="account"></ngx-select-dropdown> -->
+                            <select class="form-control " formControlName="AccountId">
+                                <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option>
+                            </select>
                             <div *ngIf="!purchaseFrm.controls.AccountTransactionValues.controls[i].controls.AccountId.valid && formSubmitAttempt" class="alert alert-danger">
                                 Particular Name is required
                             </div>
