@@ -285,9 +285,12 @@ export class JournalVouchercomponent implements OnInit {
         this.reset();
         this.getJournalVoucher(Id)
             .subscribe((journalVoucher: AccountTrans) => {
+                console.log('the journal voucher is', journalVoucher)
                 this.indLoading = false;
                 this.journalFrm.controls['Id'].setValue(journalVoucher.Id);
-                this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
+                // this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
+                this.journalFrm.controls['Name'].setValue(journalVoucher.AccountTransactionType);
+
                 this.journalFrm.controls['Date'].setValue(journalVoucher.AccountTransactionValues[0]['NVDate']);
                 this.journalFrm.controls['AccountTransactionDocumentId'].setValue(journalVoucher.AccountTransactionDocumentId);
                 this.journalFrm.controls['Description'].setValue(journalVoucher.Description);
@@ -302,7 +305,8 @@ export class JournalVouchercomponent implements OnInit {
                     let valuesFromServer = journalVoucher.AccountTransactionValues[i];
                     let instance = this.fb.group(valuesFromServer);
                     if (this.currentaccount !== undefined) {
-                        instance.controls["AccountId"].setValue(this.currentaccount.Name);
+                        // instance.controls["AccountId"].setValue(this.currentaccount.Name);
+                        instance.controls["AccountId"].setValue(this.currentaccount.Id);
                     }
 
                     if (valuesFromServer['entityLists'] === "Dr") {
@@ -337,7 +341,9 @@ export class JournalVouchercomponent implements OnInit {
             .subscribe((journalVoucher: AccountTrans) => {
                 this.indLoading = false;
                 this.journalFrm.controls['Id'].setValue(journalVoucher.Id);
-                this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
+                // this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
+                this.journalFrm.controls['Name'].setValue(journalVoucher.AccountTransactionType);
+
                 this.journalFrm.controls['AccountTransactionDocumentId'].setValue(journalVoucher.AccountTransactionDocumentId);
                 this.journalFrm.controls['Description'].setValue(journalVoucher.Description);
                 this.journalFrm.controls['Amount'].setValue(journalVoucher.Amount);
@@ -360,7 +366,8 @@ export class JournalVouchercomponent implements OnInit {
                         instance.controls['Debit'].disable();
                     }
                     if (this.currentaccount !== undefined) {
-                        instance.controls["AccountId"].setValue(this.currentaccount.Name);
+                        // instance.controls["AccountId"].setValue(this.currentaccount.Name);
+                        instance.controls["AccountId"].setValue(this.currentaccount.Id);
                     }
                     control.push(instance);
                 }
@@ -484,9 +491,9 @@ export class JournalVouchercomponent implements OnInit {
 
         this.formSubmitAttempt = true;
 
-        if (!this.voucherDateValidator(journal.get('Date').value)) {
-            return false;
-        }
+        // if (!this.voucherDateValidator(journal.get('Date').value)) {
+        //     return false;
+        // }
 
         journal.get('FinancialYear').setValue(this.currentYear['Name'] || '');
         journal.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
