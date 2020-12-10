@@ -232,7 +232,7 @@ export class SplitMergeComponent implements OnInit {
     });
 
     if(isSplit) {
-      // for primary
+      // for MainOrderItemRequest
       MainOrderItemRequestList.forEach(product => {
         let total =0;
         let unitprice = product.UnitPrice;
@@ -279,7 +279,7 @@ export class SplitMergeComponent implements OnInit {
         "ListOrderItem":ListOrderItemPrimary
       }
       
-      //for partial
+      //for SplitOrderItemRequest
       SplitOrderItemRequestList.forEach(product => {
         let total =0;
         let unitprice = product.UnitPrice;
