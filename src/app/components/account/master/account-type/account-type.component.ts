@@ -19,6 +19,7 @@ export class AccountTypeComponent implements OnInit {
     modalRef: BsModalRef;
     modalRef2: BsModalRef;
     accountTypes: AccountType[];
+    tempAccountTypes: AccountType[];
     accountType: AccountType;
     msg: string;
     indLoading: boolean = false;
@@ -28,6 +29,8 @@ export class AccountTypeComponent implements OnInit {
     modalBtnTitle: string;
     private formSubmitAttempt: boolean;
     private buttonDisabled: boolean;
+
+    searchKeyword = '';
 
     constructor(private fb: FormBuilder, private accTypeService: AccountTypeService, private modalService: BsModalService, private date: DatePipe) {
         // this.accTypeService.getaccounttypes().subscribe(data => { this.accountTypes = data });
@@ -67,6 +70,7 @@ export class AccountTypeComponent implements OnInit {
         this.accTypeService.get(Global.BASE_ACCOUNTTYPE_ENDPOINT)
             .subscribe(accounttypes => { 
                 this.accountTypes = accounttypes; 
+                this.tempAccountTypes = accounttypes; 
                 console.log('llll', this.accountTypes)
                 this.indLoading = false; 
             },
@@ -252,6 +256,22 @@ export class AccountTypeComponent implements OnInit {
     }
     SetControlsState(isEnable: boolean) {
         isEnable ? this.accTypeFrm.enable() : this.accTypeFrm.disable();
+    }
+
+    searchItem(){
+        this.searchKeyword = this.searchKeyword.trim();
+        if(this.searchKeyword == '' || this.searchKeyword == null ){
+            this.accountTypes = this.accountTypes;
+        }
+
+        let filteredAccountTypes: any[] = [];
+
+        filteredAccountTypes = this.tempAccountTypes.filter(
+            account=>{
+                return (account.Name.toLowerCase().indexOf(this.searchKeyword.toLowerCase()) !== -1);
+            }
+        );
+        this.accountTypes = filteredAccountTypes;
     }
 
 }

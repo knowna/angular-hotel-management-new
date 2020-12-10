@@ -22,6 +22,8 @@ export class AccountTransactionTypeComponent implements OnInit {
     // public acctype: Observable<AccountType>;
     acctype: AccountType[] = [];
     accounttransTypes: AccountTransType[];
+    tempAccounttransTypes: AccountTransType[];
+
     accounttransType: AccountTransType;
     msg: string;
     indLoading: boolean = false;
@@ -31,6 +33,8 @@ export class AccountTransactionTypeComponent implements OnInit {
     modalBtnTitle: string;
     private formSubmitAttempt: boolean;
     private buttonDisabled: boolean;
+
+    searchKeyword = '';
 
     constructor(private fb: FormBuilder, private acctransTypeService: AccountTransactionTypeService, private date: DatePipe, private modalService: BsModalService) {
         this.acctransTypeService.getAccountTypes()
@@ -61,7 +65,12 @@ export class AccountTransactionTypeComponent implements OnInit {
     LoadAcctransTypes(): void {
         this.indLoading = true;
         this.acctransTypeService.get(Global.BASE_ACCOUNTTRANSTYPE_ENDPOINT)
-            .subscribe(accounttransTypes => { this.accounttransTypes = accounttransTypes; this.indLoading = false; },
+            .subscribe(
+                accounttransTypes => { 
+                    this.accounttransTypes = accounttransTypes;
+                    this.tempAccounttransTypes = accounttransTypes;
+                    this.indLoading = false; 
+                },
             error => this.msg = <any>error);
     }
 
@@ -127,7 +136,6 @@ export class AccountTransactionTypeComponent implements OnInit {
     }
 
     deleteAcctransType(id: number) {
-        debugger;
         this.dbops = DBOperation.delete;
         this.SetControlsState(true);
         this.modalTitle = "Confirm to Delete Transaction Type?";
@@ -159,7 +167,6 @@ export class AccountTransactionTypeComponent implements OnInit {
 
     //Submit the Form
     onSubmit() {
-        debugger;
         this.msg = "";
         let accountType = this.acctransTypeFrm
         this.formSubmitAttempt = true;
@@ -174,7 +181,6 @@ export class AccountTransactionTypeComponent implements OnInit {
                             if (data == 1) //Success
 
                             {
-                                debugger;
 
                                 this.openModal2(this.TemplateRef2);
                                 this.LoadAcctransTypes();
@@ -196,7 +202,6 @@ export class AccountTransactionTypeComponent implements OnInit {
                         data => {
                             if (data == 1) //Success
                             {
-                                debugger;
                                 this.openModal2(this.TemplateRef2);
                                 this.LoadAcctransTypes();
                             }
@@ -213,7 +218,6 @@ export class AccountTransactionTypeComponent implements OnInit {
 
                     break;
                 case DBOperation.delete:
-                    debugger;
                     this.acctransTypeService.delete(Global.BASE_ACCOUNTTRANSTYPE_ENDPOINT, accountType.value.Id).subscribe(
                         data => {
                             if (data == 1) //Success
@@ -269,7 +273,6 @@ export class AccountTransactionTypeComponent implements OnInit {
 
 
     reset() {
-        //debugger;
         let control = this.acctransTypeFrm.controls['Id'].value;
         if (control > 0) {
             this.buttonDisabled = true;
@@ -283,6 +286,22 @@ export class AccountTransactionTypeComponent implements OnInit {
     }
     SetControlsState(isEnable: boolean) {
         isEnable ? this.acctransTypeFrm.enable() : this.acctransTypeFrm.disable();
+    }
+
+    searchItem(){
+        this.searchKeyword = this.searchKeyword.trim();
+        if(this.searchKeyword == '' || this.searchKeyword == null ){
+            this.accounttransTypes = this.accounttransTypes;
+        }
+
+        let filteredAccounttransTypes: any[] = [];
+
+        filteredAccounttransTypes = this.tempAccounttransTypes.filter(
+            accountType=>{
+                return (accountType.Name.toLowerCase().indexOf(this.searchKeyword.toLowerCase()) !== -1);
+            }
+        );
+        this.accounttransTypes = filteredAccounttransTypes;
     }
 
 }

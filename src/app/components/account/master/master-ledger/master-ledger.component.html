@@ -5,7 +5,12 @@
             <h2 class="header">Ledger</h2>
         </div>
         <div class="col-md-4">
-            <input type="text" class="form-control" placeholder="Search by Name">
+            <input 
+                type="text" 
+                class="form-control" 
+                placeholder="Search by Name"
+                (keyup)="searchItem()" 
+                [(ngModel)]="searchKeyword">
         </div>
         <div class="col-md-2">
             <button *ngIf='masterLedgers && masterLedgers.length' class="btn btn-primary pull-left" (click)="exportTableToExcel('ledgersTable')"> Export</button>
