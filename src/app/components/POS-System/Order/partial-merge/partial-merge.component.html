@@ -94,7 +94,7 @@
                                 <tbody>
                                     <tr *ngFor="let item of o.OrderItems">
                                         <!-- <td><input  [id]="'item'+i" type="checkbox" (change)="moveOrder(item)"> </td> -->
-                                        <td class="text-center"><input [disabled]="item.Qty < 1" type="number" [(ngModel)]="item.newQty" (keyup)="quantityChanged(item)" min="1" style="width: 50%;"> </td>
+                                        <td class="text-center"><input type="number" [(ngModel)]="item.newQty" min="1" style="width: 50%;"> </td>
                                         <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
                                         <td>{{item.Qty}}</td>
                                         <td>{{item.UnitPrice}}</td>
