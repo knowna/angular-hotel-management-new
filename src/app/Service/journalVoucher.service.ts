@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Global } from '../Shared/global';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
@@ -61,12 +61,19 @@ export class JournalVoucherService {
 
     delete(url: string, model: any): Observable<any> {
         let body = JSON.stringify(model);
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        // let options = new RequestOptions({ headers: headers, body: body });
-        return this._http.delete(url)
-            // .map((response: Response) => <any>response.json())
-            // .catch(this.handleError);
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let options = ({ headers: headers, body: body });
+        return this._http.delete(url, options)
+            .catch(this.handleError);
     }
+
+    // delete(url: string, id: number): Observable<any> {
+    //     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    //     let options = ({ headers: headers });
+    //     return this._http.delete(url + id, options).pipe(
+
+    //         catchError(this.handleError));
+    // }
 
 
     private handleError(error: HttpErrorResponse) {
