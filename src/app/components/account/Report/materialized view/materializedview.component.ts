@@ -11,7 +11,7 @@ import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
 import { Global } from 'src/app/Shared/global';
 
 @Component({
-    templateUrl: './materializedview.Component.html'
+    templateUrl: './materializedview.component.html'
 })
 
 export class MaterializedViewComponent {
