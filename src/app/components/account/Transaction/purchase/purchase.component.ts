@@ -172,6 +172,8 @@ export class PurchaseComponent implements OnInit {
             .subscribe(
                 purchase => {
                     purchase.map((purch) => purch['File'] = Global.BASE_HOST_ENDPOINT + Global.BASE_FILE_UPLOAD_ENDPOINT + '?Id=' + purch.Id + '&ApplicationModule=JournalVoucher');
+
+                    console.log('the purchase list', purchase)
                     this.purchase = purchase; 
                     this.indLoading = false; 
                 },
@@ -261,15 +263,17 @@ export class PurchaseComponent implements OnInit {
     editPurchase(Id: number) {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
-        this.modalTitle = "Edit";
-        this.modalBtnTitle = "Update";
+        this.modalTitle = "Edit Purchase";
+        this.modalBtnTitle = "Save";
         this.reset();
         this.getPurchaseDetails(Id)
             .subscribe((purchase: AccountTrans) => {
+                console.log('for edit', purchase);
                 this.indLoading = false;
                 this.purchaseFrm.controls['Id'].setValue(purchase.Id);
                 this.purchaseFrm.controls['Date'].setValue(purchase.AccountTransactionValues[0]['NVDate']);
-                this.purchaseFrm.controls['Name'].setValue(purchase.Name);
+                // this.purchaseFrm.controls['Name'].setValue(purchase.Name);
+                this.purchaseFrm.controls['Name'].setValue(purchase.AccountTransactionType);
                 this.purchaseFrm.controls['AccountTransactionDocumentId'].setValue(purchase.AccountTransactionDocumentId);
                 this.purchaseFrm.controls['Description'].setValue(purchase.Description);
 
@@ -296,7 +300,8 @@ export class PurchaseComponent implements OnInit {
 
                     this.currentaccount = this.account.filter(x => x.Id === purchase.AccountTransactionValues[i]["AccountId"])[0];
                     if (this.currentaccount !== undefined) {
-                        instance.controls["AccountId"].setValue(this.currentaccount.Name);
+                        // instance.controls["AccountId"].setValue(this.currentaccount.Name);
+                        instance.controls["AccountId"].setValue(this.currentaccount.Id);
                     }
 
                     if (valuesFromServer['entityLists'] === "Dr") {
@@ -322,7 +327,7 @@ export class PurchaseComponent implements OnInit {
     deletePurchase(Id: number) {
         this.dbops = DBOperation.delete;
         this.SetControlsState(true);
-        this.modalTitle = "Delete Purchase Items";
+        this.modalTitle = "Delete Purchase";
         this.modalBtnTitle = "Delete";
         this.reset();
         this.getPurchaseDetails(Id)
@@ -330,7 +335,8 @@ export class PurchaseComponent implements OnInit {
                 this.indLoading = false;  
                 this.purchaseFrm.controls['Id'].setValue(purchase.Id);
                 this.purchaseFrm.controls['Date'].setValue(purchase.AccountTransactionValues[0]['NVDate']);
-                this.purchaseFrm.controls['Name'].setValue(purchase.Name);
+                // this.purchaseFrm.controls['Name'].setValue(purchase.Name);
+                this.purchaseFrm.controls['Name'].setValue(purchase.AccountTransactionType);
                 this.purchaseFrm.controls['AccountTransactionDocumentId'].setValue(purchase.AccountTransactionDocumentId);
                 this.purchaseFrm.controls['Description'].setValue(purchase.Description);
                 
@@ -519,9 +525,9 @@ export class PurchaseComponent implements OnInit {
         this.formSubmitAttempt = true;
         let purchase = this.purchaseFrm;
 
-        if (!this.voucherDateValidator(purchase.get('Date').value)) {
-            return false;
-        }
+        // if (!this.voucherDateValidator(purchase.get('Date').value)) {
+        //     return false;
+        // }
 
         purchase.get('FinancialYear').setValue(this.currentYear['Name'] || '');
         purchase.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
@@ -538,49 +544,49 @@ export class PurchaseComponent implements OnInit {
 
             const control = <FormArray>this.purchaseFrm.controls['AccountTransactionValues'].value;
             const controls = <FormArray>this.purchaseFrm.controls['AccountTransactionValues'];
-            for (var i = 0; i < control.length; i++) {
-                let Id = control[i]['Id'];
-                if (Id > 0) {
-                    let CurrentAccount = control[i]['AccountId'];
-                    this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
-                    let CurrentAccountId = this.currentaccount.Id;
-                    let currentaccountvoucher = control[i];
-                    let instance = this.fb.group(currentaccountvoucher);
-                    instance.controls["AccountId"].setValue(CurrentAccountId);
-                    controls.push(instance);
-                }
-                else {
-                    let xcurrentaccountvoucher = control[i]['AccountId'];
-                    let currentaccountvoucher = control[i];
-                    let instance = this.fb.group(currentaccountvoucher);
-                    this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
-                    instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
-                    controls.push(instance);
-                }
-            }
+            // for (var i = 0; i < control.length; i++) {
+            //     let Id = control[i]['Id'];
+            //     if (Id > 0) {
+            //         let CurrentAccount = control[i]['AccountId'];
+            //         this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
+            //         let CurrentAccountId = this.currentaccount.Id;
+            //         let currentaccountvoucher = control[i];
+            //         let instance = this.fb.group(currentaccountvoucher);
+            //         instance.controls["AccountId"].setValue(CurrentAccountId);
+            //         controls.push(instance);
+            //     }
+            //     else {
+            //         let xcurrentaccountvoucher = control[i]['AccountId'];
+            //         let currentaccountvoucher = control[i];
+            //         let instance = this.fb.group(currentaccountvoucher);
+            //         this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
+            //         instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
+            //         controls.push(instance);
+            //     }
+            // }
 
             const purchasecontrol = <FormArray>this.purchaseFrm.controls['PurchaseDetails'].value;
             const purchasecontrols = <FormArray>this.purchaseFrm.controls['PurchaseDetails'];
-            for (var i = 0; i < purchasecontrol.length; i++) {
-                let Id = purchasecontrol[i]['Id'];
-                if (Id > 0) {
-                    let CurrentItemName = purchasecontrol[i]['InventoryItemId'];
-                    this.inventoryItemName = this.inventoryItem.filter(x => x.Id === CurrentItemName.Name)[0];
-                    let CurrentItemId = this.inventoryItemName.Id;
-                    let currentinventoryItem = purchasecontrol[i];
-                    let instance = this.fb.group(currentinventoryItem);
-                    instance.controls["InventoryItemId"].setValue(CurrentItemId);
-                    purchasecontrols.push(instance);
-                }
-                else {
-                    let xcurrentCurrentItemName = purchasecontrol[i]['InventoryItemId'];
-                    let currentinventoryItem = purchasecontrol[i];
-                    let instance = this.fb.group(currentinventoryItem);
-                    this.inventoryItemName = this.inventoryItem.filter(x => x.Name === xcurrentCurrentItemName.Name)[0];
-                    instance.controls["InventoryItemId"].setValue(this.inventoryItemName.Id.toString());
-                    purchasecontrols.push(instance);
-                }
-            }
+            // for (var i = 0; i < purchasecontrol.length; i++) {
+            //     let Id = purchasecontrol[i]['Id'];
+            //     if (Id > 0) {
+            //         let CurrentItemName = purchasecontrol[i]['InventoryItemId'];
+            //         this.inventoryItemName = this.inventoryItem.filter(x => x.Id === CurrentItemName.Name)[0];
+            //         let CurrentItemId = this.inventoryItemName.Id;
+            //         let currentinventoryItem = purchasecontrol[i];
+            //         let instance = this.fb.group(currentinventoryItem);
+            //         instance.controls["InventoryItemId"].setValue(CurrentItemId);
+            //         purchasecontrols.push(instance);
+            //     }
+            //     else {
+            //         let xcurrentCurrentItemName = purchasecontrol[i]['InventoryItemId'];
+            //         let currentinventoryItem = purchasecontrol[i];
+            //         let instance = this.fb.group(currentinventoryItem);
+            //         this.inventoryItemName = this.inventoryItem.filter(x => x.Name === xcurrentCurrentItemName.Name)[0];
+            //         instance.controls["InventoryItemId"].setValue(this.inventoryItemName.Id.toString());
+            //         purchasecontrols.push(instance);
+            //     }
+            // }
 
             let purchaseObject = {
                 Id: this.purchaseFrm.controls['Id'].value,
@@ -624,7 +630,7 @@ export class PurchaseComponent implements OnInit {
                                     'moduleName': 'JournalVoucher',
                                     'id': data
                                 });
-                                alert("Data successfully added.");
+                                alert("Data successfully updated.");
                                 this.loadPurchaseList(this.fromDate, this.toDate);
                                 this.modalRef.hide();
                                 this.formSubmitAttempt = false;
@@ -635,7 +641,7 @@ export class PurchaseComponent implements OnInit {
                     );
                     break;
                 case DBOperation.delete:
-                    this._purchaseService.delete(Global.BASE_PURCHASE_ENDPOINT, purchaseObject.Id).subscribe(
+                    this._purchaseService.delete(Global.BASE_PURCHASE_ENDPOINT, purchaseObject).subscribe(
                         data => {
                             if (data == 1) {
                                 alert("Data successfully deleted.");
@@ -716,7 +722,8 @@ export class PurchaseComponent implements OnInit {
     config = {
         displayKey: 'Name', // if objects array passed which key to be displayed defaults to description
         search: true,
-        limitTo: 1000
+        limitTo: 1000,
+        height: '200px'
     };
     nepaliDateStringValidator(control: string) {
         let pattern = new RegExp(/(^[0-9]{4})\.([0-9]{2})\.([0-9]{2})/g);

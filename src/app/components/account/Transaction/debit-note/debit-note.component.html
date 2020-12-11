@@ -7,7 +7,7 @@
             </button>
         </div>
         <div class="modal-body">
-            <div class="hidden">
+            <div class="hidden" style="display: none;">
                 <input type="number" class="hidden" formControlName="Id" />
                 <input type="text" class="hidden" formControlName="Amount" />
                 <input type="text" class="hidden" placeholder="Credit Note No" formControlName="AccountTransactionDocumentId" />
@@ -36,6 +36,9 @@
                 <div class="container col-md-12">
                     <div formArrayName="AccountTransactionValues" class="panel panel-default container-padding">
                         <br>
+                        <div class="row">
+
+                        
                         <div class="col-md-1 custom-padding">
                             <strong>Dr/Cr</strong>
                         </div>
@@ -54,8 +57,9 @@
                         <div class="col-md-1 custom-padding">
                             <strong>&nbsp;</strong>
                         </div>
+                        </div>
                         <br />
-                        <div class="panel-body" *ngFor="let AccountTransactionValue of debitNoteFrm.controls.AccountTransactionValues.controls; let i=index"
+                        <div *ngFor="let AccountTransactionValue of debitNoteFrm.controls.AccountTransactionValues.controls; let i=index"
                              [formGroupName]="i">
                             <div class="row">
                                 <div class="col-md-1 custom-padding">
@@ -67,7 +71,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-3 custom-padding">
-                                    <!--<ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="AccountId" [config]="config" [options]="account"></ngx-select-dropdown>-->
+                                    <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="AccountId" [config]="config" [options]="account"></ngx-select-dropdown>
                                     <div *ngIf="!debitNoteFrm.controls.AccountTransactionValues.controls[i].controls.AccountId.valid  && formSubmitAttempt" class="text-danger">
                                         Select the Particular
                                     </div>
@@ -85,7 +89,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-1 custom-padding text-center" style="padding-top: 7px !important;">
-                                    <span *ngIf="debitNoteFrm.controls.AccountTransactionValues.controls.length > 1" style="font-size: 30px; margin-right: 15px; margin-top: -5px;" class="glyphicon glyphicon-remove pull-right"
+                                    <span *ngIf="debitNoteFrm.controls.AccountTransactionValues.controls.length > 1" style="font-size: 30px;" class="fa fa-window-close pull-right"
                                           (click)="removeAccount(i)"></span>
                                 </div>
                             </div>
@@ -122,58 +126,49 @@
         <div class="modal-footer">
             <div>
                 <button type="submit" class="btn btn-success pull-left" [disabled]="debitNoteFrm.invalid"> {{modalBtnTitle}}</button>
-                <button type="button" class="btn btn-danger pull-right" (click)="reset(); modalRef.hide()" aria-label="Close">Cancel</button>
+                <button type="button" class="btn btn-danger pull-right ml-2" (click)="reset(); modalRef.hide()" aria-label="Close">Cancel</button>
             </div>
         </div>
     </form>
 </ng-template>
 
-<div class='panel panel-primary'>
-    <div class='panel-heading'>
-        Debit Note
+<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Debit Note</h2>
+        </div>
     </div>
-    <div>
-        <div class='table' style="min-height: 400px;">
-            <div style="padding-bottom:10px">
-                <div class="row">
-                    <div class="col-md-3">
-                        <button class="btn btn-success mt-3 ml-3" (click)="addDebitNote()">
-                            <i class="fa fa-plus"></i>
-                            Add
-                        </button>
-                        <!-- <div (click)="addDebitNote()" style="cursor: pointer">
-                            <span>
-                                <img src="../../images/Add.png" height="60" width="60" />
-                            </span>
-                            Add Debit Note
-                        </div> -->
-                    </div>
-                    <div class="col-md-9">
-                        <div class="row" style="padding-top: 17px;">
-                            <div class="col-md-2">
-                                Filter By Date:
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" class="form-control" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" value="" [(ngModel)]="sfromDate" placeholder="yyyy.mm.dd">
-                            </div>
-                            <div class="col-md-3">
-                                <input class="form-control" type="text" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" placeholder="yyyy.mm.dd" [(ngModel)]="stoDate" />
-                            </div>
-                            <div class="col-md-2">
-                                <button class="btn btn-success" (click)="loadDebitNoteList(sfromDate, stoDate)"> GO</button>
-                            </div>
-                            <div class="col-md-2">
-                                <button class="btn btn-primary pull-left" (click)="exportDebitNote()"> Export</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-md-2">
+            <button class="btn btn-success" (click)="addDebitNote()">
+                <i class="fa fa-plus"></i>
+                Add
+            </button>
+        </div>
+        <div class="col-md-2">
+            Filter By Date:
+        </div>
+        <div class="col-md-2">
+            <input type="text" class="form-control" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" value="" [(ngModel)]="sfromDate" placeholder="yyyy.mm.dd">
+        </div>
+        <div class="col-md-2">
+            <input class="form-control" type="text" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" placeholder="yyyy.mm.dd" [(ngModel)]="stoDate" />
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-success" (click)="loadDebitNoteList(sfromDate, stoDate)"> GO</button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary pull-left" (click)="exportDebitNote()" style="float: right;"> Export</button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
             <div class="alert alert-info" role="alert" *ngIf="indLoading">
-                <img src="../../images/loading.gif" width="32" height="32" /> Loading...
+                <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
             </div>
             <div *ngIf='debitNote && debitNote.length==0' class="alert alert-info" role="alert">No record found!</div>
-            <!-- Voucher list table starts -->
             <table class='table' *ngIf='debitNote && debitNote.length' style="border: 2px solid #ddd;">
                 <thead>
                     <tr>
@@ -219,7 +214,6 @@
                     </tr>
                 </tbody>
             </table>
-            <!-- Voucher list table ends -->
         </div>
         <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -231,6 +225,104 @@
         </div>
     </div>
 </div>
+
+
+
+<!-- <div class='panel panel-primary'>
+    <div class='panel-heading'>
+        Debit Note
+    </div>
+    <div>
+        <div class='table' style="min-height: 400px;">
+            <div style="padding-bottom:10px">
+                <div class="row">
+                    <div class="col-md-3">
+                        <button class="btn btn-success mt-3 ml-3" (click)="addDebitNote()">
+                            <i class="fa fa-plus"></i>
+                            Add
+                        </button>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="padding-top: 17px;">
+                            <div class="col-md-2">
+                                Filter By Date:
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" value="" [(ngModel)]="sfromDate" placeholder="yyyy.mm.dd">
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-control" type="text" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" placeholder="yyyy.mm.dd" [(ngModel)]="stoDate" />
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-success" (click)="loadDebitNoteList(sfromDate, stoDate)"> GO</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-primary pull-left" (click)="exportDebitNote()"> Export</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-info" role="alert" *ngIf="indLoading">
+                <img src="../../images/loading.gif" width="32" height="32" /> Loading...
+            </div>
+            <div *ngIf='debitNote && debitNote.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table class='table' *ngIf='debitNote && debitNote.length' style="border: 2px solid #ddd;">
+                <thead>
+                    <tr>
+                        <th colspan="8" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                            <br /> Debit Note
+                            <br /> {{ sfromDate }} - {{ stoDate }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Date</th>
+                        <th width="400">Particular</th>
+                        <th>Voucher Type</th>
+                        <th>Voucher No.</th>
+                        <th>Debit (Rs.)</th>
+                        <th>Credit (Rs.)</th>
+                        <th>File</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let voucher of debitNote">
+                    <tr style="background:#eceaea">
+                        <td>{{ voucher.VDate | date: 'yyyy.MM.dd' }}</td>
+                        <td>{{ voucher.Name }}</td>
+                        <td>{{ voucher.VType }}</td>
+                        <td>{{ voucher.VoucherNo }}</td>
+                        <td colspan="2">&nbsp;</td>
+                        <td>
+                            <img *ngIf="voucher.File" (click)="viewFile(voucher.File,imageView)" [src]="voucher.File" alt="Document" style="height:30px; border-radius:5px;" />
+                            <span *ngIf="voucher.File == ''">Not Added</span>
+                        </td>
+                        <td>
+                            <img src="../../images/Edit.png" (click)="editDebitNote(voucher.Id)" title="Edit Voucher" height="32" width="32" />
+                            <img src="../../images/Delete.png" (click)="deleteDebitNote(voucher.Id)" title="Delete Voucher" height="32" width="32" />
+                        </td>
+                    </tr>
+                    <tr *ngFor="let transaction of voucher.AccountTransactionValues">
+                        <td>&nbsp;</td>
+                        <td colspan="3">{{ transaction.Name }}</td>
+                        <td>{{ transaction.DebitAmount !== 0 ? transaction.DebitAmount.toFixed(2) : '' }}</td>
+                        <td>{{ transaction.CreditAmount !== 0 ? transaction.CreditAmount.toFixed(2) : '' }}</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
+    </div>
+</div> -->
 
 <ng-template #templateNested>
     <div class="modal-body text-center">

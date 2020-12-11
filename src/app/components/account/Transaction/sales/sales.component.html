@@ -1,0 +1,395 @@
+﻿<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Sales</h2>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-md-2">
+            Filter By Date:
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" value="" [(ngModel)]="sfromDate" placeholder="yyyy.mm.dd">
+        </div>
+        <div class="col-md-3">
+            <input class="form-control" type="text" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" placeholder="yyyy.mm.dd" [(ngModel)]="stoDate" />
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-success" (click)="loadSaleList(sfromDate, stoDate)"> GO</button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary pull-left" (click)="exportTableToExcel('salesTable')" style="float: right;"> Export</button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="indLoading">
+                <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
+            </div>
+            <div *ngIf='sales && sales.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table id="salesTable" class='table table-bordered' *ngIf='sales && sales.length' style="border: 2px solid #ddd;">
+                <thead>
+                    <tr>
+                        <th colspan="6" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                            <br/> Sales Voucher
+                            <br/> {{ sfromDate }} - {{ stoDate }}
+                        </th>
+                    </tr>
+                    <tr style="background: #bcd1e2;">
+                        <th>Date</th>
+                        <th>Particular</th>
+                        <th>Voucher Type</th>
+                        <th>Voucher No.</th>
+                        <th>Debit (Rs.)</th>
+                        <th>Credit (Rs.)</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let row of sales">
+                    <tr style="background:#eceaea">
+                        <td>{{ row.VDate | date: 'yyyy.MM.dd' }}</td>
+                        <td>{{ row.Name }}</td>
+                        <td>{{ row.VType }}</td>
+                        <td>{{ row.VoucherNo }}</td>
+                        <td colspan="2">&nbsp;</td>
+                    </tr>
+                    <tr *ngFor="let transaction of row.AccountTransactionValues">
+                        <td>&nbsp;</td>
+                        <td colspan="3">{{ transaction.Name }}</td>
+                        <td>
+                            {{ transaction.DebitAmount !== 0 ? transaction.DebitAmount.toFixed(2) : '' }}
+                        </td>
+                        <td>
+                            {{ transaction.CreditAmount !== 0 ? transaction.CreditAmount.toFixed(2) : '' }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+
+        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
+    </div>
+</div>
+
+
+
+<!-- <div class='panel panel-primary'>
+    <div class='panel-heading'> Sales </div>
+    <div class='panel-body'>
+        <div class='table-responsive' style="min-height: 400px;">
+            <div style="padding-bottom:10px">
+                <div class="row">
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="padding-top: 17px;">
+                            <div class="col-md-2">
+                                Filter By Date:
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" value="" [(ngModel)]="sfromDate" placeholder="yyyy.mm.dd">
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-control" type="text" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" placeholder="yyyy.mm.dd" [(ngModel)]="stoDate" />
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-success" (click)="loadSaleList(sfromDate, stoDate)"> GO</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-primary pull-left" (click)="exportTableToExcel('salesTable')"> Export</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-info" role="alert" *ngIf="indLoading">
+                <img src="../../images/loading.gif" width="32" height="32" /> Loading...
+            </div>
+            <div *ngIf='sales && sales.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table id="salesTable" class='table' *ngIf='sales && sales.length' style="border: 2px solid #ddd;">
+                <thead>
+                    <tr>
+                        <th colspan="6" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                            <br/> Sales Voucher
+                            <br/> {{ sfromDate }} - {{ stoDate }}
+                        </th>
+                    </tr>
+                    <tr style="background: #bcd1e2;">
+                        <th>Date</th>
+                        <th>Particular</th>
+                        <th>Voucher Type</th>
+                        <th>Voucher No.</th>
+                        <th>Debit (Rs.)</th>
+                        <th>Credit (Rs.)</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let row of sales">
+                    <tr style="background:#eceaea">
+                        <td>{{ row.VDate | date: 'yyyy.MM.dd' }}</td>
+                        <td>{{ row.Name }}</td>
+                        <td>{{ row.VType }}</td>
+                        <td>{{ row.VoucherNo }}</td>
+                        <td colspan="2">&nbsp;</td>
+                    </tr>
+                    <tr *ngFor="let transaction of row.AccountTransactionValues">
+                        <td>&nbsp;</td>
+                        <td colspan="3">{{ transaction.Name }}</td>
+                        <td>
+                            {{ transaction.DebitAmount !== 0 ? transaction.DebitAmount.toFixed(2) : '' }}
+                        </td>
+                        <td>
+                            {{ transaction.CreditAmount !== 0 ? transaction.CreditAmount.toFixed(2) : '' }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
+    </div>
+</div> -->
+
+<ng-template #template>
+    <form novalidate (ngSubmit)="onSubmit(fileUpload)" [formGroup]="salesForm" class="panel-primary">
+        <div class="modal-header panel-heading">
+            <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <label class="control-label col-md-2">
+                    <strong>Voucher Type:</strong>
+                </label>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" formControlName="Name" readonly="true">
+                </div>
+                <div class="hidden">
+                    <input type="number" class="hidden" formControlName="FinancialYear" />
+                    <input type="text" class="hidden" formControlName="UserName" />
+                    <input type="number" class="hidden" formControlName="CompanyCode" />
+                    <input type="text" class="hidden" placeholder="Voucher No" formControlName="AccountTransactionDocumentId" />
+                </div>
+                <label class="control-label col-md-2">
+                    <strong>Voucher Date:</strong>
+                </label>
+                <div class="col-md-4">
+                    <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker formControlName="Date" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+                    <div class="text-danger" *ngIf="(salesForm.get('Date').hasError('InvalidDate') || salesForm.get('Date').hasError('required')) && formSubmitAttempt">
+                        {{ salesForm.get('Date').getError('InvalidDate') }}
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="col-md-4">
+                            <label>
+                                <strong>Name of Item:</strong>
+                            </label>
+                        </div>
+                        <div class="col-md-2">
+                            <label>
+                                <strong>Quantity:</strong>
+                            </label>
+                        </div>
+                        <div class="col-md-2">
+                            <label>
+                                <strong>Rate:</strong>
+                            </label>
+                        </div>
+                        <div class="col-md-3">
+                            <label>
+                                <strong>Amount:</strong>
+                            </label>
+                        </div>
+                        <div class="col-md-1">
+                            <label>&nbsp;</label>
+                        </div>
+                        <div formArrayName="SalesOrderDetails">
+                            <div class="row" *ngFor="let SalesOrderDetails of salesForm.controls.SalesOrderDetails.controls; let i=index" [formGroupName]="i">
+                                <div class="col-md-12">
+                                    <my-salesDetail-list [group]="salesForm.controls.SalesOrderDetails.controls[i]"></my-salesDetail-list>
+                                    <div class="col-md-1 text-center">
+                                        <span *ngIf="salesForm.controls.SalesOrderDetails.controls.length > 1" style="font-size: 30px; margin-right: 10px; margin-top: -20px;" class="fa fa-window-close pull-right" (click)="removePurchaseitems(i)"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group col-md-8 text-right">
+                                    <label for="">
+                                        <strong>Total Amount:</strong>
+                                    </label>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <input type="number" class="form-control" placeholder="Grand Total" formControlName="Amount" value="{{calculateAmount()}}"
+                                        readonly="true" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-right" style="padding:12px 26px">
+                                <button type="button" class="btn btn-success" [disabled]="salesForm.controls.SalesOrderDetails.invalid" (click)="addPurchaseitems()">Add Item +</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="col-md-2">
+                            <label>
+                                <strong>Dr/Cr:</strong>
+                            </label>
+                        </div>
+                        <div class="col-md-5">
+                            <label>
+                                <strong>Particular:</strong>
+                            </label>
+                        </div>
+                        <div class="col-md-2">
+                            <label>
+                                <strong>Debit:</strong>
+                            </label>
+                        </div>
+                        <div class="col-md-2">
+                            <label>
+                                <strong>Credit:</strong>
+                            </label>
+                        </div>
+                        <div class="col-md-1">
+                            <label>&nbsp;</label>
+                        </div>
+                        <div formArrayName="AccountTransactionValues">
+                            <div *ngFor="let AccountTransactionValues of salesForm.controls.AccountTransactionValues.controls; let i=index">
+                                <div [formGroupName]="i">
+                                    <div>
+                                        <div class="form-group col-md-2 custom-padding">
+                                            <select class="form-control" formControlName="entityLists" (change)="enableDisable(salesForm.controls.AccountTransactionValues.controls[i].controls)">
+                                                <option *ngFor="let entityList of entityLists" [ngValue]="entityList.name">{{ entityList.name }}</option>
+                                            </select>
+                                            <!--<small [hidden]="salesForm.controls.AccountTransactionValues.controls[i].controls.entityLists.valid" class="text-danger">
+                                                Please select Dr/Cr
+                                            </small>-->
+                                            <div *ngIf="!salesForm.controls.AccountTransactionValues.controls[i].controls.entityLists.valid && formSubmitAttempt" class="alert alert-danger">
+                                                Please select Dr/Cr
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-5 custom-padding">
+                                            <select class="form-control " formControlName="AccountId">
+                                                <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option>
+                                            </select>
+                                            <div *ngIf="!salesForm.controls.AccountTransactionValues.controls[i].controls.AccountId.valid && formSubmitAttempt" class="alert alert-danger">
+                                                Select the Particular
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-2 custom-padding">
+                                            <input type="number" class="form-control" placeholder="Debit" formControlName="Debit" />
+                                        </div>
+                                        <div class="form-group col-md-2 custom-padding">
+                                            <input type="number" class="form-control" placeholder="Credit" formControlName="Credit">
+                                        </div>
+                                        <div class="form-group col-md-1 text-center custom-padding">
+                                            <span *ngIf="salesForm.controls.AccountTransactionValues.controls.length > 1" style="font-size: 30px" class="fa fa-window-close pull-right" (click)="removeJournal(i)"></span>
+                                        </div>
+                                        <div style="clear: both;"></div>
+                                    </div>
+                                    <div>
+                                        <div class="col-md-2 custom-padding">
+                                            <label>
+                                                <strong>Description:</strong>
+                                            </label>
+                                        </div>
+                                        <div class="form-group col-md-9 custom-padding">
+                                            <textarea class="form-control" name="Description" formControlName="Description" rows="2" placeholder="Sales transaction description here..."></textarea>
+                                            <div class="help-block alert alert-danger" *ngIf="!salesForm.controls.AccountTransactionValues.controls[i].controls.Description.valid && formSubmitAttempt">
+                                                Sales Transaction description is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-right" style="padding:12px 26px">
+                                <button type="button" class="btn btn-success" [disabled]="salesForm.controls.AccountTransactionValues.invalid" (click)="addJournalitems()">Add Item +</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-7">
+                    <textarea name="Description" formControlName="Description" class="form-control" rows="4" cols="50"></textarea>
+                    <div class="text-danger" *ngIf="salesForm.get('Description').hasError('required') && formSubmitAttempt">
+                        Description is required
+                    </div>
+                </div>
+                <div class="col-md-4 row">
+                    <div class="col-md-6 custom-padding">
+                        <input type="number" class="form-control" placeholder="Total" value="{{sumDebit()}}" readonly="true" />
+                    </div>
+                    <div class="col-md-6 custom-padding">
+                        <input type="number" class="form-control" placeholder="Total" value="{{sumCredit()}}" readonly="true" />
+                    </div>
+                    <div class="col-md-12 custom-padding">
+                        <app-file-upload #fileUpload [extraFormData]="salesForm" [uploadUrl]="uploadUrl" [dropMessage]="dropMessage"></app-file-upload>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div>
+                <button type="submit" class="btn btn-success pull-left" [disabled]="salesForm.invalid">{{modalBtnTitle}} </button>
+                <button type="button" class="btn btn-danger pull-right" (click)="reset(); modalRef.hide();">Cancel</button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #imageView>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <img style="width:100%" [src]="fileUrl" />
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #templateNested>
+    <div class="modal-body text-center">
+        <p>Data saved sucessfully!</p>
+        <button type="button" class="btn btn-default" (click)="confirm()">Ok</button>
+    </div>
+</ng-template>

@@ -10,6 +10,80 @@
 </div>
 
 <div class="row m-0">
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-sm-12">
+                <ngx-select-dropdown
+                    (change)="showDetail($event)"
+                    [multiple]="false"
+                    [config]="config"
+                    [options]="tempPrimaryOrderList">
+                </ngx-select-dropdown>
+            </div>
+        </div>
+
+        <div *ngIf="selectedTicket?.Name != null"  class="col-sm-12 card mt-3" style="cursor: pointer;">
+            <span class="mt-2" style="width:100%"> 
+                {{selectedTicket?.Name}}  {{selectedTicket?.TicketId}}
+            </span>
+
+            <div *ngIf="selectedTicket.orders?.length > 0" class="table-responsive mb-3">
+                <div *ngFor="let o of selectedTicket.orders">
+                    <table class="table">
+                        <caption style="caption-side:top">
+                            Order No: {{o.OrderNumber}},
+                            {{o.UserId}} -
+                            {{o.OrderOpeningTime}}
+                        </caption>
+                        <thead>
+                            <tr>
+                                <!-- <th>Move This Item</th> -->
+                                <th>Change Quantity </th>
+                                <th>Name</th>
+                                <th>Qty</th>
+                                <th>Unit Price</th>
+                                <th>Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of o.OrderItems">
+                                <!-- <td><input  [id]="'item'+i" type="checkbox" (change)="moveOrder(item)"> </td> -->
+                                <td class="text-center"><input type="number" [(ngModel)]="item.newQty"  min="1" style="width: 50%;"> </td>
+                                <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
+                                <td>{{item.Qty}}</td>
+                                <td>{{item.UnitPrice}}</td>
+                                <td>{{item.TotalAmount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div> 
+
+            <div *ngIf="selectedTicket.orders?.length == 0" class="text-center">
+                No record found!!
+            </div>
+
+            
+
+            
+            
+        </div>
+
+    </div>
+    <div class="col-md-4" style="margin: inherit;">
+        <div class="row">
+            <div class="col-sm-12">
+                <button type="button" class="btn btn-success" (click)="splitOrder()">
+                    Split Order
+                </button>
+            </div>
+        </div>
+        
+    </div> 
+
+</div>
+
+<!-- <div class="row m-0">
     <div class="col-md-10">
         <div class="row m-0">
             <div *ngFor="let order of tempPrimaryOrderList" class="col-md-12 card">
@@ -34,7 +108,6 @@
                                 <thead>
                                     <tr>
                                         <th> Split this order</th>
-                                        <!-- <th>Split quantity </th> -->
                                         <th>Name</th>
                                         <th>Qty</th>
                                         <th>Unit Price</th>
@@ -44,7 +117,6 @@
                                 <tbody>
                                     <tr *ngFor="let item of o.OrderItems">
                                         <td>  <input  [id]="'item'+i" type="checkbox"(change)="moveOrder(item)"> </td>
-                                        <!-- <td> <input [disabled]="item.Qty==1" type="text"> </td> -->
                                         <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
                                         <td>{{item.Qty}}</td>
                                         <td>{{item.UnitPrice}}</td>
@@ -54,39 +126,11 @@
                             </table>
                         </div>
                     </div>
-
-
-                    <!-- <div *ngIf="order.show && order.ItemList.length > 0">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th> Split this order</th>
-                                    <th>Split quantity </th>
-                                    <th>Name</th>
-                                    <th>Qty</th>
-                                    <th>Unit Price</th>
-                                    <th>Total Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let item of order.ItemList;index as i">
-                                    <td>  <input  [id]="'item'+i" type="checkbox"(change)="moveOrder(item)"> </td>
-                                    <td> <input [disabled]="item.Qty==1" type="text"> </td>
-                                    <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
-                                    <td>{{item.Qty}}</td>
-                                    <td>{{item.UnitPrice}}</td>
-                                    <td>{{item.TotalAmount}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div> -->
     
                     <div *ngIf="order.show && order.Orders?.length == 0" class="text-center">
                         No record found!!
                     </div>
-                    
                 </div>
-                
                 
             </div>
             
@@ -105,10 +149,10 @@
     </div> 
     
 
-</div>
+</div> -->
 
 
-<div *ngIf="showOrders" class="row m-0 mb-2">
+<!-- <div *ngIf="showOrders" class="row m-0 mb-2">
     <div *ngFor="let item of order.OrderItems;index as i " class="row">
         <table class="table table-borderless">
             <tr>
@@ -117,7 +161,7 @@
         </table>
     </div>
 
-</div>
+</div> -->
 
 
 

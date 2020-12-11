@@ -289,7 +289,6 @@ export class ReceiptComponent {
         this.modalBtnTitle = "Update";
         this.getJournalVoucher(Id)
             .subscribe((receipt: AccountTrans) => {
-                debugger
                 this.indLoading = false;
                 this.receiptFrm.controls['Id'].setValue(receipt.Id);
                 this.receiptFrm.controls['Name'].setValue(receipt.Name);
@@ -330,7 +329,6 @@ export class ReceiptComponent {
         this.modalBtnTitle = "Delete";
         this.getJournalVoucher(Id)
             .subscribe((receipt: AccountTrans) => {
-                debugger
                 this.indLoading = false;
                 this.receiptFrm.controls['Id'].setValue(receipt.Id);
                 this.receiptFrm.controls['Name'].setValue(receipt.Name);
@@ -405,7 +403,6 @@ export class ReceiptComponent {
         let controls = this.receiptFrm.controls.AccountTransactionValues.value;
 
         return controls.reduce(function (total: any, accounts: any) {
-                //debugger;
                 return (accounts.Debit) ? (total + Math.round(accounts.Debit)) : total;
             }, 0);
     }
@@ -414,7 +411,6 @@ export class ReceiptComponent {
         let controls = this.receiptFrm.controls.AccountTransactionValues.value;
 
         return controls.reduce(function (total: any, accounts: any) {
-                //debugger;
                 return (accounts.Credit) ? (total + Math.round(accounts.Credit)) : total;
             }, 0);
     }
@@ -449,8 +445,6 @@ export class ReceiptComponent {
         receipt.get('CompanyCode').setValue(this.currentUser && this.company['BranchCode'] || '');
 
         if (receipt.valid) {
-            debugger
-
             const control = <FormArray>this.receiptFrm.controls['AccountTransactionValues'].value;
             const controls = <FormArray>this.receiptFrm.controls['AccountTransactionValues'];
             for (var i = 0; i < control.length; i++) {
@@ -529,7 +523,6 @@ export class ReceiptComponent {
                     );
                     break;
                 case DBOperation.update:
-                    debugger;
                     this._journalvoucherService.put(Global.BASE_JOURNALVOUCHER_ENDPOINT, receipt.value.Id, receiptObj).subscribe(
                         async (data) => {
                             if (data > 0) {
@@ -557,7 +550,6 @@ export class ReceiptComponent {
                     );
                     break;
                 case DBOperation.delete:
-                    debugger;
                     let receiptObject= {
                         Id: this.receiptFrm.controls['Id'].value,
                         Date: this.receiptFrm.controls['Date'].value,
@@ -613,7 +605,6 @@ export class ReceiptComponent {
     }
 
     onFilterDateSelect (selectedDate) {
-        debugger
         let currentYearStartDate = new Date(this.currentYear.StartDate);
         let currentYearEndDate = new Date(this.currentYear.EndDate);
 
@@ -636,12 +627,14 @@ export class ReceiptComponent {
     config = {
         displayKey: 'Name', // if objects array passed which key to be displayed defaults to description
         search: true,
-        limitTo: 1000
+        limitTo: 1000,
+        height: '200px'
     };
     configAccount = {
         displayKey: 'Name', // if objects array passed which key to be displayed defaults to description
         search: true,
-        limitTo: 1000
+        limitTo: 1000,
+        height: '200px'
     };
     nepaliDateValidator(control: FormControl) {
         let nepaliDate = control.value;

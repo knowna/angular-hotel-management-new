@@ -7,6 +7,7 @@ import 'rxjs/add/operator/catch';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { Global } from 'src/app/Shared/global';
 
 
 @Injectable()
@@ -40,24 +41,32 @@ export class PurchaseService {
             catchError(this.handleError));
     }
 
-    delete(url: string, id: number): Observable<any> {
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        let options = ({ headers: headers });
-        return this._http.delete(url + id, options).pipe(
+    // delete(url: string, id: number): Observable<any> {
+    //     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    //     let options = ({ headers: headers });
+    //     return this._http.delete(url + id, options).pipe(
 
-            catchError(this.handleError));
+    //         catchError(this.handleError));
+    // }
+
+    delete(url: string, model: any): Observable<any> {
+        let body = JSON.stringify(model);
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let options = ({ headers: headers, body: body });
+        return this._http.delete(url, options)
+            .catch(this.handleError);
     }
 
 
     getInventoryItems():any {
-        return this._http.get("/api/InventoryItemAPI/get")
+        return this._http.get(Global.BASE_HOST_ENDPOINT + "/api/InventoryItemAPI/get")
             .pipe(
                 catchError(this.handleError)
             )
     }
 
-    getSalesItems() {
-        return this._http.get("/api/MenuCategoryItemAPI")
+    getSalesItems():any {
+        return this._http.get(Global.BASE_HOST_ENDPOINT + "/api/MenuCategoryItemAPI")
             .pipe(
                 catchError(this.handleError)
             )
@@ -65,7 +74,7 @@ export class PurchaseService {
 
     getAccounts():any {
 
-        return this._http.get("/api/AccountAPI/get")
+        return this._http.get(Global.BASE_HOST_ENDPOINT + "/api/AccountAPI/get")
             .pipe(
                 catchError(this.handleError)
             )

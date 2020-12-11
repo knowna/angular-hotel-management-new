@@ -59,7 +59,7 @@
     public static BASE_ORDERSMove_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/OrderMove/';
     public static BASE_ORDERSCancel_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/OrderCancel/';
     public static BASE_SCREENORDERS_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/ScreenOrderController/';
-    public static BASE_JOURNALVOUCHER_ENDPOINT=Global.BASE_HOST_ACCOUNT_ENDPOINT+ '/api/AccountTransactionAPI/';
+    public static BASE_JOURNALVOUCHER_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/AccountTransactionAPI/';
     public static BASE_USERACCOUNT_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/UserAccountAPI/GetUsers/';
     public static BASE_USERACCOUNT_CREATE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/UserAccountAPI/CreateUser/';
     public static BASE_USERACCOUNT_UPDATE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/UserAccountAPI/EditUser/';

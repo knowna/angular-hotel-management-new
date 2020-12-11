@@ -1,6 +1,9 @@
-﻿<div style="margin-bottom: 10px;" [formGroup]="purchaseDetails">
+﻿<div style="margin-bottom: 10px;" [formGroup]="purchaseDetails" class="row">
     <div class="col-md-4">
-        <!--<ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="InventoryItemId" [config]="config" [options]="inventoryItem"></ngx-select-dropdown>-->
+        <!-- <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="InventoryItemId" [config]="config" [options]="inventoryItem"></ngx-select-dropdown> -->
+        <select class="form-control " formControlName="InventoryItemId">
+            <option *ngFor="let item of inventoryItem" [ngValue]="item.Id">{{item.Name}}</option>
+        </select>
     </div>
     <div class="col-md-2">
         <input type="number" class="form-control" formControlName="Quantity" (blur)="calculateAmount(purchaseDetails.controls)" />
@@ -8,7 +11,7 @@
     <div class="col-md-2">
         <input type="number" class="form-control" formControlName="PurchaseRate" (blur)="calculateAmount(purchaseDetails.controls)" />
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <input type="number" class="form-control" formControlName="PurchaseAmount" readonly="true" />
     </div>
 </div>

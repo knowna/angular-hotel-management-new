@@ -4,6 +4,7 @@
     AccountTransactionTypeId: number;
     SourceAccountTypeId: number;
     TargetAccountTypeId: number;
+    AccountTransactionType: string;
     IsReversed: boolean;
     Reversable: boolean;
     Amount: number;

@@ -21,6 +21,7 @@ export class MasterLedgerComponent implements OnInit {
     modalRef: BsModalRef;
     modalRef2: BsModalRef;
     masterLedgers: MasterLedger[];
+    tempMasterLedgers: MasterLedger[];
     masterLedger: MasterLedger;
     msg: string;
     indLoading: boolean = false;
@@ -33,7 +34,9 @@ export class MasterLedgerComponent implements OnInit {
     modalBtnTitle: string;
     private formSubmitAttempt: boolean;
     private buttonDisabled: boolean;
-
+    
+    searchKeyword = '';
+    
     constructor(private fb: FormBuilder, private _masterLedgerService: MasterLedgerService, private modalService: BsModalService) { }
 
     ngOnInit(): void {
@@ -90,7 +93,7 @@ export class MasterLedgerComponent implements OnInit {
             Amount: ['', [Validators.required, Validators.pattern(/^[.\d]+$/)]],
             DRCR: [''],
             UnderGroupMaster:[''],
-            Currency:['']
+            Currency:[''],
             // entityLists: ['', Validators.required],
         })
 
@@ -103,6 +106,7 @@ export class MasterLedgerComponent implements OnInit {
         this._masterLedgerService.get(Global.BASE_ACCOUNT_ENDPOINT)
             .subscribe(masterLedgers => { 
                 this.masterLedgers = masterLedgers; 
+                this.tempMasterLedgers = masterLedgers;
                 console.log('the ledgers are ', this.masterLedgers)
                 this.indLoading = false; 
             },
@@ -122,14 +126,66 @@ export class MasterLedgerComponent implements OnInit {
     }
 
     editMasterLedger(Id: number) {
-        //debugger;
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Group Ledger";
         this.modalBtnTitle = "Save";
         this.masterLedger = this.masterLedgers.filter(x => x.Id == Id)[0];
-        this.masterLedgerFrm.controls['UnderGroupMaster'].setValue('');
-        this.masterLedgerFrm.setValue(this.masterLedger);
+        // this.masterLedgerFrm.controls['UnderGroupMaster'].setValue('');
+        // this.masterLedgerFrm.setValue(this.masterLedger);
+        this.masterLedgerFrm.controls['Id'].setValue(this.masterLedger.Id),
+        this.masterLedgerFrm.controls['Name'].setValue(this.masterLedger.Name),
+        this.masterLedgerFrm.controls['AccountTypeId'].setValue(this.masterLedger.AccountTypeId),
+        this.masterLedgerFrm.controls['ForeignCurrencyId'].setValue(this.masterLedger.ForeignCurrencyId),
+        this.masterLedgerFrm.controls['TaxClassificationName'].setValue(this.masterLedger.TaxClassificationName),
+        this.masterLedgerFrm.controls['TaxType'].setValue(this.masterLedger.TaxType),
+        this.masterLedgerFrm.controls['TaxRate'].setValue(this.masterLedger.TaxRate),
+        this.masterLedgerFrm.controls['GSTType'].setValue(this.masterLedger.GSTType),
+        this.masterLedgerFrm.controls['ServiceCategory'].setValue(this.masterLedger.ServiceCategory),
+        this.masterLedgerFrm.controls['ExciseDutyType'].setValue(this.masterLedger.ExciseDutyType),
+        this.masterLedgerFrm.controls['TraderLedNatureOfPurchase'].setValue(this.masterLedger.TraderLedNatureOfPurchase),
+        this.masterLedgerFrm.controls['TDSDeducteeType'].setValue(this.masterLedger.TDSDeducteeType),
+        this.masterLedgerFrm.controls['TDSRateName'].setValue(this.masterLedger.TDSRateName),
+        this.masterLedgerFrm.controls['LedgerFBTCategory'].setValue(this.masterLedger.LedgerFBTCategory),
+        this.masterLedgerFrm.controls['IsBillWiseOn'].setValue(this.masterLedger.IsBillWiseOn),
+        this.masterLedgerFrm.controls['ISCostCentresOn'].setValue(this.masterLedger.ISCostCentresOn),
+        this.masterLedgerFrm.controls['IsInterestOn'].setValue(this.masterLedger.IsInterestOn),
+        this.masterLedgerFrm.controls['AllowInMobile'].setValue(this.masterLedger.AllowInMobile),
+        this.masterLedgerFrm.controls['IsCondensed'].setValue(this.masterLedger.IsCondensed),
+        this.masterLedgerFrm.controls['AffectsStock'].setValue(this.masterLedger.AffectsStock),
+        this.masterLedgerFrm.controls['ForPayRoll'].setValue(this.masterLedger.ForPayRoll),
+        this.masterLedgerFrm.controls['InterestOnBillWise'].setValue(this.masterLedger.InterestOnBillWise),
+        this.masterLedgerFrm.controls['OverRideInterest'].setValue(this.masterLedger.OverRideInterest),
+        this.masterLedgerFrm.controls['OverRideADVInterest'].setValue(this.masterLedger.OverRideADVInterest),
+        this.masterLedgerFrm.controls['IgnoreTDSExempt'].setValue(this.masterLedger.IgnoreTDSExempt),
+        this.masterLedgerFrm.controls['UseForVat'].setValue(this.masterLedger.UseForVat),
+        this.masterLedgerFrm.controls['IsTCSApplicable'].setValue(this.masterLedger.IsTCSApplicable),
+        this.masterLedgerFrm.controls['IsTDSApplicable'].setValue(this.masterLedger.IsTDSApplicable),
+        this.masterLedgerFrm.controls['IsFBTApplicable'].setValue(this.masterLedger.IsFBTApplicable),
+        this.masterLedgerFrm.controls['IsGSTApplicable'].setValue(this.masterLedger.IsGSTApplicable),
+        this.masterLedgerFrm.controls['ShowInPaySlip'].setValue(this.masterLedger.ShowInPaySlip),
+        this.masterLedgerFrm.controls['UseForGratuity'].setValue(this.masterLedger.UseForGratuity),
+        this.masterLedgerFrm.controls['ForServiceTax'].setValue(this.masterLedger.ForServiceTax),
+        this.masterLedgerFrm.controls['IsInputCredit'].setValue(this.masterLedger.IsInputCredit),
+        this.masterLedgerFrm.controls['IsExempte'].setValue(this.masterLedger.IsExempte),
+        this.masterLedgerFrm.controls['IsAbatementApplicable'].setValue(this.masterLedger.IsAbatementApplicable),
+        this.masterLedgerFrm.controls['TDSDeducteeIsSpecialRate'].setValue(this.masterLedger.TDSDeducteeIsSpecialRate),
+        this.masterLedgerFrm.controls['Audited'].setValue(this.masterLedger.Audited),
+        this.masterLedgerFrm.controls['SortPosition'].setValue(this.masterLedger.SortPosition),
+        this.masterLedgerFrm.controls['OpeningBalance'].setValue(this.masterLedger.OpeningBalance),
+        this.masterLedgerFrm.controls['InventoryValue'].setValue(this.masterLedger.InventoryValue),
+        this.masterLedgerFrm.controls['MaintainBilByBill'].setValue(this.masterLedger.MaintainBilByBill),
+        this.masterLedgerFrm.controls['Address'].setValue(this.masterLedger.Address),
+        this.masterLedgerFrm.controls['District'].setValue(this.masterLedger.District),
+        this.masterLedgerFrm.controls['City'].setValue(this.masterLedger.City),
+        this.masterLedgerFrm.controls['Street'].setValue(this.masterLedger.Street),
+        this.masterLedgerFrm.controls['PanNo'].setValue(this.masterLedger.PanNo),
+        this.masterLedgerFrm.controls['Telephone'].setValue(this.masterLedger.Telephone),
+        this.masterLedgerFrm.controls['Email'].setValue(this.masterLedger.Email),
+        this.masterLedgerFrm.controls['Amount'].setValue(this.masterLedger.Amount),
+        this.masterLedgerFrm.controls['DRCR'].setValue(this.masterLedger.DRCR),
+        this.masterLedgerFrm.controls['UnderGroupMaster'].setValue(this.masterLedger.UnderGroupMaster),
+        this.masterLedgerFrm.controls['Currency'].setValue(this.masterLedger.Currency),
         
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
@@ -144,10 +200,66 @@ export class MasterLedgerComponent implements OnInit {
         this.modalTitle = "Confirm to Delete?";
         this.modalBtnTitle = "Delete";
         this.masterLedger = this.masterLedgers.filter(x => x.Id == id)[0];
-        this.masterLedgerFrm.setValue(this.masterLedger);
+        // this.masterLedgerFrm.setValue(this.masterLedger);
+
+        this.masterLedgerFrm.controls['Id'].setValue(this.masterLedger.Id),
+        this.masterLedgerFrm.controls['Name'].setValue(this.masterLedger.Name),
+        this.masterLedgerFrm.controls['AccountTypeId'].setValue(this.masterLedger.AccountTypeId),
+        this.masterLedgerFrm.controls['ForeignCurrencyId'].setValue(this.masterLedger.ForeignCurrencyId),
+        this.masterLedgerFrm.controls['TaxClassificationName'].setValue(this.masterLedger.TaxClassificationName),
+        this.masterLedgerFrm.controls['TaxType'].setValue(this.masterLedger.TaxType),
+        this.masterLedgerFrm.controls['TaxRate'].setValue(this.masterLedger.TaxRate),
+        this.masterLedgerFrm.controls['GSTType'].setValue(this.masterLedger.GSTType),
+        this.masterLedgerFrm.controls['ServiceCategory'].setValue(this.masterLedger.ServiceCategory),
+        this.masterLedgerFrm.controls['ExciseDutyType'].setValue(this.masterLedger.ExciseDutyType),
+        this.masterLedgerFrm.controls['TraderLedNatureOfPurchase'].setValue(this.masterLedger.TraderLedNatureOfPurchase),
+        this.masterLedgerFrm.controls['TDSDeducteeType'].setValue(this.masterLedger.TDSDeducteeType),
+        this.masterLedgerFrm.controls['TDSRateName'].setValue(this.masterLedger.TDSRateName),
+        this.masterLedgerFrm.controls['LedgerFBTCategory'].setValue(this.masterLedger.LedgerFBTCategory),
+        this.masterLedgerFrm.controls['IsBillWiseOn'].setValue(this.masterLedger.IsBillWiseOn),
+        this.masterLedgerFrm.controls['ISCostCentresOn'].setValue(this.masterLedger.ISCostCentresOn),
+        this.masterLedgerFrm.controls['IsInterestOn'].setValue(this.masterLedger.IsInterestOn),
+        this.masterLedgerFrm.controls['AllowInMobile'].setValue(this.masterLedger.AllowInMobile),
+        this.masterLedgerFrm.controls['IsCondensed'].setValue(this.masterLedger.IsCondensed),
+        this.masterLedgerFrm.controls['AffectsStock'].setValue(this.masterLedger.AffectsStock),
+        this.masterLedgerFrm.controls['ForPayRoll'].setValue(this.masterLedger.ForPayRoll),
+        this.masterLedgerFrm.controls['InterestOnBillWise'].setValue(this.masterLedger.InterestOnBillWise),
+        this.masterLedgerFrm.controls['OverRideInterest'].setValue(this.masterLedger.OverRideInterest),
+        this.masterLedgerFrm.controls['OverRideADVInterest'].setValue(this.masterLedger.OverRideADVInterest),
+        this.masterLedgerFrm.controls['IgnoreTDSExempt'].setValue(this.masterLedger.IgnoreTDSExempt),
+        this.masterLedgerFrm.controls['UseForVat'].setValue(this.masterLedger.UseForVat),
+        this.masterLedgerFrm.controls['IsTCSApplicable'].setValue(this.masterLedger.IsTCSApplicable),
+        this.masterLedgerFrm.controls['IsTDSApplicable'].setValue(this.masterLedger.IsTDSApplicable),
+        this.masterLedgerFrm.controls['IsFBTApplicable'].setValue(this.masterLedger.IsFBTApplicable),
+        this.masterLedgerFrm.controls['IsGSTApplicable'].setValue(this.masterLedger.IsGSTApplicable),
+        this.masterLedgerFrm.controls['ShowInPaySlip'].setValue(this.masterLedger.ShowInPaySlip),
+        this.masterLedgerFrm.controls['UseForGratuity'].setValue(this.masterLedger.UseForGratuity),
+        this.masterLedgerFrm.controls['ForServiceTax'].setValue(this.masterLedger.ForServiceTax),
+        this.masterLedgerFrm.controls['IsInputCredit'].setValue(this.masterLedger.IsInputCredit),
+        this.masterLedgerFrm.controls['IsExempte'].setValue(this.masterLedger.IsExempte),
+        this.masterLedgerFrm.controls['IsAbatementApplicable'].setValue(this.masterLedger.IsAbatementApplicable),
+        this.masterLedgerFrm.controls['TDSDeducteeIsSpecialRate'].setValue(this.masterLedger.TDSDeducteeIsSpecialRate),
+        this.masterLedgerFrm.controls['Audited'].setValue(this.masterLedger.Audited),
+        this.masterLedgerFrm.controls['SortPosition'].setValue(this.masterLedger.SortPosition),
+        this.masterLedgerFrm.controls['OpeningBalance'].setValue(this.masterLedger.OpeningBalance),
+        this.masterLedgerFrm.controls['InventoryValue'].setValue(this.masterLedger.InventoryValue),
+        this.masterLedgerFrm.controls['MaintainBilByBill'].setValue(this.masterLedger.MaintainBilByBill),
+        this.masterLedgerFrm.controls['Address'].setValue(this.masterLedger.Address),
+        this.masterLedgerFrm.controls['District'].setValue(this.masterLedger.District),
+        this.masterLedgerFrm.controls['City'].setValue(this.masterLedger.City),
+        this.masterLedgerFrm.controls['Street'].setValue(this.masterLedger.Street),
+        this.masterLedgerFrm.controls['PanNo'].setValue(this.masterLedger.PanNo),
+        this.masterLedgerFrm.controls['Telephone'].setValue(this.masterLedger.Telephone),
+        this.masterLedgerFrm.controls['Email'].setValue(this.masterLedger.Email),
+        this.masterLedgerFrm.controls['Amount'].setValue(this.masterLedger.Amount),
+        this.masterLedgerFrm.controls['DRCR'].setValue(this.masterLedger.DRCR),
+        this.masterLedgerFrm.controls['UnderGroupMaster'].setValue(this.masterLedger.UnderGroupMaster),
+        this.masterLedgerFrm.controls['Currency'].setValue(this.masterLedger.Currency),
+
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
-            keyboard: false
+            keyboard: false,
+            class: 'modal-lg'
         });
     }
 
@@ -186,9 +298,11 @@ export class MasterLedgerComponent implements OnInit {
                             
                             if (data == 1) //Success
                             {
-                                //alert("Data successfully added.");
-                                this.openModal2(this.TemplateRef2); 
+                                alert("Data successfully added.");
+                                // this.openModal2(this.TemplateRef2); 
                                 this.LoadMasters();
+                                this.formSubmitAttempt = true;
+                                this.modalRef.hide();
                             }
                             else {
                                 alert("There is some issue in saving records, please contact to system administrator!");
@@ -198,6 +312,52 @@ export class MasterLedgerComponent implements OnInit {
                             this.msg = error;
                         }
                     );
+                    break;
+                
+                case DBOperation.update:
+                    this._masterLedgerService.put(Global.BASE_MASTERLEDGER_ENDPOINT, this.masterLedgerFrm.value.Id, this.masterLedgerFrm.value).subscribe(
+                        data => {
+                            console.log('aayo hai',data);
+                            
+                            if (data == 1) //Success
+                            {
+                                alert("Data successfully updated.");
+                                // this.openModal2(this.TemplateRef2); 
+                                this.LoadMasters();
+                                this.formSubmitAttempt = true;
+                                this.modalRef.hide();
+                            }
+                            else {
+                                alert("There is some issue in saving records, please contact to system administrator!");
+                            }
+                        },
+                        error => {
+                            this.msg = error;
+                        }
+                    );
+                    break;
+                
+                case DBOperation.delete:
+                    this._masterLedgerService.delete(Global.BASE_MASTERLEDGER_ENDPOINT, this.masterLedgerFrm.value.Id).subscribe(
+                        data => {
+                            if (data == 1) //Success
+                            {
+                                alert("Data successfully deleted.");
+                                this.modalRef.hide();
+                                this.formSubmitAttempt = false;
+                                this.LoadMasters();
+                            }
+                            else {
+                                alert("There is some issue in saving records, please contact to system administrator!");
+                            }
+
+                            //this.modal.dismiss();
+                        },
+                        error => {
+                            alert("There is some issue in saving records, please contact to system administrator!");
+                        }
+                    );
+                    break;
             }
 
         // }
@@ -212,7 +372,6 @@ export class MasterLedgerComponent implements OnInit {
 
     reset() {
         this.modalRef.hide();
-        //debugger;
         // let control = this.masterLedgerFrm.controls['Id'].value;
         // if (control > 0) {
         //     this.buttonDisabled = true;
@@ -222,5 +381,21 @@ export class MasterLedgerComponent implements OnInit {
     }
     SetControlsState(isEnable: boolean) {
         isEnable ? this.masterLedgerFrm.enable() : this.masterLedgerFrm.disable();
+    }
+
+    searchItem(){
+        this.searchKeyword = this.searchKeyword.trim();
+        if(this.searchKeyword == '' || this.searchKeyword == null ){
+            this.masterLedgers = this.masterLedgers;
+        }
+
+        let filteredMasterLedgers: any[] = [];
+
+        filteredMasterLedgers = this.tempMasterLedgers.filter(
+            ledger=>{
+                return (ledger.Name.toLowerCase().indexOf(this.searchKeyword.toLowerCase()) !== -1);
+            }
+        );
+        this.masterLedgers = filteredMasterLedgers;
     }
 }

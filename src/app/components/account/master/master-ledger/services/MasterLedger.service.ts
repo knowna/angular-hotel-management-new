@@ -3,8 +3,10 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { typeWithParameters } from '@angular/compiler/src/render3/util';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Injectable()
 export class MasterLedgerService {
@@ -13,52 +15,39 @@ export class MasterLedgerService {
     }
 
     get(url: string): Observable<any> {
-        return this._http.get(url)
-            // .map((response: Response) => <any>response.json())
-            // .do(data => console.log("All: " + JSON.stringify(data)))
-            // .catch(this.handleError);
+        return this._http.get(url).pipe(
+            catchError(this.handleError));
     }
-
-        // return this._http.get(url);
-    //     return this._http.get(url)
-    //         .map((response: Response) => <any>response.json())
-    //         .do(data => console.log("All: " + JSON.stringify(data)))
-    //         .catch(this.handleError);
-    //  }
 
     post(url: string, model: any): Observable<any> {
-        console.log(model,url);
-        
-        return this._http.post(url,model);
-        // let body = JSON.stringify(model);
-        // let headers = new Headers({ 'Content-Type': 'application/json' });
-        // let options = new RequestOptions({ headers: headers });
-        // return this._http.post(url, body, options)
-        //     .map((response: Response) => <any>response.json())
-        //     .catch(this.handleError);
+        let body = JSON.stringify(model);
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let options = ({ headers: headers });
+        return this._http.post(url, body, options).pipe(
+
+            catchError(this.handleError));
     }
 
-    // put(url: string, id: number, model: any): Observable<any> {
-    //     let body = JSON.stringify(model);
-    //     let headers = new Headers({ 'Content-Type': 'application/json' });
-    //     let options = new RequestOptions({ headers: headers });
-    //     return this._http.put(url + id, body, options)
-    //         .map((response: Response) => <any>response.json())
-    //         .catch(this.handleError);
-    // }
+    put(url: string, id: number, model: any): Observable<any> {
+        let body = JSON.stringify(model);
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let options = ({ headers: headers });
+        return this._http.put(url + id, body, options).pipe(
 
-    // delete(url: string, id: number): Observable<any> {
-    //     let headers = new Headers({ 'Content-Type': 'application/json' });
-    //     let options = new RequestOptions({ headers: headers });
-    //     return this._http.delete(url + id, options)
-    //         .map((response: Response) => <any>response.json())
-    //         .catch(this.handleError);
-    // }
+            catchError(this.handleError));
+    }
 
-    // private handleError(error: Response) {
-    //     console.error(error);
-    //     return Observable.throw(error.json().error || 'Server error');
-    // }
+    delete(url: string, id: number): Observable<any> {
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let options = ({ headers: headers });
+        return this._http.delete(url + id, options).pipe(
+
+            catchError(this.handleError));
+    }
+
+    private handleError(error: HttpErrorResponse) {
+        return throwError(error.message || 'Server error');
+    }
 
     //getCategories() {
     //    return this._http.get("/api/CategoryAPI/Get")

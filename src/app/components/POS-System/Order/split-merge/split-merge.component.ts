@@ -53,7 +53,9 @@ export class SplitMergeComponent implements OnInit {
   tempPrimaryItemList: any[] = [];
   secondaryItemList: any[] = [];
 
-  selectedTicket: any;
+  selectedTicket: any = {};
+
+  detailPrimaryTicket: any = {'orders':[]};
 
   constructor(
     private _menuItemService: BillingService,
@@ -93,23 +95,24 @@ export class SplitMergeComponent implements OnInit {
     )
   }
 
-  showDetail(order){
-    order.ItemList = [];
-    order.Orders = [];
-    this.selectedTicket = order;
+  showDetail(event){
+    this.selectedTicket = event.value;
+    this.selectedTicket.ItemList = [];
+    this.selectedTicket.Orders = [];
 
     // this.secondaryOrderList.splice(this.secondaryOrderList.indexOf(order),1);
     // this.secondaryOrderList = [...this.secondaryOrderList];
 
-    this.orderApi.loadOrdersNew(order.Id)
+    this.orderApi.loadOrdersNew(this.selectedTicket.Id)
     .subscribe(
         data => {
            this.orders = data;
-           order.Orders = this.orders;
+           this.selectedTicket.orders = this.orders;
            console.log('the order s ss', this.orders)
            this.orders.forEach(o => {
                o.OrderItems.forEach(item => {
-                order.ItemList.push(item)
+                //  item.newQty = 0;
+                this.selectedTicket.ItemList.push(item)
                });
               
            });
@@ -117,7 +120,7 @@ export class SplitMergeComponent implements OnInit {
            
     })
 
-    this.primaryItemList = order.ItemList;
+    this.primaryItemList = this.selectedTicket.ItemList;
     this.tempPrimaryItemList = this.primaryItemList;
   }
 
@@ -150,7 +153,9 @@ export class SplitMergeComponent implements OnInit {
   }
 
   splitOrder() {
+    let isSplit = true;
     let mainItemList = [...this.tempPrimaryItemList];
+    console.log('the list', mainItemList)
 
     let ListOrderItemPrimary=[];
     let ticketTotalWithoutVatPrimary=0;
@@ -162,123 +167,199 @@ export class SplitMergeComponent implements OnInit {
     let vatAmountPartial =0;
     let grandTotalPartial =0;
 
-    // let UnSubmittedOrder = this.getUnSubmittedOrder(this.ordersNew);
 
-    this.secondaryItemList.forEach(item => {
-      mainItemList = mainItemList.filter(i => i.Id != item.Id);
-    });
-
-    // for primary
-    mainItemList.forEach(product => {
-      let total =0;
-      let unitprice = product.UnitPrice;
+    let MainOrderItemRequestList = [];
+    let SplitOrderItemRequestList = [];
     
-      total =total +(product.Qty*product.UnitPrice);
-      ticketTotalWithoutVatPrimary=ticketTotalWithoutVatPrimary+ total;
+    let fullMergeLength : any = 0;
+    let allItemsZeroLength : any = 0;
 
-    
-      let OrderItem = {
-          "Id":product.Id,
-          "UserId": this.currentUser.UserName,
-          "FinancialYear": this.currentYear.Name,
-          "OrderNumber": product.OrderNumber,
-          "OrderDescription":product.OrderDescription,
-          "OrderId":  product.OrderId,
-          "ItemId": product.ItemId,
-          "Qty": product.Qty,
-          "UnitPrice": unitprice,
-          "TotalAmount": total,
-          "Tags": "New Order",
-          "IsSelected": false,
-          "IsVoid": false
-      };
-      ListOrderItemPrimary.push(OrderItem);
-    });
+    console.log('the original length', mainItemList.length)
 
-    vatAmountPrimary =(0.13*ticketTotalWithoutVatPrimary);
-    grandTotalPrimary = vatAmountPrimary+ticketTotalWithoutVatPrimary;
-
-
-    let MainOrderItemRequest = {
-      "TicketId":this.selectedTicket.Id,
-      "TableId":this.selectedTicket.TableId,
-      "CustomerId":this.selectedTicket.CustomerId,
-      "OrderId": 0,
-      "TicketTotal":ticketTotalWithoutVatPrimary,
-      "Discount":0,
-      "ServiceCharge":0,
-      "VatAmount": vatAmountPrimary,
-      "GrandTotal":grandTotalPrimary,
-      "Balance":grandTotalPrimary,
-      "UserId":this.currentUser.UserName,
-      "FinancialYear":this.currentYear.Name,
-      "ListOrderItem":ListOrderItemPrimary
-    }
-    
-     //for partial
-    this.secondaryItemList.forEach(product => {
-      let total =0;
-      let unitprice = product.UnitPrice;
-    
-      total =total +(product.Qty*product.UnitPrice);
-      ticketTotalWithoutVatPartial=ticketTotalWithoutVatPartial+ total;
-    
-      let OrderItem = {
-          "Id":0,
-          "UserId": this.currentUser.UserName,
-          "FinancialYear": this.currentYear.Name,
-          "OrderNumber": 0,
-          "OrderDescription":'',
-          "OrderId":  0,
-          "ItemId": product.ItemId,
-          "Qty": product.Qty,
-          "UnitPrice": unitprice,
-          "TotalAmount": total,
-          "Tags": "New Order",
-          "IsSelected": false,
-          "IsVoid": false
-      };
-      ListOrderItemPartial.push(OrderItem);
-    });
-    
-    vatAmountPartial =(0.13*ticketTotalWithoutVatPartial);
-    grandTotalPartial = vatAmountPartial+ticketTotalWithoutVatPartial;
-
-    let PartialOrderItemRequest = {
-      "TicketId":0,
-      "TableId":this.selectedTicket.TableId,
-      "CustomerId":this.selectedTicket.CustomerId,
-      "OrderId": 0,
-      "TicketTotal":ticketTotalWithoutVatPartial,
-      "Discount":0,
-      "ServiceCharge":0,
-      "VatAmount": vatAmountPartial,
-      "GrandTotal":grandTotalPartial,
-      "Balance":grandTotalPartial,
-      "UserId":this.currentUser.UserName,
-      "FinancialYear":this.currentYear.Name,
-      "ListOrderItem":ListOrderItemPartial
-    }
-
-    let details = {
-      "MainOrderItemRequest" : MainOrderItemRequest,
-      "SplitOrderItemRequest" : PartialOrderItemRequest
-    }
-    
-    console.log('primary is', MainOrderItemRequest);
-    console.log('partial is', PartialOrderItemRequest);
-    console.log('the details is', details);
-    this.mergeService.splitOrder(details)
-      .subscribe(
-        data => {
-          console.log('the data is', data)
-          this.toastrService.success('Order splited successfully!');
-          window.location.reload();
-        },
-        error => {
-          console.error('the error is', error);
+    mainItemList.forEach(item => {
+      console.log('i', item);
+      const idx = mainItemList.indexOf(item);
+      if(isSplit) {
+        if(item.newQty == null || item.newQty < 0) {
+          return isSplit = false;
         }
-      )
+        else{
+          if(item.newQty == 0) {
+            allItemsZeroLength += 1;
+
+            console.log('duplicate length of zero', allItemsZeroLength , 'origin' , mainItemList.length)
+            if(allItemsZeroLength == mainItemList.length) {
+              isSplit =  false;
+              this.toastrService.info('Sorry, you cannot merge every items of quantity 0!'); 
+              return false;
+            }else {
+              MainOrderItemRequestList.push(item);
+              isSplit =  true;
+            }
+            
+          }
+          else if(item.newQty > item.Qty) {
+            isSplit =  false;
+            this.toastrService.info('Max quantity allowed for ' + (this.getProductById(this.productList,item.ItemId)?.Name) +'is : ' + item.Qty);
+            return false;
+          }else if(item.newQty == item.Qty) {
+            fullMergeLength += 1;
+
+            console.log('duplicate length of fullMergeLength', fullMergeLength , 'origin' , mainItemList.length)
+            if(fullMergeLength == mainItemList.length){
+              isSplit =  false;
+              this.toastrService.info('Sorry, you cannot split every items!'); 
+              return false; 
+            }else{
+              SplitOrderItemRequestList.push(item);
+              isSplit =  true;
+            }
+          }else if(item.newQty < item.Qty) {
+            // let MainOrderItem = item;
+            // let SplitOrderItem = item;
+
+            // MainOrderItem.Qty = item.Qty - item.newQty;
+            MainOrderItemRequestList.push(item);
+
+
+            // SplitOrderItem.Qty = item.newQty;
+            SplitOrderItemRequestList.push(item);
+            isSplit = true;
+          }
+        }
+      }
+      
+    });
+
+    if(isSplit) {
+      // for MainOrderItemRequest
+      MainOrderItemRequestList.forEach(product => {
+        let total =0;
+        let unitprice = product.UnitPrice;
+      
+        total =total +((product.Qty - product.newQty) * product.UnitPrice);
+        ticketTotalWithoutVatPrimary=ticketTotalWithoutVatPrimary+ total;
+
+      
+        let OrderItem = {
+            "Id":product.Id,
+            "UserId": this.currentUser.UserName,
+            "FinancialYear": this.currentYear.Name,
+            "OrderNumber": product.OrderNumber,
+            "OrderDescription":product.OrderDescription,
+            "OrderId":  product.OrderId,
+            "ItemId": product.ItemId,
+            "Qty": product.Qty - product.newQty,
+            "UnitPrice": unitprice,
+            "TotalAmount": total,
+            "Tags": "New Order",
+            "IsSelected": false,
+            "IsVoid": false
+        };
+        ListOrderItemPrimary.push(OrderItem);
+      });
+
+      vatAmountPrimary =(0.13*ticketTotalWithoutVatPrimary);
+      grandTotalPrimary = vatAmountPrimary+ticketTotalWithoutVatPrimary;
+
+
+      let MainOrderItemRequest = {
+        "TicketId":this.selectedTicket.Id,
+        "TableId":this.selectedTicket.TableId,
+        "CustomerId":this.selectedTicket.CustomerId,
+        "OrderId": 0,
+        "TicketTotal":ticketTotalWithoutVatPrimary,
+        "Discount":0,
+        "ServiceCharge":0,
+        "VatAmount": vatAmountPrimary,
+        "GrandTotal":grandTotalPrimary,
+        "Balance":grandTotalPrimary,
+        "UserId":this.currentUser.UserName,
+        "FinancialYear":this.currentYear.Name,
+        "ListOrderItem":ListOrderItemPrimary
+      }
+      
+      //for SplitOrderItemRequest
+      SplitOrderItemRequestList.forEach(product => {
+        let total =0;
+        let unitprice = product.UnitPrice;
+      
+        total =total +(product.newQty*product.UnitPrice);
+        ticketTotalWithoutVatPartial=ticketTotalWithoutVatPartial+ total;
+      
+        let orderId : any;
+        let orderNumber: any;
+
+
+        if(product.newQty == product.Qty) {
+          orderId = product.OrderId;
+          orderNumber = product.OrderNumber;
+        }else{
+          orderId = 0;
+          orderNumber = 0;
+        }
+      
+
+        let OrderItem = {
+            "Id":0,
+            "UserId": this.currentUser.UserName,
+            "FinancialYear": this.currentYear.Name,
+            "OrderNumber": orderNumber,
+            "OrderDescription":'',
+            "OrderId":  orderId,
+            "ItemId": product.ItemId,
+            "Qty": product.newQty,
+            "UnitPrice": unitprice,
+            "TotalAmount": total,
+            "Tags": "New Order",
+            "IsSelected": false,
+            "IsVoid": false
+        };
+        ListOrderItemPartial.push(OrderItem);
+      });
+      
+      vatAmountPartial =(0.13*ticketTotalWithoutVatPartial);
+      grandTotalPartial = vatAmountPartial+ticketTotalWithoutVatPartial;
+
+      let SplitOrderItemRequest = {
+        "TicketId":0,
+        "TableId":this.selectedTicket.TableId,
+        "CustomerId":this.selectedTicket.CustomerId,
+        "OrderId": 0,
+        "TicketTotal":ticketTotalWithoutVatPartial,
+        "Discount":0,
+        "ServiceCharge":0,
+        "VatAmount": vatAmountPartial,
+        "GrandTotal":grandTotalPartial,
+        "Balance":grandTotalPartial,
+        "UserId":this.currentUser.UserName,
+        "FinancialYear":this.currentYear.Name,
+        "ListOrderItem":ListOrderItemPartial
+      }
+
+      let details = {
+        "MainOrderItemRequest" : MainOrderItemRequest,
+        "SplitOrderItemRequest" : SplitOrderItemRequest
+      }
+      
+      console.log('primary is', MainOrderItemRequest);
+      console.log('partial is', SplitOrderItemRequest);
+      console.log('the details is', details);
+      this.mergeService.splitOrder(details)
+        .subscribe(
+          data => {
+            console.log('the data is', data)
+            this.toastrService.success('Order splited successfully!');
+            window.location.reload();
+          },
+          error => {
+            console.error('the error is', error);
+          }
+        )
+    }
+    else{
+      this.toastrService.info('Split is not possible!');
+    }
   }
 
   getUnSubmittedOrder(orders: Order[]) {

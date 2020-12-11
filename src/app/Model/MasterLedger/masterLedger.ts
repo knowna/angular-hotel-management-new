@@ -45,8 +45,15 @@ export class MasterLedger {
     Telephone: string;
     Email: string;
     Currency: string;
-    Amount: string
-
+    Amount: string;
+    AccountTypeId: string;
+    ForeignCurrencyId: string;
+    GSTType: string;
+    ServiceCategory: string;
+    ExciseDutyType: string;
+    LedgerFBTCategory: string;
+    DRCR: string;
+    
     public constructor(Name: string) {
         this.Name = Name;
 

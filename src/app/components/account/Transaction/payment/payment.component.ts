@@ -265,7 +265,6 @@ export class PaymentComponent {
         this.modalBtnTitle = "Update";
         this.getJournalVoucher(Id)
             .subscribe((payment: AccountTrans) => {
-                debugger
                 this.indLoading = false;
                 this.paymentFrm.controls['Id'].setValue(payment.Id);
                 this.paymentFrm.controls['Name'].setValue(payment.Name);
@@ -311,7 +310,6 @@ export class PaymentComponent {
         this.modalBtnTitle = "Delete";
         this.getJournalVoucher(Id)
             .subscribe((payment: AccountTrans) => {
-                debugger
                 this.indLoading = false;
                 this.paymentFrm.controls['Id'].setValue(payment.Id);
                 this.paymentFrm.controls['Name'].setValue(payment.Name);
@@ -588,7 +586,6 @@ export class PaymentComponent {
     }
 
     onFilterDateSelect(selectedDate) {
-        debugger
         let currentYearStartDate = new Date(this.currentYear.StartDate);
         let currentYearEndDate = new Date(this.currentYear.EndDate);
 
@@ -611,12 +608,14 @@ export class PaymentComponent {
     config = {
         displayKey: 'Name', // if objects array passed which key to be displayed defaults to description
         search: true,
-        limitTo: 1000
+        limitTo: 1000,
+        height: '200px'
     };
     configAccount = {
         displayKey: 'Name', // if objects array passed which key to be displayed defaults to description
         search: true,
-        limitTo: 1000
+        limitTo: 1000,
+        height: '200px'
     };
     nepaliDateValidator(control: FormControl) {
         let nepaliDate = control.value;

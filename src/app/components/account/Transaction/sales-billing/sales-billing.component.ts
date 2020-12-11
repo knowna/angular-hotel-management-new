@@ -83,8 +83,8 @@ export class SalesBillingComponent implements OnInit {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.company = JSON.parse(localStorage.getItem('company'));
-        this.fromDate = new Date(this.currentYear['StartDate']);
-        this.toDate = new Date(this.currentYear['EndDate']);
+        this.fromDate = this.currentYear['NepaliStartDate'];
+        this.toDate = this.currentYear['NepaliEndDate'];
     }
 
     ngOnInit(): void {
@@ -194,7 +194,7 @@ export class SalesBillingComponent implements OnInit {
 
     loadPurchaseList(): void {
         this.indLoading = true;
-        this._purchaseService.get(Global.BASE_SALE_BILLING_ENDPOINT + '?fromDate=' + this.date.transform(this.fromDate, 'yyyy-MM-dd') + '&toDate=' + this.date.transform(this.toDate, 'yyyy-MM-dd') + '&TransactionTypeId=' + 3)
+        this._purchaseService.get(Global.BASE_SALE_BILLING_ENDPOINT + '?fromDate=' + this.fromDate + '&toDate=' + this.toDate + '&TransactionTypeId=' + 3)
             .subscribe(
             SalesBilling => {
                 SalesBilling.map((purch) => purch['File'] = Global.BASE_HOST_ENDPOINT + Global.BASE_FILE_UPLOAD_ENDPOINT + '?Id=' + purch.Id + '&ApplicationModule=JournalVoucher');
@@ -209,7 +209,7 @@ export class SalesBillingComponent implements OnInit {
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
         this.modalTitle = "Add Sales Billing";
-        this.modalBtnTitle = "Save & Submit";
+        this.modalBtnTitle = "Save";
         this.reset();
         this.salesBillingForm.controls['Name'].setValue('Direct Sales');
         this.modalRef = this.modalService.show(this.TemplateRef, {
@@ -233,7 +233,7 @@ export class SalesBillingComponent implements OnInit {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Sales Billing";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.getSalesDetails(Id)
             .subscribe((SalesBilling: AccountTrans) => {
                 this.indLoading = false;
@@ -672,7 +672,7 @@ export class SalesBillingComponent implements OnInit {
      */
     filterPurchasesByDate() {
         this.indLoading = true;
-        this._purchaseService.get(Global.BASE_SALE_BILLING_ENDPOINT + '?fromDate=' + this.date.transform(this.fromDate, 'yyyy-MM-dd') + '&toDate=' + this.date.transform(this.toDate, 'yyyy-MM-dd') + '&TransactionTypeId=' + 3)
+        this._purchaseService.get(Global.BASE_SALE_BILLING_ENDPOINT + '?fromDate=' + this.fromDate+ '&toDate=' + this.toDate + '&TransactionTypeId=' + 3)
             .subscribe(
             SalesBilling => {
                 this.SalesBilling = SalesBilling;

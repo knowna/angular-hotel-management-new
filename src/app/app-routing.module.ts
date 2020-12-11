@@ -110,6 +110,7 @@ import { PaymentComponent } from './components/account/Transaction/payment/payme
 import { ContraComponent } from './components/account/Transaction/contra/contra.component';
 import { CreditNoteComponent } from './components/account/Transaction/credit-note/cerdit-note.component';
 import { DebitNoteComponent } from './components/account/Transaction/debit-note/debit-note.component';
+import { SalesComponent } from './components/account/Transaction/sales/sales.component';
 
 
 const routes: Routes = [
@@ -349,7 +350,7 @@ const routes: Routes = [
   },
   {
     path: 'Account/sales',
-    component: SalesBillingComponent,
+    component: SalesComponent,
     canActivate: [AuthGuard],
   },
   // {
