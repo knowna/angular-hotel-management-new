@@ -120,9 +120,11 @@ export class PartialMergeComponent implements OnInit {
 
     this.detailPrimaryTicket.ItemList = [];
 
+    this.detailPrimaryTicket.showLoader = true;
     this.orderApi.loadOrdersNew(order.Id)
-    .subscribe(
+      .subscribe(
         data => {
+          this.detailPrimaryTicket.showLoader = false;
           this.detailPrimaryTicket.orders = data;
           this.detailPrimaryTicket.orders.forEach(o => {
             o.OrderItems.forEach(item => {      
@@ -130,7 +132,12 @@ export class PartialMergeComponent implements OnInit {
               this.detailPrimaryTicket.ItemList.push(item);
             });
           });
-    });
+        },
+        error => {
+          this.detailPrimaryTicket.showLoader = false;
+          this.detailPrimaryTicket.orders = [];
+        }
+      );
 
     this.fromItemList = this.detailPrimaryTicket.ItemList;
     this.tempFromItemList = this.fromItemList;
@@ -156,9 +163,11 @@ export class PartialMergeComponent implements OnInit {
     this.deatilSecondaryTicket.ItemList = [];
     this.toItemList = [];
 
+    this.deatilSecondaryTicket.showLoader = true;
     this.orderApi.loadOrdersNew(order.Id)
-    .subscribe(
+      .subscribe(
         data => {
+          this.deatilSecondaryTicket.showLoader = false;
           this.deatilSecondaryTicket.orders = data;
           this.deatilSecondaryTicket.orders.forEach(o => {
             o.OrderItems.forEach(item => {      
@@ -169,7 +178,11 @@ export class PartialMergeComponent implements OnInit {
           this.toItemList = this.deatilSecondaryTicket.ItemList;
           this.tempToItemList = this.toItemList;
           console.log('the se',this.tempToItemList)
-    })
+        },
+        error => {
+          this.deatilSecondaryTicket.showLoader = false;
+          this.deatilSecondaryTicket.orders = [];
+        })
   }
 
   moveOrder(item){
@@ -254,11 +267,12 @@ export class PartialMergeComponent implements OnInit {
       console.log('i', item);
       const idx = mainFromItemList.indexOf(item);
       if(isSplit) {
-        if(item.newQty == null || item.newQty < 0) {
+        if(item.newQty < 0) {
           return isSplit = false;
         }
         else{
-          if(item.newQty == 0) {
+          if(item.newQty == 0 || item.newQty == null) {
+            item.newQty = 0; 
             allItemsZeroLength += 1;
 
             console.log('duplicate length of zero', allItemsZeroLength , 'origin' , mainFromItemList.length)
