@@ -375,25 +375,29 @@ export class PartialMergeComponent implements OnInit {
         total =total +((newQuantity)*product.UnitPrice);
         ticketTotalWithoutVatPrimary=ticketTotalWithoutVatPrimary+ total;
 
+        let id: any = 0;
         let orderId : any = 0;
         let orderNumber: any = 0;
         // let Id = 0;
 
         if(product.newQty) {
           if(product.newQty == product.Qty) {
+            id = product.Id;
             orderId = product.OrderId;
             orderNumber = product.OrderNumber;
           }else{
+            id = 0;
             orderId = 0;
             orderNumber = 0;
           }
         }else{
+          id = product.Id;
           orderId = product.OrderId;
           orderNumber = product.OrderNumber;
         }
       
         let OrderItem = {
-            "Id":product.Id,
+            "Id":id,
             "UserId": this.currentUser.UserName,
             "FinancialYear": this.currentYear.Name,
             "OrderNumber": orderNumber,
