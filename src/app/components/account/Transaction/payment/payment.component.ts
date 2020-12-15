@@ -265,7 +265,7 @@ export class PaymentComponent {
         this.modalBtnTitle = "Save";
         this.getJournalVoucher(Id)
             .subscribe((payment: AccountTrans) => {
-                console.log('the payment is', payment)
+                // console.log('the payment is', payment)
                 this.indLoading = false;
                 this.paymentFrm.controls['Id'].setValue(payment.Id);
                 this.paymentFrm.controls['Name'].setValue(payment.Name);
