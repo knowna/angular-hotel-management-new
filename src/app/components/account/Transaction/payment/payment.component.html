@@ -68,8 +68,17 @@
                             <span *ngIf="row.File == ''">Not Added</span>
                         </td>
                         <td class="export-no-display">
-                            <img src="../../images/Edit.png" (click)="editPayment(row.Id)" title="Edit Voucher" height="32" width="32" />
-                            <img src="../../images/Delete.png" (click)="deletePayment(row.Id)" title="Delete Voucher" height="32" width="32" />
+                            <div class="d-flex">
+                                <button class="btn btn-primary btn-sm" (click)="editPayment(row.Id)">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm ml-2" (click)="deletePayment(row.Id)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+
+                            <!-- <img src="../../images/Edit.png" (click)="editPayment(row.Id)" title="Edit Voucher" height="32" width="32" />
+                            <img src="../../images/Delete.png" (click)="deletePayment(row.Id)" title="Delete Voucher" height="32" width="32" /> -->
                         </td>
                     </tr>
                     <tr *ngFor="let transaction of row.AccountTransactionValues">
@@ -265,6 +274,9 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <ngx-select-dropdown (searchChange)="searchChangeAccountId($event)" formControlName="AccountId" [config]="configAccount" [options]="account"></ngx-select-dropdown>
+                                <!-- <select class="form-control " formControlName="AccountId">
+                                    <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option>
+                                </select> -->
                                 <div *ngIf="!paymentFrm.controls.AccountTransactionValues.controls[i].controls.AccountId.valid && formSubmitAttempt" class="alert alert-danger">
                                     Account is required
                                 </div>
