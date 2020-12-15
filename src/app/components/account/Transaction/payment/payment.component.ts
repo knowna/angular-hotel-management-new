@@ -262,7 +262,7 @@ export class PaymentComponent {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Payment";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.getJournalVoucher(Id)
             .subscribe((payment: AccountTrans) => {
                 this.indLoading = false;
@@ -442,6 +442,8 @@ export class PaymentComponent {
         if (payment.valid) {
             const control = <FormArray>this.paymentFrm.controls['AccountTransactionValues'].value;
             const controls = <FormArray>this.paymentFrm.controls['AccountTransactionValues'];
+
+            console.log('payment', payment);
             for (var i = 0; i < control.length; i++) {
                 let Id = control[i]['Id'];
                 if (Id > 0) {
