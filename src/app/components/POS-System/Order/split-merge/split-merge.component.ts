@@ -292,6 +292,7 @@ export class SplitMergeComponent implements OnInit {
         total =total +(product.newQty*product.UnitPrice);
         ticketTotalWithoutVatPartial=ticketTotalWithoutVatPartial+ total;
       
+        let id: any;
         let orderId : any;
         let orderNumber: any;
 
@@ -299,14 +300,16 @@ export class SplitMergeComponent implements OnInit {
         if(product.newQty == product.Qty) {
           orderId = product.OrderId;
           orderNumber = product.OrderNumber;
+          id = product.Id;
         }else{
+          id = 0;
           orderId = 0;
           orderNumber = 0;
         }
       
 
         let OrderItem = {
-            "Id":0,
+            "Id":id,
             "UserId": this.currentUser.UserName,
             "FinancialYear": this.currentYear.Name,
             "OrderNumber": orderNumber,
