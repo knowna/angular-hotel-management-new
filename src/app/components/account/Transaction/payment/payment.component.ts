@@ -440,30 +440,38 @@ export class PaymentComponent {
         payment.get('CompanyCode').setValue(this.currentUser && this.company['BranchCode'] || '');
 
         if (payment.valid) {
-            const control = <FormArray>this.paymentFrm.controls['AccountTransactionValues'].value;
+            const control = this.paymentFrm.controls['AccountTransactionValues'].value;
             const controls = <FormArray>this.paymentFrm.controls['AccountTransactionValues'];
 
-            console.log('payment', payment);
-            for (var i = 0; i < control.length; i++) {
-                let Id = control[i]['Id'];
-                if (Id > 0) {
-                    let CurrentAccount = control[i]['AccountId'];
-                    this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
-                    let CurrentAccountId = this.currentaccount.Id;
-                    let currentaccountvoucher = control[i];
-                    let instance = this.fb.group(currentaccountvoucher);
-                    instance.controls["AccountId"].setValue(CurrentAccountId);
-                    controls.push(instance);
-                }
-                else {
-                    let xcurrentaccountvoucher = control[i]['AccountId'];
-                    let currentaccountvoucher = control[i];
-                    let instance = this.fb.group(currentaccountvoucher);
-                    this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
-                    instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
-                    controls.push(instance);
-                }
-            }
+
+            let accountList = [];
+            control.forEach(account => {
+                let Id = account.AccountId.Id;
+                account.AccountId  = Id;
+
+                accountList.push(account);
+            });
+
+            // for (var i = 0; i < control.length; i++) {
+            //     let Id = control[i]['Id'];
+            //     if (Id > 0) {
+            //         let CurrentAccount = control[i]['AccountId'];
+            //         this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
+            //         let CurrentAccountId = this.currentaccount.Id;
+            //         let currentaccountvoucher = control[i];
+            //         let instance = this.fb.group(currentaccountvoucher);
+            //         instance.controls["AccountId"].setValue(CurrentAccountId);
+            //         controls.push(instance);
+            //     }
+            //     else {
+            //         let xcurrentaccountvoucher = control[i]['AccountId'];
+            //         let currentaccountvoucher = control[i];
+            //         let instance = this.fb.group(currentaccountvoucher);
+            //         this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
+            //         instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
+            //         controls.push(instance);
+            //     }
+            // }
 
             let Id = payment.get('Id').value;
             if (Id > 0) {
@@ -488,7 +496,8 @@ export class PaymentComponent {
                 FinancialYear: this.paymentFrm.controls['FinancialYear'].value,
                 UserName: this.paymentFrm.controls['UserName'].value,
                 CompanyCode: this.paymentFrm.controls['CompanyCode'].value,
-                AccountTransactionValues: this.paymentFrm.controls['AccountTransactionValues'].value
+                // AccountTransactionValues: this.paymentFrm.controls['AccountTransactionValues'].value
+                AccountTransactionValues: accountList
             }
 
             switch (this.dbops) {
