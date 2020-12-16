@@ -114,6 +114,15 @@ import { SalesComponent } from './components/account/Transaction/sales/sales.com
 import { StockInHandComponent } from './components/InventoryDashboard/inventory report/stock-in-hand.component';
 import { ReservationCustomerComponent } from './components/Reservation/customer/customer.component';
 import { CheckInComponent } from './components/Reservation/checkin/checkin.component';
+import { PaymentTypeComponent } from './components/Reservation/payment-type/payment-type.component';
+import { CheckOutComponent } from './components/Reservation/checkout/checkout.component';
+import { ReservationInquiryComponent } from './components/Reservation/ReservationInquiry/ReservationInquiry.component';
+import { RoomStatusComponent } from './components/Reservation/reservation-status/Reservationstatus.component';
+import { ReservationComponent } from './components/Reservation/reservation/reservation.component';
+import { FacilityComponent } from './components/Reservation/facility/facility.component';
+import { CustomerTypeComponent } from './components/Reservation/customer-type/customer-type.component';
+import { ReservationTypeComponent } from './components/Reservation/reservation-type/reservation-type.component';
+import { RoomComponent } from './components/Reservation/room/room.component';
 
 
 const routes: Routes = [
@@ -157,85 +166,71 @@ const routes: Routes = [
     path: "split-order",
     component: SplitMergeComponent
   },
-
-  // {
-  //   path: "reservation",
-  //   component: ReservationComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
+  {
+    path: "reservation",
+    component: ReservationComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: "reservation/checkin",
     component: CheckInComponent,
     canActivate: [AuthGuard]
   },
-
-  // {
-  //   path: "reservation/reservationstatus",
-  //   component: RoomStatusComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
-  // {
-  //   path: "reservation/checkout",
-  //   component: CheckOutComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
-  // {
-  //   path: "reservation/reservationinquiry",
-  //   component: ReservationInquiryComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
+  {
+    path: "reservation/reservationstatus",
+    component: RoomStatusComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "reservation/checkout",
+    component: CheckOutComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "reservation/reservationinquiry",
+    component: ReservationInquiryComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: "reservation/customer",
     component: ReservationCustomerComponent,
     canActivate: [AuthGuard]
   },
 
-  // {
-  //   path: "reservation/payment",
-  //   component: PaymentTypeComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
+  {
+    path: "reservation/payment",
+    component: PaymentTypeComponent,
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: "reservation/roomtype", component: RoomTypeComponent,
   //   canActivate: [AuthGuard]
   // },
-
-  // {
-  //   path: "reservation/facility",
-  //   component: FacilityComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
-  // {
-  //   path: "reservation/roomtype",
-  //   component: RoomTypeComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
-  // {
-  //   path: "reservation/room",
-  //   component: RoomComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
-  // {
-  //   path: "reservation/customertypes",
-  //   component: CustomerTypeComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
-
-  // {
-  //   path: "reservation/reservationtype",
-  //   component: ReservationTypeComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
+  {
+    path: "reservation/facility",
+    component: FacilityComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "reservation/roomtype",
+    component: RoomTypeComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "reservation/room",
+    component: RoomComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "reservation/customertypes",
+    component: CustomerTypeComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "reservation/reservationtype",
+    component: ReservationTypeComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: "billing/order",
     component: TableComponent,

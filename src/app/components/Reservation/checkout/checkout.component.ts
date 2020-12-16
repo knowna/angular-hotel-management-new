@@ -1,23 +1,23 @@
 ﻿import { Component, OnInit, ViewChild, TemplateRef, ElementRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
-import { RoomReserverd } from '../../../models/reservation/room-reserved.model';
-import { Reservation } from '../../../models/reservation/reservation.model';
-import { Room } from '../../../models/reservation/room.model';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
-import { ReservationService } from '../../../services/reservation/reservation.services';
-import { RoomOccupiedService } from '../../../services/reservation/room-occupied.services';
-import { FileService } from '../../../services/file.service';
 
 import { DBOperation } from '../../../Shared/enum';
 import { Observable } from 'rxjs/Rx';
 import { Global } from '../../../Shared/global';
-import { Customer } from '../../../models/reservation/customer.model';
-import { RoomType } from '../../../models/reservation/customer-screen.model';
 import { forkJoin } from "rxjs/observable/forkJoin";
+import { Reservation } from 'src/app/Model/reservation/reservation.model';
+import { RoomReserverd } from 'src/app/Model/reservation/room-reserved.model';
+import { Room } from 'src/app/Model/reservation/room.model';
+import { Customer } from 'src/app/Model/customer.model';
+import { RoomType } from 'src/app/Model/reservation/customer-screen.model';
+import { ReservationTypeService } from 'src/app/Service/reservation/reservation-type.services';
+import { RoomOccupiedService } from 'src/app/Service/reservation/room-occupied.services';
+import { FileService } from 'src/app/Service/file.service';
 
 @Component({
     templateUrl: './checkout.component.html'
@@ -55,7 +55,7 @@ export class CheckOutComponent implements OnInit {
     };
     constructor(
         private fb: FormBuilder,
-        private _reservationService: ReservationService,
+        private _reservationService: ReservationTypeService,
         private _roomOccupiedService: RoomOccupiedService,
         private modalService: BsModalService,
         private fileService: FileService,

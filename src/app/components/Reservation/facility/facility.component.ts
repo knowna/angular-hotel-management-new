@@ -1,7 +1,5 @@
 ﻿import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { FacilityService } from '../../../services/reservation/facility.services';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { Facility } from '../../../models/reservation/facility.model';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
@@ -9,6 +7,8 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { DBOperation } from '../../../Shared/enum';
 import { Observable } from 'rxjs/Rx';
 import { Global } from '../../../Shared/global';
+import { Facility } from 'src/app/Model/reservation/facility.model';
+import { FacilityService } from 'src/app/Service/reservation/facility.services';
 
 @Component({
     templateUrl: './facility.component.html'
