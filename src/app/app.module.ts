@@ -218,6 +218,7 @@ import { SalesComponent } from './components/account/Transaction/sales/sales.com
 import { SalesDetailComponent } from './components/account/Transaction/sales/sales-detail/salesDetail.component';
 import { StockInHandComponent } from './components/InventoryDashboard/inventory report/stock-in-hand.component';
 import { ReservationCustomerComponent } from './components/Reservation/customer/customer.component';
+import { CheckInComponent } from './components/Reservation/checkin/checkin.component';
 
 @NgModule({
   imports: [
@@ -275,7 +276,7 @@ import { ReservationCustomerComponent } from './components/Reservation/customer/
     RoomTypeComponent,
     MasterLedgerComponent,
     PagenotfoundComponent,
-    // CheckInComponent,
+    CheckInComponent,
     FileUploadComponent,
     MenuCategoryComponent1,
     JournalVouchercomponent,

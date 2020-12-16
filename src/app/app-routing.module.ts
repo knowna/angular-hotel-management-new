@@ -113,6 +113,7 @@ import { DebitNoteComponent } from './components/account/Transaction/debit-note/
 import { SalesComponent } from './components/account/Transaction/sales/sales.component';
 import { StockInHandComponent } from './components/InventoryDashboard/inventory report/stock-in-hand.component';
 import { ReservationCustomerComponent } from './components/Reservation/customer/customer.component';
+import { CheckInComponent } from './components/Reservation/checkin/checkin.component';
 
 
 const routes: Routes = [
@@ -163,11 +164,11 @@ const routes: Routes = [
   //   canActivate: [AuthGuard]
   // },
 
-  // {
-  //   path: "reservation/checkin",
-  //   component: CheckInComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: "reservation/checkin",
+    component: CheckInComponent,
+    canActivate: [AuthGuard]
+  },
 
   // {
   //   path: "reservation/reservationstatus",
