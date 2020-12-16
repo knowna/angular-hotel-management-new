@@ -216,6 +216,8 @@ import { CreditNoteComponent } from './components/account/Transaction/credit-not
 import { DebitNoteComponent } from './components/account/Transaction/debit-note/debit-note.component';
 import { SalesComponent } from './components/account/Transaction/sales/sales.component';
 import { SalesDetailComponent } from './components/account/Transaction/sales/sales-detail/salesDetail.component';
+import { StockInHandComponent } from './components/InventoryDashboard/inventory report/stock-in-hand.component';
+import { ReservationCustomerComponent } from './components/Reservation/customer/customer.component';
 
 @NgModule({
   imports: [
@@ -282,7 +284,7 @@ import { SalesDetailComponent } from './components/account/Transaction/sales/sal
     // ReservationComponent,
     // CheckOutComponent,
     // ReservationInquiryComponent,
-    // ReservationCustomerComponent,
+    ReservationCustomerComponent,
     // RoomComponent,
     // PaymentTypeComponent,
     // FacilityComponent,
@@ -303,7 +305,7 @@ import { SalesDetailComponent } from './components/account/Transaction/sales/sal
     CategoryComponent,
     // InventoryDashboardComponent,
     InventoryItemComponent,
-    // StockInHandComponent,
+    StockInHandComponent,
     // InventoryReceiptComponent,
     // InventoryReceiptDetailsComponent,
     // PeriodicConsumptionComponent,

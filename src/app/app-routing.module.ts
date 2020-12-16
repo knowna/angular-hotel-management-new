@@ -111,6 +111,8 @@ import { ContraComponent } from './components/account/Transaction/contra/contra.
 import { CreditNoteComponent } from './components/account/Transaction/credit-note/cerdit-note.component';
 import { DebitNoteComponent } from './components/account/Transaction/debit-note/debit-note.component';
 import { SalesComponent } from './components/account/Transaction/sales/sales.component';
+import { StockInHandComponent } from './components/InventoryDashboard/inventory report/stock-in-hand.component';
+import { ReservationCustomerComponent } from './components/Reservation/customer/customer.component';
 
 
 const routes: Routes = [
@@ -185,11 +187,11 @@ const routes: Routes = [
   //   canActivate: [AuthGuard]
   // },
 
-  // {
-  //   path: "reservation/customer",
-  //   component: ReservationCustomerComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: "reservation/customer",
+    component: ReservationCustomerComponent,
+    canActivate: [AuthGuard]
+  },
 
   // {
   //   path: "reservation/payment",
@@ -327,11 +329,11 @@ const routes: Routes = [
     component: WareHouseTypeComponent,
     canActivate: [AuthGuard]
   },
-  // {
-  //   path: 'Inventory/stockinhand',
-  //   component: StockInHandComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'Inventory/stockinhand',
+    component: StockInHandComponent,
+    canActivate: [AuthGuard]
+  },
   
   {
     path: 'Account/ledger',

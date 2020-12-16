@@ -1,0 +1,149 @@
+﻿<reservationdashboard-app></reservationdashboard-app>
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        Room Allocation
+    </div>
+    <div class='panel-body'>
+        <div class='table-responsive'>
+            <div style="padding-bottom:10px">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img src="../../images/Add.png" (click)="openModal(template)" height="60" width="60" />
+                    </div>
+                    <div class="col-md-9 text-right">
+                        <button (click)="getData('today')" class="btn btn-info">
+                            <i class="fa fa-clock"></i> New
+                        </button>
+                        <button (click)="getData('all')" class="btn btn-success">
+                            <i class="fa fa-clock"></i> Old
+                        </button>
+                        <button class="btn btn-primary" (click)="exportTableToExcel('TblRoomAllocation')"> Export</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-info" role="alert" *ngIf="isLoading">
+                            <img src="../../images/loading.gif" width="32" height="32" /> Loading...
+                        </div>
+                        <div *ngIf='occupiedRooms && occupiedRooms.length==0' class="alert alert-info" role="alert">No record found!</div>
+                    </div>
+                </div>
+                <table class='table table-striped' *ngIf='occupiedRooms && occupiedRooms.length' id="TblRoomAllocation">
+                    <thead>
+                        <tr>
+                            <th colspan="3" class="text-center">
+                                <strong>{{ company?.NameEnglish }}</strong>
+                                <br /> Room Allocation Status
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Check In Date</th>
+                            <th>Check Out Date</th>
+                            <th class="export-no-display">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let or of occupiedRooms">
+                            <td>{{getCustomer(or.CustomerId)?.CustomerName}}(Res.{{ or.ReservationId }})</td>
+                            <td>{{getReservation(or.ReservationId)?.CheckInDate | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{getReservation(or.ReservationId)?.CheckOutDate | date: 'dd/MM/yyyy'}}</td>
+                            <td class="export-no-display">
+                                <span>
+                                    <img src="../../images/Edit.png" (click)="editOccupiedRoom(or.Id,template)" height="32" width="32" />
+                                </span>
+                                <span>
+                                    <img src="../../images/Delete.png" (click)="deleteOccupiedRoom(or.Id,template)" height="32" width="32" />
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{msg}}
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #template>
+    <form class="panel-primary" novalidate (ngSubmit)="onSubmit(occupiedRoomForm)" [formGroup]="occupiedRoomForm">
+        <div class="modal-header panel-heading">
+            <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-3" align="right">Reservation Of:</label>
+                    <div class="col-sm-7" style="margin: inherit;">
+                        <select class="col-md-3 form-control" formControlName="ReservationId" (change)="fillForm($event)" setAutoFocus tabindex="1">
+                            <option class="form-control" *ngFor="let reservation of reservations" [ngValue]="reservation.Id">{{getCustomer(reservation.CustomerId).CustomerName}} (Res. {{reservation.Id}})</option>
+                        </select>
+                        <div class="alert alert-danger" *ngIf="occupiedRoomForm.get('ReservationId').hasError('required') && formSubmitAttempt">
+                            Reservation field is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-3" align="right">Customer:</label>
+                    <div class="col-sm-7" style="margin: inherit;">
+                        <select class="col-md-3 form-control" formControlName="CustomerId" tabindex="2">
+                            <option class="form-control" *ngFor="let customer of customers" [ngValue]="customer.Id"> {{customer.CustomerName}}</option>
+                        </select>
+                        <div class="alert alert-danger" *ngIf="occupiedRoomForm.get('CustomerId').hasError('required') && formSubmitAttempt">
+                            Reservation Id field is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="occupiedRoomForm.controls.listRoomOccupiedDetail.controls.length">
+                <div formArrayName="listRoomOccupiedDetail" class="panel panel-default">
+                    <div class="col-sm-12" *ngFor="let occupancyD of occupiedRoomForm.controls.listRoomOccupiedDetail.controls; let i=index" [formGroupName]="i" style="margin-bottom:10px;">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label col-sm-3" align="right">Room:</label>
+                                <select class="col-md-6 form-control" formControlName="RoomId" tabindex="3">
+                                    <option class="form-control" *ngFor="let room of rooms" [ngValue]="room.Id">Room {{room.RoomNumber}}</option>
+                                </select>
+                                <div class="alert alert-danger" *ngIf="occupancyD.get('RoomId').hasError('required') && formSubmitAttempt">
+                                    Room field is required
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label col-sm-3" align="right">Guest:</label>
+                                <input type="text" class="col-md-6 form-control" placeholder="Guest Name" formControlName="GuestName">
+                                <div class="alert alert-danger" *ngIf="occupancyD.get('GuestName').hasError('required') && formSubmitAttempt">
+                                    Guest Name field is required
+                                </div>
+                            </div>
+                            <div class="col-sm-2 close-btn" (click)="removeRoom(i)">
+                                <i class="fa fa-times"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 pull-right">
+                    <button type="button" (click)="addRoom()" class="btn btn-success col-sm-1" tabindex="4">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div>
+                <button type="submit" class="btn btn-success pull-left" tabindex="5">{{modalBtnTitle}}</button>
+                <a class="btn btn-danger pull-right" (click)="modalRef.hide()" tabindex="6">Cancel</a>
+            </div>
+        </div>
+    </form>
+</ng-template>

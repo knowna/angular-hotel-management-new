@@ -1,0 +1,68 @@
+﻿<reservationdashboard-app></reservationdashboard-app>
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        PAYMENT TYPES
+    </div>
+    <div class='panel-body'>
+        <div class='table-responsive'>
+            <div style="padding-bottom:10px">
+                <img src="../../images/Add.png" (click)="openModal(template)" height="60" width="60" />
+                <div class="alert alert-info" role="alert" *ngIf="isLoading"><img src="../../images/loading.gif" width="32" height="32" /> Loading...</div>
+                <div *ngIf='paymentTypes && paymentTypes.length==0' class="alert alert-info" role="alert">No record found!</div>
+                <table class='table table-striped' *ngIf='paymentTypes && paymentTypes.length'>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let customerType of paymentTypes">
+                            <td>{{customerType.Name}}</td>
+                            <td>
+                                <span><img src="../../images/Edit.png" (click)="editDepartment(customerType.Id,template)" height="32" width="32" /></span>
+                                <span><img src="../../images/Delete.png" (click)="deleteDepartment(customerType.Id,template)" height="32" width="32" /></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                </div>
+            </div>
+            <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{msg}}
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #template>
+    <form class="panel-primary" novalidate (ngSubmit)="onSubmit(paymentTypeForm)" [formGroup]="paymentTypeForm">
+        <div class="modal-header panel-heading">
+            <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="form-group">
+                    <label class="control-label col-sm-2">Name:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" placeholder="" formControlName="Name" setAutoFocus  tabindex="1">
+                        <div class="alert alert-danger" *ngIf="paymentTypeForm.get('Name').hasError('required') && formSubmitAttempt">
+                            Name is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div>
+                <button type="submit" class="btn btn-success pull-left" tabindex="2">{{modalBtnTitle}}</button>
+                <a class="btn btn-danger pull-right" (click)="modalRef.hide()" tabindex="3">Cancel</a>
+            </div>
+        </div>
+    </form>
+</ng-template>
