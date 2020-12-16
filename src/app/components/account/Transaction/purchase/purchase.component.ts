@@ -14,6 +14,7 @@ import { PurchaseDetailsService } from 'src/app/Service/Billing/PurchaseDetails.
 import { AccountTransValuesService } from 'src/app/Service/accountTransValues.service';
 import { Account, EntityMock } from 'src/app/Model/Account/account';
 import { AccountTrans } from 'src/app/Model/AccountTransaction/accountTrans';
+import { ToastrService } from 'ngx-toastr';
 
 type CSV = any[][];
 
@@ -69,10 +70,15 @@ export class PurchaseComponent implements OnInit {
     public inventoryItemName: InventoryItem;
     public currentItem: string;
 
-    constructor(private fb: FormBuilder, private _purchaseService: PurchaseService, 
+    constructor(
+        private fb: FormBuilder, 
+        private _purchaseService: PurchaseService, 
         private _purchaseDetailsService: PurchaseDetailsService, 
         private _accountTransValues: AccountTransValuesService, 
-        private date: DatePipe, private modalService: BsModalService) {
+        private date: DatePipe, 
+        private modalService: BsModalService,
+        private toastrService: ToastrService) {
+
         this._purchaseService.getAccounts().subscribe(data => { this.account = data });
         this._purchaseService.getInventoryItems().subscribe(data => { this.inventoryItem = data });
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
@@ -422,14 +428,17 @@ export class PurchaseComponent implements OnInit {
     removePurchaseitems(i: number) {
         let controls = <FormArray>this.purchaseFrm.controls['PurchaseDetails'];
         let controlToRemove = this.purchaseFrm.controls.PurchaseDetails['controls'][i].controls;
+        // console.log('the contro', controlToRemove)
         let selectedControl = controlToRemove.hasOwnProperty('Id') ? controlToRemove.Id.value : 0;
 
-        let currentaccountid = controlToRemove.Id.value;
+        let currentaccountid = controlToRemove.PurchaseId.value;
 
         if (currentaccountid != "0") {
-            this._purchaseDetailsService.delete(Global.BASE_PURCHASEDETAILS_ENDPOINT, currentaccountid).subscribe(data => {
-                (data == 1) && controls.removeAt(i);
-            });
+            this._purchaseDetailsService.delete(Global.BASE_PURCHASEDETAILS_ENDPOINT, currentaccountid)
+                .subscribe(data => {
+                    (data == 1) && controls.removeAt(i);
+                    this.toastrService.success('Item removed successfully!');
+                });
         } else {
             if (i >= 0) {
                 controls.removeAt(i);
@@ -455,9 +464,13 @@ export class PurchaseComponent implements OnInit {
         let currentaccountid = controlToRemove.Id.value;
 
         if (currentaccountid != "0") {
-            this._accountTransValues.delete(Global.BASE_JOURNAL_ENDPOINT, currentaccountid).subscribe(data => {
-                (data == 1) && controls.removeAt(i);
-            });
+            this._accountTransValues.delete(Global.BASE_JOURNAL_ENDPOINT, currentaccountid)
+                .subscribe(
+                    data => {
+                        (data == 1) && controls.removeAt(i);
+                        this.toastrService.success('Data removed successfully!');
+                    }
+                );
         } else {
             if (i >= 0) {
                 controls.removeAt(i);

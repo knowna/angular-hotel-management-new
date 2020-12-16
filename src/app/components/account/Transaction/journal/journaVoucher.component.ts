@@ -15,6 +15,7 @@ import { Account, EntityMock } from 'src/app/Model/Account/account';
 import { AccountTransValuesService } from 'src/app/Service/accountTransValues.service';
 import { FileService } from 'src/app/Service/file.service';
 import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
+import { ToastrService } from 'ngx-toastr';
 
 // Accessing global variable
 type CSV = any[][];
@@ -76,7 +77,8 @@ export class JournalVouchercomponent implements OnInit {
         private fb: FormBuilder, private _journalvoucherService: JournalVoucherService,
         private _accountTransValues: AccountTransValuesService, private date: DatePipe,
         private modalService: BsModalService,
-        private fileService: FileService
+        private fileService: FileService,
+        private toastrService: ToastrService
     ) {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -416,6 +418,11 @@ export class JournalVouchercomponent implements OnInit {
 
     //remove the rows//
     removeAccount(i: number) {
+        // updated one
+        // let controls = <FormArray>this.journalFrm.controls['AccountTransactionValues'];
+        // controls.removeAt(i);
+
+
         let controls = <FormArray>this.journalFrm.controls['AccountTransactionValues'];
         let controlToRemove = this.journalFrm.controls.AccountTransactionValues['controls'][i].controls;
         let selectedControl = controlToRemove.hasOwnProperty('Id') ? controlToRemove.Id.value : 0;
@@ -423,9 +430,13 @@ export class JournalVouchercomponent implements OnInit {
         let currentaccountid = controlToRemove.Id.value;
 
         if (currentaccountid != "0") {
-            this._accountTransValues.delete(Global.BASE_JOURNAL_ENDPOINT, currentaccountid).subscribe(data => {
-                (data == 1) && controls.removeAt(i);
-            });
+            this._accountTransValues.delete(Global.BASE_JOURNAL_ENDPOINT, currentaccountid)
+                .subscribe(
+                    data => {   
+                        (data == 1) && controls.removeAt(i);
+                        this.toastrService.success('Data removed successfully!');
+                    }
+                );
         } else {
             if (i >= 0) {
                 controls.removeAt(i);
