@@ -72,10 +72,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-3 custom-padding">
-                                    <!-- <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="AccountId" [config]="config" [options]="account" (change)="DropdownChange($event, i)"></ngx-select-dropdown> -->
-                                    <select class="form-control " formControlName="AccountId">
+                                    <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="AccountId" [config]="config" [options]="account"></ngx-select-dropdown>
+                                    <!-- <select class="form-control " formControlName="AccountId">
                                         <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option>
-                                    </select>
+                                    </select> -->
                                     <div *ngIf="!journalFrm.controls.AccountTransactionValues.controls[i].controls.AccountId.valid && formSubmitAttempt" class="alert alert-danger">
                                         Select the Particular
                                     </div>
