@@ -1,47 +1,48 @@
-﻿import { Component, OnInit, TemplateRef } from '@angular/core';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+﻿import { Component, OnInit } from '@angular/core';
 
-
+import { ProfitAndLoss } from '../../../Model/ProfitAndLoss';
 import { Observable } from 'rxjs/Rx';
+import { Global } from '../../../Shared/global';
 import { DatePipe } from '@angular/common';
-import { MaterializedView } from 'src/app/Model/materializedview';
-import { NepaliMonth } from 'src/app/Model/NepaliMonth';
-import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
-import { Global } from 'src/app/Shared/global';
+import { ViewInventoryItem } from '../../../Model/Inventory/stock-in-hand';
+import { InventoryItemService } from 'src/app/Service/Inventory/InventoryItem.service';
 
 @Component({
-    templateUrl: './materializedview.component.html'
+    templateUrl: './stock-in-hand.component.html'
 })
 
-export class MaterializedViewComponent {
+export class StockInHandComponent implements OnInit {
     currentYear: any;
     currentUser: any;
     company: any;
-    materializedViews: MaterializedView[];
+    ViewInventoryItems: ViewInventoryItem;
     msg: string;
-    isLoading: boolean = false;
-    public Months: Observable<NepaliMonth>;
-    modalRef: BsModalRef;
-    selectedMonths: any = "";
-    /**
-     * Sale Book Constructor
-     */
-    constructor(private _journalvoucherService: JournalVoucherService, private modalService: BsModalService, private date: DatePipe) {
-        this._journalvoucherService.getAccountMonths().subscribe(data => { this.Months = data });
+    indLoading: boolean = false;
+
+    constructor(
+        private date: DatePipe,
+        private _inventoryService: InventoryItemService,
+    ) {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.company = JSON.parse(localStorage.getItem('company'));
     }
 
-    SearchLedgerTransaction(CurrentMonth: string) {
-        this.isLoading = true;
-        this._journalvoucherService.get(Global.BASE_ACCOUNT_MaterializedView_ENDPOINT + '?Month=' + CurrentMonth + "&&FinancialYear=" + (this.currentYear['Name']))
-            .subscribe(SB => {
-                this.materializedViews = SB; this.isLoading = false;
+    ngOnInit(): void {
+        this.LoadInventoryItems();
+    }
+
+    LoadInventoryItems(): void {
+        this.indLoading = true;
+        this._inventoryService.get(Global.BASE_STOCKINHAND_ENDPOINT + "?FinancialYear=" + (this.currentYear['Name'] || ''))
+            .subscribe(InventoryItems => {
+                debugger;
+                this.ViewInventoryItems = InventoryItems;
+                this.indLoading = false;
             },
             error => this.msg = <any>error);
     }
+
 
     exportTableToExcel(tableID, filename = '') {
         var downloadLink;
@@ -54,7 +55,7 @@ export class MaterializedViewComponent {
         $('#' + tableID).html(clonedHtml.html());
 
         // Specify file name
-        filename = filename ? filename + '.xls' : 'Account Sale Book of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
+        filename = filename ? filename + '.xls' : 'Stock In Hand' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
 
         // Create download link element
         downloadLink = document.createElement("a");

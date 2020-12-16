@@ -1,46 +1,53 @@
 ﻿import { Component, OnInit, TemplateRef } from '@angular/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-
-
+import { ReservationService } from '../../../services/reservation/reservation.services';
+import { RoomStatus } from '../../../models/reservation/room-status.model';
 import { Observable } from 'rxjs/Rx';
+import { Global } from '../../../Shared/global';
 import { DatePipe } from '@angular/common';
-import { MaterializedView } from 'src/app/Model/materializedview';
-import { NepaliMonth } from 'src/app/Model/NepaliMonth';
-import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
-import { Global } from 'src/app/Shared/global';
 
 @Component({
-    templateUrl: './materializedview.component.html'
+    templateUrl: './Reservationstatus.component.html'
 })
 
-export class MaterializedViewComponent {
-    currentYear: any;
-    currentUser: any;
+export class RoomStatusComponent implements OnInit{
     company: any;
-    materializedViews: MaterializedView[];
+    RoomStatuss: RoomStatus[];
     msg: string;
     isLoading: boolean = false;
-    public Months: Observable<NepaliMonth>;
     modalRef: BsModalRef;
-    selectedMonths: any = "";
+    public fromDate: any;
+    public toDate: any;
+
     /**
      * Sale Book Constructor
      */
-    constructor(private _journalvoucherService: JournalVoucherService, private modalService: BsModalService, private date: DatePipe) {
-        this._journalvoucherService.getAccountMonths().subscribe(data => { this.Months = data });
-        this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
-        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    constructor(private _reservationService: ReservationService, private modalService: BsModalService, private date: DatePipe) {
         this.company = JSON.parse(localStorage.getItem('company'));
     }
 
-    SearchLedgerTransaction(CurrentMonth: string) {
+    /**
+     * Overrides ngOnInit 
+     */
+    ngOnInit(): void {
+        this.LoadRoomStatus();
+    }
+    getDataDateFilter() {
         this.isLoading = true;
-        this._journalvoucherService.get(Global.BASE_ACCOUNT_MaterializedView_ENDPOINT + '?Month=' + CurrentMonth + "&&FinancialYear=" + (this.currentYear['Name']))
+        this._reservationService.get(Global.BASE_ROOM_STATUS_ENDPOINT + '?fromDate=' + this.date.transform(this.fromDate, 'yyyy-MM-dd') + '&toDate=' + this.date.transform(this.toDate, 'yyyy-MM-dd'))
             .subscribe(SB => {
-                this.materializedViews = SB; this.isLoading = false;
+                this.RoomStatuss = SB; this.isLoading = false;
             },
-            error => this.msg = <any>error);
+                error => this.msg = <any>error);
+    }
+    LoadRoomStatus() {
+        this.isLoading = true;
+        this._reservationService.get(Global.BASE_ROOM_STATUS_ENDPOINT)
+            .subscribe(SB => {
+                this.RoomStatuss = SB; this.isLoading = false;
+            },
+                error => this.msg = <any>error);
     }
 
     exportTableToExcel(tableID, filename = '') {
@@ -54,7 +61,7 @@ export class MaterializedViewComponent {
         $('#' + tableID).html(clonedHtml.html());
 
         // Specify file name
-        filename = filename ? filename + '.xls' : 'Account Sale Book of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
+        filename = filename ? filename + '.xls' : 'Room Status Of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
 
         // Create download link element
         downloadLink = document.createElement("a");

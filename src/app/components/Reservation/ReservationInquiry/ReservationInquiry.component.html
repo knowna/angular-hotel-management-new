@@ -1,0 +1,55 @@
+﻿<reservationdashboard-app></reservationdashboard-app>
+<form class="form-horizontal" novalidate (ngSubmit)="checkAvailability(InqueryForm)" [formGroup]="InqueryForm">
+    <div class='panel panel-primary'>
+        <div class='panel-heading'>
+            {{modalTitle}}
+        </div>
+        <div class='panel-body'>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label col-sm-4">Room Type:</label>
+                    <div class="col-sm-7">
+                        <select class="col-md-3 form-control" formControlName="RoomTypeId" setAutoFocus tabindex="1" >
+                            <option class="form-control" *ngFor="let CType of roomTypes" [ngValue]="CType.Id">{{CType.Name}}</option>
+                        </select>
+                        <div class="alert alert-danger" *ngIf="InqueryForm.get('RoomTypeId').hasError('required') && formSubmitAttempt">
+                            Room Type field is required
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-sm-4">Number of Rooms:</label>
+                    <div class="col-sm-7">
+                        <input type="number" min="1" class="form-control" formControlName="Rooms" tabindex="2">
+                        <div class="alert alert-danger" *ngIf="InqueryForm.get('Rooms').hasError('required') && formSubmitAttempt">
+                            Room Type field is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label col-sm-4">Check In Date:</label>
+                    <div class="col-sm-7">
+                        <angular2-date-picker formControlName="CheckInDate" [settings]="settings" tabindex="3"></angular2-date-picker>
+                        <div class="alert alert-danger" *ngIf="InqueryForm.get('CheckInDate').hasError('required') && formSubmitAttempt">
+                            Check In Date field is required
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label col-sm-4">Check Out Date:</label>
+                    <div class="col-sm-7">
+                        <angular2-date-picker formControlName="CheckOutDate" [settings]="settings" tabindex="4"></angular2-date-picker>
+                        <div class="alert alert-danger" *ngIf="InqueryForm.get('CheckOutDate').hasError('required') && formSubmitAttempt">
+                            Check Out Date field is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='panel-footer text-center'>
+            <button type="submit" class="btn btn-success" tabindex="5">{{modalBtnTitle}}</button>
+        </div>
+    </div>
+</form>

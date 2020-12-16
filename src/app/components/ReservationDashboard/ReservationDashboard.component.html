@@ -1,0 +1,54 @@
+﻿<div class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" [routerLink]="['/reservationdashboardnavcomponent']">
+                <img src="../../images/logo.png" class="pull-left" alt="D Cube Hotel">
+                <div style="padding-top: 1px;width: 200px; text-align: center;">
+                    <h5 style="color: #ffffff; font-weight: 600;">
+                        D Cube Hotel System (V1)
+                    </h5>
+                </div>
+            </a>
+        </div>
+        <div id="navbar1" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Customer<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a [routerLink]="['/reservation/customers']">Customers</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reservation<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a [routerLink]="['/reservation/reservationinquirycomponent']">Inquiry</a></li>
+                        <li><a [routerLink]="['/reservation']">Reservation</a></li>
+                        <li><a [routerLink]="['/reservation/checkin']">Check in</a></li>
+                        <li><a [routerLink]="['/reservation/checkout']">Check out</a></li>
+                        <li><a [routerLink]="['/reservation/reservation-status']">Guest Status</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <img style="height: 18px;" src="../../images/logo.png" alt="DCube Hotel">&nbsp;Welcome! {{ user.UserName }}
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="#" (click)="logout()">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
