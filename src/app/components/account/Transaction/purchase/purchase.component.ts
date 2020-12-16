@@ -194,7 +194,7 @@ export class PurchaseComponent implements OnInit {
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class: 'modal-lg'
+            class: 'modal-xl'
         });
     }
 
@@ -284,9 +284,9 @@ export class PurchaseComponent implements OnInit {
                     let valuesFromServer = purchase.PurchaseDetails[i];
                     let instance = this.fb.group(valuesFromServer);
                     this.currentItem = this.inventoryItem.filter(x => x.Id === purchase.PurchaseDetails[i]["InventoryItemId"])[0];
-                    if (this.currentaccount !== undefined) {
+                    // if (this.currentaccount !== undefined) {
                         instance.controls["InventoryItemId"].setValue(this.currentItem);
-                    }
+                    // }
                     control.push(instance);
                 }
         
@@ -298,11 +298,13 @@ export class PurchaseComponent implements OnInit {
                     let valuesFromServer = purchase.AccountTransactionValues[i];
                     let instance = this.fb.group(valuesFromServer);
 
-                    this.currentaccount = this.account.filter(x => x.Id === purchase.AccountTransactionValues[i]["AccountId"])[0];
-                    if (this.currentaccount !== undefined) {
+                    // this.currentaccount = this.account.filter(x => x.Id === purchase.AccountTransactionValues[i]["AccountId"])[0];
+                    const account = this.account.find(x => x.Id === purchase.AccountTransactionValues[i].AccountId);
+                    // if (this.currentaccount !== undefined) {
                         // instance.controls["AccountId"].setValue(this.currentaccount.Name);
-                        instance.controls["AccountId"].setValue(this.currentaccount.Id);
-                    }
+                        // instance.controls["AccountId"].setValue(this.currentaccount.Id);
+                        instance.controls["AccountId"].setValue(account);
+                    // }
 
                     if (valuesFromServer['entityLists'] === "Dr") {
                         instance.controls['Credit'].disable();
@@ -310,12 +312,19 @@ export class PurchaseComponent implements OnInit {
                     } else if (valuesFromServer['entityLists'] === "Cr") {
                         instance.controls['Debit'].disable();
                     }
+
+                    // instance.controls["Debit"].setValue(purchase.AccountTransactionValues[i].Debit);
+                    // instance.controls["Credit"].setValue(purchase.AccountTransactionValues[i].Credit);
+                    // instance.controls["Description"].setValue(purchase.AccountTransactionValues[i].Description);
                     controlAc.push(instance);
                 }
+
+                console.log('the control', controlAc);
+
                 this.modalRef = this.modalService.show(this.TemplateRef, {
                     backdrop: 'static',
                     keyboard: false,
-                    class: 'modal-lg'
+                    class: 'modal-xl'
                 });
             });
     }
@@ -347,9 +356,9 @@ export class PurchaseComponent implements OnInit {
                     let valuesFromServer = purchase.PurchaseDetails[i];
                     let instance = this.fb.group(valuesFromServer);
                     this.currentItem = this.inventoryItem.filter(x => x.Id === purchase.PurchaseDetails[i]["InventoryItemId"])[0];
-                    if (this.currentaccount !== undefined) {
+                    // if (this.currentaccount !== undefined) {
                         instance.controls["InventoryItemId"].setValue(this.currentItem);
-                    }
+                    // }
                     control.push(instance);
                 }
         
@@ -361,6 +370,9 @@ export class PurchaseComponent implements OnInit {
                     let valuesFromServer = purchase.AccountTransactionValues[i];
                     let instance = this.fb.group(valuesFromServer);
         
+                    const account = this.account.find(x => x.Id === purchase.AccountTransactionValues[i].AccountId);
+                    instance.controls["AccountId"].setValue(account);
+
                     if (valuesFromServer['entityLists'] === "Dr") {
                         instance.controls['Credit'].disable();
         
@@ -373,7 +385,7 @@ export class PurchaseComponent implements OnInit {
                 this.modalRef = this.modalService.show(this.TemplateRef, {
                     backdrop: 'static',
                     keyboard: false,
-                    class: 'modal-lg'
+                    class: 'modal-xl'
                 });
             });
     }
@@ -542,8 +554,18 @@ export class PurchaseComponent implements OnInit {
                 return;
             }
 
-            const control = <FormArray>this.purchaseFrm.controls['AccountTransactionValues'].value;
+            const control = this.purchaseFrm.controls['AccountTransactionValues'].value;
             const controls = <FormArray>this.purchaseFrm.controls['AccountTransactionValues'];
+
+            let accountList = [];
+            control.forEach(account => {
+                let Id = account.AccountId.Id;
+                account.AccountId  = Id;
+
+                accountList.push(account);
+            });
+
+
             // for (var i = 0; i < control.length; i++) {
             //     let Id = control[i]['Id'];
             //     if (Id > 0) {
@@ -565,8 +587,18 @@ export class PurchaseComponent implements OnInit {
             //     }
             // }
 
-            const purchasecontrol = <FormArray>this.purchaseFrm.controls['PurchaseDetails'].value;
+            const purchasecontrol = this.purchaseFrm.controls['PurchaseDetails'].value;
             const purchasecontrols = <FormArray>this.purchaseFrm.controls['PurchaseDetails'];
+
+            console.log('the purchase details', purchasecontrol)
+
+            let purchaseList = [];
+            purchasecontrol.forEach(item => {
+                let Id = item.InventoryItemId.Id;
+                item.InventoryItemId  = Id;
+
+                purchaseList.push(item);
+            });
             // for (var i = 0; i < purchasecontrol.length; i++) {
             //     let Id = purchasecontrol[i]['Id'];
             //     if (Id > 0) {
@@ -597,8 +629,10 @@ export class PurchaseComponent implements OnInit {
                 FinancialYear: this.purchaseFrm.controls['FinancialYear'].value,
                 UserName: this.purchaseFrm.controls['UserName'].value,
                 CompanyCode: this.purchaseFrm.controls['CompanyCode'].value,
-                PurchaseDetails: this.purchaseFrm.controls['PurchaseDetails'].value,
-                AccountTransactionValues: this.purchaseFrm.controls['AccountTransactionValues'].value
+                // PurchaseDetails: this.purchaseFrm.controls['PurchaseDetails'].value,
+                PurchaseDetails: purchaseList,
+                // AccountTransactionValues: this.purchaseFrm.controls['AccountTransactionValues'].value
+                AccountTransactionValues: accountList
             }
 
             switch (this.dbops) {

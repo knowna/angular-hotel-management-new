@@ -37,10 +37,10 @@
                     <strong>Customer: </strong>
                 </label>
                 <div class="form-group col-md-4">
-                    <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="SourceAccountTypeId" (change)="fillCustomerInvoice($event)" [config]="config" [options]="customeraccount"></ngx-select-dropdown>
-                    <!--<select class="form-control " (change)="fillCustomerInvoice($event)" formControlName="SourceAccountTypeId">
+                    <!-- <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="SourceAccountTypeId" (change)="fillCustomerInvoice($event)" [config]="config" [options]="customeraccount"></ngx-select-dropdown> -->
+                    <select class="form-control " (change)="fillCustomerInvoice($event)" formControlName="SourceAccountTypeId">
                         <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option>
-                    </select>-->
+                    </select>
                     <div class="alert alert-danger" *ngIf="cerditNoteFrm.get('SourceAccountTypeId').hasError('required') && formSubmitAttempt">
                         Select Customer is required
                     </div>
@@ -78,7 +78,10 @@
                         <div *ngFor="let AccountTransactionValue of cerditNoteFrm.controls.AccountTransactionValues.controls; let i=index" [formGroupName]="i">
                             <div class="row">
                                 <div class="col-md-4 custom-padding">
-                                    <ngx-select-dropdown (searchChange)="searchChangeAccountId($event)" formControlName="AccountId" [config]="configAccount" [options]="account"></ngx-select-dropdown>
+                                    <!-- <ngx-select-dropdown (searchChange)="searchChangeAccountId($event)" formControlName="AccountId" [config]="configAccount" [options]="account"></ngx-select-dropdown> -->
+                                     <select class="form-control " formControlName="AccountId">
+                                        <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option>
+                                    </select>
                                     <div *ngIf="!cerditNoteFrm.controls.AccountTransactionValues.controls[i].controls.AccountId.valid && formSubmitAttempt" class="text-danger">
                                         Select the Account
                                     </div>

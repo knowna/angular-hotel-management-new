@@ -47,11 +47,11 @@
         </div> -->
 
 
-        <div class="row m-0 mt-5">
+        <!-- <div class="row m-0 mt-5">
             <div class="col-sm-12">
                 <h6  class="font-weight-bold">  All unsettled tickets  </h6> 
             </div>
-        </div>
+        </div> -->
 
         <div class="row m-0">
             <div class="col-md-6">
@@ -73,7 +73,7 @@
                         {{detailPrimaryTicket?.Name}}  {{detailPrimaryTicket?.TicketId}}
                     </span>
     
-                    <div *ngIf="detailPrimaryTicket.orders?.length > 0" class="table-responsive mb-3">
+                    <div *ngIf="detailPrimaryTicket.orders?.length > 0 && !detailPrimaryTicket.showLoader" class="table-responsive mb-3">
                         <div *ngFor="let o of detailPrimaryTicket.orders">
                             <table class="table">
                                 <caption style="caption-side:top">
@@ -84,7 +84,7 @@
                                 <thead>
                                     <tr>
                                         <!-- <th>Move This Item</th> -->
-                                        <th>Change Quantity </th>
+                                        <th class="text-center">Change Quantity </th>
                                         <th>Name</th>
                                         <th>Qty</th>
                                         <th>Unit Price</th>
@@ -104,12 +104,25 @@
                             </table>
                         </div>
                     </div> 
+
+                    <div *ngIf="detailPrimaryTicket.orders?.length == 0 && !detailPrimaryTicket.showLoader" class="text-center">
+                        No record found!!
+                    </div>
+                    
+
+                    <div class="row" *ngIf="detailPrimaryTicket.showLoader">
+                        <div class="col-md-12" style="height:300px">
+                          <div class="loader"></div>
+                        </div>
+                    </div>
     
                     
     
                     
                     
                 </div>
+
+
             </div>
 
             <div class="col-md-5" style="margin: inherit;">
@@ -133,7 +146,7 @@
                             {{deatilSecondaryTicket?.Name}}  {{deatilSecondaryTicket?.TicketId}}
                         </span>
         
-                        <div *ngIf="deatilSecondaryTicket?.orders.length > 0" class="table-responsive mb-3">
+                        <div *ngIf="deatilSecondaryTicket?.orders.length > 0 && !deatilSecondaryTicket.showLoader" class="table-responsive mb-3">
                             <div *ngFor="let o of deatilSecondaryTicket.orders">
                                 <table class="table">
                                     <caption style="caption-side:top">
@@ -164,11 +177,24 @@
                             </div>
                         </div> 
         
+
+                        <div *ngIf="deatilSecondaryTicket.orders?.length == 0 && !deatilSecondaryTicket.showLoader" class="text-center">
+                            No record found!!
+                        </div>
+                        
+    
+                        <div class="row" *ngIf="deatilSecondaryTicket.showLoader">
+                            <div class="col-md-12" style="height:300px">
+                              <div class="loader"></div>
+                            </div>
+                        </div>
                        
         
                        
                         
                     </div>
+
+                    
 
                     <!-- <div class="col-sm-12 mt-2">
                         <button type="button" class="btn btn-success" (click)="partialMerge()">

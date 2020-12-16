@@ -103,22 +103,26 @@ export class SplitMergeComponent implements OnInit {
     // this.secondaryOrderList.splice(this.secondaryOrderList.indexOf(order),1);
     // this.secondaryOrderList = [...this.secondaryOrderList];
 
+    this.selectedTicket.showLoader = true;
     this.orderApi.loadOrdersNew(this.selectedTicket.Id)
     .subscribe(
-        data => {
-           this.orders = data;
-           this.selectedTicket.orders = this.orders;
-           console.log('the order s ss', this.orders)
-           this.orders.forEach(o => {
-               o.OrderItems.forEach(item => {
-                //  item.newQty = 0;
-                this.selectedTicket.ItemList.push(item)
-               });
-              
-           });
-           
-           
-    })
+      data => {
+        this.selectedTicket.showLoader = false;
+        this.orders = data;
+        this.selectedTicket.orders = this.orders;
+        console.log('the order s ss', this.orders)
+        this.orders.forEach(o => {
+            o.OrderItems.forEach(item => {
+            //  item.newQty = 0;
+            this.selectedTicket.ItemList.push(item)
+            });
+          
+        });
+      },
+      error => {
+        this.selectedTicket.showLoader = false;
+        this.selectedTicket.orders = [];
+      })
 
     this.primaryItemList = this.selectedTicket.ItemList;
     this.tempPrimaryItemList = this.primaryItemList;
@@ -180,11 +184,12 @@ export class SplitMergeComponent implements OnInit {
       console.log('i', item);
       const idx = mainItemList.indexOf(item);
       if(isSplit) {
-        if(item.newQty == null || item.newQty < 0) {
+        if(item.newQty < 0) {
           return isSplit = false;
         }
         else{
-          if(item.newQty == 0) {
+          if(item.newQty == 0 || item.newQty == null) {
+            item.newQty = 0; 
             allItemsZeroLength += 1;
 
             console.log('duplicate length of zero', allItemsZeroLength , 'origin' , mainItemList.length)
@@ -287,6 +292,7 @@ export class SplitMergeComponent implements OnInit {
         total =total +(product.newQty*product.UnitPrice);
         ticketTotalWithoutVatPartial=ticketTotalWithoutVatPartial+ total;
       
+        let id: any;
         let orderId : any;
         let orderNumber: any;
 
@@ -294,14 +300,16 @@ export class SplitMergeComponent implements OnInit {
         if(product.newQty == product.Qty) {
           orderId = product.OrderId;
           orderNumber = product.OrderNumber;
+          id = product.Id;
         }else{
+          id = 0;
           orderId = 0;
           orderNumber = 0;
         }
       
 
         let OrderItem = {
-            "Id":0,
+            "Id":id,
             "UserId": this.currentUser.UserName,
             "FinancialYear": this.currentYear.Name,
             "OrderNumber": orderNumber,

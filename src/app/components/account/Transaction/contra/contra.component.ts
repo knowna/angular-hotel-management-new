@@ -38,7 +38,7 @@ export class ContraComponent implements OnInit{
     formattedDate: any;
     private buttonDisabled: boolean;
     private formSubmitAttempt: boolean;
-    public account: Observable<Account>;
+    public account: Account[] = [];
     public contraForm: FormGroup;
     dropMessage: string = "Upload Reference File";
     uploadUrl = Global.BASE_FILE_UPLOAD_ENDPOINT;
@@ -255,13 +255,14 @@ export class ContraComponent implements OnInit{
         this.modalBtnTitle = "Save";
         this.getJournalVoucher(Id)
             .subscribe((contra: AccountTrans) => {
+                console.log('the contra is', contra)
                 this.indLoading = false;
                 this.contraForm.controls['Id'].setValue(contra.Id);
                 this.contraForm.controls['Name'].setValue(contra.Name);
                 this.contraForm.controls['AccountTransactionDocumentId'].setValue(contra.AccountTransactionDocumentId);
                 this.currentaccount = this.account.filter(x => x.Id === contra.SourceAccountTypeId)[0];
                 if (this.currentaccount!== undefined) {
-                    this.contraForm.controls['SourceAccountTypeId'].setValue(this.currentaccount.Name);
+                    this.contraForm.controls['SourceAccountTypeId'].setValue(this.currentaccount);
                 }
                 this.contraForm.controls['Description'].setValue(contra.Description);
                 this.contraForm.controls['Date'].setValue(contra.AccountTransactionValues[0]['NVDate']);
@@ -269,15 +270,31 @@ export class ContraComponent implements OnInit{
                 this.contraForm.controls['AccountTransactionValues'] = this.fb.array([]);
                 const control = <FormArray>this.contraForm.controls['AccountTransactionValues'];
 
+
                 for (var i = 0; i < contra.AccountTransactionValues.length; i++) {
-                    this.currentaccount = this.account.filter(x => x.Id === contra.AccountTransactionValues[i]["AccountId"])[0];
-                    if (this.currentaccount !== undefined) {
-                        let currentaccountvoucher = contra.AccountTransactionValues[i];
-                        let instance = this.fb.group(currentaccountvoucher);
-                        instance.controls["AccountId"].setValue(this.currentaccount.Name);
-                        control.push(instance);
-                    }
+                    const account = this.account.find(x => x.Id === contra.AccountTransactionValues[i].AccountId);
+                    let currentaccountvoucher = contra.AccountTransactionValues[i];
+                    let instance = this.fb.group(currentaccountvoucher);
+                    instance.controls["AccountId"].setValue(account);
+                    instance.controls["Debit"].setValue(contra.AccountTransactionValues[i].Debit);
+                    instance.controls["Credit"].setValue(contra.AccountTransactionValues[i].Credit);
+                    instance.controls["Description"].setValue(contra.AccountTransactionValues[i].Description);
+
+                    control.push(instance);
                 }
+
+
+
+
+                // for (var i = 0; i < contra.AccountTransactionValues.length; i++) {
+                //     this.currentaccount = this.account.filter(x => x.Id === contra.AccountTransactionValues[i]["AccountId"])[0];
+                //     if (this.currentaccount !== undefined) {
+                //         let currentaccountvoucher = contra.AccountTransactionValues[i];
+                //         let instance = this.fb.group(currentaccountvoucher);
+                //         instance.controls["AccountId"].setValue(this.currentaccount.Name);
+                //         control.push(instance);
+                //     }
+                // }
                 this.modalRef = this.modalService.show(this.TemplateRef, {
                     backdrop: 'static',
                     keyboard: false,
@@ -304,7 +321,7 @@ export class ContraComponent implements OnInit{
                 this.contraForm.controls['AccountTransactionDocumentId'].setValue(contra.AccountTransactionDocumentId);
                 this.currentaccount = this.account.filter(x => x.Id === contra.SourceAccountTypeId)[0];
                 if (this.currentaccount !== undefined) {
-                    this.contraForm.controls['SourceAccountTypeId'].setValue(this.currentaccount.Name);
+                    this.contraForm.controls['SourceAccountTypeId'].setValue(this.currentaccount);
                 }
                 this.contraForm.controls['Description'].setValue(contra.Description);
                 this.contraForm.controls['Date'].setValue(contra.AccountTransactionValues[0]['NVDate']);
@@ -312,15 +329,29 @@ export class ContraComponent implements OnInit{
                 this.contraForm.controls['AccountTransactionValues'] = this.fb.array([]);
                 const control = <FormArray>this.contraForm.controls['AccountTransactionValues'];
 
+
                 for (var i = 0; i < contra.AccountTransactionValues.length; i++) {
-                    this.currentaccount = this.account.filter(x => x.Id === contra.AccountTransactionValues[i]["AccountId"])[0];
-                    if (this.currentaccount !== undefined) {
-                        let currentaccountvoucher = contra.AccountTransactionValues[i];
-                        let instance = this.fb.group(currentaccountvoucher);
-                        instance.controls["AccountId"].setValue(this.currentaccount.Name);
-                        control.push(instance);
-                    }
+                    const account = this.account.find(x => x.Id === contra.AccountTransactionValues[i].AccountId);
+                    let currentaccountvoucher = contra.AccountTransactionValues[i];
+                    let instance = this.fb.group(currentaccountvoucher);
+                    instance.controls["AccountId"].setValue(account);
+                    instance.controls["Debit"].setValue(contra.AccountTransactionValues[i].Debit);
+                    instance.controls["Credit"].setValue(contra.AccountTransactionValues[i].Credit);
+                    instance.controls["Description"].setValue(contra.AccountTransactionValues[i].Description);
+
+                    control.push(instance);
                 }
+
+
+                // for (var i = 0; i < contra.AccountTransactionValues.length; i++) {
+                //     this.currentaccount = this.account.filter(x => x.Id === contra.AccountTransactionValues[i]["AccountId"])[0];
+                //     if (this.currentaccount !== undefined) {
+                //         let currentaccountvoucher = contra.AccountTransactionValues[i];
+                //         let instance = this.fb.group(currentaccountvoucher);
+                //         instance.controls["AccountId"].setValue(this.currentaccount.Name);
+                //         control.push(instance);
+                //     }
+                // }
                 this.modalRef = this.modalService.show(this.TemplateRef, {
                     backdrop: 'static',
                     keyboard: false,
@@ -417,49 +448,63 @@ export class ContraComponent implements OnInit{
         let contra = this.contraForm;
         this.formSubmitAttempt = true;
 
-        if (!this.voucherDateValidator(contra.get('Date').value)) {
-            return false;
-        }
+        // if (!this.voucherDateValidator(contra.get('Date').value)) {
+        //     return false;
+        // }
 
         contra.get('FinancialYear').setValue(this.currentYear['Name'] || '');
         contra.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
         contra.get('CompanyCode').setValue(this.currentUser && this.company['BranchCode'] || '');
 
         if (contra.valid) {
-            const control = <FormArray>this.contraForm.controls['AccountTransactionValues'].value;
+            const control = this.contraForm.controls['AccountTransactionValues'].value;
             const controls = <FormArray>this.contraForm.controls['AccountTransactionValues'];
-            for (var i = 0; i < control.length; i++) {
-                let Id = control[i]['Id'];
-                if (Id > 0) {
-                    let CurrentAccount = control[i]['AccountId'];
-                    this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
-                    let CurrentAccountId = this.currentaccount.Id;
-                    let currentaccountvoucher = control[i];
-                    let instance = this.fb.group(currentaccountvoucher);
-                    instance.controls["AccountId"].setValue(CurrentAccountId);
-                    controls.push(instance);
-                }
-                else {
-                    let xcurrentaccountvoucher = control[i]['AccountId'];
-                    let currentaccountvoucher = control[i];
-                    let instance = this.fb.group(currentaccountvoucher);
-                    this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
-                    instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
-                    controls.push(instance);
-                }
-            }
-            let Id = contra.get('Id').value;
-            if (Id > 0) {
-                let CurrentAccount = contra.get('SourceAccountTypeId').value;
-                this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
-                this.SourceAccountTypeId = this.currentaccount.Id.toString();
-                contra.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
-            }
-            else {
-                let CurrentAccount = contra.get('SourceAccountTypeId').value;
-                this.SourceAccountTypeId = CurrentAccount.Id;
-                contra.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
-            }
+
+            let accountList = [];
+            control.forEach(account => {
+                let Id = account.AccountId.Id;
+                account.AccountId  = Id;
+
+                accountList.push(account);
+            });
+            // for (var i = 0; i < control.length; i++) {
+            //     let Id = control[i]['Id'];
+            //     if (Id > 0) {
+            //         let CurrentAccount = control[i]['AccountId'];
+            //         this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
+            //         let CurrentAccountId = this.currentaccount.Id;
+            //         let currentaccountvoucher = control[i];
+            //         let instance = this.fb.group(currentaccountvoucher);
+            //         instance.controls["AccountId"].setValue(CurrentAccountId);
+            //         controls.push(instance);
+            //     }
+            //     else {
+            //         let xcurrentaccountvoucher = control[i]['AccountId'];
+            //         let currentaccountvoucher = control[i];
+            //         let instance = this.fb.group(currentaccountvoucher);
+            //         this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
+            //         instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
+            //         controls.push(instance);
+            //     }
+            // }
+
+
+            let CurrentAccount = contra.get('SourceAccountTypeId').value;
+            let currentaccount = this.account.find(x => x.Id === CurrentAccount.Id);
+            this.SourceAccountTypeId = currentaccount.Id.toString();
+
+            // let Id = contra.get('Id').value;
+            // if (Id > 0) {
+            //     let CurrentAccount = contra.get('SourceAccountTypeId').value;
+            //     this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
+            //     this.SourceAccountTypeId = this.currentaccount.Id.toString();
+            //     contra.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
+            // }
+            // else {
+            //     let CurrentAccount = contra.get('SourceAccountTypeId').value;
+            //     this.SourceAccountTypeId = CurrentAccount.Id;
+            //     contra.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
+            // }
 
             let paymentObject = {
                 Id: this.contraForm.controls['Id'].value,
@@ -471,8 +516,12 @@ export class ContraComponent implements OnInit{
                 FinancialYear: this.contraForm.controls['FinancialYear'].value,
                 UserName: this.contraForm.controls['UserName'].value,
                 CompanyCode: this.contraForm.controls['CompanyCode'].value,
-                AccountTransactionValues: <FormArray>this.contraForm.controls['AccountTransactionValues'].value
+                // AccountTransactionValues: <FormArray>this.contraForm.controls['AccountTransactionValues'].value
+                AccountTransactionValues: accountList
+                
             }
+
+            console.log('the payment ', paymentObject)
             switch (this.dbops) {
                 case DBOperation.create:
                     this._journalvoucherService.post(Global.BASE_JOURNALVOUCHER_ENDPOINT, paymentObject).subscribe(
@@ -502,7 +551,7 @@ export class ContraComponent implements OnInit{
                                     'moduleName': 'JournalVoucher',
                                     'id': data
                                 });
-                                alert("Data successfully added.");
+                                alert("Data successfully updated.");
                                 this.loadContraList(this.fromDate, this.toDate);
                                 this.modalRef.hide();
                                 this.formSubmitAttempt = false;

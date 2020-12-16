@@ -116,19 +116,19 @@ export class MasterLedgerComponent implements OnInit {
     addMasterLedger() {
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
-        this.modalTitle = "Add New Master Ledger";
+        this.modalTitle = "Add Ledger";
         this.modalBtnTitle = "Save";
         this.masterLedgerFrm.reset();
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class: 'modal-lg' });
+            class: 'modal-xl' });
     }
 
     editMasterLedger(Id: number) {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
-        this.modalTitle = "Edit Group Ledger";
+        this.modalTitle = "Edit Ledger";
         this.modalBtnTitle = "Save";
         this.masterLedger = this.masterLedgers.filter(x => x.Id == Id)[0];
         // this.masterLedgerFrm.controls['UnderGroupMaster'].setValue('');
@@ -190,7 +190,7 @@ export class MasterLedgerComponent implements OnInit {
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class: 'modal-lg'
+            class: 'modal-xl'
         });
     }
 
@@ -259,7 +259,7 @@ export class MasterLedgerComponent implements OnInit {
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class: 'modal-lg'
+            class: 'modal-xl'
         });
     }
 

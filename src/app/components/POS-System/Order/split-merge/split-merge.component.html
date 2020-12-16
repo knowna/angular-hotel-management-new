@@ -6,7 +6,7 @@
 
 
 <div class="row m-0 mt-5">
-    <h6  class="font-weight-bold ml-3">  All unsettled tickets  </h6> 
+    <h6  class="font-weight-bold ml-3">Select Bill</h6> 
 </div>
 
 <div class="row m-0">
@@ -27,7 +27,7 @@
                 {{selectedTicket?.Name}}  {{selectedTicket?.TicketId}}
             </span>
 
-            <div *ngIf="selectedTicket.orders?.length > 0" class="table-responsive mb-3">
+            <div *ngIf="selectedTicket.orders?.length > 0 && !selectedTicket.showLoader" class="table-responsive mb-3">
                 <div *ngFor="let o of selectedTicket.orders">
                     <table class="table">
                         <caption style="caption-side:top">
@@ -38,7 +38,7 @@
                         <thead>
                             <tr>
                                 <!-- <th>Move This Item</th> -->
-                                <th>Change Quantity </th>
+                                <th class="text-center">Change Quantity</th>
                                 <th>Name</th>
                                 <th>Qty</th>
                                 <th>Unit Price</th>
@@ -59,11 +59,15 @@
                 </div>
             </div> 
 
-            <div *ngIf="selectedTicket.orders?.length == 0" class="text-center">
+            <div *ngIf="selectedTicket.orders?.length == 0 && !selectedTicket.showLoader" class="text-center">
                 No record found!!
             </div>
 
-            
+            <div class="row" *ngIf="selectedTicket.showLoader">
+                <div class="col-md-12" style="height:300px">
+                  <div class="loader"></div>
+                </div>
+            </div>
 
             
             

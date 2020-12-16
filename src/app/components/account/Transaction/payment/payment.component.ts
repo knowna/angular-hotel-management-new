@@ -36,8 +36,8 @@ export class PaymentComponent {
     formattedDate: any;
     private buttonDisabled: boolean;
     private formSubmitAttempt: boolean;
-    public account: Observable<Account>;
-    public accountcashbank: Observable<Account>;
+    public account: Account[] = [];
+    public accountcashbank: Account[] = [];
     public paymentFrm: FormGroup;
     dropMessage: string = "Upload Reference File";
     uploadUrl = Global.BASE_FILE_UPLOAD_ENDPOINT;
@@ -262,16 +262,17 @@ export class PaymentComponent {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Payment";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.getJournalVoucher(Id)
             .subscribe((payment: AccountTrans) => {
+                // console.log('the payment is', payment)
                 this.indLoading = false;
                 this.paymentFrm.controls['Id'].setValue(payment.Id);
                 this.paymentFrm.controls['Name'].setValue(payment.Name);
                 this.paymentFrm.controls['AccountTransactionDocumentId'].setValue(payment.AccountTransactionDocumentId);
                 this.currentaccount = this.accountcashbank.filter(x => x.Id === payment.SourceAccountTypeId)[0];
                 if (this.currentaccount !== undefined) {
-                    this.paymentFrm.controls['SourceAccountTypeId'].setValue(this.currentaccount.Name);
+                    this.paymentFrm.controls['SourceAccountTypeId'].setValue(this.currentaccount);
                 }
                 this.paymentFrm.controls['Description'].setValue(payment.Description);
                 this.paymentFrm.controls['Date'].setValue(payment.AccountTransactionValues[0]['NVDate']);
@@ -280,14 +281,28 @@ export class PaymentComponent {
                 const control = <FormArray>this.paymentFrm.controls['AccountTransactionValues'];
 
                 for (var i = 0; i < payment.AccountTransactionValues.length; i++) {
-                    this.currentaccount = this.account.filter(x => x.Id === payment.AccountTransactionValues[i]["AccountId"])[0];
-                    if (this.currentaccount !== undefined) {
-                        let currentaccountvoucher = payment.AccountTransactionValues[i];
-                        let instance = this.fb.group(currentaccountvoucher);
-                        instance.controls["AccountId"].setValue(this.currentaccount.Name);
-                        control.push(instance);
-                    }
+                    const account = this.account.find(x => x.Id === payment.AccountTransactionValues[i].AccountId);
+                    // console.log('the accoun in the lis', account);
+                    let currentaccountvoucher = payment.AccountTransactionValues[i];
+                    let instance = this.fb.group(currentaccountvoucher);
+                    instance.controls["AccountId"].setValue(account);
+                    instance.controls["Debit"].setValue(payment.AccountTransactionValues[i].Debit);
+                    instance.controls["Credit"].setValue(payment.AccountTransactionValues[i].Credit);
+                    instance.controls["Description"].setValue(payment.AccountTransactionValues[i].Description);
+                    
+                    control.push(instance);
                 }
+
+
+                // for (var i = 0; i < payment.AccountTransactionValues.length; i++) {
+                //     this.currentaccount = this.account.filter(x => x.Id === payment.AccountTransactionValues[i]["AccountId"])[0];
+                //     if (this.currentaccount !== undefined) {
+                //         let currentaccountvoucher = payment.AccountTransactionValues[i];
+                //         let instance = this.fb.group(currentaccountvoucher);
+                //         instance.controls["AccountId"].setValue(this.currentaccount.Name);
+                //         control.push(instance);
+                //     }
+                // }
 
                 this.modalRef = this.modalService.show(this.TemplateRef, {
                     backdrop: 'static',
@@ -316,7 +331,7 @@ export class PaymentComponent {
                 this.paymentFrm.controls['AccountTransactionDocumentId'].setValue(payment.AccountTransactionDocumentId);
                 this.currentaccount = this.accountcashbank.filter(x => x.Id === payment.SourceAccountTypeId)[0];
                 if (this.currentaccount !== undefined) {
-                    this.paymentFrm.controls['SourceAccountTypeId'].setValue(this.currentaccount.Name);
+                    this.paymentFrm.controls['SourceAccountTypeId'].setValue(this.currentaccount);
                 }
                 this.paymentFrm.controls['Description'].setValue(payment.Description);
                 this.paymentFrm.controls['Date'].setValue(payment.AccountTransactionValues[0]['NVDate']);
@@ -324,15 +339,28 @@ export class PaymentComponent {
                 this.paymentFrm.controls['AccountTransactionValues'] = this.fb.array([]);
                 const control = <FormArray>this.paymentFrm.controls['AccountTransactionValues'];
 
+
                 for (var i = 0; i < payment.AccountTransactionValues.length; i++) {
-                    this.currentaccount = this.account.filter(x => x.Id === payment.AccountTransactionValues[i]["AccountId"])[0];
-                    if (this.currentaccount !== undefined) {
-                        let currentaccountvoucher = payment.AccountTransactionValues[i];
-                        let instance = this.fb.group(currentaccountvoucher);
-                        instance.controls["AccountId"].setValue(this.currentaccount.Name);
-                        control.push(instance);
-                    }
+                    const account = this.account.find(x => x.Id === payment.AccountTransactionValues[i].AccountId);
+                    let currentaccountvoucher = payment.AccountTransactionValues[i];
+                    let instance = this.fb.group(currentaccountvoucher);
+                    instance.controls["AccountId"].setValue(account);
+                    instance.controls["Debit"].setValue(payment.AccountTransactionValues[i].Debit);
+                    instance.controls["Credit"].setValue(payment.AccountTransactionValues[i].Credit);
+                    instance.controls["Description"].setValue(payment.AccountTransactionValues[i].Description);
+                    
+                    control.push(instance);
                 }
+
+                // for (var i = 0; i < payment.AccountTransactionValues.length; i++) {
+                //     this.currentaccount = this.account.filter(x => x.Id === payment.AccountTransactionValues[i]["AccountId"])[0];
+                //     if (this.currentaccount !== undefined) {
+                //         let currentaccountvoucher = payment.AccountTransactionValues[i];
+                //         let instance = this.fb.group(currentaccountvoucher);
+                //         instance.controls["AccountId"].setValue(this.currentaccount.Name);
+                //         control.push(instance);
+                //     }
+                // }
 
                 this.modalRef = this.modalService.show(this.TemplateRef, {
                     backdrop: 'static',
@@ -431,64 +459,84 @@ export class PaymentComponent {
 
         this.formSubmitAttempt = true;
 
-        if (!this.voucherDateValidator(payment.get('Date').value)) {
-            return false;
-        }
+        // if (!this.voucherDateValidator(payment.get('Date').value)) {
+        //     return false;
+        // }
 
         payment.get('FinancialYear').setValue(this.currentYear['Name'] || '');
         payment.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
         payment.get('CompanyCode').setValue(this.currentUser && this.company['BranchCode'] || '');
 
         if (payment.valid) {
-            const control = <FormArray>this.paymentFrm.controls['AccountTransactionValues'].value;
+            const control = this.paymentFrm.controls['AccountTransactionValues'].value;
             const controls = <FormArray>this.paymentFrm.controls['AccountTransactionValues'];
-            for (var i = 0; i < control.length; i++) {
-                let Id = control[i]['Id'];
-                if (Id > 0) {
-                    let CurrentAccount = control[i]['AccountId'];
-                    this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
-                    let CurrentAccountId = this.currentaccount.Id;
-                    let currentaccountvoucher = control[i];
-                    let instance = this.fb.group(currentaccountvoucher);
-                    instance.controls["AccountId"].setValue(CurrentAccountId);
-                    controls.push(instance);
-                }
-                else {
-                    let xcurrentaccountvoucher = control[i]['AccountId'];
-                    let currentaccountvoucher = control[i];
-                    let instance = this.fb.group(currentaccountvoucher);
-                    this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
-                    instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
-                    controls.push(instance);
-                }
-            }
 
-            let Id = payment.get('Id').value;
-            if (Id > 0) {
-                let CurrentAccount = payment.get('SourceAccountTypeId').value;
-                this.currentaccount = this.accountcashbank.filter(x => x.Name === CurrentAccount)[0];
-                this.SourceAccountTypeId = this.currentaccount.Id.toString();
-                payment.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
-            }
-            else {
-                let CurrentAccount = payment.get('SourceAccountTypeId').value;
-                this.SourceAccountTypeId = CurrentAccount.Id;
-                payment.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
-            }
+
+            let accountList = [];
+            control.forEach(account => {
+                let Id = account.AccountId.Id;
+                account.AccountId  = Id;
+
+                accountList.push(account);
+            });
+
+            // for (var i = 0; i < control.length; i++) {
+            //     let Id = control[i]['Id'];
+            //     if (Id > 0) {
+            //         let CurrentAccount = control[i]['AccountId'];
+            //         this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
+            //         let CurrentAccountId = this.currentaccount.Id;
+            //         let currentaccountvoucher = control[i];
+            //         let instance = this.fb.group(currentaccountvoucher);
+            //         instance.controls["AccountId"].setValue(CurrentAccountId);
+            //         controls.push(instance);
+            //     }
+            //     else {
+            //         let xcurrentaccountvoucher = control[i]['AccountId'];
+            //         let currentaccountvoucher = control[i];
+            //         let instance = this.fb.group(currentaccountvoucher);
+            //         this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
+            //         instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
+            //         controls.push(instance);
+            //     }
+            // }
+
+            let CurrentAccount = payment.get('SourceAccountTypeId').value;
+            // console.log('current account', CurrentAccount);
+            // console.log('cashbank lus', this.accountcashbank)
+            let currentaccount = this.accountcashbank.find(x => x.Id === CurrentAccount.Id);
+            this.SourceAccountTypeId = currentaccount.Id.toString();
+
+
+            // let Id = payment.get('Id').value;
+            // if (Id > 0) {
+            //     let CurrentAccount = payment.get('SourceAccountTypeId').value;
+            //     this.currentaccount = this.accountcashbank.filter(x => x.Name === CurrentAccount)[0];
+            //     this.SourceAccountTypeId = this.currentaccount.Id.toString();
+            //     payment.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
+            // }
+            // else {
+            //     let CurrentAccount = payment.get('SourceAccountTypeId').value;
+            //     this.SourceAccountTypeId = CurrentAccount.Id;
+            //     payment.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
+            // }
 
             let paymentObj = {
                 Id: this.paymentFrm.controls['Id'].value,
                 Date: this.paymentFrm.controls['Date'].value,
                 Name: this.paymentFrm.controls['Name'].value,
-                SourceAccountTypeId: this.paymentFrm.controls['SourceAccountTypeId'].value,
+                // SourceAccountTypeId: this.paymentFrm.controls['SourceAccountTypeId'].value,
+                SourceAccountTypeId: this.SourceAccountTypeId,
                 AccountTransactionDocumentId: this.paymentFrm.controls['AccountTransactionDocumentId'].value,
                 Description: this.paymentFrm.controls['Description'].value,
                 FinancialYear: this.paymentFrm.controls['FinancialYear'].value,
                 UserName: this.paymentFrm.controls['UserName'].value,
                 CompanyCode: this.paymentFrm.controls['CompanyCode'].value,
-                AccountTransactionValues: this.paymentFrm.controls['AccountTransactionValues'].value
+                // AccountTransactionValues: this.paymentFrm.controls['AccountTransactionValues'].value
+                AccountTransactionValues: accountList
             }
 
+            // console.log('the paymet', paymentObj)
             switch (this.dbops) {
                 case DBOperation.create:
                     this._journalvoucherService.post(Global.BASE_JOURNALVOUCHER_ENDPOINT, paymentObj).subscribe(
@@ -509,6 +557,7 @@ export class PaymentComponent {
                                     this.formSubmitAttempt = false;
                                     this.reset();
                                 }
+                                alert('Data saved successfully!');
                                 this.modalRef.hide();
                                 this.loadPaymentList(this.fromDate, this.toDate);
                             } else {
@@ -536,6 +585,7 @@ export class PaymentComponent {
                                     this.formSubmitAttempt = false;
                                     this.reset();
                                 }
+                                alert('Data updated successfully!');
                                 this.modalRef.hide();
                                 this.loadPaymentList(this.fromDate, this.toDate);
                             } else {

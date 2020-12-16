@@ -260,7 +260,7 @@ export class JournalVouchercomponent implements OnInit {
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class: 'modal-lg'
+            class: 'modal-xl'
         });
     }
 
@@ -289,7 +289,7 @@ export class JournalVouchercomponent implements OnInit {
                 this.indLoading = false;
                 this.journalFrm.controls['Id'].setValue(journalVoucher.Id);
                 // this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
-                this.journalFrm.controls['Name'].setValue(journalVoucher.AccountTransactionType);
+                this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
 
                 this.journalFrm.controls['Date'].setValue(journalVoucher.AccountTransactionValues[0]['NVDate']);
                 this.journalFrm.controls['AccountTransactionDocumentId'].setValue(journalVoucher.AccountTransactionDocumentId);
@@ -301,13 +301,15 @@ export class JournalVouchercomponent implements OnInit {
                 const control = <FormArray>this.journalFrm.controls['AccountTransactionValues'];
 
                 for (let i = 0; i < journalVoucher.AccountTransactionValues.length; i++) {
-                    this.currentaccount = this.account.filter(x => x.Id === journalVoucher.AccountTransactionValues[i]["AccountId"])[0];
+                    // this.currentaccount = this.account.filter(x => x.Id === journalVoucher.AccountTransactionValues[i]["AccountId"])[0];
+                    const account = this.account.find(x => x.Id === journalVoucher.AccountTransactionValues[i].AccountId);
                     let valuesFromServer = journalVoucher.AccountTransactionValues[i];
                     let instance = this.fb.group(valuesFromServer);
-                    if (this.currentaccount !== undefined) {
+                    console.log('accountis', account);
+                    // if (this.currentaccount !== undefined) {
                         // instance.controls["AccountId"].setValue(this.currentaccount.Name);
-                        instance.controls["AccountId"].setValue(this.currentaccount.Id);
-                    }
+                        instance.controls["AccountId"].setValue(account);
+                    // }
 
                     if (valuesFromServer['entityLists'] === "Dr") {
                         instance.controls['Credit'].disable();
@@ -317,12 +319,18 @@ export class JournalVouchercomponent implements OnInit {
                         instance.controls['Debit'].disable();
                     }
 
+                    instance.controls["Debit"].setValue(journalVoucher.AccountTransactionValues[i].Debit);
+                    instance.controls["Credit"].setValue(journalVoucher.AccountTransactionValues[i].Credit);
+                    instance.controls["Description"].setValue(journalVoucher.AccountTransactionValues[i].Description);
+
                     control.push(instance);
                 }
+
+                console.log('the control after push is', control);
                 this.modalRef = this.modalService.show(this.TemplateRef, {
                     backdrop: 'static',
                     keyboard: false,
-                    class: 'modal-lg'
+                    class: 'modal-xl'
                 });
             },
                 error => this.msg = <any>error);
@@ -335,14 +343,14 @@ export class JournalVouchercomponent implements OnInit {
     deleteJournalVoucher(id: number) {
         this.dbops = DBOperation.delete;
         this.SetControlsState(true);
-        this.modalTitle = "Confirm to Delete?";
+        this.modalTitle = "Delete Journal";
         this.modalBtnTitle = "Delete";
         this.getJournalVoucher(id)
             .subscribe((journalVoucher: AccountTrans) => {
                 this.indLoading = false;
                 this.journalFrm.controls['Id'].setValue(journalVoucher.Id);
-                // this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
-                this.journalFrm.controls['Name'].setValue(journalVoucher.AccountTransactionType);
+                this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
+                // this.journalFrm.controls['Name'].setValue(journalVoucher.AccountTransactionType);
 
                 this.journalFrm.controls['AccountTransactionDocumentId'].setValue(journalVoucher.AccountTransactionDocumentId);
                 this.journalFrm.controls['Description'].setValue(journalVoucher.Description);
@@ -356,7 +364,9 @@ export class JournalVouchercomponent implements OnInit {
                 const control = <FormArray>this.journalFrm.controls['AccountTransactionValues'];
 
                 for (let i = 0; i < journalVoucher.AccountTransactionValues.length; i++) {
-                    this.currentaccount = this.account.filter(x => x.Id === journalVoucher.AccountTransactionValues[i]["AccountId"])[0];
+                    // this.currentaccount = this.account.filter(x => x.Id === journalVoucher.AccountTransactionValues[i]["AccountId"])[0];
+                    const account = this.account.find(x => x.Id === journalVoucher.AccountTransactionValues[i].AccountId);
+
                     let valuesFromServer = journalVoucher.AccountTransactionValues[i];
                     let instance = this.fb.group(valuesFromServer);
 
@@ -365,16 +375,20 @@ export class JournalVouchercomponent implements OnInit {
                     } else if (valuesFromServer['entityLists'] === "Cr") {
                         instance.controls['Debit'].disable();
                     }
-                    if (this.currentaccount !== undefined) {
+                    // if (this.currentaccount !== undefined) {
                         // instance.controls["AccountId"].setValue(this.currentaccount.Name);
-                        instance.controls["AccountId"].setValue(this.currentaccount.Id);
-                    }
+                        instance.controls["AccountId"].setValue(account);
+                    // }
+
+                    instance.controls["Debit"].setValue(journalVoucher.AccountTransactionValues[i].Debit);
+                    instance.controls["Credit"].setValue(journalVoucher.AccountTransactionValues[i].Credit);
+                    instance.controls["Description"].setValue(journalVoucher.AccountTransactionValues[i].Description);
                     control.push(instance);
                 }
                 this.modalRef = this.modalService.show(this.TemplateRef, {
                     backdrop: 'static',
                     keyboard: false,
-                    class: 'modal-lg'
+                    class: 'modal-xl'
                 });
             });
     }
@@ -507,10 +521,19 @@ export class JournalVouchercomponent implements OnInit {
                 alert("Debit and Credit are not Equal | Value must be greater than Amount Zero.");
                 return;
             }
-            const control = <FormArray>this.journalFrm.controls['AccountTransactionValues'].value;
+            const control = this.journalFrm.controls['AccountTransactionValues'].value;
             const controls = <FormArray>this.journalFrm.controls['AccountTransactionValues'];
 
-            console.log('the list of the details are', control);
+            let accountList = [];
+            control.forEach(account => {
+                let Id = account.AccountId.Id;
+                account.AccountId  = Id;
+
+                accountList.push(account);
+            });
+
+
+            console.log('the list of the details are', accountList);
             // for (var i = 0; i < control.length; i++) {
             //     let Id = control[i]['Id'];
             //     if (Id > 0) {
@@ -543,7 +566,8 @@ export class JournalVouchercomponent implements OnInit {
                 FinancialYear: this.journalFrm.controls['FinancialYear'].value,
                 UserName: this.journalFrm.controls['UserName'].value,
                 CompanyCode: this.journalFrm.controls['CompanyCode'].value,
-                AccountTransactionValues: this.journalFrm.controls['AccountTransactionValues'].value
+                // AccountTransactionValues: this.journalFrm.controls['AccountTransactionValues'].value
+                AccountTransactionValues: accountList
             }
             switch (this.dbops) {
                 case DBOperation.create:
@@ -694,7 +718,8 @@ export class JournalVouchercomponent implements OnInit {
     config = {
         displayKey: 'Name', // if objects array passed which key to be displayed defaults to description
         search: true,
-        limitTo: 1000
+        limitTo: 1000,
+        height: '200px'
     };
     DropdownChange($event, i: number) {
         var ii = i;
