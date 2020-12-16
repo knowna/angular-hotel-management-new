@@ -286,7 +286,7 @@ export class ReceiptComponent {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Recepit";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.getJournalVoucher(Id)
             .subscribe((receipt: AccountTrans) => {
                 this.indLoading = false;
