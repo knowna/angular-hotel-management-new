@@ -35,7 +35,7 @@ export class ReceiptComponent {
     modalBtnTitle: string;
     formattedDate: any;
     public account: Observable<Account>;
-    public accountcashbank: Observable<Account>;
+    public accountcashbank: Account[] = [];
     public receiptFrm: FormGroup;
     private formSubmitAttempt: boolean;
     private buttonDisabled: boolean;
@@ -264,7 +264,7 @@ export class ReceiptComponent {
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class: 'modal-lg'
+            class: 'modal-xl'
         });
     }
     
@@ -289,13 +289,14 @@ export class ReceiptComponent {
         this.modalBtnTitle = "Save";
         this.getJournalVoucher(Id)
             .subscribe((receipt: AccountTrans) => {
+                console.log('the receipt is', receipt)
                 this.indLoading = false;
                 this.receiptFrm.controls['Id'].setValue(receipt.Id);
                 this.receiptFrm.controls['Name'].setValue(receipt.Name);
                 this.receiptFrm.controls['AccountTransactionDocumentId'].setValue(receipt.AccountTransactionDocumentId);
                 this.currentaccount = this.accountcashbank.filter(x => x.Id === receipt.SourceAccountTypeId)[0];
                 if (this.currentaccount !== undefined) {
-                    this.receiptFrm.controls['SourceAccountTypeId'].setValue(this.currentaccount.Name);
+                    this.receiptFrm.controls['SourceAccountTypeId'].setValue(this.currentaccount);
                 }
                 this.receiptFrm.controls['Description'].setValue(receipt.Description);
                 this.receiptFrm.controls['Date'].setValue(receipt.AccountTransactionValues[0]['NVDate']);
@@ -308,7 +309,7 @@ export class ReceiptComponent {
                     if (this.currentaccount !== undefined) {
                         let currentaccountvoucher = receipt.AccountTransactionValues[i];
                         let instance = this.fb.group(currentaccountvoucher);
-                        instance.controls["AccountId"].setValue(this.currentaccount.Name);
+                        instance.controls["AccountId"].setValue(this.currentaccount);
                         control.push(instance);
                     }
                 }
@@ -316,7 +317,7 @@ export class ReceiptComponent {
                 this.modalRef = this.modalService.show(this.TemplateRef, {
                     backdrop: 'static',
                     keyboard: false,
-                    class: 'modal-lg'
+                    class: 'modal-xl'
                 });
             },
             error => this.msg = <any>error);
@@ -325,7 +326,7 @@ export class ReceiptComponent {
     deleteReceipt(Id: number) {
         this.dbops = DBOperation.delete;
         this.SetControlsState(true);
-        this.modalTitle = "Delete Receipts";
+        this.modalTitle = "Delete Receipt";
         this.modalBtnTitle = "Delete";
         this.getJournalVoucher(Id)
             .subscribe((receipt: AccountTrans) => {
@@ -335,7 +336,7 @@ export class ReceiptComponent {
                 this.receiptFrm.controls['AccountTransactionDocumentId'].setValue(receipt.AccountTransactionDocumentId);
                 this.currentaccount = this.accountcashbank.filter(x => x.Id === receipt.SourceAccountTypeId)[0];
                 if (this.currentaccount !== undefined) {
-                    this.receiptFrm.controls['SourceAccountTypeId'].setValue(this.currentaccount.Name);
+                    this.receiptFrm.controls['SourceAccountTypeId'].setValue(this.currentaccount);
                 }
                 this.receiptFrm.controls['Description'].setValue(receipt.Description);
                 this.receiptFrm.controls['Date'].setValue(receipt.AccountTransactionValues[0]['NVDate']);
@@ -348,7 +349,7 @@ export class ReceiptComponent {
                     if (this.currentaccount !== undefined) {
                         let currentaccountvoucher = receipt.AccountTransactionValues[i];
                         let instance = this.fb.group(currentaccountvoucher);
-                        instance.controls["AccountId"].setValue(this.currentaccount.Name);
+                        instance.controls["AccountId"].setValue(this.currentaccount);
                         control.push(instance);
                     }
                 }
@@ -356,7 +357,7 @@ export class ReceiptComponent {
                 this.modalRef = this.modalService.show(this.TemplateRef, {
                     backdrop: 'static',
                     keyboard: false,
-                    class: 'modal-lg'
+                    class: 'modal-xl'
                 });
             },
             error => this.msg = <any>error);
@@ -445,53 +446,67 @@ export class ReceiptComponent {
         receipt.get('CompanyCode').setValue(this.currentUser && this.company['BranchCode'] || '');
 
         if (receipt.valid) {
-            const control = <FormArray>this.receiptFrm.controls['AccountTransactionValues'].value;
+            const control = this.receiptFrm.controls['AccountTransactionValues'].value;
             const controls = <FormArray>this.receiptFrm.controls['AccountTransactionValues'];
-            for (var i = 0; i < control.length; i++) {
-                let Id = control[i]['Id'];
-                if (Id > 0) {
-                    let CurrentAccount = control[i]['AccountId'];
-                    this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
-                    let CurrentAccountId = this.currentaccount.Id;
-                    let currentaccountvoucher = control[i];
-                    let instance = this.fb.group(currentaccountvoucher);
-                    instance.controls["AccountId"].setValue(CurrentAccountId);
-                    controls.push(instance);
-                }
-                else {
-                    let xcurrentaccountvoucher = control[i]['AccountId'];
-                    let currentaccountvoucher = control[i];
-                    let instance = this.fb.group(currentaccountvoucher);
-                    this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
-                    instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
-                    controls.push(instance);
-                }
-            }
 
-            let Id = receipt.get('Id').value;
-            if (Id > 0) {
-                let CurrentAccount = receipt.get('SourceAccountTypeId').value;
-                this.currentaccount = this.accountcashbank.filter(x => x.Name === CurrentAccount)[0];
-                this.SourceAccountTypeId = this.currentaccount.Id.toString();
-                receipt.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
-            }
-            else {
-                let CurrentAccount = receipt.get('SourceAccountTypeId').value;
-                this.SourceAccountTypeId = CurrentAccount.Id;
-                receipt.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
-            }
+            let accountList = [];
+            control.forEach(account => {
+                let Id = account.AccountId.Id;
+                account.AccountId  = Id;
+
+                accountList.push(account);
+            });
+
+            // for (var i = 0; i < control.length; i++) {
+            //     let Id = control[i]['Id'];
+            //     if (Id > 0) {
+            //         let CurrentAccount = control[i]['AccountId'];
+            //         this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
+            //         let CurrentAccountId = this.currentaccount.Id;
+            //         let currentaccountvoucher = control[i];
+            //         let instance = this.fb.group(currentaccountvoucher);
+            //         instance.controls["AccountId"].setValue(CurrentAccountId);
+            //         controls.push(instance);
+            //     }
+            //     else {
+            //         let xcurrentaccountvoucher = control[i]['AccountId'];
+            //         let currentaccountvoucher = control[i];
+            //         let instance = this.fb.group(currentaccountvoucher);
+            //         this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
+            //         instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
+            //         controls.push(instance);
+            //     }
+            // }
+
+            let CurrentAccount = receipt.get('SourceAccountTypeId').value;
+            let currentaccount = this.accountcashbank.find(x => x.Id === CurrentAccount.Id);
+            this.SourceAccountTypeId = currentaccount.Id.toString();
+
+            // let Id = receipt.get('Id').value;
+            // if (Id > 0) {
+            //     let CurrentAccount = receipt.get('SourceAccountTypeId').value;
+            //     this.currentaccount = this.accountcashbank.filter(x => x.Name === CurrentAccount)[0];
+            //     this.SourceAccountTypeId = this.currentaccount.Id.toString();
+            //     receipt.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
+            // }
+            // else {
+            //     let CurrentAccount = receipt.get('SourceAccountTypeId').value;
+            //     this.SourceAccountTypeId = CurrentAccount.Id;
+            //     receipt.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
+            // }
 
             let receiptObj = {
                 Id: this.receiptFrm.controls['Id'].value,
                 Date: this.receiptFrm.controls['Date'].value,
                 Name: this.receiptFrm.controls['Name'].value,
-                SourceAccountTypeId: this.receiptFrm.controls['SourceAccountTypeId'].value,
+                SourceAccountTypeId: this.SourceAccountTypeId,
                 AccountTransactionDocumentId: this.receiptFrm.controls['AccountTransactionDocumentId'].value,
                 Description: this.receiptFrm.controls['Description'].value,
                 FinancialYear: this.receiptFrm.controls['FinancialYear'].value,
                 UserName: this.receiptFrm.controls['UserName'].value,
                 CompanyCode: this.receiptFrm.controls['CompanyCode'].value,
-                AccountTransactionValues: this.receiptFrm.controls['AccountTransactionValues'].value
+                // AccountTransactionValues: this.receiptFrm.controls['AccountTransactionValues'].value
+                AccountTransactionValues: accountList
             }
 
             switch (this.dbops) {
@@ -514,6 +529,7 @@ export class ReceiptComponent {
                                     this.formSubmitAttempt = false;
                                     this.reset();
                                 }
+                                alert("Data successfully added.");
                                 this.modalRef.hide();
                                 this.loadReceiptList(this.fromDate, this.toDate);
                             } else {
@@ -541,6 +557,7 @@ export class ReceiptComponent {
                                     this.formSubmitAttempt = false;
                                     this.reset();
                                 }
+                                alert("Data successfully updated.");
                                 this.modalRef.hide();
                                 this.loadReceiptList(this.fromDate, this.toDate);
                             } else {
@@ -550,19 +567,19 @@ export class ReceiptComponent {
                     );
                     break;
                 case DBOperation.delete:
-                    let receiptObject= {
-                        Id: this.receiptFrm.controls['Id'].value,
-                        Date: this.receiptFrm.controls['Date'].value,
-                        Name: this.receiptFrm.controls['Name'].value,
-                        SourceAccountTypeId: this.receiptFrm.controls['SourceAccountTypeId'].value,
-                        AccountTransactionDocumentId: this.receiptFrm.controls['AccountTransactionDocumentId'].value,
-                        Description: this.receiptFrm.controls['Description'].value,
-                        FinancialYear: this.receiptFrm.controls['FinancialYear'].value,
-                        UserName: this.receiptFrm.controls['UserName'].value,
-                        CompanyCode: this.receiptFrm.controls['CompanyCode'].value,
-                        AccountTransactionValues: this.receiptFrm.controls['AccountTransactionValues'].value
-                    }
-                    this._journalvoucherService.delete(Global.BASE_JOURNALVOUCHER_ENDPOINT,  receiptObject).subscribe(
+                    // let receiptObject= {
+                    //     Id: this.receiptFrm.controls['Id'].value,
+                    //     Date: this.receiptFrm.controls['Date'].value,
+                    //     Name: this.receiptFrm.controls['Name'].value,
+                    //     SourceAccountTypeId: this.receiptFrm.controls['SourceAccountTypeId'].value,
+                    //     AccountTransactionDocumentId: this.receiptFrm.controls['AccountTransactionDocumentId'].value,
+                    //     Description: this.receiptFrm.controls['Description'].value,
+                    //     FinancialYear: this.receiptFrm.controls['FinancialYear'].value,
+                    //     UserName: this.receiptFrm.controls['UserName'].value,
+                    //     CompanyCode: this.receiptFrm.controls['CompanyCode'].value,
+                    //     AccountTransactionValues: this.receiptFrm.controls['AccountTransactionValues'].value
+                    // }
+                    this._journalvoucherService.delete(Global.BASE_JOURNALVOUCHER_ENDPOINT,  receiptObj).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
