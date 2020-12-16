@@ -3,7 +3,9 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Injectable()
 export class AccountTransValuesService {
@@ -12,21 +14,28 @@ export class AccountTransValuesService {
     }
 
 
-    delete(url: string, id: number): Observable<any> {
-        debugger;
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        // let options = new RequestOptions({ headers: headers });
-        return this._http.delete(url + id)
-    //         .map((response: Response) => <any>response.json())
-    //         .catch(this.handleError);
-     }
+    // delete(url: string, id: number): Observable<any> {
+    //     let headers = new Headers({ 'Content-Type': 'application/json' });
+    //     // let options = new RequestOptions({ headers: headers });
+    //     return this._http.delete(url + id)
+    // //         .map((response: Response) => <any>response.json())
+    // //         .catch(this.handleError);
+    //  }
+
+     delete(url: string, id: number): Observable<any> {
+
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let options = ({ headers: headers });
+        return this._http.delete(url + id, options).pipe(
+                catchError(this.handleError));
+    }
 
 
 
-    // private handleError(error: Response) {
-    //     console.error(error);
-    //     return Observable.throw(error.json().error || 'Server error');
-    // }
+    private handleError (error:HttpErrorResponse) {
+        console.error(error);
+           return  throwError(error.error|| 'Server error');  
+    }
 
 
 }

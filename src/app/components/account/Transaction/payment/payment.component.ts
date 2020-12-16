@@ -12,6 +12,7 @@ import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
 import { AccountTransValuesService } from 'src/app/Service/accountTransValues.service';
 import { FileService } from 'src/app/Service/file.service';
 import { Account } from 'src/app/Model/Account/account';
+import { ToastrService } from 'ngx-toastr';
 
 type CSV = any[][];
 
@@ -67,7 +68,8 @@ export class PaymentComponent {
         private _accountTransValues: AccountTransValuesService,
         private date: DatePipe,
         private modalService: BsModalService,
-        private fileService: FileService
+        private fileService: FileService,
+        private toastrService: ToastrService
     ) {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -402,6 +404,7 @@ export class PaymentComponent {
         if (currentaccountid != "0") {
             this._accountTransValues.delete(Global.BASE_JOURNAL_ENDPOINT, currentaccountid).subscribe(data => {
                 (data == 1) && controls.removeAt(i);
+                this.toastrService.success('Data removed successfully!');
             });
         } else {
             if (i >= 0) {
