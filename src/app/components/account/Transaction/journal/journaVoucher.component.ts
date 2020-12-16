@@ -289,7 +289,7 @@ export class JournalVouchercomponent implements OnInit {
                 this.indLoading = false;
                 this.journalFrm.controls['Id'].setValue(journalVoucher.Id);
                 // this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
-                this.journalFrm.controls['Name'].setValue(journalVoucher.AccountTransactionType);
+                this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
 
                 this.journalFrm.controls['Date'].setValue(journalVoucher.AccountTransactionValues[0]['NVDate']);
                 this.journalFrm.controls['AccountTransactionDocumentId'].setValue(journalVoucher.AccountTransactionDocumentId);
@@ -343,14 +343,14 @@ export class JournalVouchercomponent implements OnInit {
     deleteJournalVoucher(id: number) {
         this.dbops = DBOperation.delete;
         this.SetControlsState(true);
-        this.modalTitle = "Confirm to Delete?";
+        this.modalTitle = "Delete Journal";
         this.modalBtnTitle = "Delete";
         this.getJournalVoucher(id)
             .subscribe((journalVoucher: AccountTrans) => {
                 this.indLoading = false;
                 this.journalFrm.controls['Id'].setValue(journalVoucher.Id);
-                // this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
-                this.journalFrm.controls['Name'].setValue(journalVoucher.AccountTransactionType);
+                this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
+                // this.journalFrm.controls['Name'].setValue(journalVoucher.AccountTransactionType);
 
                 this.journalFrm.controls['AccountTransactionDocumentId'].setValue(journalVoucher.AccountTransactionDocumentId);
                 this.journalFrm.controls['Description'].setValue(journalVoucher.Description);
