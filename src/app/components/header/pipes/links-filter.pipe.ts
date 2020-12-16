@@ -78,6 +78,15 @@ export class LinksFilterPipe implements PipeTransform {
     'Inventory:Master:Unit',
     'Inventory:Warehouse:Warehouse',
     'Inventory:Warehouse:WareHouseType',
+    'Front Office',
+    'Front Office:Booking',
+    'Front Office:Booking:Booking',
+    'Front Office:Booking:Check-in',
+    'Front Office:Booking:Room Status',
+    'Front Office:Booking:Check-Out',
+    'Front Office:Booking:Inquiry',
+    'Front Office:Booking:Customer'
+
     
 
 ];

@@ -20,6 +20,8 @@ export class MergeService {
     }
 
     partialMerge(details):Observable<any> {
+        console.log(details);
+        
         return this._http.post(Global.BASE_PARTIAL_MERGE, details);
     }
 
