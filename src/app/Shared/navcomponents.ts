@@ -1,43 +1,50 @@
 export const navcomponents=[
     {
       title: 'Front Office',
-      icon: 'fa fa-shopping-cart',
+      img:'../../../assets/images/frontOffice.png',
       permission:'Front Office',
       children: [
         {
           title: 'Booking',
           icon: 'fa fa-circle',
           permission:'Front Office:Booking',
+          img:'../../../assets/images/bookingBooking.png',
           children: [
             {
               title: 'Booking',
               link: 'reservation',
+              img:'../../../assets/images/bookingBooking.png',
               permission:'Front Office:Booking:Booking',
             },
             {
               title: 'Check-in',
               link: 'reservation/checkin',
+              img:'../../../assets/images/check-in.png',
               permission:'Front Office:Booking:Check-in',
             },
             {
               title: 'Room Status',
               link: 'reservation/reservationstatus',
+              img:'../../../assets/images/status.png',
               permission:'Front Office:Booking:Room Status',
             },
             {
               title: 'Check-Out',
               link: 'reservation/checkout',
+              img:'../../../assets/images/check-out.png',
               permission:'Front Office:Booking:Check-Out',
             },
            
             {
               title: 'Inquiry',
               link: 'reservation/reservationinquiry',
+              img:'../../../assets/images/inquiry.png',
               permission:'Front Office:Booking:Inquiry',
             },
             {
               title: 'Customer',
               link: 'reservation/customer',
+              img:'../../../assets/images/customer-booking.png',
               permission:'Front Office:Booking:Customer',
             }
                      
