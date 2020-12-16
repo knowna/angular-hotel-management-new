@@ -11,7 +11,7 @@ export const navcomponents=[
           img:'../../../assets/images/bookingBooking.png',
           children: [
             {
-              title: 'Booking',
+              title: 'Reservation',
               link: 'reservation',
               img:'../../../assets/images/bookingBooking.png',
               permission:'Front Office:Booking:Booking',
@@ -52,30 +52,37 @@ export const navcomponents=[
         },
         {
           title: 'Master Setup',
+          permission:'Front Office:master',
           icon: 'fa fa-book',
           children: [
             {
-              title: 'Payment',
+              title: 'Payment Types',
               link: 'reservation/payment',
+              permission:'Front Office:master:Payment',
             },
             {
               title: 'Facility',
               link: 'reservation/facility',
+              permission:'Front Office:master:facility',
             },
             {
               title: 'Room Types',
               link: 'reservation/roomtype',
+              permission:'Front Office:master:roomtype',
             },
             {
-              title: 'Customer',
+              title: 'Customer Types',
+              permission:'Front Office:master:customertypes',
               link: 'reservation/customertypes',
             },
             {
-              title: 'Reservation',
+              title: 'Reservation Type',
+              permission:'Front Office:master:reservationtype',
               link: 'reservation/reservationtype',
             },
             {
               title: 'Rooms Setup',
+              permission:'Front Office:master:room',
               link: 'reservation/room',
             },
           ]

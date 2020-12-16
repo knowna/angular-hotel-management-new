@@ -1,8 +1,5 @@
 ﻿import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { FacilityService } from '../../../services/reservation/facility.services';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { Room } from '../../../models/reservation/room.model';
-import { RoomType } from '../../../models/reservation/room-type.model';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
@@ -10,6 +7,9 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { DBOperation } from '../../../Shared/enum';
 import { Observable } from 'rxjs/Rx';
 import { Global } from '../../../Shared/global';
+import { Room } from 'src/app/Model/reservation/room.model';
+import { RoomType } from 'src/app/Model/reservation/customer-screen.model';
+import { FacilityService } from 'src/app/Service/reservation/facility.services';
 
 @Component({
     templateUrl: './room.component.html'
@@ -66,21 +66,19 @@ export class RoomComponent implements OnInit {
     }
 
     editRoom(id: number, template: TemplateRef<any>) {
-        ' '
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Room";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.room = this.rooms.filter(x => x.Id == id)[0];
         this.roomForm.setValue(this.room);
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
     }
 
     deleteRoom(id: number, template: TemplateRef<any>) {
-        ' '
         this.dbops = DBOperation.delete;
         this.SetControlsState(true);
-        this.modalTitle = "Confirm to Delete?";
+        this.modalTitle = "Delete Room";
         this.modalBtnTitle = "Delete";
         this.room = this.rooms.filter(x => x.Id == id)[0];
         this.roomForm.setValue(this.room);

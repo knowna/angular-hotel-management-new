@@ -218,6 +218,16 @@ import { SalesComponent } from './components/account/Transaction/sales/sales.com
 import { SalesDetailComponent } from './components/account/Transaction/sales/sales-detail/salesDetail.component';
 import { StockInHandComponent } from './components/InventoryDashboard/inventory report/stock-in-hand.component';
 import { ReservationCustomerComponent } from './components/Reservation/customer/customer.component';
+import { CheckInComponent } from './components/Reservation/checkin/checkin.component';
+import { PaymentTypeComponent } from './components/Reservation/payment-type/payment-type.component';
+import { CheckOutComponent } from './components/Reservation/checkout/checkout.component';
+import { ReservationInquiryComponent } from './components/Reservation/ReservationInquiry/ReservationInquiry.component';
+import { RoomStatusComponent } from './components/Reservation/reservation-status/Reservationstatus.component';
+import { ReservationComponent } from './components/Reservation/reservation/reservation.component';
+import { FacilityComponent } from './components/Reservation/facility/facility.component';
+import { CustomerTypeComponent } from './components/Reservation/customer-type/customer-type.component';
+import { ReservationTypeComponent } from './components/Reservation/reservation-type/reservation-type.component';
+import { RoomComponent } from './components/Reservation/room/room.component';
 
 @NgModule({
   imports: [
@@ -275,22 +285,22 @@ import { ReservationCustomerComponent } from './components/Reservation/customer/
     RoomTypeComponent,
     MasterLedgerComponent,
     PagenotfoundComponent,
-    // CheckInComponent,
+    CheckInComponent,
     FileUploadComponent,
     MenuCategoryComponent1,
     JournalVouchercomponent,
 
-    // RoomStatusComponent,
-    // ReservationComponent,
-    // CheckOutComponent,
-    // ReservationInquiryComponent,
+    RoomStatusComponent,
+    ReservationComponent,
+    CheckOutComponent,
+    ReservationInquiryComponent,
     ReservationCustomerComponent,
-    // RoomComponent,
-    // PaymentTypeComponent,
-    // FacilityComponent,
-    // ReservationTypeComponent,
+    RoomComponent,
+    PaymentTypeComponent,
+    FacilityComponent,
+    ReservationTypeComponent,
     // RoomTypeComponent,
-    // CustomerTypeComponent,
+    CustomerTypeComponent,
 
     UserComponent,
     CompanyComponent,

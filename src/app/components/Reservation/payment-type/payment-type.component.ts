@@ -1,7 +1,5 @@
 ﻿import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { PaymentTypeService } from '../../../services/reservation/payment-type.services';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { PaymentType } from '../../../models/reservation/payment-type.model';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
@@ -9,6 +7,8 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { DBOperation } from '../../../Shared/enum';
 import { Observable } from 'rxjs/Rx';
 import { Global } from '../../../Shared/global';
+import { PaymentType } from 'src/app/Model/reservation/payment-type.model';
+import { PaymentTypeService } from 'src/app/Service/reservation/payment-type.services';
 
 @Component({
     templateUrl: './payment-type.component.html'

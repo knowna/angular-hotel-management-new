@@ -1,7 +1,5 @@
 ﻿import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { ReservationTypeService } from '../../../services/reservation/reservation-type.services';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { ReservationType } from '../../../models/reservation/reservation-type.model';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
@@ -9,6 +7,8 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { DBOperation } from '../../../Shared/enum';
 import { Observable } from 'rxjs/Rx';
 import { Global } from '../../../Shared/global';
+import { ReservationType } from 'src/app/Model/reservation/reservation-type.model';
+import { ReservationTypeService } from 'src/app/Service/reservation/reservation-type.services';
 
 @Component({
     templateUrl: './reservation-type.component.html'

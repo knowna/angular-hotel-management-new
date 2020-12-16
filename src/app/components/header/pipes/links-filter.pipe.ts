@@ -85,7 +85,14 @@ export class LinksFilterPipe implements PipeTransform {
     'Front Office:Booking:Room Status',
     'Front Office:Booking:Check-Out',
     'Front Office:Booking:Inquiry',
-    'Front Office:Booking:Customer'
+    'Front Office:Booking:Customer',
+    'Front Office:master:Payment',
+    'Front Office:master:facility',
+    'Front Office:master:roomtype',
+    'Front Office:master:customertypes',
+    'Front Office:master:reservationtype',
+    'Front Office:master:room',
+    'Front Office:master'
 
     
 

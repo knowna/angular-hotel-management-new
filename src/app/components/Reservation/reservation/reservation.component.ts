@@ -1,8 +1,6 @@
 ﻿import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ReservationService } from '../../../services/reservation/reservation.services';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
-import { Reservation } from '../../../models/reservation/reservation.model';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
@@ -12,10 +10,12 @@ import { Observable } from 'rxjs/Rx';
 import { forkJoin } from "rxjs/observable/forkJoin";
 
 import { Global } from '../../../Shared/global';
-import { ReservationType } from '../../../models/reservation/reservation-type.model';
-import { Customer } from '../../../models/reservation/customer.model';
-import { RoomType } from '../../../models/reservation/customer-screen.model';
-import { PaymentType } from '../../../models/reservation/payment-type.model';
+import { Reservation } from 'src/app/Model/reservation/reservation.model';
+import { ReservationType } from 'src/app/Model/reservation/reservation-type.model';
+import { Customer } from 'src/app/Model/customer.model';
+import { RoomType } from 'src/app/Model/reservation/customer-screen.model';
+import { PaymentType } from 'src/app/Model/reservation/payment-type.model';
+import { ReservationTypeService } from 'src/app/Service/reservation/reservation-type.services';
 
 @Component({
     templateUrl: './reservation.component.html'
@@ -52,7 +52,7 @@ export class ReservationComponent implements OnInit {
      */
     constructor(
         private fb: FormBuilder,
-        private _reservationService: ReservationService,
+        private _reservationService: ReservationTypeService,
         private modalService: BsModalService,
         private date: DatePipe
     ) {
