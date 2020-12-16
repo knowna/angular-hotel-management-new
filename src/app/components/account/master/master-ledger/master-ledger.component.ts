@@ -122,7 +122,7 @@ export class MasterLedgerComponent implements OnInit {
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class: 'modal-lg' });
+            class: 'modal-xl' });
     }
 
     editMasterLedger(Id: number) {
@@ -190,7 +190,7 @@ export class MasterLedgerComponent implements OnInit {
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class: 'modal-lg'
+            class: 'modal-xl'
         });
     }
 
@@ -259,7 +259,7 @@ export class MasterLedgerComponent implements OnInit {
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class: 'modal-lg'
+            class: 'modal-xl'
         });
     }
 

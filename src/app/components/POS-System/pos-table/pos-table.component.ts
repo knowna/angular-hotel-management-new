@@ -639,7 +639,18 @@ export class PosTableComponent implements OnInit {
         ListOrderItem.push(OrderItem);
     });
     
+
+    let previousItemTotal = 0;
+    this.ordersNew.forEach(order => {
+        order.OrderItems.forEach(item => {
+            previousItemTotal += item.TotalAmount; 
+        });
+    });
+
+    console.log('the toal amonut of prev', previousItemTotal)
     
+    ticketTotalWithoutVat += previousItemTotal;
+
     vatAmount =(0.13*ticketTotalWithoutVat);
     grandTotal = vatAmount+ticketTotalWithoutVat;
 
@@ -664,7 +675,7 @@ export class PosTableComponent implements OnInit {
     }
 
     console.log('the order request us', orderRequest);
-           
+    console.log('the previous orders are', this.ordersNew)
             
     this.orderApi.addOrderProductList(orderRequest).subscribe(
         data =>{
@@ -680,9 +691,6 @@ export class PosTableComponent implements OnInit {
             }else{
                 this.router.navigate(['table/' + data.TableId + '/ticket/'+ data.TicketId]);
             }
-            
-            // window.location.reload();
-            
         }
     )
     
