@@ -113,6 +113,7 @@ import { DebitNoteComponent } from './components/account/Transaction/debit-note/
 import { SalesComponent } from './components/account/Transaction/sales/sales.component';
 import { StockInHandComponent } from './components/InventoryDashboard/inventory report/stock-in-hand.component';
 import { ReservationCustomerComponent } from './components/Reservation/customer/customer.component';
+import { PaymentTypeComponent } from './components/Reservation/payment-type/payment-type.component';
 
 
 const routes: Routes = [
@@ -193,11 +194,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
 
-  // {
-  //   path: "reservation/payment",
-  //   component: PaymentTypeComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: "reservation/payment",
+    component: PaymentTypeComponent,
+    canActivate: [AuthGuard]
+  },
 
   // {
   //   path: "reservation/roomtype", component: RoomTypeComponent,

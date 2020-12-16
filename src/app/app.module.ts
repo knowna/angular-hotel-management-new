@@ -218,6 +218,7 @@ import { SalesComponent } from './components/account/Transaction/sales/sales.com
 import { SalesDetailComponent } from './components/account/Transaction/sales/sales-detail/salesDetail.component';
 import { StockInHandComponent } from './components/InventoryDashboard/inventory report/stock-in-hand.component';
 import { ReservationCustomerComponent } from './components/Reservation/customer/customer.component';
+import { PaymentTypeComponent } from './components/Reservation/payment-type/payment-type.component';
 
 @NgModule({
   imports: [
@@ -286,7 +287,7 @@ import { ReservationCustomerComponent } from './components/Reservation/customer/
     // ReservationInquiryComponent,
     ReservationCustomerComponent,
     // RoomComponent,
-    // PaymentTypeComponent,
+    PaymentTypeComponent,
     // FacilityComponent,
     // ReservationTypeComponent,
     // RoomTypeComponent,
