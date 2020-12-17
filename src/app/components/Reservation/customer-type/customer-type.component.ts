@@ -61,7 +61,7 @@ export class CustomerTypeComponent implements OnInit {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Customer Type";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.customerType = this.customerTypes.filter(x => x.Id == id)[0];
         this.customerTypeForm.setValue(this.customerType);
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
@@ -98,7 +98,7 @@ export class CustomerTypeComponent implements OnInit {
         if (departfrm.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
-                    this._customerTypeService.post(Global.BASE_CUSTOMER_TYPES_ENDPOINT, formData._value).subscribe(
+                    this._customerTypeService.post(Global.BASE_CUSTOMER_TYPES_ENDPOINT, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -117,7 +117,7 @@ export class CustomerTypeComponent implements OnInit {
                     );
                     break;
                 case DBOperation.update:
-                    this._customerTypeService.put(Global.BASE_CUSTOMER_TYPES_ENDPOINT, formData._value.Id, formData._value).subscribe(
+                    this._customerTypeService.put(Global.BASE_CUSTOMER_TYPES_ENDPOINT, formData.value.Id, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -136,11 +136,11 @@ export class CustomerTypeComponent implements OnInit {
                     );
                     break;
                 case DBOperation.delete:
-                    this._customerTypeService.delete(Global.BASE_CUSTOMER_TYPES_ENDPOINT, formData._value.Id).subscribe(
+                    this._customerTypeService.delete(Global.BASE_CUSTOMER_TYPES_ENDPOINT, formData.value.Id).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
-                                alert("Department successfully deleted.");
+                                alert("Data successfully deleted.");
                                 this.modalRef.hide();
                                 this.LoadCustomerTypes();
                                 this.formSubmitAttempt = false;

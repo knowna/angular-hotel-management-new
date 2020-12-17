@@ -19,7 +19,7 @@
                 <label class="control-label col-md-2 text-center">
                     <strong>Voucher Type:</strong>
                 </label>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                     <input type="text" class="form-control" formControlName="Name" readonly="true">
                     <div class="text-danger" *ngIf="journalFrm.get('Name'). hasError('required') && formSubmitAttempt">
                         <strong>Voucher Type is required</strong>
@@ -28,8 +28,11 @@
                 <label class="control-label col-md-2 text-center">
                     <strong>Voucher Date:</strong>
                 </label>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3" id="datepicker">
                     <input class="form-control" type="text" placeholder="yyyy.mm.dd" formControlName="Date" />
+                    <!-- <np-datepicker
+                        language="en">
+                    </np-datepicker> -->
                     <div class="text-danger" *ngIf="(journalFrm.get('Date').hasError('InvalidDate') || journalFrm.get('Date').hasError('required')) && formSubmitAttempt">
                         {{ journalFrm.get('Date').getError('InvalidDate') }}
                     </div>

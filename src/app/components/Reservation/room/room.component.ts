@@ -104,7 +104,7 @@ export class RoomComponent implements OnInit {
         if (departfrm.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
-                    this._roomService.post(Global.BASE_RESERVATION_ROOM_ENDPOINT, formData._value).subscribe(
+                    this._roomService.post(Global.BASE_RESERVATION_ROOM_ENDPOINT, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -123,7 +123,7 @@ export class RoomComponent implements OnInit {
                     );
                     break;
                 case DBOperation.update:
-                    this._roomService.put(Global.BASE_RESERVATION_ROOM_ENDPOINT, formData._value.Id, formData._value).subscribe(
+                    this._roomService.put(Global.BASE_RESERVATION_ROOM_ENDPOINT, formData.value.Id, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -142,7 +142,7 @@ export class RoomComponent implements OnInit {
                     );
                     break;
                 case DBOperation.delete:
-                    this._roomService.delete(Global.BASE_RESERVATION_ROOM_ENDPOINT, formData._value.Id).subscribe(
+                    this._roomService.delete(Global.BASE_RESERVATION_ROOM_ENDPOINT, formData.value.Id).subscribe(
                         data => {
                             if (data == 1) //Success
                             {

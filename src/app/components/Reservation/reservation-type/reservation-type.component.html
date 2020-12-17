@@ -1,4 +1,62 @@
-﻿<div class='panel panel-primary'>
+﻿<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Reservation Types</h2>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="Search by Name">
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-success" (click)="openModal(template)" style="float: right">
+                <strong>
+                    <i class="fa fa-plus"></i>
+                    Add
+                </strong>
+            </button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="isLoading"><img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <div *ngIf='reservationTypes && reservationTypes.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table class='table table-bordered' *ngIf='reservationTypes && reservationTypes.length'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let customerType of reservationTypes">
+                        <td>{{customerType.Name}}</td>
+                        <td>
+                            <div class="d-flex">
+                                <button class="btn btn-primary btn-sm" (click)="editDepartment(customerType.Id,template)">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm ml-2" (click)="deleteDepartment(customerType.Id,template)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+
+                            <!-- <span><img src="../../images/Edit.png" (click)="editDepartment(customerType.Id,template)" height="32" width="32" /></span>
+                            <span><img src="../../images/Delete.png" (click)="deleteDepartment(customerType.Id,template)" height="32" width="32" /></span> -->
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
+    </div>
+</div>
+
+<!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
         RESERVATION TYPES
     </div>
@@ -35,7 +93,8 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
+
 <ng-template #template>
     <form class="panel-primary" novalidate (ngSubmit)="onSubmit(reservationTypeForm)" [formGroup]="reservationTypeForm">
         <div class="modal-header panel-heading">
@@ -46,11 +105,11 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-2">Name:</label>
-                    <div class="col-sm-6">
-                        <input type="text" class="form-control" placeholder="" formControlName="Name"  setAutoFocus  tabindex="1">
-                        <div class="alert alert-danger" *ngIf="reservationTypeForm.get('Name').hasError('required') && formSubmitAttempt">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label">Name</label>
+                        <input type="text" class="form-control" placeholder="Name" formControlName="Name"  setAutoFocus  tabindex="1">
+                        <div class="alert alert-danger mt-1" *ngIf="reservationTypeForm.get('Name').hasError('required') && formSubmitAttempt">
                             Name is required
                         </div>
                     </div>
@@ -60,7 +119,8 @@
         <div class="modal-footer">
             <div>
                 <button type="submit" class="btn btn-success pull-left" tabindex="2">{{modalBtnTitle}}</button>
-                <a class="btn btn-danger pull-right" (click)="modalRef.hide()" tabindex="3">Cancel</a>
+                <button type="button" class="btn btn-danger pull-right ml-2" (click)="modalRef.hide();">Cancel</button>
+                <!-- <a class="btn btn-danger pull-right" (click)="modalRef.hide()" tabindex="3">Cancel</a> -->
             </div>
         </div>
     </form>
