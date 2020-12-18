@@ -1,13 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
 
-:host{
-    z-index: 100000000 !important;
-}
-
-.np-datepicker-backdrop-overlay {
-    z-index: 100000000 !important;
-}
-
   #preloader {
       position: fixed;
       top: 0;

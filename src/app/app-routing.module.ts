@@ -123,6 +123,7 @@ import { FacilityComponent } from './components/Reservation/facility/facility.co
 import { CustomerTypeComponent } from './components/Reservation/customer-type/customer-type.component';
 import { ReservationTypeComponent } from './components/Reservation/reservation-type/reservation-type.component';
 import { RoomComponent } from './components/Reservation/room/room.component';
+import { JournalAddEditComponent } from './components/account/Transaction/journal/journal-add-edit/journal-add-edit.component';
 
 
 const routes: Routes = [
@@ -371,6 +372,16 @@ const routes: Routes = [
   {
     path: 'Account/journalVoucher',
     component: JournalVouchercomponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/journalVoucher/:mode',
+    component: JournalAddEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/journalVoucher/:mode/:id',
+    component: JournalAddEditComponent,
     canActivate: [AuthGuard]
   },
   {
