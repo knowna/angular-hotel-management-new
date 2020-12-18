@@ -104,8 +104,20 @@
                                 </div>
                             </div>
                             <div class="col-md-1 custom-padding text-center" style="padding-top: 7px !important;">
-                                <span *ngIf="journalFrm.controls.AccountTransactionValues.controls.length > 1" style="cursor: pointer; font-size: 30px" class="fa fa-window-close pull-right"
-                                        (click)="removeAccount(i)"></span>
+                                <span 
+                                    *ngIf="journalFrm.controls.AccountTransactionValues.controls.length > 1" 
+                                    style="cursor: pointer; font-size: 30px" 
+                                    class="fa fa-window-close pull-right"
+                                    (click)="removeAccount(i)">
+                                </span>
+                                <!-- <button 
+                                    *ngIf="journalFrm.controls.AccountTransactionValues.controls.length > 1" 
+                                    type="button"
+                                    style="cursor: pointer" 
+                                    class="btn btn-danger btn-sm"
+                                    (click)="removeAccount(i)">
+                                    <i class="fa fa-trash"></i>
+                                </button> -->
                             </div>
                         </div>
                     </div>

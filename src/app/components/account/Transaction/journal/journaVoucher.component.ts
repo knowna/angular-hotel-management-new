@@ -180,6 +180,51 @@ export class JournalVouchercomponent implements OnInit {
 
     exportTableToPdf() {
         var doc = new jsPDF("p", "mm", "a4");
+        var rows = [];
+        let sn = 1;
+
+        rows.push(['S.No','Date','Particular','Voucher Type','Voucher No']);
+
+        this.journalVoucher.forEach(voucher => {
+            var tempVoucher = [
+                sn,
+                voucher.VDate,
+                voucher.Name,
+                voucher.VType,
+                voucher.VoucherNo
+            ];
+        
+            sn = sn * 1 + 1;
+            rows.push(tempVoucher);
+        });
+
+        doc.setFontSize(14);
+        doc.text(10,30,'Journal Voucher');
+        doc.text(50,30,` : ${this.date.transform(new Date, "dd-MM-yyyy")}`);
+        // doc.text(120,30,'Date');
+        // doc.text(150,30,` : ${this.date.transform(new Date, "dd-MM-yyyy")}`);
+        doc.autoTable({
+            margin: {left: 10},
+            setFontSize: 14,
+      
+            //for next page 
+            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 40,
+            rowPageBreak: 'avoid',
+            body: rows,
+            bodyStyles: {
+              fontSize: 9,
+            },
+            columnStyles: {
+              0: {cellWidth: 35},
+              1: {cellWidth: 35},
+              2: {cellWidth: 35},
+              3: {cellWidth: 40},
+              4: {cellWidth: 40},
+            },
+      
+            // customize table header and rows format
+            theme: 'striped'
+        });
         doc.save(this.toPdfFileName);
     }
 
