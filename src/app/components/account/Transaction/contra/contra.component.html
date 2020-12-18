@@ -234,7 +234,7 @@
                 <label class="control-label col-md-2 text-right">
                     <strong>Account:</strong>
                 </label>
-                <div class="form-group col-md-10">
+                <div class="form-group col-md-4">
                     <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="SourceAccountTypeId" [config]="config" [options]="account"></ngx-select-dropdown>
                     <div class="text-danger" *ngIf="contraForm.get('SourceAccountTypeId').hasError('required') && formSubmitAttempt">
                         Ledger Name is required

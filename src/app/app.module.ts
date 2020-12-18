@@ -228,6 +228,7 @@ import { FacilityComponent } from './components/Reservation/facility/facility.co
 import { CustomerTypeComponent } from './components/Reservation/customer-type/customer-type.component';
 import { ReservationTypeComponent } from './components/Reservation/reservation-type/reservation-type.component';
 import { RoomComponent } from './components/Reservation/room/room.component';
+import { JournalAddEditComponent } from './components/account/Transaction/journal/journal-add-edit/journal-add-edit.component';
 
 @NgModule({
   imports: [
@@ -397,7 +398,8 @@ import { RoomComponent } from './components/Reservation/room/room.component';
     DashboardComponent,
     PosCustomerComponent,
     PartialMergeComponent,
-    SplitMergeComponent
+    SplitMergeComponent,
+    JournalAddEditComponent
 
   ],
   providers: [

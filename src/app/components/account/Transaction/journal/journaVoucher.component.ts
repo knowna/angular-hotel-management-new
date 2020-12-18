@@ -16,6 +16,7 @@ import { AccountTransValuesService } from 'src/app/Service/accountTransValues.se
 import { FileService } from 'src/app/Service/file.service';
 import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
 import { ToastrService } from 'ngx-toastr';
+import { Router, ActivatedRoute } from '@angular/router';
 
 // Accessing global variable
 type CSV = any[][];
@@ -78,7 +79,9 @@ export class JournalVouchercomponent implements OnInit {
         private _accountTransValues: AccountTransValuesService, private date: DatePipe,
         private modalService: BsModalService,
         private fileService: FileService,
-        private toastrService: ToastrService
+        private toastrService: ToastrService,
+        private router: Router,
+        private route: ActivatedRoute
     ) {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -253,17 +256,18 @@ export class JournalVouchercomponent implements OnInit {
      * Open Add New Journal Voucher Form Modal
      */
     addJournalVoucher() {
-        this.dbops = DBOperation.create;
-        this.SetControlsState(true);
-        this.modalTitle = "Add Journal";
-        this.modalBtnTitle = "Save";
-        this.reset();
-        this.journalFrm.controls['Name'].setValue("Journal");
-        this.modalRef = this.modalService.show(this.TemplateRef, {
-            backdrop: 'static',
-            keyboard: false,
-            class: 'modal-xl'
-        });
+        // this.dbops = DBOperation.create;
+        // this.SetControlsState(true);
+        // this.modalTitle = "Add Journal";
+        // this.modalBtnTitle = "Save";
+        // this.reset();
+        // this.journalFrm.controls['Name'].setValue("Journal");
+        // this.modalRef = this.modalService.show(this.TemplateRef, {
+        //     backdrop: 'static',
+        //     keyboard: false,
+        //     class: 'modal-xl'
+        // });
+        this.router.navigate(['add'], {relativeTo: this.route});
     }
 
     /**
@@ -280,62 +284,58 @@ export class JournalVouchercomponent implements OnInit {
      * @param Id {String} Voucher Id
      */
     editJournalVoucher(Id: number) {
-        this.dbops = DBOperation.update;
-        this.SetControlsState(true);
-        this.modalTitle = "Edit Journal";
-        this.modalBtnTitle = "Save";
-        this.reset();
-        this.getJournalVoucher(Id)
-            .subscribe((journalVoucher: AccountTrans) => {
-                console.log('the journal voucher is', journalVoucher)
-                this.indLoading = false;
-                this.journalFrm.controls['Id'].setValue(journalVoucher.Id);
-                // this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
-                this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
+        this.router.navigate(['edit/' + Id], {relativeTo: this.route});
+        // this.dbops = DBOperation.update;
+        // this.SetControlsState(true);
+        // this.modalTitle = "Edit Journal";
+        // this.modalBtnTitle = "Save";
+        // this.reset();
+        // this.getJournalVoucher(Id)
+        //     .subscribe((journalVoucher: AccountTrans) => {
+        //         console.log('the journal voucher is', journalVoucher)
+        //         this.indLoading = false;
+        //         this.journalFrm.controls['Id'].setValue(journalVoucher.Id);
+        //         this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
 
-                this.journalFrm.controls['Date'].setValue(journalVoucher.AccountTransactionValues[0]['NVDate']);
-                this.journalFrm.controls['AccountTransactionDocumentId'].setValue(journalVoucher.AccountTransactionDocumentId);
-                this.journalFrm.controls['Description'].setValue(journalVoucher.Description);
-                this.journalFrm.controls['Amount'].setValue(journalVoucher.Amount);
-                this.journalFrm.controls['drTotal'].setValue(journalVoucher.drTotal);
-                this.journalFrm.controls['crTotal'].setValue(journalVoucher.crTotal);
-                this.journalFrm.controls['AccountTransactionValues'] = this.fb.array([]);
-                const control = <FormArray>this.journalFrm.controls['AccountTransactionValues'];
+        //         this.journalFrm.controls['Date'].setValue(journalVoucher.AccountTransactionValues[0]['NVDate']);
+        //         this.journalFrm.controls['AccountTransactionDocumentId'].setValue(journalVoucher.AccountTransactionDocumentId);
+        //         this.journalFrm.controls['Description'].setValue(journalVoucher.Description);
+        //         this.journalFrm.controls['Amount'].setValue(journalVoucher.Amount);
+        //         this.journalFrm.controls['drTotal'].setValue(journalVoucher.drTotal);
+        //         this.journalFrm.controls['crTotal'].setValue(journalVoucher.crTotal);
+        //         this.journalFrm.controls['AccountTransactionValues'] = this.fb.array([]);
+        //         const control = <FormArray>this.journalFrm.controls['AccountTransactionValues'];
 
-                for (let i = 0; i < journalVoucher.AccountTransactionValues.length; i++) {
-                    // this.currentaccount = this.account.filter(x => x.Id === journalVoucher.AccountTransactionValues[i]["AccountId"])[0];
-                    const account = this.account.find(x => x.Id === journalVoucher.AccountTransactionValues[i].AccountId);
-                    let valuesFromServer = journalVoucher.AccountTransactionValues[i];
-                    let instance = this.fb.group(valuesFromServer);
-                    console.log('accountis', account);
-                    // if (this.currentaccount !== undefined) {
-                        // instance.controls["AccountId"].setValue(this.currentaccount.Name);
-                        instance.controls["AccountId"].setValue(account);
-                    // }
+        //         for (let i = 0; i < journalVoucher.AccountTransactionValues.length; i++) {
+        //             const account = this.account.find(x => x.Id === journalVoucher.AccountTransactionValues[i].AccountId);
+        //             let valuesFromServer = journalVoucher.AccountTransactionValues[i];
+        //             let instance = this.fb.group(valuesFromServer);
+        //             console.log('accountis', account);
+        //             instance.controls["AccountId"].setValue(account);
 
-                    if (valuesFromServer['entityLists'] === "Dr") {
-                        instance.controls['Credit'].disable();
-                    }
+        //             if (valuesFromServer['entityLists'] === "Dr") {
+        //                 instance.controls['Credit'].disable();
+        //             }
 
-                    if (valuesFromServer['entityLists'] === "Cr") {
-                        instance.controls['Debit'].disable();
-                    }
+        //             if (valuesFromServer['entityLists'] === "Cr") {
+        //                 instance.controls['Debit'].disable();
+        //             }
 
-                    instance.controls["Debit"].setValue(journalVoucher.AccountTransactionValues[i].Debit);
-                    instance.controls["Credit"].setValue(journalVoucher.AccountTransactionValues[i].Credit);
-                    instance.controls["Description"].setValue(journalVoucher.AccountTransactionValues[i].Description);
+        //             instance.controls["Debit"].setValue(journalVoucher.AccountTransactionValues[i].Debit);
+        //             instance.controls["Credit"].setValue(journalVoucher.AccountTransactionValues[i].Credit);
+        //             instance.controls["Description"].setValue(journalVoucher.AccountTransactionValues[i].Description);
 
-                    control.push(instance);
-                }
+        //             control.push(instance);
+        //         }
 
-                console.log('the control after push is', control);
-                this.modalRef = this.modalService.show(this.TemplateRef, {
-                    backdrop: 'static',
-                    keyboard: false,
-                    class: 'modal-xl'
-                });
-            },
-                error => this.msg = <any>error);
+        //         console.log('the control after push is', control);
+        //         this.modalRef = this.modalService.show(this.TemplateRef, {
+        //             backdrop: 'static',
+        //             keyboard: false,
+        //             class: 'modal-xl'
+        //         });
+        //     },
+        //         error => this.msg = <any>error);
     }
 
     /**

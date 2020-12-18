@@ -234,7 +234,7 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label class="control-label">
                             <strong>Voucher Type</strong>
@@ -248,10 +248,10 @@
                     </div>
                 </div>
                 
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label class="control-label">
-                            <strong>Voucher Date:</strong>
+                            <strong>Voucher Date</strong>
                         </label>
                         <input class="form-control" type="text" placeholder="yyyy.mm.dd" formControlName="Date" />
                         <div class="text-danger" *ngIf="(purchaseFrm.get('Date').hasError('InvalidDate') || purchaseFrm.get('Date').hasError('required')) && formSubmitAttempt">
