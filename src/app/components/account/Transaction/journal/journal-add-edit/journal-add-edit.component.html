@@ -71,7 +71,7 @@
                         </div>
                     </div>
                     <br>
-                    <div *ngFor="let AccountTransactionValues of journalFrm.controls.AccountTransactionValues.controls; let i=index"
+                    <div *ngFor="let AccountTransactionValues of journalFrm.controls.AccountTransactionValues['controls']; let i=index"
                             [formGroupName]="i">
                         <div class="row mt-2">
                             <div class="col-md-1 custom-padding">
