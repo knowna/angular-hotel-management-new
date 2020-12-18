@@ -165,8 +165,11 @@
         <div class="col-md-2">
             <button class="btn btn-success" (click)="loadJournalVoucherList(fromDate,toDate)"> GO</button>
         </div>
-        <div class="col-md-2">
-            <button class="btn btn-primary pull-left" (click)="exportTableToExcel('voucherTable')" style="float: right;"> Export</button>
+        <div class="col-md-1">
+            <button class="btn btn-secondary pull-left" (click)="exportTableToPdf()" style="float: right;">Pdf</button>
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary pull-left" (click)="exportTableToExcel('voucherTable')" style="float: right;">Excel</button>
         </div>
     </div>
 
@@ -197,10 +200,13 @@
                         <td colspan="2">&nbsp;</td>
                         <td>
                             <div class="d-flex">
-                                <button class="btn btn-primary btn-sm" (click)="editJournalVoucher(voucher.Id)">
+                                <button class="btn btn-secondary btn-sm" (click)="exportRowToPdf(voucher.Id)">
+                                    <i class="fa fa-download"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm ml-1" (click)="editJournalVoucher(voucher.Id)">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-sm ml-2" (click)="deleteJournalVoucher(voucher.Id)">
+                                <button class="btn btn-danger btn-sm ml-1" (click)="deleteJournalVoucher(voucher.Id)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </div>

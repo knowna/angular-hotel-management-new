@@ -31,8 +31,8 @@ export class JournalAddEditComponent implements OnInit {
   
   public journalFrm: FormGroup;
   public account: Observable<Account>;
-  private formSubmitAttempt: boolean;
-  private buttonDisabled: boolean;
+  public formSubmitAttempt: boolean;
+  public buttonDisabled: boolean;
   public entityLists: EntityMock[];
   public fromDate: any;
   public toDate: any;
@@ -60,7 +60,8 @@ export class JournalAddEditComponent implements OnInit {
   public voucherDateNepali: any;
   
   voucherDateFormatter: DateFormatter = (voucherDateNepali) => {
-    return `${ voucherDateNepali.year }.${ (voucherDateNepali.month*1 + 1) }.${ voucherDateNepali.day }`;
+    console.log('the vouccc',voucherDateNepali )
+    return `${ voucherDateNepali.year }.${ (voucherDateNepali.month*1 + 1) }.${ (voucherDateNepali.day) }`;
   }
 
   constructor(
@@ -183,6 +184,7 @@ export class JournalAddEditComponent implements OnInit {
     this.reset();
     this.journalFrm.controls['Name'].setValue("Journal");
     this.indLoading = false;
+    console.log('currentYear', this.currentYear)
     // this.modalRef = this.modalService.show(this.TemplateRef, {
     //     backdrop: 'static',
     //     keyboard: false,
@@ -214,14 +216,17 @@ export class JournalAddEditComponent implements OnInit {
           this.toastrService.info('No record found!');
           this.router.navigate(['Account/journalVoucher']);
         }
-        
-        console.log('the journal voucher is', journalVoucher)
-        console.log('the accounts is', this.account)
+
         this.indLoading = false;
+        let vocuherDateDetails = (journalVoucher.AccountTransactionValues[0]['NVDate']).split(".");
+        this.voucherDateNepali = { 
+          "year": vocuherDateDetails[0]*1, 
+          "month": (vocuherDateDetails[1] *1 - 1), 
+          "day": vocuherDateDetails[2]*1 
+        }
         this.journalFrm.controls['Id'].setValue(journalVoucher.Id);
         // this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
         this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
-
         this.journalFrm.controls['Date'].setValue(journalVoucher.AccountTransactionValues[0]['NVDate']);
         this.journalFrm.controls['AccountTransactionDocumentId'].setValue(journalVoucher.AccountTransactionDocumentId);
         this.journalFrm.controls['Description'].setValue(journalVoucher.Description);

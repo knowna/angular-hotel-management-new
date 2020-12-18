@@ -4,7 +4,9 @@ import { DatePipe } from '@angular/common';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs/Rx';
 import * as XLSX from 'xlsx';
-
+//generating pdf
+import * as jsPDF from 'jspdf'
+import 'jspdf-autotable';
 
 
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
@@ -47,7 +49,8 @@ export class JournalVouchercomponent implements OnInit {
         ["Journal Voucher of " + this.date.transform(new Date, "dd-MM-yyyy")],
         ['Date', 'Particular', 'Voucher Type', 'Voucher No.', 'Debit Amount', 'Credit Amount']
     ];
-    toExportFileName: string = 'Journal-voucher-' + this.date.transform(new Date, "dd-MM-yyyy") + '.xlsx';
+    toExportFileName: string = 'Journal-Voucher-' + this.date.transform(new Date, "dd-MM-yyyy") + '.xlsx';
+    toPdfFileName: string = 'Journal-Voucher-' + this.date.transform(new Date, "dd-MM-yyyy") + '.pdf';
     uploadUrl = Global.BASE_FILE_UPLOAD_ENDPOINT;
     fileUrl: string = '';
     settings = {
@@ -57,7 +60,7 @@ export class JournalVouchercomponent implements OnInit {
         defaultOpen: false
     };
 
-    public account: Observable<Account>;
+    public account: Account[] = [];
     public journalFrm: FormGroup;
     private formSubmitAttempt: boolean;
     private buttonDisabled: boolean;
@@ -132,36 +135,114 @@ export class JournalVouchercomponent implements OnInit {
      * @param filename 
      */
     exportTableToExcel(tableID, filename = '') {
-        var downloadLink;
-        var dataType = 'application/vnd.ms-excel';
-        var clonedtable = $('#' + tableID);
-        var clonedHtml = clonedtable.clone();
-        $(clonedtable).find('.export-no-display').remove();
-        var tableSelect = document.getElementById(tableID);
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-        $('#' + tableID).html(clonedHtml.html());
+        // var downloadLink;
+        // var dataType = 'application/vnd.ms-excel';
+        // var clonedtable = $('#' + tableID);
+        // var clonedHtml = clonedtable.clone();
+        // $(clonedtable).find('.export-no-display').remove();
+        // var tableSelect = document.getElementById(tableID);
+        // var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        // $('#' + tableID).html(clonedHtml.html());
 
-        // Specify file name
-        filename = filename ? filename + '.xls' : 'Journal Voucher of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
+        // // Specify file name
+        // filename = filename ? filename + '.xls' : 'Journal Voucher of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
 
-        // Create download link element
-        downloadLink = document.createElement("a");
+        // // Create download link element
+        // downloadLink = document.createElement("a");
 
-        document.body.appendChild(downloadLink);
+        // document.body.appendChild(downloadLink);
 
-        if (navigator.msSaveOrOpenBlob) {
-            var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
-            navigator.msSaveOrOpenBlob(blob, filename);
-        } else {
-            // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+        // if (navigator.msSaveOrOpenBlob) {
+        //     var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
+        //     navigator.msSaveOrOpenBlob(blob, filename);
+        // } else {
+        //     // Create a link to the file
+        //     downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
 
-            // Setting the file name
-            downloadLink.download = filename;
+        //     // Setting the file name
+        //     downloadLink.download = filename;
 
-            //triggering the function
-            downloadLink.click();
-        }
+        //     //triggering the function
+        //     downloadLink.click();
+        // }
+
+        let element = document.getElementById('voucherTable'); 
+        const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+        /* generate workbook and add the worksheet */
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        /* save to file */
+        XLSX.writeFile(wb, this.toExportFileName);
+    }
+
+
+    exportTableToPdf() {
+        var doc = new jsPDF("p", "mm", "a4");
+        doc.save(this.toPdfFileName);
+    }
+
+    exportRowToPdf(Id: number) {
+        this._journalvoucherService.get(Global.BASE_JOURNALVOUCHER_ENDPOINT + '?TransactionId=' + Id)
+        .subscribe((journalVoucher: any) => {
+            // console.log('the journal voucher is', journalVoucher)
+            var doc = new jsPDF("p", "mm", "a4");
+            
+            var rows = [];
+
+            let sn = 1;
+
+            rows.push(['S.No','Dr/Cr','Account','Debit','Credit','Description']);
+                journalVoucher.AccountTransactionValues.forEach(data => {
+                let account = this.account.find(a => a.Id == data.AccountId);
+                var tempData = [
+                  sn,
+                  data.entityLists,
+                  account.Name,
+                  data.Debit,
+                  data.Credit,
+                  data.Description
+                ];
+          
+                sn = sn * 1 + 1;
+                rows.push(tempData);
+                
+            })
+
+            rows.push(['','','Total',journalVoucher.drTotal,journalVoucher.crTotal,journalVoucher.Description])
+
+            doc.setFontSize(14);
+            doc.text(10,30,'Voucher Type');
+            doc.text(40,30,` : ${journalVoucher.Name}`);
+            doc.text(120,30,'Voucher Date');
+            doc.text(150,30,` : ${journalVoucher.AccountTransactionValues[0]['NVDate']}`);
+
+            doc.autoTable({
+                margin: {left: 10},
+                setFontSize: 14,
+          
+                //for next page 
+                startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 40,
+                rowPageBreak: 'avoid',
+                body: rows,
+                bodyStyles: {
+                  fontSize: 9,
+                },
+                columnStyles: {
+                  0: {cellWidth: 30},
+                  1: {cellWidth: 30},
+                  2: {cellWidth: 30},
+                  3: {cellWidth: 30},
+                  4: {cellWidth: 30},
+                },
+          
+                // customize table header and rows format
+                theme: 'striped'
+            });
+            doc.save('Journal-Vocuher- ' + journalVoucher.Id + '-'+ `${this.date.transform(new Date, "dd-MM-yyyy")}` + '.pdf');
+        });
+    
     }
 
     voucherDateValidator(currentdate: string) {
