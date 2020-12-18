@@ -45,6 +45,9 @@ export class AccountTransactionValues {
     AccountTransactionDocumentId: number;
     entityList: EntityMock[];
     Description: string;
+    Name: string;
+    DebitAmount: number;
+    CreditAmount: number;
 }
 
 export class InventoryReceiptDetail {
