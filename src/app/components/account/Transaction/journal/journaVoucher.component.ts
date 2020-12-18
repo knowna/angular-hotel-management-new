@@ -183,7 +183,7 @@ export class JournalVouchercomponent implements OnInit {
         var rows = [];
         let sn = 1;
 
-        rows.push(['S.No','Date','Particular','Voucher Type','Voucher No']);
+        rows.push(['S.No','Date','Particular','Voucher Type','Voucher No','Debit Amount','Credit Amount']);
 
         this.journalVoucher.forEach(voucher => {
             var tempVoucher = [
@@ -191,11 +191,27 @@ export class JournalVouchercomponent implements OnInit {
                 voucher.VDate,
                 voucher.Name,
                 voucher.VType,
-                voucher.VoucherNo
+                voucher.VoucherNo,
+                '',
+                ''
             ];
         
             sn = sn * 1 + 1;
             rows.push(tempVoucher);
+
+            voucher.AccountTransactionValues.forEach(account => {
+                var tempAccount = [
+                    '',
+                    '',
+                    account.Name,
+                    '',
+                    '',
+                    account.DebitAmount,
+                    account.CreditAmount,
+                ]
+                rows.push(tempAccount);
+            });
+
         });
 
         doc.setFontSize(14);
@@ -215,11 +231,13 @@ export class JournalVouchercomponent implements OnInit {
               fontSize: 9,
             },
             columnStyles: {
-              0: {cellWidth: 35},
-              1: {cellWidth: 35},
-              2: {cellWidth: 35},
-              3: {cellWidth: 40},
-              4: {cellWidth: 40},
+              0: {cellWidth: 25},
+              1: {cellWidth: 25},
+              2: {cellWidth: 25},
+              3: {cellWidth: 25},
+              4: {cellWidth: 25},
+              5: {cellWidth: 25},
+              6: {cellWidth: 25},
             },
       
             // customize table header and rows format
