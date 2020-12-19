@@ -46,11 +46,11 @@ export class JournalVouchercomponent implements OnInit {
     modalBtnTitle: string;
     dropMessage: string = "Upload Reference File";
     toExportData: CSV = [
-        ["Journal Voucher of " + this.date.transform(new Date, "dd-MM-yyyy")],
+        ["Journal Voucher of " + this.date.transform(new Date, "yyyy-MM-dd")],
         ['Date', 'Particular', 'Voucher Type', 'Voucher No.', 'Debit Amount', 'Credit Amount']
     ];
-    toExportFileName: string = 'Journal-Voucher-' + this.date.transform(new Date, "dd-MM-yyyy") + '.xlsx';
-    toPdfFileName: string = 'Journal-Voucher-' + this.date.transform(new Date, "dd-MM-yyyy") + '.pdf';
+    toExportFileName: string = 'Journal Voucher Report-' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
+    toPdfFileName: string = 'Journal Voucher Report-' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
     uploadUrl = Global.BASE_FILE_UPLOAD_ENDPOINT;
     fileUrl: string = '';
     settings = {
@@ -168,6 +168,8 @@ export class JournalVouchercomponent implements OnInit {
 
         let element = document.getElementById('voucherTable'); 
         const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+        ws['!cols'] = [];
+        ws['!cols'][6] = { hidden: true };
 
         /* generate workbook and add the worksheet */
         const wb: XLSX.WorkBook = XLSX.utils.book_new();
@@ -216,7 +218,7 @@ export class JournalVouchercomponent implements OnInit {
 
         doc.setFontSize(14);
         doc.text(10,30,'Journal Voucher');
-        doc.text(50,30,` : ${this.date.transform(new Date, "dd-MM-yyyy")}`);
+        doc.text(50,30,` : ${this.date.transform(new Date, "yyyy-MM-dd")}`);
         // doc.text(120,30,'Date');
         // doc.text(150,30,` : ${this.date.transform(new Date, "dd-MM-yyyy")}`);
         doc.autoTable({
