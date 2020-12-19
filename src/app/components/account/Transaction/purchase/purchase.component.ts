@@ -48,7 +48,7 @@ export class PurchaseComponent implements OnInit {
 		defaultOpen: false
     };
 
-    public account: Observable<Account>;
+    public account: Account[] = [];
     public purchaseFrm: FormGroup;
     private formSubmitAttempt: boolean;
     private buttonDisabled: boolean;
@@ -70,6 +70,7 @@ export class PurchaseComponent implements OnInit {
     public currentaccount: Account;
     public vdate: string;
     public inventoryItem: Observable<InventoryItem>;
+    public inventoryItemList: any = [];
     public inventoryItemName: InventoryItem;
     public currentItem: string;
 
@@ -119,6 +120,11 @@ export class PurchaseComponent implements OnInit {
         });
         // Load purchases list
         this.loadPurchaseList(this.fromDate, this.toDate);
+
+        this._purchaseService.getInventoryItems().subscribe(data => {
+            this.inventoryItemList = data ;
+            console.log('inventoryItemList', this.inventoryItemList)
+        });
     }
 
     voucherDateValidator(currentdate: string) {
@@ -219,6 +225,90 @@ export class PurchaseComponent implements OnInit {
         this.fileUrl = fileUrl;
         this.modalTitle = "View Attachment";
         this.modalRef = this.modalService.show(template, { keyboard: false, class: 'modal-lg' });
+    }
+
+    exportRowToPdf(Id: number) {
+        this._purchaseService.get(Global.BASE_PURCHASE_ENDPOINT + '?TransactionId=' + Id)
+            .subscribe((purchase: any) => {
+                console.log('the purchase is', purchase)
+                var doc = new jsPDF("p", "mm", "a4");
+                
+
+                // for purchase items
+                var rowsItems = [];
+                let snItem = 1;
+                rowsItems.push(['S.No','Name of Item','Quantity','Rate','Amount']);
+                purchase.PurchaseDetails.forEach(item => {
+                    let findItem = this.inventoryItemList.find(x => x.Id == item.InventoryItemId);
+                    var tempItem = [
+                        snItem,
+                        findItem.Name,
+                        item.Quantity,
+                        item.PurchaseRate,
+                        item.PurchaseAmount
+                    ];
+
+                    snItem = snItem * 1 + 1;
+                    rowsItems.push(tempItem);
+                });
+
+
+
+
+                // for account items
+                var rows = [];
+                let sn = 1;
+
+                rows.push(['S.No','Dr/Cr','Account','Debit','Credit','Description']);
+                purchase.AccountTransactionValues.forEach(data => {
+                    let account = this.account.find(a => a.Id == data.AccountId);
+                    var tempData = [
+                        sn,
+                        data.entityLists,
+                        account.Name,
+                        data.Debit,
+                        data.Credit,
+                        data.Description
+                    ];
+            
+                    sn = sn * 1 + 1;
+                    rows.push(tempData);
+                    
+                })
+
+                rows.push(['','','Total',purchase.drTotal,purchase.crTotal,purchase.Description])
+
+                doc.setFontSize(14);
+                doc.text(10,30,'Voucher Type');
+                doc.text(40,30,` : ${purchase.Name}`);
+                doc.text(120,30,'Voucher Date');
+                doc.text(150,30,` : ${purchase.AccountTransactionValues[0]['NVDate']}`);
+
+                doc.autoTable({
+                    margin: {left: 10},
+                    setFontSize: 14,
+            
+                    //for next page 
+                    startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 40,
+                    rowPageBreak: 'avoid',
+                    body: rows,
+                    bodyStyles: {
+                    fontSize: 9,
+                    },
+                    columnStyles: {
+                        0: {cellWidth: 30},
+                        1: {cellWidth: 30},
+                        2: {cellWidth: 30},
+                        3: {cellWidth: 30},
+                        4: {cellWidth: 30},
+                    },
+            
+                    // customize table header and rows format
+                    theme: 'striped'
+                });
+                
+                doc.save('Purchase-Report-Of- ' + purchase.Id + '-'+ `${this.date.transform(new Date, "yyyy-MM-dd")}` + '.pdf');
+            });
     }
 
     exportTableToPdf() {
