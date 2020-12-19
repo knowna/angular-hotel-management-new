@@ -250,63 +250,63 @@ export class JournalVouchercomponent implements OnInit {
 
     exportRowToPdf(Id: number) {
         this._journalvoucherService.get(Global.BASE_JOURNALVOUCHER_ENDPOINT + '?TransactionId=' + Id)
-        .subscribe((journalVoucher: any) => {
-            // console.log('the journal voucher is', journalVoucher)
-            var doc = new jsPDF("p", "mm", "a4");
-            
-            var rows = [];
-
-            let sn = 1;
-
-            rows.push(['S.No','Dr/Cr','Account','Debit','Credit','Description']);
-                journalVoucher.AccountTransactionValues.forEach(data => {
-                let account = this.account.find(a => a.Id == data.AccountId);
-                var tempData = [
-                  sn,
-                  data.entityLists,
-                  account.Name,
-                  data.Debit,
-                  data.Credit,
-                  data.Description
-                ];
-          
-                sn = sn * 1 + 1;
-                rows.push(tempData);
+            .subscribe((journalVoucher: any) => {
+                // console.log('the journal voucher is', journalVoucher)
+                var doc = new jsPDF("p", "mm", "a4");
                 
-            })
+                var rows = [];
 
-            rows.push(['','','Total',journalVoucher.drTotal,journalVoucher.crTotal,journalVoucher.Description])
+                let sn = 1;
 
-            doc.setFontSize(14);
-            doc.text(10,30,'Voucher Type');
-            doc.text(40,30,` : ${journalVoucher.Name}`);
-            doc.text(120,30,'Voucher Date');
-            doc.text(150,30,` : ${journalVoucher.AccountTransactionValues[0]['NVDate']}`);
+                rows.push(['S.No','Dr/Cr','Account','Debit','Credit','Description']);
+                    journalVoucher.AccountTransactionValues.forEach(data => {
+                    let account = this.account.find(a => a.Id == data.AccountId);
+                    var tempData = [
+                    sn,
+                    data.entityLists,
+                    account.Name,
+                    data.Debit,
+                    data.Credit,
+                    data.Description
+                    ];
+            
+                    sn = sn * 1 + 1;
+                    rows.push(tempData);
+                    
+                })
 
-            doc.autoTable({
-                margin: {left: 10},
-                setFontSize: 14,
-          
-                //for next page 
-                startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 40,
-                rowPageBreak: 'avoid',
-                body: rows,
-                bodyStyles: {
-                  fontSize: 9,
-                },
-                columnStyles: {
-                  0: {cellWidth: 30},
-                  1: {cellWidth: 30},
-                  2: {cellWidth: 30},
-                  3: {cellWidth: 30},
-                  4: {cellWidth: 30},
-                },
-          
-                // customize table header and rows format
-                theme: 'striped'
+                rows.push(['','','Total',journalVoucher.drTotal,journalVoucher.crTotal,journalVoucher.Description])
+
+                doc.setFontSize(14);
+                doc.text(10,30,'Voucher Type');
+                doc.text(40,30,` : ${journalVoucher.Name}`);
+                doc.text(120,30,'Voucher Date');
+                doc.text(150,30,` : ${journalVoucher.AccountTransactionValues[0]['NVDate']}`);
+
+                doc.autoTable({
+                    margin: {left: 10},
+                    setFontSize: 14,
+            
+                    //for next page 
+                    startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 40,
+                    rowPageBreak: 'avoid',
+                    body: rows,
+                    bodyStyles: {
+                    fontSize: 9,
+                    },
+                    columnStyles: {
+                    0: {cellWidth: 30},
+                    1: {cellWidth: 30},
+                    2: {cellWidth: 30},
+                    3: {cellWidth: 30},
+                    4: {cellWidth: 30},
+                    },
+            
+                    // customize table header and rows format
+                    theme: 'striped'
+                });
+                doc.save('Journal-Vocuher- ' + journalVoucher.Id + '-'+ `${this.date.transform(new Date, "dd-MM-yyyy")}` + '.pdf');
             });
-            doc.save('Journal-Vocuher- ' + journalVoucher.Id + '-'+ `${this.date.transform(new Date, "dd-MM-yyyy")}` + '.pdf');
-        });
     
     }
 

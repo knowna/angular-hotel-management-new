@@ -203,6 +203,70 @@ export class PaymentComponent {
                 error => this.msg = <any>error);
     }
 
+    exportRowToPdf(Id: number) {
+        this._journalvoucherService.get(Global.BASE_JOURNALVOUCHER_ENDPOINT + '?TransactionId=' + Id)
+        .subscribe((payment: any) => {
+            console.log('the payment is', payment)
+            var doc = new jsPDF("p", "mm", "a4");
+            
+            var rows = [];
+
+            let sn = 1;
+
+            rows.push(['S.No','Account','Debit','Description']);
+                payment.AccountTransactionValues.forEach(data => {
+                let account = this.account.find(a => a.Id == data.AccountId);
+                var tempData = [
+                    sn,
+                    account.Name,
+                    data.Debit,
+                    // data.Credit,
+                    data.Description
+                ];
+        
+                sn = sn * 1 + 1;
+                rows.push(tempData);
+                
+            })
+
+            rows.push(['','Total',payment.drTotal,payment.Description])
+
+            doc.setFontSize(14);
+            doc.text(10,30,'Voucher Type');
+            doc.text(40,30,` : ${payment.Name}`);
+            doc.text(120,30,'Voucher Date');
+            doc.text(150,30,` : ${payment.AccountTransactionValues[0]['NVDate']}`);
+
+            let accountType = this.accountcashbank.find(x => x.Id == payment.SourceAccountTypeId);
+            doc.text(10,40,'Account');
+            doc.text(40,40, ` : ${accountType.Name}`)
+
+            doc.autoTable({
+                margin: {left: 10},
+                setFontSize: 14,
+        
+                //for next page 
+                startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50,
+                rowPageBreak: 'avoid',
+                body: rows,
+                bodyStyles: {
+                fontSize: 9,
+                },
+                // columnStyles: {
+                // 0: {cellWidth: 35},
+                // 1: {cellWidth: 35},
+                // 2: {cellWidth: 35},
+                // 3: {cellWidth: 35},
+                // },
+        
+                // customize table header and rows format
+                theme: 'striped'
+            });
+            doc.save('Payment-Report-Of- ' + payment.Id + '-'+ `${this.date.transform(new Date, "yyyy-MM-dd")}` + '.pdf');
+        });
+    }
+
+
     exportTableToPdf() {
         var doc = new jsPDF("p", "mm", "a4");
         var rows = [];

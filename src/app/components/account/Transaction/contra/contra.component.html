@@ -71,10 +71,13 @@
                         </td>
                         <td class="export-no-display">
                             <div class="d-flex">
-                                <button class="btn btn-primary btn-sm" (click)="editPayment(row.Id)">
+                                <button class="btn btn-secondary btn-sm" (click)="exportRowToPdf(row.Id)">
+                                    <i class="fa fa-download"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm ml-1" (click)="editPayment(row.Id)">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-sm ml-2" (click)="deletePayment(row.Id)">
+                                <button class="btn btn-danger btn-sm ml-1" (click)="deletePayment(row.Id)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </div>

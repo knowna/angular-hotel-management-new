@@ -38,7 +38,7 @@ export class ReceiptComponent {
     modalTitle: string;
     modalBtnTitle: string;
     formattedDate: any;
-    public account: Observable<Account>;
+    public account: Account[] = [];
     public accountcashbank: Account[] = [];
     public receiptFrm: FormGroup;
     private formSubmitAttempt: boolean;
@@ -126,6 +126,68 @@ export class ReceiptComponent {
         this.fileUrl = fileUrl;
         this.modalTitle = "View Attachment";
         this.modalRef = this.modalService.show(template, { keyboard: false, class: 'modal-lg' });
+    }
+
+    exportRowToPdf(Id: number) {
+        this._journalvoucherService.get(Global.BASE_JOURNALVOUCHER_ENDPOINT + '?TransactionId=' + Id)
+        .subscribe((receipt: any) => {
+            // console.log('the journal voucher is', journalVoucher)
+            var doc = new jsPDF("p", "mm", "a4");
+            
+            var rows = [];
+
+            let sn = 1;
+
+            rows.push(['S.No','Account','Credit','Description']);
+                receipt.AccountTransactionValues.forEach(data => {
+                let account = this.account.find(a => a.Id == data.AccountId);
+                var tempData = [
+                    sn,
+                    account.Name,
+                    data.Credit,
+                    data.Description
+                ];
+        
+                sn = sn * 1 + 1;
+                rows.push(tempData);
+                
+            })
+
+            rows.push(['','Total',receipt.crTotal,receipt.Description])
+
+            doc.setFontSize(14);
+            doc.text(10,30,'Voucher Type');
+            doc.text(40,30,` : ${receipt.Name}`);
+            doc.text(120,30,'Voucher Date');
+            doc.text(150,30,` : ${receipt.AccountTransactionValues[0]['NVDate']}`);
+
+            let accountType = this.accountcashbank.find(x => x.Id == receipt.SourceAccountTypeId);
+            doc.text(10,40,'Account');
+            doc.text(40,40, ` : ${accountType.Name}`)
+
+            doc.autoTable({
+                margin: {left: 10},
+                setFontSize: 14,
+        
+                //for next page 
+                startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50,
+                rowPageBreak: 'avoid',
+                body: rows,
+                bodyStyles: {
+                fontSize: 9,
+                },
+                // columnStyles: {
+                // 0: {cellWidth: 35},
+                // 1: {cellWidth: 35},
+                // 2: {cellWidth: 35},
+                // 3: {cellWidth: 35},
+                // },
+        
+                // customize table header and rows format
+                theme: 'striped'
+            });
+            doc.save('Receipt-Report-Of- ' + receipt.Id + '-'+ `${this.date.transform(new Date, "yyyy-MM-dd")}` + '.pdf');
+        });
     }
 
     exportTableToPdf() {
