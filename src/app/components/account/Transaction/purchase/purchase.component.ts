@@ -15,6 +15,9 @@ import { AccountTransValuesService } from 'src/app/Service/accountTransValues.se
 import { Account, EntityMock } from 'src/app/Model/Account/account';
 import { AccountTrans } from 'src/app/Model/AccountTransaction/accountTrans';
 import { ToastrService } from 'ngx-toastr';
+//generating pdf
+import * as jsPDF from 'jspdf'
+import 'jspdf-autotable';
 
 type CSV = any[][];
 
@@ -69,6 +72,9 @@ export class PurchaseComponent implements OnInit {
     public inventoryItem: Observable<InventoryItem>;
     public inventoryItemName: InventoryItem;
     public currentItem: string;
+
+    toExportFileName: string = 'Purchase Report -' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
+    toPdfFileName: string = 'Purchase Report -' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
 
     constructor(
         private fb: FormBuilder, 
@@ -215,42 +221,122 @@ export class PurchaseComponent implements OnInit {
         this.modalRef = this.modalService.show(template, { keyboard: false, class: 'modal-lg' });
     }
 
+    exportTableToPdf() {
+        var doc = new jsPDF("p", "mm", "a4");
+        var rows = [];
+        let sn = 1;
+
+        rows.push(['S.No','Date','Particular','Voucher Type','Voucher No','Debit(Rs)','Credit(Rs)']);
+
+        this.purchase.forEach(p => {
+            var tempPurchase = [
+                sn,
+                p.VDate,
+                p.Name,
+                p.VType,
+                p.VoucherNo,
+                '',
+                ''
+            ];
+        
+            sn = sn * 1 + 1;
+            rows.push(tempPurchase);
+
+            p.AccountTransactionValues.forEach(account => {
+                var tempAccount = [
+                    '',
+                    '',
+                    account.Name,
+                    '',
+                    '',
+                    account.DebitAmount,
+                    account.CreditAmount,
+                ]
+                rows.push(tempAccount);
+            });
+
+        });
+
+        doc.setFontSize(14);
+        doc.text(10,30,'Purchase Report');
+        doc.text(50,30,` : ${this.date.transform(new Date, "yyyy-MM-dd")}`);
+        doc.autoTable({
+            margin: {left: 10},
+            setFontSize: 14,
+      
+            //for next page 
+            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 40,
+            rowPageBreak: 'avoid',
+            body: rows,
+            bodyStyles: {
+              fontSize: 9,
+            },
+            columnStyles: {
+              0: {cellWidth: 15},
+              1: {cellWidth: 25},
+              2: {cellWidth: 35},
+              3: {cellWidth: 35},
+              4: {cellWidth: 25},
+              5: {cellWidth: 25},
+              6: {cellWidth: 25},
+            },
+      
+            // customize table header and rows format
+            theme: 'striped'
+        });
+        doc.save(this.toPdfFileName);
+    }
+
     /**
      * Export formatter table in excel
      * @param tableID 
      * @param filename 
      */
     exportTableToExcel(tableID, filename = '') {
-        var downloadLink;
-        var dataType = 'application/vnd.ms-excel';
-        var clonedtable = $('#'+ tableID);
-        var clonedHtml = clonedtable.clone();
-        $(clonedtable).find('.export-no-display').remove();
-        var tableSelect = document.getElementById(tableID);
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-        $('#' + tableID).html(clonedHtml.html());
+        // var downloadLink;
+        // var dataType = 'application/vnd.ms-excel';
+        // var clonedtable = $('#'+ tableID);
+        // var clonedHtml = clonedtable.clone();
+        // $(clonedtable).find('.export-no-display').remove();
+        // var tableSelect = document.getElementById(tableID);
+        // var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        // $('#' + tableID).html(clonedHtml.html());
 
-        // Specify file name
-        filename = filename ? filename + '.xls' : 'Purchase Voucher of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
+        // // Specify file name
+        // filename = filename ? filename + '.xlsx' : 'Purchase Voucher of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
 
-        // Create download link element
-        downloadLink = document.createElement("a");
+        // // Create download link element
+        // downloadLink = document.createElement("a");
 
-        document.body.appendChild(downloadLink);
+        // document.body.appendChild(downloadLink);
 
-        if (navigator.msSaveOrOpenBlob) {
-            var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
-            navigator.msSaveOrOpenBlob(blob, filename);
-        } else {
-            // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+        // if (navigator.msSaveOrOpenBlob) {
+        //     var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
+        //     navigator.msSaveOrOpenBlob(blob, filename);
+        // } else {
+        //     // Create a link to the file
+        //     downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
 
-            // Setting the file name
-            downloadLink.download = filename;
+        //     // Setting the file name
+        //     downloadLink.download = filename;
 
-            //triggering the function
-            downloadLink.click();
-        } 
+        //     //triggering the function
+        //     downloadLink.click();
+        // } 
+
+        let element = document.getElementById('purchaseTable'); 
+        const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+        ws['!cols'] = [];
+        ws['!cols'][6] = { hidden: true };
+        ws['!cols'][7] = { hidden: true };
+
+        /* generate workbook and add the worksheet */
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        /* save to file */
+        XLSX.writeFile(wb, this.toExportFileName);
     }
 
     /**
