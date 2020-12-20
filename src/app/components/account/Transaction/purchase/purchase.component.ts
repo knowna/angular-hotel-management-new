@@ -18,6 +18,7 @@ import { ToastrService } from 'ngx-toastr';
 //generating pdf
 import * as jsPDF from 'jspdf'
 import 'jspdf-autotable';
+import { ActivatedRoute, Router } from '@angular/router';
 
 type CSV = any[][];
 
@@ -84,7 +85,9 @@ export class PurchaseComponent implements OnInit {
         private _accountTransValues: AccountTransValuesService, 
         private date: DatePipe, 
         private modalService: BsModalService,
-        private toastrService: ToastrService) {
+        private toastrService: ToastrService,
+        private router: Router,
+        private route: ActivatedRoute) {
 
         this._purchaseService.getAccounts().subscribe(data => { this.account = data });
         this._purchaseService.getInventoryItems().subscribe(data => { this.inventoryItem = data });
@@ -203,17 +206,18 @@ export class PurchaseComponent implements OnInit {
      * Open Add New Purchase Form Modal
      */
     addPurchase() {
-        this.dbops = DBOperation.create;
-        this.SetControlsState(true);
-        this.modalTitle = "Add Purchase";
-        this.modalBtnTitle = "Save";
-        this.reset();
-        //this.purchaseFrm.controls['Name'].setValue('Purchase');
-        this.modalRef = this.modalService.show(this.TemplateRef, {
-            backdrop: 'static',
-            keyboard: false,
-            class: 'modal-xl'
-        });
+        // this.dbops = DBOperation.create;
+        // this.SetControlsState(true);
+        // this.modalTitle = "Add Purchase";
+        // this.modalBtnTitle = "Save";
+        // this.reset();
+        // //this.purchaseFrm.controls['Name'].setValue('Purchase');
+        // this.modalRef = this.modalService.show(this.TemplateRef, {
+        //     backdrop: 'static',
+        //     keyboard: false,
+        //     class: 'modal-xl'
+        // });
+        this.router.navigate(['add'], {relativeTo: this.route});
     }
 
         /**
@@ -446,72 +450,73 @@ export class PurchaseComponent implements OnInit {
      * @param Id 
      */
     editPurchase(Id: number) {
-        this.dbops = DBOperation.update;
-        this.SetControlsState(true);
-        this.modalTitle = "Edit Purchase";
-        this.modalBtnTitle = "Save";
-        this.reset();
-        this.getPurchaseDetails(Id)
-            .subscribe((purchase: AccountTrans) => {
-                console.log('for edit', purchase);
-                this.indLoading = false;
-                this.purchaseFrm.controls['Id'].setValue(purchase.Id);
-                this.purchaseFrm.controls['Date'].setValue(purchase.AccountTransactionValues[0]['NVDate']);
-                // this.purchaseFrm.controls['Name'].setValue(purchase.Name);
-                this.purchaseFrm.controls['Name'].setValue(purchase.AccountTransactionType);
-                this.purchaseFrm.controls['AccountTransactionDocumentId'].setValue(purchase.AccountTransactionDocumentId);
-                this.purchaseFrm.controls['Description'].setValue(purchase.Description);
+        this.router.navigate(['edit/' + Id], {relativeTo: this.route});
+        // this.dbops = DBOperation.update;
+        // this.SetControlsState(true);
+        // this.modalTitle = "Edit Purchase";
+        // this.modalBtnTitle = "Save";
+        // this.reset();
+        // this.getPurchaseDetails(Id)
+        //     .subscribe((purchase: AccountTrans) => {
+        //         console.log('for edit', purchase);
+        //         this.indLoading = false;
+        //         this.purchaseFrm.controls['Id'].setValue(purchase.Id);
+        //         this.purchaseFrm.controls['Date'].setValue(purchase.AccountTransactionValues[0]['NVDate']);
+        //         // this.purchaseFrm.controls['Name'].setValue(purchase.Name);
+        //         this.purchaseFrm.controls['Name'].setValue(purchase.AccountTransactionType);
+        //         this.purchaseFrm.controls['AccountTransactionDocumentId'].setValue(purchase.AccountTransactionDocumentId);
+        //         this.purchaseFrm.controls['Description'].setValue(purchase.Description);
 
-                this.purchaseFrm.controls['PurchaseDetails'] = this.fb.array([]);
-                const control = <FormArray>this.purchaseFrm.controls['PurchaseDetails'];
+        //         this.purchaseFrm.controls['PurchaseDetails'] = this.fb.array([]);
+        //         const control = <FormArray>this.purchaseFrm.controls['PurchaseDetails'];
         
-                for (let i = 0; i < purchase.PurchaseDetails.length; i++) {
-                    let valuesFromServer = purchase.PurchaseDetails[i];
-                    let instance = this.fb.group(valuesFromServer);
-                    this.currentItem = this.inventoryItem.filter(x => x.Id === purchase.PurchaseDetails[i]["InventoryItemId"])[0];
-                    // if (this.currentaccount !== undefined) {
-                        instance.controls["InventoryItemId"].setValue(this.currentItem);
-                    // }
-                    control.push(instance);
-                }
+        //         for (let i = 0; i < purchase.PurchaseDetails.length; i++) {
+        //             let valuesFromServer = purchase.PurchaseDetails[i];
+        //             let instance = this.fb.group(valuesFromServer);
+        //             this.currentItem = this.inventoryItem.filter(x => x.Id === purchase.PurchaseDetails[i]["InventoryItemId"])[0];
+        //             // if (this.currentaccount !== undefined) {
+        //                 instance.controls["InventoryItemId"].setValue(this.currentItem);
+        //             // }
+        //             control.push(instance);
+        //         }
         
-                this.purchaseFrm.controls['AccountTransactionValues'] = this.fb.array([]);
-                const controlAc = <FormArray>this.purchaseFrm.controls['AccountTransactionValues'];
-                controlAc.controls = [];
+        //         this.purchaseFrm.controls['AccountTransactionValues'] = this.fb.array([]);
+        //         const controlAc = <FormArray>this.purchaseFrm.controls['AccountTransactionValues'];
+        //         controlAc.controls = [];
         
-                for (let i = 0; i < purchase.AccountTransactionValues.length; i++) {
-                    let valuesFromServer = purchase.AccountTransactionValues[i];
-                    let instance = this.fb.group(valuesFromServer);
+        //         for (let i = 0; i < purchase.AccountTransactionValues.length; i++) {
+        //             let valuesFromServer = purchase.AccountTransactionValues[i];
+        //             let instance = this.fb.group(valuesFromServer);
 
-                    // this.currentaccount = this.account.filter(x => x.Id === purchase.AccountTransactionValues[i]["AccountId"])[0];
-                    const account = this.account.find(x => x.Id === purchase.AccountTransactionValues[i].AccountId);
-                    // if (this.currentaccount !== undefined) {
-                        // instance.controls["AccountId"].setValue(this.currentaccount.Name);
-                        // instance.controls["AccountId"].setValue(this.currentaccount.Id);
-                        instance.controls["AccountId"].setValue(account);
-                    // }
+        //             // this.currentaccount = this.account.filter(x => x.Id === purchase.AccountTransactionValues[i]["AccountId"])[0];
+        //             const account = this.account.find(x => x.Id === purchase.AccountTransactionValues[i].AccountId);
+        //             // if (this.currentaccount !== undefined) {
+        //                 // instance.controls["AccountId"].setValue(this.currentaccount.Name);
+        //                 // instance.controls["AccountId"].setValue(this.currentaccount.Id);
+        //                 instance.controls["AccountId"].setValue(account);
+        //             // }
 
-                    if (valuesFromServer['entityLists'] === "Dr") {
-                        instance.controls['Credit'].disable();
+        //             if (valuesFromServer['entityLists'] === "Dr") {
+        //                 instance.controls['Credit'].disable();
         
-                    } else if (valuesFromServer['entityLists'] === "Cr") {
-                        instance.controls['Debit'].disable();
-                    }
+        //             } else if (valuesFromServer['entityLists'] === "Cr") {
+        //                 instance.controls['Debit'].disable();
+        //             }
 
-                    // instance.controls["Debit"].setValue(purchase.AccountTransactionValues[i].Debit);
-                    // instance.controls["Credit"].setValue(purchase.AccountTransactionValues[i].Credit);
-                    // instance.controls["Description"].setValue(purchase.AccountTransactionValues[i].Description);
-                    controlAc.push(instance);
-                }
+        //             // instance.controls["Debit"].setValue(purchase.AccountTransactionValues[i].Debit);
+        //             // instance.controls["Credit"].setValue(purchase.AccountTransactionValues[i].Credit);
+        //             // instance.controls["Description"].setValue(purchase.AccountTransactionValues[i].Description);
+        //             controlAc.push(instance);
+        //         }
 
-                console.log('the control', controlAc);
+        //         console.log('the control', controlAc);
 
-                this.modalRef = this.modalService.show(this.TemplateRef, {
-                    backdrop: 'static',
-                    keyboard: false,
-                    class: 'modal-xl'
-                });
-            });
+        //         this.modalRef = this.modalService.show(this.TemplateRef, {
+        //             backdrop: 'static',
+        //             keyboard: false,
+        //             class: 'modal-xl'
+        //         });
+        //     });
     }
 
     /**

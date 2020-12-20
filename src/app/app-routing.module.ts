@@ -124,6 +124,7 @@ import { CustomerTypeComponent } from './components/Reservation/customer-type/cu
 import { ReservationTypeComponent } from './components/Reservation/reservation-type/reservation-type.component';
 import { RoomComponent } from './components/Reservation/room/room.component';
 import { JournalAddEditComponent } from './components/account/Transaction/journal/journal-add-edit/journal-add-edit.component';
+import { PurchaseAddEditComponent } from './components/account/Transaction/purchase/purchase-add-edit/purchase-add-edit.component';
 
 
 const routes: Routes = [
@@ -362,6 +363,16 @@ const routes: Routes = [
   {
     path: 'Account/purchase',
     component: PurchaseComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/purchase/:mode',
+    component: PurchaseAddEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/purchase/:mode/:id',
+    component: PurchaseAddEditComponent,
     canActivate: [AuthGuard]
   },
   {

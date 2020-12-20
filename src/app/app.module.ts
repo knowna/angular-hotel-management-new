@@ -229,6 +229,12 @@ import { CustomerTypeComponent } from './components/Reservation/customer-type/cu
 import { ReservationTypeComponent } from './components/Reservation/reservation-type/reservation-type.component';
 import { RoomComponent } from './components/Reservation/room/room.component';
 import { JournalAddEditComponent } from './components/account/Transaction/journal/journal-add-edit/journal-add-edit.component';
+import { PurchaseAddEditComponent } from './components/account/Transaction/purchase/purchase-add-edit/purchase-add-edit.component';
+import { ReceiptAddEditComponent } from './components/account/Transaction/receipt/receipt-add-edit/receipt-add-edit.component';
+import { PaymentAddEditComponent } from './components/account/Transaction/payment/payment-add-edit/payment-add-edit.component';
+import { ContraAddEditComponent } from './components/account/Transaction/contra/contra-add-edit/contra-add-edit.component';
+import { CreditNoteAddEditComponent } from './components/account/Transaction/credit-note/credit-note-add-edit/credit-note-add-edit.component';
+import { DebitNoteAddEditComponent } from './components/account/Transaction/debit-note/debit-note-add-edit/debit-note-add-edit.component';
 
 @NgModule({
   imports: [
@@ -399,7 +405,13 @@ import { JournalAddEditComponent } from './components/account/Transaction/journa
     PosCustomerComponent,
     PartialMergeComponent,
     SplitMergeComponent,
-    JournalAddEditComponent
+    JournalAddEditComponent,
+    PurchaseAddEditComponent,
+    ReceiptAddEditComponent,
+    PaymentAddEditComponent,
+    ContraAddEditComponent,
+    CreditNoteAddEditComponent,
+    DebitNoteAddEditComponent
 
   ],
   providers: [
