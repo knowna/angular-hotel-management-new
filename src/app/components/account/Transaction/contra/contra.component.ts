@@ -221,21 +221,23 @@ export class ContraComponent implements OnInit{
             rows.push(['','Total',contra.drTotal,contra.Description])
 
             doc.setFontSize(14);
-            doc.text(10,30,'Voucher Type');
-            doc.text(40,30,` : ${contra.Name}`);
-            doc.text(120,30,'Voucher Date');
-            doc.text(150,30,` : ${contra.AccountTransactionValues[0]['NVDate']}`);
+            doc.text(80,20, `${this.company?.NameEnglish}`);
+            doc.text(87,30,'Bank/Cash Voucher');
+            doc.text(10,40,'Voucher No');
+            doc.text(40,40,` : ${contra.Name}`);
+            doc.text(120,40,'Voucher Date');
+            doc.text(150,40,` : ${contra.AccountTransactionValues[0]['NVDate']}`);
 
             let accountType = this.account.find(x => x.Id == contra.SourceAccountTypeId);
-            doc.text(10,40,'Account');
-            doc.text(40,40, ` : ${accountType.Name}`)
+            doc.text(10,50,'Account');
+            doc.text(40,50, ` : ${accountType.Name}`)
 
             doc.autoTable({
                 margin: {left: 10},
                 setFontSize: 14,
         
                 //for next page 
-                startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50,
+                startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 60,
                 rowPageBreak: 'avoid',
                 body: rows,
                 bodyStyles: {
@@ -294,14 +296,15 @@ export class ContraComponent implements OnInit{
         });
 
         doc.setFontSize(14);
-        doc.text(10,30,'Bank/Cash Report');
-        doc.text(50,30,` : ${this.date.transform(new Date, "yyyy-MM-dd")}`);
+        doc.text(80,20, `${this.company?.NameEnglish}`);
+        doc.text(87,30,'Bank/Cash Voucher');
+        doc.text(80,40,`${this.sfromDate} - ${this.stoDate}`);
         doc.autoTable({
             margin: {left: 10},
             setFontSize: 14,
       
             //for next page 
-            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 40,
+            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50,
             rowPageBreak: 'avoid',
             body: rows,
             bodyStyles: {

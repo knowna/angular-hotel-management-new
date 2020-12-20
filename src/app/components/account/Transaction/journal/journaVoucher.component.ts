@@ -217,16 +217,15 @@ export class JournalVouchercomponent implements OnInit {
         });
 
         doc.setFontSize(14);
-        doc.text(10,30,'Journal Voucher');
-        doc.text(50,30,` : ${this.date.transform(new Date, "yyyy-MM-dd")}`);
-        // doc.text(120,30,'Date');
-        // doc.text(150,30,` : ${this.date.transform(new Date, "dd-MM-yyyy")}`);
+        doc.text(80,20, `${this.company?.NameEnglish}`);
+        doc.text(87,30,'Journal Voucher');
+        doc.text(80,40,`${this.sfromDate} - ${this.stoDate}`);
         doc.autoTable({
             margin: {left: 10},
             setFontSize: 14,
       
             //for next page 
-            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 40,
+            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50,
             rowPageBreak: 'avoid',
             body: rows,
             bodyStyles: {
@@ -278,17 +277,19 @@ export class JournalVouchercomponent implements OnInit {
                 rows.push(['','','Total',journalVoucher.drTotal,journalVoucher.crTotal,journalVoucher.Description])
 
                 doc.setFontSize(14);
-                doc.text(10,30,'Voucher Type');
-                doc.text(40,30,` : ${journalVoucher.Name}`);
-                doc.text(120,30,'Voucher Date');
-                doc.text(150,30,` : ${journalVoucher.AccountTransactionValues[0]['NVDate']}`);
+                doc.text(80,20, `${this.company?.NameEnglish}`);
+                doc.text(87,30,'Journal Voucher');
+                doc.text(10,40,'Voucher No');
+                doc.text(40,40,` : ${journalVoucher.Name}`);
+                doc.text(120,40,'Voucher Date');
+                doc.text(150,40,` : ${journalVoucher.AccountTransactionValues[0]['NVDate']}`);
 
                 doc.autoTable({
                     margin: {left: 10},
                     setFontSize: 14,
             
                     //for next page 
-                    startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 40,
+                    startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50,
                     rowPageBreak: 'avoid',
                     body: rows,
                     bodyStyles: {

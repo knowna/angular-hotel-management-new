@@ -182,6 +182,13 @@
             <table id="voucherTable" class='table table-bordered' *ngIf='journalVoucher && journalVoucher.length' style="border: 2px solid #ddd;">
                 <thead>
                     <tr>
+                        <th colspan="8" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                            <br/> Journal Voucher
+                            <br/> {{ sfromDate }} - {{ stoDate }}
+                        </th>
+                    </tr>
+                    <tr style="background: #bcd1e2;">
                         <th>Date</th>
                         <th width="400">Particular</th>
                         <th>Voucher Type</th>

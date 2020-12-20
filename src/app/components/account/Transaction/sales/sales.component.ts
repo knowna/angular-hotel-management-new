@@ -171,14 +171,15 @@ export class SalesComponent implements OnInit {
         });
 
         doc.setFontSize(14);
-        doc.text(10,30,'Sales Report');
-        doc.text(40,30,` : ${this.date.transform(new Date, "yyyy-MM-dd")}`);
+        doc.text(80,20, `${this.company?.NameEnglish}`);
+        doc.text(87,30,'Sales Voucher');
+        doc.text(80,40,`${this.sfromDate} - ${this.stoDate}`);
         doc.autoTable({
             margin: {left: 10, right: 10, bottom:10},
             setFontSize: 14,
       
             //for next page 
-            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 40,
+            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50,
             rowPageBreak: 'avoid',
             body: rows,
             bodyStyles: {
