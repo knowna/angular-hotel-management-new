@@ -106,6 +106,7 @@ export class JournalAddEditComponent implements OnInit {
 
     // Load list of journal vouchers
     // this.loadAccounts();
+    this.indLoading = true;
     this._journalvoucherService.get(Global.BASE_ACCOUNT_ENDPOINT + '?AccountTypeId=AT&AccountGeneral=AG')
       .subscribe(at => {
         this.account = at;
@@ -176,7 +177,6 @@ export class JournalAddEditComponent implements OnInit {
    * Open Add New Journal Voucher Form Modal
    */
   addJournalVoucher() {
-    this.indLoading = true;
     this.dbops = DBOperation.create;
     this.SetControlsState(true);
     this.modalTitle = "Add Journal";
