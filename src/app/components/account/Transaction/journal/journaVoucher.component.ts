@@ -274,7 +274,8 @@ export class JournalVouchercomponent implements OnInit {
                     
                 })
 
-                rows.push(['','','Total',journalVoucher.drTotal,journalVoucher.crTotal,journalVoucher.Description])
+                rows.push(['','','Total',journalVoucher.drTotal,journalVoucher.crTotal,''])
+                rows.push(['','','Voucher Description','','',journalVoucher.Description])
 
                 doc.setFontSize(14);
                 doc.text(80,20, `${this.company?.NameEnglish}`);

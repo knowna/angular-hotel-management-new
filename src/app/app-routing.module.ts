@@ -125,6 +125,7 @@ import { ReservationTypeComponent } from './components/Reservation/reservation-t
 import { RoomComponent } from './components/Reservation/room/room.component';
 import { JournalAddEditComponent } from './components/account/Transaction/journal/journal-add-edit/journal-add-edit.component';
 import { PurchaseAddEditComponent } from './components/account/Transaction/purchase/purchase-add-edit/purchase-add-edit.component';
+import { ReceiptAddEditComponent } from './components/account/Transaction/receipt/receipt-add-edit/receipt-add-edit.component';
 
 
 const routes: Routes = [
@@ -348,6 +349,16 @@ const routes: Routes = [
   {
     path: 'Account/receipt',
     component: ReceiptComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/receipt/:mode',
+    component: ReceiptAddEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/receipt/:mode/:id',
+    component: ReceiptAddEditComponent,
     canActivate: [AuthGuard]
   },
   {

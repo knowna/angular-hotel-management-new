@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -81,6 +81,7 @@ export class PurchaseAddEditComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private route: ActivatedRoute,
+    private _location: Location
   ) { 
     // this._purchaseService.getAccounts().subscribe(data => { this.account = data });
     // this._purchaseService.getInventoryItems().subscribe(data => { this.inventoryItem = data });
@@ -105,7 +106,7 @@ export class PurchaseAddEditComponent implements OnInit {
       Name: ['', Validators.required],
       AccountTransactionDocumentId: [''],
       Date: ['', Validators.compose([Validators.required, this.nepaliDateValidator])],
-      Description: [''],
+      Description: ['', Validators.required],
       Amount: [''],
       PurchaseDetails: this.fb.array([ this.initPurchase()]),
       AccountTransactionValues: this.fb.array([this.initJournalDetail()]),
@@ -731,6 +732,10 @@ export class PurchaseAddEditComponent implements OnInit {
   cancel() {
     this.reset();
     this.router.navigate(['Account/purchase'])
+  }
+
+  back() {
+    this._location.back();
   }
 
 

@@ -280,7 +280,8 @@ export class PurchaseComponent implements OnInit {
                     
                 })
 
-                rows.push(['','','Total',purchase.drTotal,purchase.crTotal,purchase.Description])
+                rows.push(['','','Total',purchase.drTotal,purchase.crTotal,''])
+                rows.push(['','','Voucher Description','','',purchase.Description])
 
                 doc.setFontSize(14);
                 doc.text(80,20, `${this.company?.NameEnglish}`);
