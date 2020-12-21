@@ -127,6 +127,7 @@ import { JournalAddEditComponent } from './components/account/Transaction/journa
 import { PurchaseAddEditComponent } from './components/account/Transaction/purchase/purchase-add-edit/purchase-add-edit.component';
 import { ReceiptAddEditComponent } from './components/account/Transaction/receipt/receipt-add-edit/receipt-add-edit.component';
 import { PaymentAddEditComponent } from './components/account/Transaction/payment/payment-add-edit/payment-add-edit.component';
+import { ContraAddEditComponent } from './components/account/Transaction/contra/contra-add-edit/contra-add-edit.component';
 
 
 const routes: Routes = [
@@ -345,6 +346,16 @@ const routes: Routes = [
   {
     path: 'Account/contra',
     component: ContraComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/contra/:mode',
+    component: ContraAddEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/contra/:mode/:id',
+    component: ContraAddEditComponent,
     canActivate: [AuthGuard]
   },
   {

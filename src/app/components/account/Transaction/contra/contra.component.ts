@@ -18,6 +18,7 @@ type CSV = any[][];
 //generating pdf
 import * as jsPDF from 'jspdf'
 import 'jspdf-autotable';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     templateUrl: './contra.component.html',
@@ -68,7 +69,9 @@ export class ContraComponent implements OnInit{
         private date: DatePipe,
         private modalService: BsModalService,
         private fileService: FileService,
-        private toastrService: ToastrService
+        private toastrService: ToastrService,
+        private router: Router,
+        private route: ActivatedRoute
     ) {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -377,17 +380,18 @@ export class ContraComponent implements OnInit{
      * Add Payment
      */
     addPayment() {
-        this.dbops = DBOperation.create;
-        this.SetControlsState(true);
-        this.modalTitle = "Add Cash/Bank";
-        this.modalBtnTitle = "Save";
-        this.reset();
-        this.contraForm.controls['Name'].setValue('Contra');
-        this.modalRef = this.modalService.show(this.TemplateRef, {
-            backdrop: 'static',
-            keyboard: false,
-            class: 'modal-lg'
-        });
+        // this.dbops = DBOperation.create;
+        // this.SetControlsState(true);
+        // this.modalTitle = "Add Cash/Bank";
+        // this.modalBtnTitle = "Save";
+        // this.reset();
+        // this.contraForm.controls['Name'].setValue('Contra');
+        // this.modalRef = this.modalService.show(this.TemplateRef, {
+        //     backdrop: 'static',
+        //     keyboard: false,
+        //     class: 'modal-lg'
+        // });
+        this.router.navigate(['add'], {relativeTo: this.route});
     }
 
     /**
@@ -404,60 +408,61 @@ export class ContraComponent implements OnInit{
      * @param Id 
      */
     editPayment(Id: number) {
-        this.reset();
-        this.dbops = DBOperation.update;
-        this.SetControlsState(true);
-        this.modalTitle = "Edit Cash/Bank";
-        this.modalBtnTitle = "Save";
-        this.getJournalVoucher(Id)
-            .subscribe((contra: AccountTrans) => {
-                console.log('the contra is', contra)
-                this.indLoading = false;
-                this.contraForm.controls['Id'].setValue(contra.Id);
-                this.contraForm.controls['Name'].setValue(contra.Name);
-                this.contraForm.controls['AccountTransactionDocumentId'].setValue(contra.AccountTransactionDocumentId);
-                this.currentaccount = this.account.filter(x => x.Id === contra.SourceAccountTypeId)[0];
-                if (this.currentaccount!== undefined) {
-                    this.contraForm.controls['SourceAccountTypeId'].setValue(this.currentaccount);
-                }
-                this.contraForm.controls['Description'].setValue(contra.Description);
-                this.contraForm.controls['Date'].setValue(contra.AccountTransactionValues[0]['NVDate']);
+        this.router.navigate(['edit/' + Id], {relativeTo: this.route});
+        // this.reset();
+        // this.dbops = DBOperation.update;
+        // this.SetControlsState(true);
+        // this.modalTitle = "Edit Cash/Bank";
+        // this.modalBtnTitle = "Save";
+        // this.getJournalVoucher(Id)
+        //     .subscribe((contra: AccountTrans) => {
+        //         console.log('the contra is', contra)
+        //         this.indLoading = false;
+        //         this.contraForm.controls['Id'].setValue(contra.Id);
+        //         this.contraForm.controls['Name'].setValue(contra.Name);
+        //         this.contraForm.controls['AccountTransactionDocumentId'].setValue(contra.AccountTransactionDocumentId);
+        //         this.currentaccount = this.account.filter(x => x.Id === contra.SourceAccountTypeId)[0];
+        //         if (this.currentaccount!== undefined) {
+        //             this.contraForm.controls['SourceAccountTypeId'].setValue(this.currentaccount);
+        //         }
+        //         this.contraForm.controls['Description'].setValue(contra.Description);
+        //         this.contraForm.controls['Date'].setValue(contra.AccountTransactionValues[0]['NVDate']);
 
-                this.contraForm.controls['AccountTransactionValues'] = this.fb.array([]);
-                const control = <FormArray>this.contraForm.controls['AccountTransactionValues'];
-
-
-                for (var i = 0; i < contra.AccountTransactionValues.length; i++) {
-                    const account = this.account.find(x => x.Id === contra.AccountTransactionValues[i].AccountId);
-                    let currentaccountvoucher = contra.AccountTransactionValues[i];
-                    let instance = this.fb.group(currentaccountvoucher);
-                    instance.controls["AccountId"].setValue(account);
-                    instance.controls["Debit"].setValue(contra.AccountTransactionValues[i].Debit);
-                    instance.controls["Credit"].setValue(contra.AccountTransactionValues[i].Credit);
-                    instance.controls["Description"].setValue(contra.AccountTransactionValues[i].Description);
-
-                    control.push(instance);
-                }
+        //         this.contraForm.controls['AccountTransactionValues'] = this.fb.array([]);
+        //         const control = <FormArray>this.contraForm.controls['AccountTransactionValues'];
 
 
+        //         for (var i = 0; i < contra.AccountTransactionValues.length; i++) {
+        //             const account = this.account.find(x => x.Id === contra.AccountTransactionValues[i].AccountId);
+        //             let currentaccountvoucher = contra.AccountTransactionValues[i];
+        //             let instance = this.fb.group(currentaccountvoucher);
+        //             instance.controls["AccountId"].setValue(account);
+        //             instance.controls["Debit"].setValue(contra.AccountTransactionValues[i].Debit);
+        //             instance.controls["Credit"].setValue(contra.AccountTransactionValues[i].Credit);
+        //             instance.controls["Description"].setValue(contra.AccountTransactionValues[i].Description);
+
+        //             control.push(instance);
+        //         }
 
 
-                // for (var i = 0; i < contra.AccountTransactionValues.length; i++) {
-                //     this.currentaccount = this.account.filter(x => x.Id === contra.AccountTransactionValues[i]["AccountId"])[0];
-                //     if (this.currentaccount !== undefined) {
-                //         let currentaccountvoucher = contra.AccountTransactionValues[i];
-                //         let instance = this.fb.group(currentaccountvoucher);
-                //         instance.controls["AccountId"].setValue(this.currentaccount.Name);
-                //         control.push(instance);
-                //     }
-                // }
-                this.modalRef = this.modalService.show(this.TemplateRef, {
-                    backdrop: 'static',
-                    keyboard: false,
-                    class: 'modal-lg'
-                });
-            },
-            error => this.msg = <any>error);
+
+
+        //         // for (var i = 0; i < contra.AccountTransactionValues.length; i++) {
+        //         //     this.currentaccount = this.account.filter(x => x.Id === contra.AccountTransactionValues[i]["AccountId"])[0];
+        //         //     if (this.currentaccount !== undefined) {
+        //         //         let currentaccountvoucher = contra.AccountTransactionValues[i];
+        //         //         let instance = this.fb.group(currentaccountvoucher);
+        //         //         instance.controls["AccountId"].setValue(this.currentaccount.Name);
+        //         //         control.push(instance);
+        //         //     }
+        //         // }
+        //         this.modalRef = this.modalService.show(this.TemplateRef, {
+        //             backdrop: 'static',
+        //             keyboard: false,
+        //             class: 'modal-lg'
+        //         });
+        //     },
+        //     error => this.msg = <any>error);
     }
 
     /**
