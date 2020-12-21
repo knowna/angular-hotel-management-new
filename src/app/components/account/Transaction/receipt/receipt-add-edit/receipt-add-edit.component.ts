@@ -261,7 +261,11 @@ export class ReceiptAddEditComponent implements OnInit {
     this.modalBtnTitle = "Save";
     this.getJournalVoucher(Id)
       .subscribe((receipt: AccountTrans) => {
-        console.log('the receipt is', receipt)
+        // console.log('the receipt is', receipt)
+        if(receipt.Id == 0) {
+          this.toastrService.info('No record found!');
+          this.router.navigate(['Account/receipt']);
+        }
         this.indLoading = false;
         this.receiptFrm.controls['Id'].setValue(receipt.Id);
         this.receiptFrm.controls['Name'].setValue(receipt.Name);

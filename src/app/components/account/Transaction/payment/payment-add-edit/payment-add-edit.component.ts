@@ -268,6 +268,10 @@ export class PaymentAddEditComponent implements OnInit {
       this.getJournalVoucher(Id)
           .subscribe((payment: AccountTrans) => {
               // console.log('the payment is', payment)
+              if(payment.Id == 0) {
+                this.toastrService.info('No record found!');
+                this.router.navigate(['Account/payment']);
+              }
               this.indLoading = false;
               this.paymentFrm.controls['Id'].setValue(payment.Id);
               this.paymentFrm.controls['Name'].setValue(payment.Name);

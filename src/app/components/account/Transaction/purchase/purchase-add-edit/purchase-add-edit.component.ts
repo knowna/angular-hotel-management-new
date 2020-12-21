@@ -218,7 +218,11 @@ export class PurchaseAddEditComponent implements OnInit {
       this.reset();
       this.getPurchaseDetails(Id)
           .subscribe((purchase: AccountTrans) => {
-              console.log('for edit', purchase);
+              // console.log('for edit', purchase);
+              if(purchase.Id == 0) {
+                this.toastrService.info('No record found!');
+                this.router.navigate(['Account/purchase']);
+              }
               this.indLoading = false;
               this.purchaseFrm.controls['Id'].setValue(purchase.Id);
               this.purchaseFrm.controls['Date'].setValue(purchase.AccountTransactionValues[0]['NVDate']);
