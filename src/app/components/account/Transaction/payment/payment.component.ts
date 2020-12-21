@@ -17,6 +17,7 @@ import { ToastrService } from 'ngx-toastr';
 //generating pdf
 import * as jsPDF from 'jspdf'
 import 'jspdf-autotable';
+import { ActivatedRoute, Router } from '@angular/router';
 
 type CSV = any[][];
 
@@ -76,7 +77,9 @@ export class PaymentComponent {
         private date: DatePipe,
         private modalService: BsModalService,
         private fileService: FileService,
-        private toastrService: ToastrService
+        private toastrService: ToastrService,
+        private router: Router,
+        private route: ActivatedRoute
     ) {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -389,17 +392,18 @@ export class PaymentComponent {
      * Add Payment
      */
     addPayment() {
-        this.dbops = DBOperation.create;
-        this.SetControlsState(true);
-        this.modalTitle = "Add Payment";
-        this.modalBtnTitle = "Save";
-        this.reset();
-        this.paymentFrm.controls['Name'].setValue('Payment');
-        this.modalRef = this.modalService.show(this.TemplateRef, {
-            backdrop: 'static',
-            keyboard: false,
-            class: 'modal-lg'
-        });
+        // this.dbops = DBOperation.create;
+        // this.SetControlsState(true);
+        // this.modalTitle = "Add Payment";
+        // this.modalBtnTitle = "Save";
+        // this.reset();
+        // this.paymentFrm.controls['Name'].setValue('Payment');
+        // this.modalRef = this.modalService.show(this.TemplateRef, {
+        //     backdrop: 'static',
+        //     keyboard: false,
+        //     class: 'modal-lg'
+        // });
+        this.router.navigate(['add'], {relativeTo: this.route});
     }
 
     /**
@@ -416,60 +420,61 @@ export class PaymentComponent {
      * @param Id 
      */
     editPayment(Id: number) {
-        this.reset();
-        this.dbops = DBOperation.update;
-        this.SetControlsState(true);
-        this.modalTitle = "Edit Payment";
-        this.modalBtnTitle = "Save";
-        this.getJournalVoucher(Id)
-            .subscribe((payment: AccountTrans) => {
-                // console.log('the payment is', payment)
-                this.indLoading = false;
-                this.paymentFrm.controls['Id'].setValue(payment.Id);
-                this.paymentFrm.controls['Name'].setValue(payment.Name);
-                this.paymentFrm.controls['AccountTransactionDocumentId'].setValue(payment.AccountTransactionDocumentId);
-                this.currentaccount = this.accountcashbank.filter(x => x.Id === payment.SourceAccountTypeId)[0];
-                if (this.currentaccount !== undefined) {
-                    this.paymentFrm.controls['SourceAccountTypeId'].setValue(this.currentaccount);
-                }
-                this.paymentFrm.controls['Description'].setValue(payment.Description);
-                this.paymentFrm.controls['Date'].setValue(payment.AccountTransactionValues[0]['NVDate']);
+        this.router.navigate(['edit/' + Id], {relativeTo: this.route});
+        // this.reset();
+        // this.dbops = DBOperation.update;
+        // this.SetControlsState(true);
+        // this.modalTitle = "Edit Payment";
+        // this.modalBtnTitle = "Save";
+        // this.getJournalVoucher(Id)
+        //     .subscribe((payment: AccountTrans) => {
+        //         // console.log('the payment is', payment)
+        //         this.indLoading = false;
+        //         this.paymentFrm.controls['Id'].setValue(payment.Id);
+        //         this.paymentFrm.controls['Name'].setValue(payment.Name);
+        //         this.paymentFrm.controls['AccountTransactionDocumentId'].setValue(payment.AccountTransactionDocumentId);
+        //         this.currentaccount = this.accountcashbank.filter(x => x.Id === payment.SourceAccountTypeId)[0];
+        //         if (this.currentaccount !== undefined) {
+        //             this.paymentFrm.controls['SourceAccountTypeId'].setValue(this.currentaccount);
+        //         }
+        //         this.paymentFrm.controls['Description'].setValue(payment.Description);
+        //         this.paymentFrm.controls['Date'].setValue(payment.AccountTransactionValues[0]['NVDate']);
 
-                this.paymentFrm.controls['AccountTransactionValues'] = this.fb.array([]);
-                const control = <FormArray>this.paymentFrm.controls['AccountTransactionValues'];
+        //         this.paymentFrm.controls['AccountTransactionValues'] = this.fb.array([]);
+        //         const control = <FormArray>this.paymentFrm.controls['AccountTransactionValues'];
 
-                for (var i = 0; i < payment.AccountTransactionValues.length; i++) {
-                    const account = this.account.find(x => x.Id === payment.AccountTransactionValues[i].AccountId);
-                    // console.log('the accoun in the lis', account);
-                    let currentaccountvoucher = payment.AccountTransactionValues[i];
-                    let instance = this.fb.group(currentaccountvoucher);
-                    instance.controls["AccountId"].setValue(account);
-                    instance.controls["Debit"].setValue(payment.AccountTransactionValues[i].Debit);
-                    instance.controls["Credit"].setValue(payment.AccountTransactionValues[i].Credit);
-                    instance.controls["Description"].setValue(payment.AccountTransactionValues[i].Description);
+        //         for (var i = 0; i < payment.AccountTransactionValues.length; i++) {
+        //             const account = this.account.find(x => x.Id === payment.AccountTransactionValues[i].AccountId);
+        //             // console.log('the accoun in the lis', account);
+        //             let currentaccountvoucher = payment.AccountTransactionValues[i];
+        //             let instance = this.fb.group(currentaccountvoucher);
+        //             instance.controls["AccountId"].setValue(account);
+        //             instance.controls["Debit"].setValue(payment.AccountTransactionValues[i].Debit);
+        //             instance.controls["Credit"].setValue(payment.AccountTransactionValues[i].Credit);
+        //             instance.controls["Description"].setValue(payment.AccountTransactionValues[i].Description);
                     
-                    control.push(instance);
-                }
+        //             control.push(instance);
+        //         }
 
 
-                // for (var i = 0; i < payment.AccountTransactionValues.length; i++) {
-                //     this.currentaccount = this.account.filter(x => x.Id === payment.AccountTransactionValues[i]["AccountId"])[0];
-                //     if (this.currentaccount !== undefined) {
-                //         let currentaccountvoucher = payment.AccountTransactionValues[i];
-                //         let instance = this.fb.group(currentaccountvoucher);
-                //         instance.controls["AccountId"].setValue(this.currentaccount.Name);
-                //         control.push(instance);
-                //     }
-                // }
+        //         // for (var i = 0; i < payment.AccountTransactionValues.length; i++) {
+        //         //     this.currentaccount = this.account.filter(x => x.Id === payment.AccountTransactionValues[i]["AccountId"])[0];
+        //         //     if (this.currentaccount !== undefined) {
+        //         //         let currentaccountvoucher = payment.AccountTransactionValues[i];
+        //         //         let instance = this.fb.group(currentaccountvoucher);
+        //         //         instance.controls["AccountId"].setValue(this.currentaccount.Name);
+        //         //         control.push(instance);
+        //         //     }
+        //         // }
 
-                this.modalRef = this.modalService.show(this.TemplateRef, {
-                    backdrop: 'static',
-                    keyboard: false,
-                    class: 'modal-lg'
-                });
+        //         this.modalRef = this.modalService.show(this.TemplateRef, {
+        //             backdrop: 'static',
+        //             keyboard: false,
+        //             class: 'modal-lg'
+        //         });
 
-            },
-                error => this.msg = <any>error);
+        //     },
+        //         error => this.msg = <any>error);
     }
 
     /**
