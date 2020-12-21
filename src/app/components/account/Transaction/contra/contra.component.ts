@@ -218,7 +218,8 @@ export class ContraComponent implements OnInit{
                 
             })
 
-            rows.push(['','Total',contra.drTotal,contra.Description])
+            rows.push(['','Total',contra.drTotal,''])
+            rows.push(['','Voucher Description','',contra.Description])
 
             doc.setFontSize(14);
             doc.text(80,20, `${this.company?.NameEnglish}`);

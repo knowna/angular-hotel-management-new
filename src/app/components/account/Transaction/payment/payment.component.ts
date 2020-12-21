@@ -229,7 +229,8 @@ export class PaymentComponent {
                 
             })
 
-            rows.push(['','Total',payment.drTotal,payment.Description])
+            rows.push(['','Total',payment.drTotal,''])
+            rows.push(['','Voucher Description','',payment.Description])
 
             doc.setFontSize(14);
             doc.text(80,20, `${this.company?.NameEnglish}`);

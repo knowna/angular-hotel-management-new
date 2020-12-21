@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 import { FormBuilder, Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
 import { AccountTransValuesService } from 'src/app/Service/accountTransValues.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { FileService } from 'src/app/Service/file.service';
 import { ToastrService } from 'ngx-toastr';
@@ -74,7 +74,8 @@ export class JournalAddEditComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router,
     private route: ActivatedRoute,
-    public datepipe: DatePipe
+    public datepipe: DatePipe,
+    private _location: Location
   ) {
     this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -574,6 +575,10 @@ export class JournalAddEditComponent implements OnInit {
   cancel() {
     this.reset();
     this.router.navigate(['Account/journalVoucher'])
+  }
+
+  back() {
+    this._location.back();
   }
 
 }
