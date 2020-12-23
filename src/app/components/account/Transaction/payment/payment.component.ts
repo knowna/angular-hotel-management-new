@@ -216,13 +216,13 @@ export class PaymentComponent {
 
             let sn = 1;
 
-            rows.push(['S.No','Account','Debit','Description']);
+            rows.push(['S.No','Account','Debit Amount','Description']);
                 payment.AccountTransactionValues.forEach(data => {
                 let account = this.account.find(a => a.Id == data.AccountId);
                 var tempData = [
                     sn,
                     account.Name,
-                    data.Debit,
+                    data.Debit.toFixed(2),
                     // data.Credit,
                     data.Description
                 ];
@@ -248,7 +248,7 @@ export class PaymentComponent {
             doc.text(40,50, ` : ${accountType.Name}`)
 
             doc.autoTable({
-                margin: {left: 10},
+                margin: {left: 10,bottom:20},
                 setFontSize: 14,
         
                 //for next page 
@@ -258,16 +258,29 @@ export class PaymentComponent {
                 bodyStyles: {
                 fontSize: 9,
                 },
-                // columnStyles: {
+                columnStyles: {
                 // 0: {cellWidth: 35},
                 // 1: {cellWidth: 35},
-                // 2: {cellWidth: 35},
+                2: { halign: 'right',},
                 // 3: {cellWidth: 35},
-                // },
+                },
         
                 // customize table header and rows format
                 theme: 'striped'
             });
+
+            const pages = doc.internal.getNumberOfPages();
+            const pageWidth = doc.internal.pageSize.width;  //Optional
+            const pageHeight = doc.internal.pageSize.height;  //Optional
+            doc.setFontSize(10);  //Optional
+
+            for(let j = 1; j < pages + 1 ; j++) {
+                let horizontalPos = pageWidth / 2;  //Can be fixed number
+                let verticalPos = pageHeight - 10;  //Can be fixed number
+                doc.setPage(j);
+                doc.text(`${j} of ${pages}`, horizontalPos, verticalPos, {align: 'center' }); //Optional text styling});
+            }
+
             doc.save('Payment-Report-Of- ' + payment.Id + '-'+ `${this.date.transform(new Date, "yyyy-MM-dd")}` + '.pdf');
         });
     }
@@ -278,7 +291,7 @@ export class PaymentComponent {
         var rows = [];
         let sn = 1;
 
-        rows.push(['S.No','Date','Particular','Voucher Type','Voucher No','Debit(Rs)','Credit(Rs)']);
+        rows.push(['S.No','Date','Particular','Voucher Type','Voucher No','Debit Amount','Credit Amount']);
 
         this.paymentList.forEach(p => {
             var tempPayment = [
@@ -301,8 +314,8 @@ export class PaymentComponent {
                     account.Name,
                     '',
                     '',
-                    account.DebitAmount,
-                    account.CreditAmount,
+                    account.DebitAmount > 0 ? account.DebitAmount.toFixed(2) : '',
+                    account.CreditAmount> 0 ? account.CreditAmount.toFixed(2) : '',
                 ]
                 rows.push(tempAccount);
             });
@@ -314,7 +327,7 @@ export class PaymentComponent {
         doc.text(87,30,'Payment Voucher');
         doc.text(80,40,`${this.sfromDate} - ${this.stoDate}`);
         doc.autoTable({
-            margin: {left: 10},
+            margin: {left: 10,bottom:20},
             setFontSize: 14,
       
             //for next page 
@@ -330,13 +343,25 @@ export class PaymentComponent {
               2: {cellWidth: 35},
               3: {cellWidth: 35},
               4: {cellWidth: 25},
-              5: {cellWidth: 25},
-              6: {cellWidth: 25},
+              5: {cellWidth: 25, halign: 'right',},
+              6: {cellWidth: 25, halign: 'right',},
             },
       
             // customize table header and rows format
             theme: 'striped'
         });
+
+        const pages = doc.internal.getNumberOfPages();
+        const pageWidth = doc.internal.pageSize.width;  //Optional
+        const pageHeight = doc.internal.pageSize.height;  //Optional
+        doc.setFontSize(10);  //Optional
+
+        for(let j = 1; j < pages + 1 ; j++) {
+            let horizontalPos = pageWidth / 2;  //Can be fixed number
+            let verticalPos = pageHeight - 10;  //Can be fixed number
+            doc.setPage(j);
+            doc.text(`${j} of ${pages}`, horizontalPos, verticalPos, {align: 'center' }); //Optional text styling});
+        }
         doc.save(this.toPdfFileName);
     }
 

@@ -208,8 +208,8 @@ export class JournalVouchercomponent implements OnInit {
                     account.Name,
                     '',
                     '',
-                    account.DebitAmount,
-                    account.CreditAmount,
+                    account.DebitAmount > 0 ? account.DebitAmount.toFixed(2) : '',
+                    account.CreditAmount> 0 ? account.CreditAmount.toFixed(2) : '',
                 ]
                 rows.push(tempAccount);
             });
@@ -221,7 +221,7 @@ export class JournalVouchercomponent implements OnInit {
         doc.text(87,30,'Journal Voucher');
         doc.text(80,40,`${this.sfromDate} - ${this.stoDate}`);
         doc.autoTable({
-            margin: {left: 10},
+            margin: {left: 10,bottom:20},
             setFontSize: 14,
       
             //for next page 
@@ -237,13 +237,33 @@ export class JournalVouchercomponent implements OnInit {
               2: {cellWidth: 25},
               3: {cellWidth: 25},
               4: {cellWidth: 25},
-              5: {cellWidth: 25},
-              6: {cellWidth: 25},
+              5: {
+                  cellWidth: 25,
+                  halign: 'right',
+                },
+              6: {
+                  cellWidth: 25,
+                  halign: 'right',
+                },
             },
       
             // customize table header and rows format
             theme: 'striped'
         });
+
+
+        const pages = doc.internal.getNumberOfPages();
+        const pageWidth = doc.internal.pageSize.width;  //Optional
+        const pageHeight = doc.internal.pageSize.height;  //Optional
+        doc.setFontSize(10);  //Optional
+
+        for(let j = 1; j < pages + 1 ; j++) {
+            let horizontalPos = pageWidth / 2;  //Can be fixed number
+            let verticalPos = pageHeight - 10;  //Can be fixed number
+            doc.setPage(j);
+            doc.text(`${j} of ${pages}`, horizontalPos, verticalPos, {align: 'center' }); //Optional text styling});
+        }
+                
         doc.save(this.toPdfFileName);
     }
 
@@ -257,15 +277,15 @@ export class JournalVouchercomponent implements OnInit {
 
                 let sn = 1;
 
-                rows.push(['S.No','Dr/Cr','Account','Debit','Credit','Description']);
+                rows.push(['S.No','Dr/Cr','Account','Debit Amount','Credit Amount','Description']);
                     journalVoucher.AccountTransactionValues.forEach(data => {
                     let account = this.account.find(a => a.Id == data.AccountId);
                     var tempData = [
                     sn,
                     data.entityLists,
                     account.Name,
-                    data.Debit,
-                    data.Credit,
+                    data.Debit > 0 ? data.Debit.toFixed(2) : '',
+                    data.Credit > 0 ? data.Credit.toFixed(2) : '',
                     data.Description
                     ];
             
@@ -286,7 +306,7 @@ export class JournalVouchercomponent implements OnInit {
                 doc.text(150,40,` : ${journalVoucher.AccountTransactionValues[0]['NVDate']}`);
 
                 doc.autoTable({
-                    margin: {left: 10},
+                    margin: {left: 10,bottom:20},
                     setFontSize: 14,
             
                     //for next page 
@@ -297,16 +317,38 @@ export class JournalVouchercomponent implements OnInit {
                     fontSize: 9,
                     },
                     columnStyles: {
-                    0: {cellWidth: 30},
-                    1: {cellWidth: 30},
-                    2: {cellWidth: 30},
-                    3: {cellWidth: 30},
-                    4: {cellWidth: 30},
+                        0: {cellWidth: 30},
+                        1: {cellWidth: 30},
+                        2: {cellWidth: 30},
+                        3: {
+                            cellWidth: 30,
+                            halign: 'right',
+                        },
+                        4: {
+                            cellWidth: 30,
+                            halign: 'right',
+                        },
+                        5: {
+                            cellWidth: 30
+                        }
                     },
             
                     // customize table header and rows format
                     theme: 'striped'
                 });
+
+                const pages = doc.internal.getNumberOfPages();
+                const pageWidth = doc.internal.pageSize.width;  //Optional
+                const pageHeight = doc.internal.pageSize.height;  //Optional
+                doc.setFontSize(10);  //Optional
+
+                for(let j = 1; j < pages + 1 ; j++) {
+                    let horizontalPos = pageWidth / 2;  //Can be fixed number
+                    let verticalPos = pageHeight - 10;  //Can be fixed number
+                    doc.setPage(j);
+                    doc.text(`${j} of ${pages}`, horizontalPos, verticalPos, {align: 'center' }); //Optional text styling});
+                }
+
                 doc.save('Journal-Vocuher- ' + journalVoucher.Id + '-'+ `${this.date.transform(new Date, "dd-MM-yyyy")}` + '.pdf');
             });
     
