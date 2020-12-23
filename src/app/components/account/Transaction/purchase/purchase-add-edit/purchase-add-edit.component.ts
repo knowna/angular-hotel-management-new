@@ -499,9 +499,9 @@ export class PurchaseAddEditComponent implements OnInit {
       this.formSubmitAttempt = true;
       let purchase = this.purchaseFrm;
 
-      // if (!this.voucherDateValidator(purchase.get('Date').value)) {
-      //     return false;
-      // }
+      if (!this.voucherDateValidator(purchase.get('Date').value)) {
+          return false;
+      }
 
       purchase.get('FinancialYear').setValue(this.currentYear['Name'] || '');
       purchase.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');

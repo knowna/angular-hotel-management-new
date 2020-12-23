@@ -1,213 +1,220 @@
 <div class="container" style="padding-top: 20px;">
-    <div class="row mt-3">
-        <div class="col-sm-1">
-            <button type="button" class="btn btn-primary" (click)="back()">
-                <i class="fa fa-arrow-left"></i>
-            </button>
-        </div>
-    </div>
-    <div class="row mt-3 mb-3">
-        <div class="col-md-12">
-            <h2 class="header">{{modalTitle}}</h2>
-        </div>
-    </div>
-
-    <div class="alert alert-info" role="alert" *ngIf="indLoading">
-        <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
-    </div>
-
-    <form novalidate (ngSubmit)="onSubmit(purchaseFrm, fileUpload)" [formGroup]="purchaseFrm">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">
-                        <strong>Voucher Type</strong>
-                    </label>
-                    <select class="form-control" formControlName="Name">
-                        <option *ngFor="let purchasetype of Name" [ngValue]="purchasetype.name">{{ purchasetype.name }}</option>
-                    </select>
-                    <div *ngIf="(purchaseFrm.get('Name').hasError('required')) && formSubmitAttempt" class="alert alert-danger">
-                        Select Purchase Type
-                    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row mt-3 mb-3">
+                <div class="col-sm-11">
+                    <h2 class="header">{{modalTitle}}</h2>
+                </div>
+                <div class="col-sm-1 text-right">
+                    <button type="button" class="btn btn-primary" (click)="back()">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
                 </div>
             </div>
-            
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">
-                        <strong>Voucher Date</strong>
-                    </label>
-                    <input class="form-control" type="text" placeholder="yyyy.mm.dd" formControlName="Date" />
-                    <div class="text-danger" *ngIf="(purchaseFrm.get('Date').hasError('InvalidDate') || purchaseFrm.get('Date').hasError('required')) && formSubmitAttempt">
-                        {{ purchaseFrm.get('Date').getError('InvalidDate') }}
-                    </div>
+            <!-- <div class="row mt-3 mb-3">
+                <div class="col-md-12">
+                    <h2 class="header">{{modalTitle}}</h2>
                 </div>
-                
+            </div> -->
+
+            <div class="alert alert-info" role="alert" *ngIf="indLoading">
+                <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
             </div>
-            
-            <div class="hidden">
-                <input type="hidden" class="hidden" placeholder="Voucher No" formControlName="AccountTransactionDocumentId" />
-            </div>
-            
-            <div class="col-md-4">
-                
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-11">
+
+            <form novalidate (ngSubmit)="onSubmit(purchaseFrm, fileUpload)" [formGroup]="purchaseFrm">
                 <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">
+                                <strong>Voucher Type</strong>
+                            </label>
+                            <select class="form-control" formControlName="Name">
+                                <option *ngFor="let purchasetype of Name" [ngValue]="purchasetype.name">{{ purchasetype.name }}</option>
+                            </select>
+                            <div *ngIf="(purchaseFrm.get('Name').hasError('required')) && formSubmitAttempt" class="alert alert-danger">
+                                Select Purchase Type
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 offset-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                <strong>Voucher Date</strong>
+                            </label>
+                            <input class="form-control" type="text" placeholder="yyyy.mm.dd" formControlName="Date" />
+                            <div class="text-danger" *ngIf="(purchaseFrm.get('Date').hasError('InvalidDate') || purchaseFrm.get('Date').hasError('required')) && formSubmitAttempt">
+                                {{ purchaseFrm.get('Date').getError('InvalidDate') }}
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="hidden">
+                        <input type="hidden" class="hidden" placeholder="Voucher No" formControlName="AccountTransactionDocumentId" />
+                    </div>
+                    
                     <div class="col-md-4">
-                        <label>
-                            <strong>Name of Item:</strong>
-                        </label>
-                    </div>
-                    <div class="col-md-2">
-                        <label>
-                            <strong>Quantity:</strong>
-                        </label>
-                    </div>
-                    <div class="col-md-2">
-                        <label>
-                            <strong>Rate:</strong>
-                        </label>
-                    </div>
-                    <div class="col-md-4">
-                        <label>
-                            <strong>Amount:</strong>
-                        </label>
+                        
                     </div>
                 </div>
-            </div>
-            <div class="col-md-1">
-                <label>&nbsp;</label>
-            </div>
-        </div>
-                
-        <div formArrayName="PurchaseDetails">
-            <div *ngFor="let PurchaseDetail of purchaseFrm.controls.PurchaseDetails['controls']; let i=index">
-                <div class="row" [formGroupName]="i">
+                <div class="row">
                     <div class="col-md-11">
-                        <my-purchaseDetail-list [group]="purchaseFrm.controls.PurchaseDetails.controls[i]"></my-purchaseDetail-list>
-                    </div>
-                    <div class="col-md-1 text-center">
-                        <span *ngIf="purchaseFrm.controls.PurchaseDetails.controls.length > 1" style="cursor: pointer;font-size: 30px" class="fa fa-window-close pull-right" (click)="removePurchaseitems(i)"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row" style="padding-top:5px;">
-            <div class="form-group col-md-8 text-right">
-                <label for="">
-                    <strong>Total Amount:</strong>
-                </label>
-            </div>
-            
-            <div class="form-group col-md-3">
-                <input type="number" class="form-control" placeholder="Grand Total" formControlName="Amount" value="{{calculateAmount()}}"
-                        readonly="true" />
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-12 text-right" style="padding:12px 26px">
-                <button type="button" class="btn btn-success" [disabled]="purchaseFrm.controls.PurchaseDetails.invalid" (click)="addPurchaseitems()">Add Row +</button>
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-md-1">
-                <strong>Dr/Cr:</strong>
-            </div>
-            <div class="col-md-3">
-                <strong>Account:</strong>
-            </div>
-            <div class="col-md-2">
-                <strong>Debit:</strong>
-            </div>
-            <div class="col-md-2">
-                <strong>Credit:</strong>
-            </div>
-            <div class="col-md-3">
-                <strong>Description</strong>
-            </div>
-            <div class="col-md-1">
-                <strong>&nbsp;</strong>
-            </div>
-        </div>
-
-        <div formArrayName="AccountTransactionValues">
-            <div class="row mt-1" *ngFor="let AccountTransactionValues of purchaseFrm.controls.AccountTransactionValues['controls']; let i=index" [formGroupName]="i">
-                <!-- <div class="col-md-12"> -->
-                    <div class="col-md-1 custom-padding">
-                        <select class="form-control" formControlName="entityLists" (change)="enableDisable(purchaseFrm.controls.AccountTransactionValues.controls[i].controls)">
-                            <option *ngFor="let entityList of entityLists" [ngValue]="entityList.name">{{ entityList.name }}</option>
-                        </select>
-                        <div *ngIf="!purchaseFrm.controls.AccountTransactionValues.controls[i].controls.entityLists.valid && formSubmitAttempt" class="alert alert-danger">
-                            Select Dr/Cr
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>
+                                    <strong>Name of Item</strong>
+                                </label>
+                            </div>
+                            <div class="col-md-2">
+                                <label>
+                                    <strong>Quantity</strong>
+                                </label>
+                            </div>
+                            <div class="col-md-2">
+                                <label>
+                                    <strong>Rate</strong>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label>
+                                    <strong>Amount</strong>
+                                </label>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-3 custom-padding">
-                        <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="AccountId" [config]="config" [options]="account"></ngx-select-dropdown>
-                        <!-- <select class="form-control " formControlName="AccountId">
-                            <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option>
-                        </select> -->
-                        <div *ngIf="!purchaseFrm.controls.AccountTransactionValues.controls[i].controls.AccountId.valid && formSubmitAttempt" class="alert alert-danger">
-                            Particular Name is required
+                    <div class="col-md-1">
+                        <label>&nbsp;</label>
+                    </div>
+                </div>
+                        
+                <div formArrayName="PurchaseDetails">
+                    <div *ngFor="let PurchaseDetail of purchaseFrm.controls.PurchaseDetails['controls']; let i=index">
+                        <div class="row" [formGroupName]="i">
+                            <div class="col-md-11">
+                                <my-purchaseDetail-list [group]="purchaseFrm.controls.PurchaseDetails.controls[i]"></my-purchaseDetail-list>
+                            </div>
+                            <div class="col-md-1 text-center">
+                                <span *ngIf="purchaseFrm.controls.PurchaseDetails.controls.length > 1" style="cursor: pointer;font-size: 30px" class="fa fa-window-close pull-right" (click)="removePurchaseitems(i)"></span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-2 custom-padding">
-                        <input type="number" class="form-control" placeholder="Debit" formControlName="Debit" />
+                </div>
+
+                <div class="row" style="padding-top:5px;">
+                    <div class="form-group col-md-8 text-right">
+                        <label for="">
+                            <strong>Total Amount:</strong>
+                        </label>
                     </div>
-                    <div class="col-md-2 custom-padding">
-                        <input type="number" class="form-control" placeholder="Credit" formControlName="Credit">
+                    
+                    <div class="form-group col-md-3">
+                        <input type="number" class="form-control" placeholder="Grand Total" formControlName="Amount" value="{{calculateAmount()}}"
+                                readonly="true" />
                     </div>
-                    <div class="col-md-3 custom-padding">
-                        <textarea class="form-control" name="Description" formControlName="Description" rows="1" placeholder="Purchase transaction description here..."></textarea>
-                        <div class="help-block alert alert-danger" *ngIf="!purchaseFrm.controls.AccountTransactionValues.controls[i].controls.Description.valid && formSubmitAttempt">
-                            Transaction description is required.
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12 text-right" style="padding:12px 26px">
+                        <button type="button" class="btn btn-success" [disabled]="purchaseFrm.controls.PurchaseDetails.invalid" (click)="addPurchaseitems()">Add Row +</button>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-1">
+                        <strong>Dr/Cr</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Account</strong>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Debit</strong>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Credit</strong>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Description</strong>
+                    </div>
+                    <div class="col-md-1">
+                        <strong>&nbsp;</strong>
+                    </div>
+                </div>
+
+                <div formArrayName="AccountTransactionValues">
+                    <div class="row mt-1" *ngFor="let AccountTransactionValues of purchaseFrm.controls.AccountTransactionValues['controls']; let i=index" [formGroupName]="i">
+                        <!-- <div class="col-md-12"> -->
+                            <div class="col-md-1 custom-padding">
+                                <select class="form-control" formControlName="entityLists" (change)="enableDisable(purchaseFrm.controls.AccountTransactionValues.controls[i].controls)">
+                                    <option *ngFor="let entityList of entityLists" [ngValue]="entityList.name">{{ entityList.name }}</option>
+                                </select>
+                                <div *ngIf="!purchaseFrm.controls.AccountTransactionValues.controls[i].controls.entityLists.valid && formSubmitAttempt" class="alert alert-danger">
+                                    Select Dr/Cr
+                                </div>
+                            </div>
+                            <div class="col-md-3 custom-padding">
+                                <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="AccountId" [config]="config" [options]="account"></ngx-select-dropdown>
+                                <!-- <select class="form-control " formControlName="AccountId">
+                                    <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option>
+                                </select> -->
+                                <div *ngIf="!purchaseFrm.controls.AccountTransactionValues.controls[i].controls.AccountId.valid && formSubmitAttempt" class="alert alert-danger">
+                                    Particular Name is required
+                                </div>
+                            </div>
+                            <div class="col-md-2 custom-padding">
+                                <input type="number" class="form-control" placeholder="Debit" formControlName="Debit" />
+                            </div>
+                            <div class="col-md-2 custom-padding">
+                                <input type="number" class="form-control" placeholder="Credit" formControlName="Credit">
+                            </div>
+                            <div class="col-md-3 custom-padding">
+                                <textarea class="form-control" name="Description" formControlName="Description" rows="1" placeholder="Purchase transaction description here..."></textarea>
+                                <div class="help-block alert alert-danger" *ngIf="!purchaseFrm.controls.AccountTransactionValues.controls[i].controls.Description.valid && formSubmitAttempt">
+                                    Transaction description is required.
+                                </div>
+                            </div>
+                            <div class="form-group col-md-1 text-center">
+                                <span *ngIf="purchaseFrm.controls.AccountTransactionValues.controls.length > 1" style="cursor: pointer;font-size: 30px;" class="fa fa-window-close pull-right" (click)="removePurchase(i)"></span>
+                            </div>
+                        <!-- </div> -->
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12" style="padding: 12px;padding-right: 26px;">
+                            <button type="button" class="btn btn-success pull-right" [disabled]="purchaseFrm.controls.AccountTransactionValues.invalid" (click)="addJournalitems()">Add Row +</button>
                         </div>
                     </div>
-                    <div class="form-group col-md-1 text-center">
-                        <span *ngIf="purchaseFrm.controls.AccountTransactionValues.controls.length > 1" style="cursor: pointer;font-size: 30px;" class="fa fa-window-close pull-right" (click)="removePurchase(i)"></span>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-7 textarea-container">
+                        <textarea class="form-control" name="Description" formControlName="Description" rows="4" placeholder="Add Voucher description here..."></textarea>
+                        <div class="help-block alert alert-danger" *ngIf="purchaseFrm.get('Description'). hasError('required') && formSubmitAttempt">
+                            Voucher description is required.
+                        </div>
                     </div>
-                <!-- </div> -->
-            </div>
-
-            <div class="row">
-                <div class="col-md-12" style="padding: 12px;padding-right: 26px;">
-                    <button type="button" class="btn btn-success pull-right" [disabled]="purchaseFrm.controls.AccountTransactionValues.invalid" (click)="addJournalitems()">Add Row +</button>
+                    <div class="col-md-4 row">
+                        <div class="col-md-6 custom-padding">
+                            <input type="number" placeholder="dd/MM/yyyy" class="form-control" placeholder="Total" value="{{sumDebit()}}" readonly="true" />
+                        </div>
+                        <div class="col-md-6 custom-padding">
+                            <input type="number" placeholder="dd/MM/yyyy" class="form-control" placeholder="Total" value="{{sumCredit()}}" readonly="true" />
+                        </div>
+                        <div class="col-md-12 custom-padding">
+                            <app-file-upload #fileUpload [extraFormData]="purchaseFrm" [uploadUrl]="uploadUrl" [dropMessage]="dropMessage"></app-file-upload>
+                        </div>
+                    </div>
+                    <div class="col-md-1">&nbsp;</div>
                 </div>
-            </div>
+                <div class="modal-footer mb-5">
+                    <div>
+                        <button type="submit" class="btn btn-success pull-left" [disabled]="purchaseFrm.invalid">{{modalBtnTitle}} </button>
+                        <button type="button" class="btn btn-danger pull-right ml-2" (click)="cancel()">Cancel</button>
+                    </div>
+                </div>
+            </form>
         </div>
-
-
-        <div class="row">
-            <div class="col-md-7 textarea-container">
-                <textarea class="form-control" name="Description" formControlName="Description" rows="4" placeholder="Add Voucher description here..."></textarea>
-                <div class="help-block alert alert-danger" *ngIf="purchaseFrm.get('Description'). hasError('required') && formSubmitAttempt">
-                    Voucher description is required.
-                </div>
-            </div>
-            <div class="col-md-4 row">
-                <div class="col-md-6 custom-padding">
-                    <input type="number" placeholder="dd/MM/yyyy" class="form-control" placeholder="Total" value="{{sumDebit()}}" readonly="true" />
-                </div>
-                <div class="col-md-6 custom-padding">
-                    <input type="number" placeholder="dd/MM/yyyy" class="form-control" placeholder="Total" value="{{sumCredit()}}" readonly="true" />
-                </div>
-                <div class="col-md-12 custom-padding">
-                    <app-file-upload #fileUpload [extraFormData]="purchaseFrm" [uploadUrl]="uploadUrl" [dropMessage]="dropMessage"></app-file-upload>
-                </div>
-            </div>
-            <div class="col-md-1">&nbsp;</div>
-        </div>
-        <div class="modal-footer mb-5">
-            <div>
-                <button type="submit" class="btn btn-success pull-left" [disabled]="purchaseFrm.invalid">{{modalBtnTitle}} </button>
-                <button type="button" class="btn btn-danger pull-right ml-2" (click)="cancel()">Cancel</button>
-            </div>
-        </div>
-    </form>
+    </div>
 </div>

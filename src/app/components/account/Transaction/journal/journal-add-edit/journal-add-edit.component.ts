@@ -219,12 +219,12 @@ export class JournalAddEditComponent implements OnInit {
         }
 
         this.indLoading = false;
-        let vocuherDateDetails = (journalVoucher.AccountTransactionValues[0]['NVDate']).split(".");
-        this.voucherDateNepali = { 
-          "year": vocuherDateDetails[0]*1, 
-          "month": (vocuherDateDetails[1] *1 - 1), 
-          "day": vocuherDateDetails[2]*1 
-        }
+        // let vocuherDateDetails = (journalVoucher.AccountTransactionValues[0]['NVDate']).split(".");
+        // this.voucherDateNepali = { 
+        //   "year": vocuherDateDetails[0]*1, 
+        //   "month": (vocuherDateDetails[1] *1 - 1), 
+        //   "day": vocuherDateDetails[2]*1 
+        // }
         this.journalFrm.controls['Id'].setValue(journalVoucher.Id);
         // this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
         this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
@@ -302,13 +302,16 @@ export class JournalAddEditComponent implements OnInit {
     this._journalvoucherService.get(Global.BASE_NEPALIMONTH_ENDPOINT + '?NDate=' + currentdate)
       .subscribe(SB => {
         this.vdate = SB;
+        console.log('data is', SB)
       },
       error => this.msg = <any>error);
 
     if (this.vdate === "undefined") {
       alert("Please enter the voucher valid date");
       return false;
-    } 
+    }
+
+    console.log('the database date is', this.vdate , currentdate)
     let voucherDate = new Date(this.vdate);
 
     let tomorrow = new Date(today.setDate(today.getDate() + 1));
@@ -316,11 +319,11 @@ export class JournalAddEditComponent implements OnInit {
     let currentYearStartDate = new Date(this.currentYear.StartDate);
     let currentYearEndDate = new Date(this.currentYear.EndDate);
 
-    // console.log('the current date is', currentdate);
-    // console.log('the voucher date', voucherDate)
-    // console.log('the tomorrow date is', tomorrow);
-    // console.log('the current year start date', currentYearStartDate);
-    // console.log('the end year dateis', currentYearEndDate);
+    console.log('the current date is', currentdate);
+    console.log('the voucher date', voucherDate)
+    console.log('the tomorrow date is', tomorrow);
+    console.log('the current year start date', currentYearStartDate);
+    console.log('the end year dateis', currentYearEndDate);
 
     // let voucherDateConverted = this. datepipe. transform(voucherDate, 'yyyy-MM-dd');
     // let currentYearStartDateConverted = this. datepipe. transform(currentYearStartDate, 'yyyy-MM-dd');
@@ -344,9 +347,13 @@ export class JournalAddEditComponent implements OnInit {
     console.log('the jounra', this.journalFrm)
 
     this.formSubmitAttempt = true;
-    let voucherDateNepali = this.voucherDateNepali.year + '.' + (this.voucherDateNepali.month*1 + 1) + '.' + this.voucherDateNepali.day;
+    // let voucherDateNepali = this.voucherDateNepali.year + '.' + (this.voucherDateNepali.month*1 + 1) + '.' + this.voucherDateNepali.day;
 
-    if (!this.voucherDateValidator(voucherDateNepali)) {
+    // if (!this.voucherDateValidator(voucherDateNepali)) {
+    //     return false;
+    // }
+
+    if (!this.voucherDateValidator(journal.get('Date').value)) {
         return false;
     }
 
@@ -354,7 +361,7 @@ export class JournalAddEditComponent implements OnInit {
     journal.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
     journal.get('CompanyCode').setValue(this.company && this.company['BranchCode'] || '');
 
-    journal.get('Date').setValue(voucherDateNepali);
+    // journal.get('Date').setValue(voucherDateNepali);
 
     if (journal.valid) {
         let totalDebit = this.sumDebit();
