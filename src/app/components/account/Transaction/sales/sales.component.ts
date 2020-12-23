@@ -139,7 +139,7 @@ export class SalesComponent implements OnInit {
         var rows = [];
         let sn = 1;
 
-        rows.push(['S.No','Date','Particular','Voucher Type','Voucher No','Debit(Rs)','Credit(Rs)']);
+        rows.push(['S.No','Date','Particular','Voucher Type','Voucher No','Debit Amount','Credit Amount']);
 
         this.sales.forEach(s => {
             var tempSale = [
@@ -162,8 +162,8 @@ export class SalesComponent implements OnInit {
                     account.Name,
                     '',
                     '',
-                    account.DebitAmount,
-                    account.CreditAmount,
+                    account.DebitAmount > 0 ? account.DebitAmount.toFixed(2) : '',
+                    account.CreditAmount> 0 ? account.CreditAmount.toFixed(2) : '',
                 ]
                 rows.push(tempAccount);
             });
@@ -175,7 +175,7 @@ export class SalesComponent implements OnInit {
         doc.text(87,30,'Sales Voucher');
         doc.text(80,40,`${this.sfromDate} - ${this.stoDate}`);
         doc.autoTable({
-            margin: {left: 10, right: 10, bottom:10},
+            margin: {left: 10, right: 10, bottom:20},
             setFontSize: 14,
       
             //for next page 
@@ -191,13 +191,26 @@ export class SalesComponent implements OnInit {
               2: {cellWidth: 35},
               3: {cellWidth: 35},
               4: {cellWidth: 25},
-              5: {cellWidth: 25},
-              6: {cellWidth: 25},
+              5: {cellWidth: 25, halign: 'right',},
+              6: {cellWidth: 25, halign: 'right',},
             },
       
             // customize table header and rows format
             theme: 'striped'
         });
+
+
+        const pages = doc.internal.getNumberOfPages();
+        const pageWidth = doc.internal.pageSize.width;  //Optional
+        const pageHeight = doc.internal.pageSize.height;  //Optional
+        doc.setFontSize(10);  //Optional
+
+        for(let j = 1; j < pages + 1 ; j++) {
+            let horizontalPos = pageWidth / 2;  //Can be fixed number
+            let verticalPos = pageHeight - 10;  //Can be fixed number
+            doc.setPage(j);
+            doc.text(`${j} of ${pages}`, horizontalPos, verticalPos, {align: 'center' }); //Optional text styling});
+        }
         doc.save(this.toPdfFileName);
 
     }
