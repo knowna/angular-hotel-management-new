@@ -294,6 +294,8 @@ export class JournalAddEditComponent implements OnInit {
   }
 
   voucherDateValidator(currentdate: string) {
+    console.log('the current date is', currentdate);
+
     if (currentdate == "") {
         alert("Please enter the voucher date");
         return false;
@@ -319,7 +321,7 @@ export class JournalAddEditComponent implements OnInit {
     let currentYearStartDate = new Date(this.currentYear.StartDate);
     let currentYearEndDate = new Date(this.currentYear.EndDate);
 
-    console.log('the current date is', currentdate);
+    // console.log('the current date is', currentdate);
     console.log('the voucher date', voucherDate)
     console.log('the tomorrow date is', tomorrow);
     console.log('the current year start date', currentYearStartDate);
