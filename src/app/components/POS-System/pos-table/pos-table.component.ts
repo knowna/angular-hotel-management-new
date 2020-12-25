@@ -295,7 +295,7 @@ export class PosTableComponent implements OnInit {
         this.billService.loadProducts()
             .subscribe(data => { 
                 this.productList=data;
-                // console.log('the products are', this.productList);
+                console.log('the products are', this.productList);
                 
                 
                 data.forEach(prod => {

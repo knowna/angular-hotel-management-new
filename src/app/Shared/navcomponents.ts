@@ -194,6 +194,13 @@ export const navcomponents=[
             },
           ],
         },
+        {
+          title: 'Notification',
+          img:'../../../assets/images/report.png',
+          link: 'pos-dashboard/table/kitchen-order',
+          permission:'Billing:Notification',
+          show: false,
+        }
       ],    
     },
     {

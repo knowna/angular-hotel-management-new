@@ -16,6 +16,7 @@ export class LinksFilterPipe implements PipeTransform {
     'Billing:Order',
     'Billing:Customer',
     'Billing:Billing',
+    'Billing:Notification',
     'Billing:Menu',
     'Billing:Menu:Item',
     'Billing:Menu:Category',

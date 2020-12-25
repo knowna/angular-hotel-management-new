@@ -128,6 +128,7 @@ import { PurchaseAddEditComponent } from './components/account/Transaction/purch
 import { ReceiptAddEditComponent } from './components/account/Transaction/receipt/receipt-add-edit/receipt-add-edit.component';
 import { PaymentAddEditComponent } from './components/account/Transaction/payment/payment-add-edit/payment-add-edit.component';
 import { ContraAddEditComponent } from './components/account/Transaction/contra/contra-add-edit/contra-add-edit.component';
+import { KitchenOrderViewComponent } from './components/POS-System/kitchen-order-view-component/kitchen-order-view.component';
 
 
 const routes: Routes = [
@@ -617,6 +618,11 @@ const routes: Routes = [
   {
     path: 'pos-dashboard/table/posbilling',
     component: POSSaleBillingComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pos-dashboard/table/kitchen-order',
+    component: KitchenOrderViewComponent,
     canActivate: [AuthGuard]
   },
   {

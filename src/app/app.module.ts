@@ -235,6 +235,7 @@ import { PaymentAddEditComponent } from './components/account/Transaction/paymen
 import { ContraAddEditComponent } from './components/account/Transaction/contra/contra-add-edit/contra-add-edit.component';
 import { CreditNoteAddEditComponent } from './components/account/Transaction/credit-note/credit-note-add-edit/credit-note-add-edit.component';
 import { DebitNoteAddEditComponent } from './components/account/Transaction/debit-note/debit-note-add-edit/debit-note-add-edit.component';
+import { KitchenOrderViewComponent } from './components/POS-System/kitchen-order-view-component/kitchen-order-view.component';
 
 @NgModule({
   imports: [
@@ -411,7 +412,8 @@ import { DebitNoteAddEditComponent } from './components/account/Transaction/debi
     PaymentAddEditComponent,
     ContraAddEditComponent,
     CreditNoteAddEditComponent,
-    DebitNoteAddEditComponent
+    DebitNoteAddEditComponent,
+    KitchenOrderViewComponent
 
   ],
   providers: [
