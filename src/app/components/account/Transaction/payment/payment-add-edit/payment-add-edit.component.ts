@@ -467,9 +467,9 @@ export class PaymentAddEditComponent implements OnInit {
 
       this.formSubmitAttempt = true;
 
-      // if (!this.voucherDateValidator(payment.get('Date').value)) {
-      //     return false;
-      // }
+      if (!this.voucherDateValidator(payment.get('Date').value)) {
+          return false;
+      }
 
       payment.get('FinancialYear').setValue(this.currentYear['Name'] || '');
       payment.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');

@@ -449,9 +449,9 @@ export class ContraAddEditComponent implements OnInit{
       let contra = this.contraForm;
       this.formSubmitAttempt = true;
 
-      // if (!this.voucherDateValidator(contra.get('Date').value)) {
-      //     return false;
-      // }
+      if (!this.voucherDateValidator(contra.get('Date').value)) {
+          return false;
+      }
 
       contra.get('FinancialYear').setValue(this.currentYear['Name'] || '');
       contra.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
