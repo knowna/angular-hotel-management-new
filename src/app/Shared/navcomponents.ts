@@ -11,7 +11,7 @@ export const navcomponents=[
           img:'../../../assets/images/bookingBooking.png',
           children: [
             {
-              title: 'Booking',
+              title: 'Reservation',
               link: 'reservation',
               img:'../../../assets/images/bookingBooking.png',
               permission:'Front Office:Booking:Booking',
@@ -194,6 +194,13 @@ export const navcomponents=[
             },
           ],
         },
+        {
+          title: 'Notification',
+          img:'../../../assets/images/report.png',
+          link: 'pos-dashboard/table/kitchen-order',
+          permission:'Billing:Notification',
+          show: false,
+        }
       ],    
     },
     {

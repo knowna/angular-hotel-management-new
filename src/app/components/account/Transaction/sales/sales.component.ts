@@ -16,6 +16,10 @@ import { AccountTrans } from 'src/app/Model/AccountTransaction/accountTrans';
 
 type CSV = any[][];
 
+//generating pdf
+import * as jsPDF from 'jspdf'
+import 'jspdf-autotable';
+
 @Component({
     templateUrl: './sales.component.html',
     styleUrls: ['./sales.component.css']
@@ -48,7 +52,8 @@ export class SalesComponent implements OnInit {
     public currentUser: any = {};
     public company: any = {};
     dropMessage: string = "Upload Reference File";
-    toExportFileName: string = 'Sales Voucher of ' + this.date.transform(new Date, "dd-MM-yyyy") + '.xls';
+    toExportFileName: string = 'Sales Report - ' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
+    toPdfFileName: string = 'Sales Report - ' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
     uploadUrl = Global.BASE_FILE_UPLOAD_ENDPOINT;
     fileUrl: string = '';
     journalDetailsFrm: any
@@ -129,40 +134,130 @@ export class SalesComponent implements OnInit {
         this.modalRef = this.modalService.show(template, { keyboard: false, class: 'modal-lg' });
     }
 
+    exportTableToPdf() {
+        var doc = new jsPDF("p", "mm", "a4");
+        var rows = [];
+        let sn = 1;
+
+        rows.push(['S.No','Date','Particular','Voucher Type','Voucher No','Debit Amount','Credit Amount']);
+
+        this.sales.forEach(s => {
+            var tempSale = [
+                sn,
+                s.VDate,
+                s.Name,
+                s.VType,
+                s.VoucherNo,
+                '',
+                ''
+            ];
+        
+            sn = sn * 1 + 1;
+            rows.push(tempSale);
+
+            s.AccountTransactionValues.forEach(account => {
+                var tempAccount = [
+                    '',
+                    '',
+                    account.Name,
+                    '',
+                    '',
+                    account.DebitAmount > 0 ? account.DebitAmount.toFixed(2) : '',
+                    account.CreditAmount> 0 ? account.CreditAmount.toFixed(2) : '',
+                ]
+                rows.push(tempAccount);
+            });
+
+        });
+
+        doc.setFontSize(14);
+        doc.text(80,20, `${this.company?.NameEnglish}`);
+        doc.text(87,30,'Sales Voucher');
+        doc.text(80,40,`${this.sfromDate} - ${this.stoDate}`);
+        doc.autoTable({
+            margin: {left: 10, right: 10, bottom:20},
+            setFontSize: 14,
+      
+            //for next page 
+            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50,
+            rowPageBreak: 'avoid',
+            body: rows,
+            bodyStyles: {
+              fontSize: 9,
+            },
+            columnStyles: {
+              0: {cellWidth: 15},
+              1: {cellWidth: 25},
+              2: {cellWidth: 35},
+              3: {cellWidth: 35},
+              4: {cellWidth: 25},
+              5: {cellWidth: 25, halign: 'right',},
+              6: {cellWidth: 25, halign: 'right',},
+            },
+      
+            // customize table header and rows format
+            theme: 'striped'
+        });
+
+
+        const pages = doc.internal.getNumberOfPages();
+        const pageWidth = doc.internal.pageSize.width;  //Optional
+        const pageHeight = doc.internal.pageSize.height;  //Optional
+        doc.setFontSize(10);  //Optional
+
+        for(let j = 1; j < pages + 1 ; j++) {
+            let horizontalPos = pageWidth / 2;  //Can be fixed number
+            let verticalPos = pageHeight - 10;  //Can be fixed number
+            doc.setPage(j);
+            doc.text(`${j} of ${pages}`, horizontalPos, verticalPos, {align: 'center' }); //Optional text styling});
+        }
+        doc.save(this.toPdfFileName);
+
+    }
+
     /**
      * Exports the pOrder voucher data in CSV/ Excel format
      */
     exportTableToExcel(tableID, filename = '') {
-        var downloadLink;
-        var dataType = 'application/vnd.ms-excel';
-        var clonedtable = $('#'+ tableID);
-        var clonedHtml = clonedtable.clone();
-        $(clonedtable).find('.export-no-display').remove();
-        var tableSelect = document.getElementById(tableID);
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-        $('#' + tableID).html(clonedHtml.html());
+        // var downloadLink;
+        // var dataType = 'application/vnd.ms-excel';
+        // var clonedtable = $('#'+ tableID);
+        // var clonedHtml = clonedtable.clone();
+        // $(clonedtable).find('.export-no-display').remove();
+        // var tableSelect = document.getElementById(tableID);
+        // var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        // $('#' + tableID).html(clonedHtml.html());
 
-        // Specify file name
-        filename = filename ? filename + '.xls' : this.toExportFileName;
+        // // Specify file name
+        // filename = filename ? filename + '.xls' : this.toExportFileName;
 
-        // Create download link element
-        downloadLink = document.createElement("a");
+        // // Create download link element
+        // downloadLink = document.createElement("a");
 
-        document.body.appendChild(downloadLink);
+        // document.body.appendChild(downloadLink);
 
-        if (navigator.msSaveOrOpenBlob) {
-            var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
-            navigator.msSaveOrOpenBlob(blob, filename);
-        } else {
-            // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+        // if (navigator.msSaveOrOpenBlob) {
+        //     var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
+        //     navigator.msSaveOrOpenBlob(blob, filename);
+        // } else {
+        //     // Create a link to the file
+        //     downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
 
-            // Setting the file name
-            downloadLink.download = filename;
+        //     // Setting the file name
+        //     downloadLink.download = filename;
 
-            //triggering the function
-            downloadLink.click();
-        } 
+        //     //triggering the function
+        //     downloadLink.click();
+        // } 
+        let element = document.getElementById('salesTable'); 
+        const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+        
+        /* generate workbook and add the worksheet */
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        /* save to file */
+        XLSX.writeFile(wb, this.toExportFileName);
     }
 
     loadSaleList(sfromdate: string, stodate: string) {

@@ -295,7 +295,7 @@ export class PosTableComponent implements OnInit {
         this.billService.loadProducts()
             .subscribe(data => { 
                 this.productList=data;
-                // console.log('the products are', this.productList);
+                console.log('the products are', this.productList);
                 
                 
                 data.forEach(prod => {
@@ -634,7 +634,8 @@ export class PosTableComponent implements OnInit {
             "TotalAmount": total,
             "Tags": "New Order",
             "IsSelected": false,
-            "IsVoid": false
+            "IsVoid": false,
+            "DepartmentId": product.DepartmentId
         };
         ListOrderItem.push(OrderItem);
     });

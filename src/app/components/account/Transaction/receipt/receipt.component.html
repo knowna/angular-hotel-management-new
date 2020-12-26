@@ -24,8 +24,11 @@
         <div class="col-md-2">
             <button class="btn btn-success" (click)="loadReceiptList(sfromDate, stoDate)">GO</button>
         </div>
-        <div class="col-md-2">
-            <button class="btn btn-primary pull-left" (click)="exportTableToExcel('purchaseTable')" style="float: right;">Export</button>
+        <div class="col-md-1">
+            <button class="btn btn-secondary pull-left" (click)="exportTableToPdf()" style="float: right;">Pdf</button>
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary pull-left" (click)="exportTableToExcel('receiptTable')" style="float: right;">Excel</button>
         </div>
     </div>
 
@@ -35,7 +38,7 @@
                 <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
             </div>
             <div *ngIf='receiptList && receiptList.length==0' class="alert alert-info" role="alert">No record found!</div>
-            <table id="purchaseTable" class='table' *ngIf='receiptList && receiptList.length' style="border: 2px solid #ddd;">
+            <table id="receiptTable" class='table' *ngIf='receiptList && receiptList.length' style="border: 2px solid #ddd;">
                 <thead>
                     <tr>
                         <th colspan="8" class="text-center">
@@ -68,10 +71,13 @@
                         </td>
                         <td class="export-no-display">
                             <div class="d-flex">
-                                <button class="btn btn-primary btn-sm" (click)="editReceipt(row.Id)">
+                                <button class="btn btn-secondary btn-sm" (click)="exportRowToPdf(row.Id)">
+                                    <i class="fa fa-download"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm ml-1" (click)="editReceipt(row.Id)">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-sm ml-2" (click)="deleteReceipt(row.Id)">
+                                <button class="btn btn-danger btn-sm ml-1" (click)="deleteReceipt(row.Id)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </div>
@@ -217,7 +223,7 @@
                 <label class="control-label col-md-2 text-right">
                     <strong>Voucher Date:</strong>
                 </label>
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <input class="form-control" type="text" placeholder="yyyy.mm.dd" formControlName="Date" />
                     <div class="text-danger" *ngIf="(receiptFrm.get('Date').hasError('InvalidDate') || receiptFrm.get('Date').hasError('required')) && formSubmitAttempt">
                         {{ receiptFrm.get('Date').getError('InvalidDate') }}

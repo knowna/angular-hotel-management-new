@@ -1,0 +1,183 @@
+<div class="container" style="padding-top: 20px;">
+    <div class="card">
+        <div class="card-body">
+            <div class="row mt-3 mb-3">
+                <div class="col-sm-11">
+                    <h2 class="header">{{modalTitle}}</h2>
+                </div>
+                <div class="col-sm-1 text-right">
+                    <button type="button" class="btn btn-primary" (click)="back()">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- <div class="row mt-3 mb-3">
+                <div class="col-md-12">
+                    <h2 class="header">{{modalTitle}}</h2>
+                </div>
+            </div> -->
+
+            <div class="alert alert-info" role="alert" *ngIf="indLoading">
+                <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
+            </div>
+
+            <form novalidate (ngSubmit)="onSubmit(paymentFrm, fileUpload)" [formGroup]="paymentFrm">
+                <div class="hidden">
+                    <input type="number" class="hidden" formControlName="Id" />
+                    <input type="text" class="hidden" placeholder="Voucher No" formControlName="AccountTransactionDocumentId" />
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">
+                                <strong>Voucher Type</strong>
+                            </label>
+                            <input type="text" class="form-control" formControlName="Name" readonly="true">
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 offset-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                <strong>Voucher Date</strong>
+                            </label>
+                            <input class="form-control" type="text" placeholder="yyyy.mm.dd" formControlName="Date" />
+                            <div class="text-danger mt-1" *ngIf="(paymentFrm.get('Date').hasError('InvalidDate') || paymentFrm.get('Date').hasError('required')) && formSubmitAttempt">
+                                {{ paymentFrm.get('Date').getError('InvalidDate') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <label class="control-label col-md-2 text-right">
+                        <strong>Voucher Type:</strong>
+                    </label>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" formControlName="Name" readonly="true">
+                    </div>
+                    <label class="control-label col-md-2 text-right">
+                        <strong>Date:</strong>
+                    </label>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" placeholder="yyyy.mm.dd" formControlName="Date" />
+                        <div class="text-danger" *ngIf="(paymentFrm.get('Date').hasError('InvalidDate') || paymentFrm.get('Date').hasError('required')) && formSubmitAttempt">
+                            {{ paymentFrm.get('Date').getError('InvalidDate') }}
+                        </div>
+                    </div> -->
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">
+                                <strong>Account</strong>
+                            </label>
+                            <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="SourceAccountTypeId" [config]="config" [options]="accountcashbank"></ngx-select-dropdown>
+                            <div class="text-danger mt-1" *ngIf="paymentFrm.get('SourceAccountTypeId').hasError('required') && formSubmitAttempt">
+                                Ledger Name is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <label class="control-label col-md-2 text-right">
+                        <strong>Account:</strong>
+                    </label>
+                    <div class="form-group col-md-4">
+                        <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="SourceAccountTypeId" [config]="config" [options]="accountcashbank"></ngx-select-dropdown>
+                        <div class="text-danger" *ngIf="paymentFrm.get('SourceAccountTypeId').hasError('required') && formSubmitAttempt">
+                            Ledger Name is required
+                        </div>
+                    </div> -->
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div formArrayName="AccountTransactionValues" class="panel panel-default">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>
+                                        <strong>Account</strong>
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>
+                                        <strong>Debit</strong>
+                                    </label>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>
+                                        <strong>Description</strong>
+                                    </label>
+                                </div>
+                                <div class="col-md-1">
+                                    <label>&nbsp;</label>
+                                </div>
+                            </div>
+
+                            <div *ngFor="let AccountTransactionValue of paymentFrm.controls.AccountTransactionValues['controls']; let i=index" [formGroupName]="i">
+                                <div class="row mt-1">
+                                    <div class="hidden">
+                                        <input type="number" class="form-control" placeholder="Credit" formControlName="Credit" readonly="true" />
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <ngx-select-dropdown (searchChange)="searchChangeAccountId($event)" formControlName="AccountId" [config]="configAccount" [options]="account"></ngx-select-dropdown>
+                                        <!-- <select class="form-control " formControlName="AccountId">
+                                            <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option>
+                                        </select> -->
+                                        <div *ngIf="!paymentFrm.controls.AccountTransactionValues.controls[i].controls.AccountId.valid && formSubmitAttempt" class="alert alert-danger">
+                                            Account is required
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <input type="number" class="form-control" placeholder="Debit" formControlName="Debit" />
+                                        <div *ngIf="!paymentFrm.controls.AccountTransactionValues.controls[i].controls.Debit.valid && formSubmitAttempt" class="alert alert-danger">
+                                            Amount is required
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <textarea class="form-control" name="Description" rows="1" formControlName="Description" placeholder="Payment transaction description here..."></textarea>
+                                        <div class="help-block alert alert-danger" *ngIf="!paymentFrm.controls.AccountTransactionValues.controls[i].controls.Description.valid && formSubmitAttempt">
+                                            Transaction description is required.
+                                        </div>
+                                    </div>
+                                    <div class="text-center  col-md-1">
+                                        <span *ngIf="paymentFrm.controls.AccountTransactionValues.controls.length > 1" style="cursor: pointer;font-size: 30px" class="fa fa-window-close pull-right"  (click)="removeAccount(i)"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-right" style="padding:12px 26px;">
+                                    <button type="button" class="btn btn-success" [disabled]="paymentFrm.controls.AccountTransactionValues.invalid" (click)="addAccountValues()">Add Row +</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-7">
+                        <textarea name="Description" formControlName="Description" placeholder="Payment Description goes here..." class="form-control"
+                            rows="4" cols="50"></textarea>
+                        <div class="text-danger" *ngIf="paymentFrm.get('Description').hasError('required') && formSubmitAttempt">
+                            Description is required
+                        </div>
+                    </div>
+                    <div class="col-md-4 row">
+                        <div class="col-md-10 custom-padding">
+                            <input type="number" class="form-control" placeholder="Total" value="{{sumDebit()}}" readonly="true" />
+                        </div>
+                        <div class="col-md-10 custom-padding">
+                            <app-file-upload #fileUpload [extraFormData]="paymentFrm" [uploadUrl]="uploadUrl" [dropMessage]="dropMessage"></app-file-upload>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer mb-5">
+                    <button type="submit" class="btn btn-success pull-left" [disabled]="paymentFrm.invalid">{{modalBtnTitle}} </button>
+                    <button type="button" class="btn btn-danger pull-right" (click)="cancel()">Cancel</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

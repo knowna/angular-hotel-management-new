@@ -113,7 +113,22 @@ import { DebitNoteComponent } from './components/account/Transaction/debit-note/
 import { SalesComponent } from './components/account/Transaction/sales/sales.component';
 import { StockInHandComponent } from './components/InventoryDashboard/inventory report/stock-in-hand.component';
 import { ReservationCustomerComponent } from './components/Reservation/customer/customer.component';
+import { CheckInComponent } from './components/Reservation/checkin/checkin.component';
 import { PaymentTypeComponent } from './components/Reservation/payment-type/payment-type.component';
+import { CheckOutComponent } from './components/Reservation/checkout/checkout.component';
+import { ReservationInquiryComponent } from './components/Reservation/ReservationInquiry/ReservationInquiry.component';
+import { RoomStatusComponent } from './components/Reservation/reservation-status/Reservationstatus.component';
+import { ReservationComponent } from './components/Reservation/reservation/reservation.component';
+import { FacilityComponent } from './components/Reservation/facility/facility.component';
+import { CustomerTypeComponent } from './components/Reservation/customer-type/customer-type.component';
+import { ReservationTypeComponent } from './components/Reservation/reservation-type/reservation-type.component';
+import { RoomComponent } from './components/Reservation/room/room.component';
+import { JournalAddEditComponent } from './components/account/Transaction/journal/journal-add-edit/journal-add-edit.component';
+import { PurchaseAddEditComponent } from './components/account/Transaction/purchase/purchase-add-edit/purchase-add-edit.component';
+import { ReceiptAddEditComponent } from './components/account/Transaction/receipt/receipt-add-edit/receipt-add-edit.component';
+import { PaymentAddEditComponent } from './components/account/Transaction/payment/payment-add-edit/payment-add-edit.component';
+import { ContraAddEditComponent } from './components/account/Transaction/contra/contra-add-edit/contra-add-edit.component';
+import { KitchenOrderViewComponent } from './components/POS-System/kitchen-order-view-component/kitchen-order-view.component';
 
 
 const routes: Routes = [
@@ -157,37 +172,31 @@ const routes: Routes = [
     path: "split-order",
     component: SplitMergeComponent
   },
-
-  // {
-  //   path: "reservation",
-  //   component: ReservationComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
-  // {
-  //   path: "reservation/checkin",
-  //   component: CheckInComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
-  // {
-  //   path: "reservation/reservationstatus",
-  //   component: RoomStatusComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
-  // {
-  //   path: "reservation/checkout",
-  //   component: CheckOutComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
-  // {
-  //   path: "reservation/reservationinquiry",
-  //   component: ReservationInquiryComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
+  {
+    path: "reservation",
+    component: ReservationComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "reservation/checkin",
+    component: CheckInComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "reservation/reservationstatus",
+    component: RoomStatusComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "reservation/checkout",
+    component: CheckOutComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "reservation/reservationinquiry",
+    component: ReservationInquiryComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: "reservation/customer",
     component: ReservationCustomerComponent,
@@ -199,43 +208,35 @@ const routes: Routes = [
     component: PaymentTypeComponent,
     canActivate: [AuthGuard]
   },
-
   // {
   //   path: "reservation/roomtype", component: RoomTypeComponent,
   //   canActivate: [AuthGuard]
   // },
-
-  // {
-  //   path: "reservation/facility",
-  //   component: FacilityComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
-  // {
-  //   path: "reservation/roomtype",
-  //   component: RoomTypeComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
-  // {
-  //   path: "reservation/room",
-  //   component: RoomComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
-  // {
-  //   path: "reservation/customertypes",
-  //   component: CustomerTypeComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
-
-  // {
-  //   path: "reservation/reservationtype",
-  //   component: ReservationTypeComponent,
-  //   canActivate: [AuthGuard]
-  // },
-
+  {
+    path: "reservation/facility",
+    component: FacilityComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "reservation/roomtype",
+    component: RoomTypeComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "reservation/room",
+    component: RoomComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "reservation/customertypes",
+    component: CustomerTypeComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "reservation/reservationtype",
+    component: ReservationTypeComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: "billing/order",
     component: TableComponent,
@@ -349,8 +350,28 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'Account/contra/:mode',
+    component: ContraAddEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/contra/:mode/:id',
+    component: ContraAddEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'Account/receipt',
     component: ReceiptComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/receipt/:mode',
+    component: ReceiptAddEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/receipt/:mode/:id',
+    component: ReceiptAddEditComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -369,13 +390,43 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'Account/purchase/:mode',
+    component: PurchaseAddEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/purchase/:mode/:id',
+    component: PurchaseAddEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'Account/payment',
     component: PaymentComponent,
     canActivate: [AuthGuard]
   },
   {
+    path: 'Account/payment/:mode',
+    component: PaymentAddEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/payment/:mode/:id',
+    component: PaymentAddEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'Account/journalVoucher',
     component: JournalVouchercomponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/journalVoucher/:mode',
+    component: JournalAddEditComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Account/journalVoucher/:mode/:id',
+    component: JournalAddEditComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -567,6 +618,11 @@ const routes: Routes = [
   {
     path: 'pos-dashboard/table/posbilling',
     component: POSSaleBillingComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pos-dashboard/table/kitchen-order',
+    component: KitchenOrderViewComponent,
     canActivate: [AuthGuard]
   },
   {

@@ -15,6 +15,10 @@ import { AccountTransValuesService } from 'src/app/Service/accountTransValues.se
 import { Account, EntityMock } from 'src/app/Model/Account/account';
 import { AccountTrans } from 'src/app/Model/AccountTransaction/accountTrans';
 import { ToastrService } from 'ngx-toastr';
+//generating pdf
+import * as jsPDF from 'jspdf'
+import 'jspdf-autotable';
+import { ActivatedRoute, Router } from '@angular/router';
 
 type CSV = any[][];
 
@@ -45,7 +49,7 @@ export class PurchaseComponent implements OnInit {
 		defaultOpen: false
     };
 
-    public account: Observable<Account>;
+    public account: Account[] = [];
     public purchaseFrm: FormGroup;
     private formSubmitAttempt: boolean;
     private buttonDisabled: boolean;
@@ -67,8 +71,12 @@ export class PurchaseComponent implements OnInit {
     public currentaccount: Account;
     public vdate: string;
     public inventoryItem: Observable<InventoryItem>;
+    public inventoryItemList: any = [];
     public inventoryItemName: InventoryItem;
     public currentItem: string;
+
+    toExportFileName: string = 'Purchase Report -' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
+    toPdfFileName: string = 'Purchase Report -' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
 
     constructor(
         private fb: FormBuilder, 
@@ -77,7 +85,9 @@ export class PurchaseComponent implements OnInit {
         private _accountTransValues: AccountTransValuesService, 
         private date: DatePipe, 
         private modalService: BsModalService,
-        private toastrService: ToastrService) {
+        private toastrService: ToastrService,
+        private router: Router,
+        private route: ActivatedRoute) {
 
         this._purchaseService.getAccounts().subscribe(data => { this.account = data });
         this._purchaseService.getInventoryItems().subscribe(data => { this.inventoryItem = data });
@@ -113,6 +123,11 @@ export class PurchaseComponent implements OnInit {
         });
         // Load purchases list
         this.loadPurchaseList(this.fromDate, this.toDate);
+
+        this._purchaseService.getInventoryItems().subscribe(data => {
+            this.inventoryItemList = data ;
+            console.log('inventoryItemList', this.inventoryItemList)
+        });
     }
 
     voucherDateValidator(currentdate: string) {
@@ -191,17 +206,18 @@ export class PurchaseComponent implements OnInit {
      * Open Add New Purchase Form Modal
      */
     addPurchase() {
-        this.dbops = DBOperation.create;
-        this.SetControlsState(true);
-        this.modalTitle = "Add Purchase";
-        this.modalBtnTitle = "Save";
-        this.reset();
-        //this.purchaseFrm.controls['Name'].setValue('Purchase');
-        this.modalRef = this.modalService.show(this.TemplateRef, {
-            backdrop: 'static',
-            keyboard: false,
-            class: 'modal-xl'
-        });
+        // this.dbops = DBOperation.create;
+        // this.SetControlsState(true);
+        // this.modalTitle = "Add Purchase";
+        // this.modalBtnTitle = "Save";
+        // this.reset();
+        // //this.purchaseFrm.controls['Name'].setValue('Purchase');
+        // this.modalRef = this.modalService.show(this.TemplateRef, {
+        //     backdrop: 'static',
+        //     keyboard: false,
+        //     class: 'modal-xl'
+        // });
+        this.router.navigate(['add'], {relativeTo: this.route});
     }
 
         /**
@@ -215,42 +231,235 @@ export class PurchaseComponent implements OnInit {
         this.modalRef = this.modalService.show(template, { keyboard: false, class: 'modal-lg' });
     }
 
+    exportRowToPdf(Id: number) {
+        this._purchaseService.get(Global.BASE_PURCHASE_ENDPOINT + '?TransactionId=' + Id)
+            .subscribe((purchase: any) => {
+                console.log('the purchase is', purchase)
+                var doc = new jsPDF("p", "mm", "a4");
+                
+
+                // for purchase items
+                var rowsItems = [];
+                let snItem = 1;
+                rowsItems.push(['S.No','Name of Item','Quantity','Rate','Amount']);
+                purchase.PurchaseDetails.forEach(item => {
+                    let findItem = this.inventoryItemList.find(x => x.Id == item.InventoryItemId);
+                    var tempItem = [
+                        snItem,
+                        findItem.Name,
+                        item.Quantity,
+                        item.PurchaseRate,
+                        item.PurchaseAmount
+                    ];
+
+                    snItem = snItem * 1 + 1;
+                    rowsItems.push(tempItem);
+                });
+
+
+
+
+                // for account items
+                var rows = [];
+                let sn = 1;
+
+                rows.push(['S.No','Dr/Cr','Account','Debit Amount','Credit Amount','Description']);
+                purchase.AccountTransactionValues.forEach(data => {
+                    let account = this.account.find(a => a.Id == data.AccountId);
+                    var tempData = [
+                        sn,
+                        data.entityLists,
+                        account.Name,
+                        data.Debit > 0 ? data.Debit.toFixed(2) : '',
+                        data.Credit > 0 ? data.Credit.toFixed(2) : '',
+                        data.Description
+                    ];
+            
+                    sn = sn * 1 + 1;
+                    rows.push(tempData);
+                    
+                })
+
+                rows.push(['','','Total',purchase.drTotal,purchase.crTotal,''])
+                rows.push(['','','Voucher Description','','',purchase.Description])
+
+                doc.setFontSize(14);
+                doc.text(80,20, `${this.company?.NameEnglish}`);
+                doc.text(87,30,'Purchase Voucher');
+                doc.text(10,40,'Voucher No');
+                doc.text(40,40,` : ${purchase.Name}`);
+                doc.text(120,40,'Voucher Date');
+                doc.text(150,40,` : ${purchase.AccountTransactionValues[0]['NVDate']}`);
+
+                doc.autoTable({
+                    margin: {left: 10,bottom:20},
+                    setFontSize: 14,
+            
+                    //for next page 
+                    startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50,
+                    rowPageBreak: 'avoid',
+                    body: rows,
+                    bodyStyles: {
+                    fontSize: 9,
+                    },
+                    columnStyles: {
+                        0: {cellWidth: 30},
+                        1: {cellWidth: 30},
+                        2: {cellWidth: 30},
+                        3: {cellWidth: 30, halign: 'right',},
+                        4: {cellWidth: 30, halign: 'right',},
+                    },
+            
+                    // customize table header and rows format
+                    theme: 'striped'
+                });
+
+                const pages = doc.internal.getNumberOfPages();
+                const pageWidth = doc.internal.pageSize.width;  //Optional
+                const pageHeight = doc.internal.pageSize.height;  //Optional
+                doc.setFontSize(10);  //Optional
+
+                for(let j = 1; j < pages + 1 ; j++) {
+                    let horizontalPos = pageWidth / 2;  //Can be fixed number
+                    let verticalPos = pageHeight - 10;  //Can be fixed number
+                    doc.setPage(j);
+                    doc.text(`${j} of ${pages}`, horizontalPos, verticalPos, {align: 'center' }); //Optional text styling});
+                }
+                
+                doc.save('Purchase-Report-Of- ' + purchase.Id + '-'+ `${this.date.transform(new Date, "yyyy-MM-dd")}` + '.pdf');
+            });
+    }
+
+    exportTableToPdf() {
+        var doc = new jsPDF("p", "mm", "a4");
+        var rows = [];
+        let sn = 1;
+
+        rows.push(['S.No','Date','Particular','Voucher Type','Voucher No','Debit Amount','Credit Amount']);
+
+        this.purchase.forEach(p => {
+            var tempPurchase = [
+                sn,
+                p.VDate,
+                p.Name,
+                p.VType,
+                p.VoucherNo,
+                '',
+                ''
+            ];
+        
+            sn = sn * 1 + 1;
+            rows.push(tempPurchase);
+
+            p.AccountTransactionValues.forEach(account => {
+                var tempAccount = [
+                    '',
+                    '',
+                    account.Name,
+                    '',
+                    '',
+                    account.DebitAmount > 0 ? account.DebitAmount.toFixed(2) : '',
+                    account.CreditAmount> 0 ? account.CreditAmount.toFixed(2) : '',
+                ]
+                rows.push(tempAccount);
+            });
+
+        });
+
+        doc.setFontSize(14);
+        doc.text(80,20, `${this.company?.NameEnglish}`);
+        doc.text(87,30,'Purchase Voucher');
+        doc.text(80,40,`${this.sfromDate} - ${this.stoDate}`);
+        doc.autoTable({
+            margin: {left: 10,bottom:20},
+            setFontSize: 14,
+      
+            //for next page 
+            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50,
+            rowPageBreak: 'avoid',
+            body: rows,
+            bodyStyles: {
+              fontSize: 9,
+            },
+            columnStyles: {
+              0: {cellWidth: 15},
+              1: {cellWidth: 25},
+              2: {cellWidth: 35},
+              3: {cellWidth: 35},
+              4: {cellWidth: 25},
+              5: {cellWidth: 25, halign: 'right',},
+              6: {cellWidth: 25, halign: 'right',},
+            },
+      
+            // customize table header and rows format
+            theme: 'striped'
+        });
+
+        const pages = doc.internal.getNumberOfPages();
+        const pageWidth = doc.internal.pageSize.width;  //Optional
+        const pageHeight = doc.internal.pageSize.height;  //Optional
+        doc.setFontSize(10);  //Optional
+
+        for(let j = 1; j < pages + 1 ; j++) {
+            let horizontalPos = pageWidth / 2;  //Can be fixed number
+            let verticalPos = pageHeight - 10;  //Can be fixed number
+            doc.setPage(j);
+            doc.text(`${j} of ${pages}`, horizontalPos, verticalPos, {align: 'center' }); //Optional text styling});
+        }
+
+        doc.save(this.toPdfFileName);
+    }
+
     /**
      * Export formatter table in excel
      * @param tableID 
      * @param filename 
      */
     exportTableToExcel(tableID, filename = '') {
-        var downloadLink;
-        var dataType = 'application/vnd.ms-excel';
-        var clonedtable = $('#'+ tableID);
-        var clonedHtml = clonedtable.clone();
-        $(clonedtable).find('.export-no-display').remove();
-        var tableSelect = document.getElementById(tableID);
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-        $('#' + tableID).html(clonedHtml.html());
+        // var downloadLink;
+        // var dataType = 'application/vnd.ms-excel';
+        // var clonedtable = $('#'+ tableID);
+        // var clonedHtml = clonedtable.clone();
+        // $(clonedtable).find('.export-no-display').remove();
+        // var tableSelect = document.getElementById(tableID);
+        // var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        // $('#' + tableID).html(clonedHtml.html());
 
-        // Specify file name
-        filename = filename ? filename + '.xls' : 'Purchase Voucher of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
+        // // Specify file name
+        // filename = filename ? filename + '.xlsx' : 'Purchase Voucher of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
 
-        // Create download link element
-        downloadLink = document.createElement("a");
+        // // Create download link element
+        // downloadLink = document.createElement("a");
 
-        document.body.appendChild(downloadLink);
+        // document.body.appendChild(downloadLink);
 
-        if (navigator.msSaveOrOpenBlob) {
-            var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
-            navigator.msSaveOrOpenBlob(blob, filename);
-        } else {
-            // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+        // if (navigator.msSaveOrOpenBlob) {
+        //     var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
+        //     navigator.msSaveOrOpenBlob(blob, filename);
+        // } else {
+        //     // Create a link to the file
+        //     downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
 
-            // Setting the file name
-            downloadLink.download = filename;
+        //     // Setting the file name
+        //     downloadLink.download = filename;
 
-            //triggering the function
-            downloadLink.click();
-        } 
+        //     //triggering the function
+        //     downloadLink.click();
+        // } 
+
+        let element = document.getElementById('purchaseTable'); 
+        const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+        ws['!cols'] = [];
+        ws['!cols'][6] = { hidden: true };
+        ws['!cols'][7] = { hidden: true };
+
+        /* generate workbook and add the worksheet */
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        /* save to file */
+        XLSX.writeFile(wb, this.toExportFileName);
     }
 
     /**
@@ -267,72 +476,73 @@ export class PurchaseComponent implements OnInit {
      * @param Id 
      */
     editPurchase(Id: number) {
-        this.dbops = DBOperation.update;
-        this.SetControlsState(true);
-        this.modalTitle = "Edit Purchase";
-        this.modalBtnTitle = "Save";
-        this.reset();
-        this.getPurchaseDetails(Id)
-            .subscribe((purchase: AccountTrans) => {
-                console.log('for edit', purchase);
-                this.indLoading = false;
-                this.purchaseFrm.controls['Id'].setValue(purchase.Id);
-                this.purchaseFrm.controls['Date'].setValue(purchase.AccountTransactionValues[0]['NVDate']);
-                // this.purchaseFrm.controls['Name'].setValue(purchase.Name);
-                this.purchaseFrm.controls['Name'].setValue(purchase.AccountTransactionType);
-                this.purchaseFrm.controls['AccountTransactionDocumentId'].setValue(purchase.AccountTransactionDocumentId);
-                this.purchaseFrm.controls['Description'].setValue(purchase.Description);
+        this.router.navigate(['edit/' + Id], {relativeTo: this.route});
+        // this.dbops = DBOperation.update;
+        // this.SetControlsState(true);
+        // this.modalTitle = "Edit Purchase";
+        // this.modalBtnTitle = "Save";
+        // this.reset();
+        // this.getPurchaseDetails(Id)
+        //     .subscribe((purchase: AccountTrans) => {
+        //         console.log('for edit', purchase);
+        //         this.indLoading = false;
+        //         this.purchaseFrm.controls['Id'].setValue(purchase.Id);
+        //         this.purchaseFrm.controls['Date'].setValue(purchase.AccountTransactionValues[0]['NVDate']);
+        //         // this.purchaseFrm.controls['Name'].setValue(purchase.Name);
+        //         this.purchaseFrm.controls['Name'].setValue(purchase.AccountTransactionType);
+        //         this.purchaseFrm.controls['AccountTransactionDocumentId'].setValue(purchase.AccountTransactionDocumentId);
+        //         this.purchaseFrm.controls['Description'].setValue(purchase.Description);
 
-                this.purchaseFrm.controls['PurchaseDetails'] = this.fb.array([]);
-                const control = <FormArray>this.purchaseFrm.controls['PurchaseDetails'];
+        //         this.purchaseFrm.controls['PurchaseDetails'] = this.fb.array([]);
+        //         const control = <FormArray>this.purchaseFrm.controls['PurchaseDetails'];
         
-                for (let i = 0; i < purchase.PurchaseDetails.length; i++) {
-                    let valuesFromServer = purchase.PurchaseDetails[i];
-                    let instance = this.fb.group(valuesFromServer);
-                    this.currentItem = this.inventoryItem.filter(x => x.Id === purchase.PurchaseDetails[i]["InventoryItemId"])[0];
-                    // if (this.currentaccount !== undefined) {
-                        instance.controls["InventoryItemId"].setValue(this.currentItem);
-                    // }
-                    control.push(instance);
-                }
+        //         for (let i = 0; i < purchase.PurchaseDetails.length; i++) {
+        //             let valuesFromServer = purchase.PurchaseDetails[i];
+        //             let instance = this.fb.group(valuesFromServer);
+        //             this.currentItem = this.inventoryItem.filter(x => x.Id === purchase.PurchaseDetails[i]["InventoryItemId"])[0];
+        //             // if (this.currentaccount !== undefined) {
+        //                 instance.controls["InventoryItemId"].setValue(this.currentItem);
+        //             // }
+        //             control.push(instance);
+        //         }
         
-                this.purchaseFrm.controls['AccountTransactionValues'] = this.fb.array([]);
-                const controlAc = <FormArray>this.purchaseFrm.controls['AccountTransactionValues'];
-                controlAc.controls = [];
+        //         this.purchaseFrm.controls['AccountTransactionValues'] = this.fb.array([]);
+        //         const controlAc = <FormArray>this.purchaseFrm.controls['AccountTransactionValues'];
+        //         controlAc.controls = [];
         
-                for (let i = 0; i < purchase.AccountTransactionValues.length; i++) {
-                    let valuesFromServer = purchase.AccountTransactionValues[i];
-                    let instance = this.fb.group(valuesFromServer);
+        //         for (let i = 0; i < purchase.AccountTransactionValues.length; i++) {
+        //             let valuesFromServer = purchase.AccountTransactionValues[i];
+        //             let instance = this.fb.group(valuesFromServer);
 
-                    // this.currentaccount = this.account.filter(x => x.Id === purchase.AccountTransactionValues[i]["AccountId"])[0];
-                    const account = this.account.find(x => x.Id === purchase.AccountTransactionValues[i].AccountId);
-                    // if (this.currentaccount !== undefined) {
-                        // instance.controls["AccountId"].setValue(this.currentaccount.Name);
-                        // instance.controls["AccountId"].setValue(this.currentaccount.Id);
-                        instance.controls["AccountId"].setValue(account);
-                    // }
+        //             // this.currentaccount = this.account.filter(x => x.Id === purchase.AccountTransactionValues[i]["AccountId"])[0];
+        //             const account = this.account.find(x => x.Id === purchase.AccountTransactionValues[i].AccountId);
+        //             // if (this.currentaccount !== undefined) {
+        //                 // instance.controls["AccountId"].setValue(this.currentaccount.Name);
+        //                 // instance.controls["AccountId"].setValue(this.currentaccount.Id);
+        //                 instance.controls["AccountId"].setValue(account);
+        //             // }
 
-                    if (valuesFromServer['entityLists'] === "Dr") {
-                        instance.controls['Credit'].disable();
+        //             if (valuesFromServer['entityLists'] === "Dr") {
+        //                 instance.controls['Credit'].disable();
         
-                    } else if (valuesFromServer['entityLists'] === "Cr") {
-                        instance.controls['Debit'].disable();
-                    }
+        //             } else if (valuesFromServer['entityLists'] === "Cr") {
+        //                 instance.controls['Debit'].disable();
+        //             }
 
-                    // instance.controls["Debit"].setValue(purchase.AccountTransactionValues[i].Debit);
-                    // instance.controls["Credit"].setValue(purchase.AccountTransactionValues[i].Credit);
-                    // instance.controls["Description"].setValue(purchase.AccountTransactionValues[i].Description);
-                    controlAc.push(instance);
-                }
+        //             // instance.controls["Debit"].setValue(purchase.AccountTransactionValues[i].Debit);
+        //             // instance.controls["Credit"].setValue(purchase.AccountTransactionValues[i].Credit);
+        //             // instance.controls["Description"].setValue(purchase.AccountTransactionValues[i].Description);
+        //             controlAc.push(instance);
+        //         }
 
-                console.log('the control', controlAc);
+        //         console.log('the control', controlAc);
 
-                this.modalRef = this.modalService.show(this.TemplateRef, {
-                    backdrop: 'static',
-                    keyboard: false,
-                    class: 'modal-xl'
-                });
-            });
+        //         this.modalRef = this.modalService.show(this.TemplateRef, {
+        //             backdrop: 'static',
+        //             keyboard: false,
+        //             class: 'modal-xl'
+        //         });
+        //     });
     }
 
     /**

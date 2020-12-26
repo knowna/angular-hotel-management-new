@@ -166,7 +166,7 @@ getInventoryItems(){
       
 } 
 getCategories() {
-  return this._http.get(Global.BASE_MENUCATEGORY_ENDPOINT).pipe(
+  return this._http.get(Global.BASE_CATEGORY_ENDPOINT).pipe(
           catchError(this.handleError)
         )
 }

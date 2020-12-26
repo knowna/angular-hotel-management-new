@@ -14,6 +14,11 @@ import { FileService } from 'src/app/Service/file.service';
 import { Account } from 'src/app/Model/Account/account';
 import { ToastrService } from 'ngx-toastr';
 
+//generating pdf
+import * as jsPDF from 'jspdf'
+import 'jspdf-autotable';
+import { ActivatedRoute, Router } from '@angular/router';
+
 type CSV = any[][];
 
 @Component({
@@ -62,6 +67,9 @@ export class PaymentComponent {
     public vdate: string;
     public currentvdate: string;
 
+    toExportFileName: string = 'Payment Report -' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
+    toPdfFileName: string = 'Payment Report -' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
+
     constructor(
         private fb: FormBuilder,
         private _journalvoucherService: JournalVoucherService,
@@ -69,7 +77,9 @@ export class PaymentComponent {
         private date: DatePipe,
         private modalService: BsModalService,
         private fileService: FileService,
-        private toastrService: ToastrService
+        private toastrService: ToastrService,
+        private router: Router,
+        private route: ActivatedRoute
     ) {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -196,54 +206,229 @@ export class PaymentComponent {
                 error => this.msg = <any>error);
     }
 
+    exportRowToPdf(Id: number) {
+        this._journalvoucherService.get(Global.BASE_JOURNALVOUCHER_ENDPOINT + '?TransactionId=' + Id)
+        .subscribe((payment: any) => {
+            console.log('the payment is', payment)
+            var doc = new jsPDF("p", "mm", "a4");
+            
+            var rows = [];
+
+            let sn = 1;
+
+            rows.push(['S.No','Account','Debit Amount','Description']);
+                payment.AccountTransactionValues.forEach(data => {
+                let account = this.account.find(a => a.Id == data.AccountId);
+                var tempData = [
+                    sn,
+                    account.Name,
+                    data.Debit.toFixed(2),
+                    // data.Credit,
+                    data.Description
+                ];
+        
+                sn = sn * 1 + 1;
+                rows.push(tempData);
+                
+            })
+
+            rows.push(['','Total',payment.drTotal,''])
+            rows.push(['','Voucher Description','',payment.Description])
+
+            doc.setFontSize(14);
+            doc.text(80,20, `${this.company?.NameEnglish}`);
+            doc.text(87,30,'Payment Voucher');
+            doc.text(10,40,'Voucher No');
+            doc.text(40,40,` : ${payment.Name}`);
+            doc.text(120,40,'Voucher Date');
+            doc.text(150,40,` : ${payment.AccountTransactionValues[0]['NVDate']}`);
+
+            let accountType = this.accountcashbank.find(x => x.Id == payment.SourceAccountTypeId);
+            doc.text(10,50,'Account');
+            doc.text(40,50, ` : ${accountType.Name}`)
+
+            doc.autoTable({
+                margin: {left: 10,bottom:20},
+                setFontSize: 14,
+        
+                //for next page 
+                startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 60,
+                rowPageBreak: 'avoid',
+                body: rows,
+                bodyStyles: {
+                fontSize: 9,
+                },
+                columnStyles: {
+                // 0: {cellWidth: 35},
+                // 1: {cellWidth: 35},
+                2: { halign: 'right',},
+                // 3: {cellWidth: 35},
+                },
+        
+                // customize table header and rows format
+                theme: 'striped'
+            });
+
+            const pages = doc.internal.getNumberOfPages();
+            const pageWidth = doc.internal.pageSize.width;  //Optional
+            const pageHeight = doc.internal.pageSize.height;  //Optional
+            doc.setFontSize(10);  //Optional
+
+            for(let j = 1; j < pages + 1 ; j++) {
+                let horizontalPos = pageWidth / 2;  //Can be fixed number
+                let verticalPos = pageHeight - 10;  //Can be fixed number
+                doc.setPage(j);
+                doc.text(`${j} of ${pages}`, horizontalPos, verticalPos, {align: 'center' }); //Optional text styling});
+            }
+
+            doc.save('Payment-Report-Of- ' + payment.Id + '-'+ `${this.date.transform(new Date, "yyyy-MM-dd")}` + '.pdf');
+        });
+    }
+
+
+    exportTableToPdf() {
+        var doc = new jsPDF("p", "mm", "a4");
+        var rows = [];
+        let sn = 1;
+
+        rows.push(['S.No','Date','Particular','Voucher Type','Voucher No','Debit Amount','Credit Amount']);
+
+        this.paymentList.forEach(p => {
+            var tempPayment = [
+                sn,
+                p.VDate,
+                p.Name,
+                p.VType,
+                p.VoucherNo,
+                '',
+                ''
+            ];
+        
+            sn = sn * 1 + 1;
+            rows.push(tempPayment);
+
+            p.AccountTransactionValues.forEach(account => {
+                var tempAccount = [
+                    '',
+                    '',
+                    account.Name,
+                    '',
+                    '',
+                    account.DebitAmount > 0 ? account.DebitAmount.toFixed(2) : '',
+                    account.CreditAmount> 0 ? account.CreditAmount.toFixed(2) : '',
+                ]
+                rows.push(tempAccount);
+            });
+
+        });
+
+        doc.setFontSize(14);
+        doc.text(80,20, `${this.company?.NameEnglish}`);
+        doc.text(87,30,'Payment Voucher');
+        doc.text(80,40,`${this.sfromDate} - ${this.stoDate}`);
+        doc.autoTable({
+            margin: {left: 10,bottom:20},
+            setFontSize: 14,
+      
+            //for next page 
+            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50,
+            rowPageBreak: 'avoid',
+            body: rows,
+            bodyStyles: {
+              fontSize: 9,
+            },
+            columnStyles: {
+              0: {cellWidth: 15},
+              1: {cellWidth: 25},
+              2: {cellWidth: 35},
+              3: {cellWidth: 35},
+              4: {cellWidth: 25},
+              5: {cellWidth: 25, halign: 'right',},
+              6: {cellWidth: 25, halign: 'right',},
+            },
+      
+            // customize table header and rows format
+            theme: 'striped'
+        });
+
+        const pages = doc.internal.getNumberOfPages();
+        const pageWidth = doc.internal.pageSize.width;  //Optional
+        const pageHeight = doc.internal.pageSize.height;  //Optional
+        doc.setFontSize(10);  //Optional
+
+        for(let j = 1; j < pages + 1 ; j++) {
+            let horizontalPos = pageWidth / 2;  //Can be fixed number
+            let verticalPos = pageHeight - 10;  //Can be fixed number
+            doc.setPage(j);
+            doc.text(`${j} of ${pages}`, horizontalPos, verticalPos, {align: 'center' }); //Optional text styling});
+        }
+        doc.save(this.toPdfFileName);
+    }
+
+
+
     exportTableToExcel(tableID, filename = '') {
-        var downloadLink;
-        var dataType = 'application/vnd.ms-excel';
-        var clonedtable = $('#'+ tableID);
-        var clonedHtml = clonedtable.clone();
-        $(clonedtable).find('.export-no-display').remove();
-        var tableSelect = document.getElementById(tableID);
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-        $('#' + tableID).html(clonedHtml.html());
+        // var downloadLink;
+        // var dataType = 'application/vnd.ms-excel';
+        // var clonedtable = $('#'+ tableID);
+        // var clonedHtml = clonedtable.clone();
+        // $(clonedtable).find('.export-no-display').remove();
+        // var tableSelect = document.getElementById(tableID);
+        // var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        // $('#' + tableID).html(clonedHtml.html());
 
-        // Specify file name
-        filename = filename ? filename + '.xls' :  'Payment Voucher of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
+        // // Specify file name
+        // filename = filename ? filename + '.xls' :  'Payment Voucher of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
 
-        // Create download link element
-        downloadLink = document.createElement("a");
+        // // Create download link element
+        // downloadLink = document.createElement("a");
 
-        document.body.appendChild(downloadLink);
+        // document.body.appendChild(downloadLink);
 
-        if (navigator.msSaveOrOpenBlob) {
-            var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
-            navigator.msSaveOrOpenBlob(blob, filename);
-        } else {
-            // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+        // if (navigator.msSaveOrOpenBlob) {
+        //     var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
+        //     navigator.msSaveOrOpenBlob(blob, filename);
+        // } else {
+        //     // Create a link to the file
+        //     downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
 
-            // Setting the file name
-            downloadLink.download = filename;
+        //     // Setting the file name
+        //     downloadLink.download = filename;
 
-            //triggering the function
-            downloadLink.click();
-        } 
+        //     //triggering the function
+        //     downloadLink.click();
+        // } 
+        let element = document.getElementById('paymentTable'); 
+        const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+        ws['!cols'] = [];
+        ws['!cols'][6] = { hidden: true };
+        ws['!cols'][7] = { hidden: true };
+
+        /* generate workbook and add the worksheet */
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        /* save to file */
+        XLSX.writeFile(wb, this.toExportFileName);
     }
 
     /**
      * Add Payment
      */
     addPayment() {
-        this.dbops = DBOperation.create;
-        this.SetControlsState(true);
-        this.modalTitle = "Add Payment";
-        this.modalBtnTitle = "Save";
-        this.reset();
-        this.paymentFrm.controls['Name'].setValue('Payment');
-        this.modalRef = this.modalService.show(this.TemplateRef, {
-            backdrop: 'static',
-            keyboard: false,
-            class: 'modal-lg'
-        });
+        // this.dbops = DBOperation.create;
+        // this.SetControlsState(true);
+        // this.modalTitle = "Add Payment";
+        // this.modalBtnTitle = "Save";
+        // this.reset();
+        // this.paymentFrm.controls['Name'].setValue('Payment');
+        // this.modalRef = this.modalService.show(this.TemplateRef, {
+        //     backdrop: 'static',
+        //     keyboard: false,
+        //     class: 'modal-lg'
+        // });
+        this.router.navigate(['add'], {relativeTo: this.route});
     }
 
     /**
@@ -260,60 +445,61 @@ export class PaymentComponent {
      * @param Id 
      */
     editPayment(Id: number) {
-        this.reset();
-        this.dbops = DBOperation.update;
-        this.SetControlsState(true);
-        this.modalTitle = "Edit Payment";
-        this.modalBtnTitle = "Save";
-        this.getJournalVoucher(Id)
-            .subscribe((payment: AccountTrans) => {
-                // console.log('the payment is', payment)
-                this.indLoading = false;
-                this.paymentFrm.controls['Id'].setValue(payment.Id);
-                this.paymentFrm.controls['Name'].setValue(payment.Name);
-                this.paymentFrm.controls['AccountTransactionDocumentId'].setValue(payment.AccountTransactionDocumentId);
-                this.currentaccount = this.accountcashbank.filter(x => x.Id === payment.SourceAccountTypeId)[0];
-                if (this.currentaccount !== undefined) {
-                    this.paymentFrm.controls['SourceAccountTypeId'].setValue(this.currentaccount);
-                }
-                this.paymentFrm.controls['Description'].setValue(payment.Description);
-                this.paymentFrm.controls['Date'].setValue(payment.AccountTransactionValues[0]['NVDate']);
+        this.router.navigate(['edit/' + Id], {relativeTo: this.route});
+        // this.reset();
+        // this.dbops = DBOperation.update;
+        // this.SetControlsState(true);
+        // this.modalTitle = "Edit Payment";
+        // this.modalBtnTitle = "Save";
+        // this.getJournalVoucher(Id)
+        //     .subscribe((payment: AccountTrans) => {
+        //         // console.log('the payment is', payment)
+        //         this.indLoading = false;
+        //         this.paymentFrm.controls['Id'].setValue(payment.Id);
+        //         this.paymentFrm.controls['Name'].setValue(payment.Name);
+        //         this.paymentFrm.controls['AccountTransactionDocumentId'].setValue(payment.AccountTransactionDocumentId);
+        //         this.currentaccount = this.accountcashbank.filter(x => x.Id === payment.SourceAccountTypeId)[0];
+        //         if (this.currentaccount !== undefined) {
+        //             this.paymentFrm.controls['SourceAccountTypeId'].setValue(this.currentaccount);
+        //         }
+        //         this.paymentFrm.controls['Description'].setValue(payment.Description);
+        //         this.paymentFrm.controls['Date'].setValue(payment.AccountTransactionValues[0]['NVDate']);
 
-                this.paymentFrm.controls['AccountTransactionValues'] = this.fb.array([]);
-                const control = <FormArray>this.paymentFrm.controls['AccountTransactionValues'];
+        //         this.paymentFrm.controls['AccountTransactionValues'] = this.fb.array([]);
+        //         const control = <FormArray>this.paymentFrm.controls['AccountTransactionValues'];
 
-                for (var i = 0; i < payment.AccountTransactionValues.length; i++) {
-                    const account = this.account.find(x => x.Id === payment.AccountTransactionValues[i].AccountId);
-                    // console.log('the accoun in the lis', account);
-                    let currentaccountvoucher = payment.AccountTransactionValues[i];
-                    let instance = this.fb.group(currentaccountvoucher);
-                    instance.controls["AccountId"].setValue(account);
-                    instance.controls["Debit"].setValue(payment.AccountTransactionValues[i].Debit);
-                    instance.controls["Credit"].setValue(payment.AccountTransactionValues[i].Credit);
-                    instance.controls["Description"].setValue(payment.AccountTransactionValues[i].Description);
+        //         for (var i = 0; i < payment.AccountTransactionValues.length; i++) {
+        //             const account = this.account.find(x => x.Id === payment.AccountTransactionValues[i].AccountId);
+        //             // console.log('the accoun in the lis', account);
+        //             let currentaccountvoucher = payment.AccountTransactionValues[i];
+        //             let instance = this.fb.group(currentaccountvoucher);
+        //             instance.controls["AccountId"].setValue(account);
+        //             instance.controls["Debit"].setValue(payment.AccountTransactionValues[i].Debit);
+        //             instance.controls["Credit"].setValue(payment.AccountTransactionValues[i].Credit);
+        //             instance.controls["Description"].setValue(payment.AccountTransactionValues[i].Description);
                     
-                    control.push(instance);
-                }
+        //             control.push(instance);
+        //         }
 
 
-                // for (var i = 0; i < payment.AccountTransactionValues.length; i++) {
-                //     this.currentaccount = this.account.filter(x => x.Id === payment.AccountTransactionValues[i]["AccountId"])[0];
-                //     if (this.currentaccount !== undefined) {
-                //         let currentaccountvoucher = payment.AccountTransactionValues[i];
-                //         let instance = this.fb.group(currentaccountvoucher);
-                //         instance.controls["AccountId"].setValue(this.currentaccount.Name);
-                //         control.push(instance);
-                //     }
-                // }
+        //         // for (var i = 0; i < payment.AccountTransactionValues.length; i++) {
+        //         //     this.currentaccount = this.account.filter(x => x.Id === payment.AccountTransactionValues[i]["AccountId"])[0];
+        //         //     if (this.currentaccount !== undefined) {
+        //         //         let currentaccountvoucher = payment.AccountTransactionValues[i];
+        //         //         let instance = this.fb.group(currentaccountvoucher);
+        //         //         instance.controls["AccountId"].setValue(this.currentaccount.Name);
+        //         //         control.push(instance);
+        //         //     }
+        //         // }
 
-                this.modalRef = this.modalService.show(this.TemplateRef, {
-                    backdrop: 'static',
-                    keyboard: false,
-                    class: 'modal-lg'
-                });
+        //         this.modalRef = this.modalService.show(this.TemplateRef, {
+        //             backdrop: 'static',
+        //             keyboard: false,
+        //             class: 'modal-lg'
+        //         });
 
-            },
-                error => this.msg = <any>error);
+        //     },
+        //         error => this.msg = <any>error);
     }
 
     /**

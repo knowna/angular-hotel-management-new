@@ -18,8 +18,11 @@
         <div class="col-md-2">
             <button class="btn btn-success" (click)="loadSaleList(sfromDate, stoDate)"> GO</button>
         </div>
-        <div class="col-md-2">
-            <button class="btn btn-primary pull-left" (click)="exportTableToExcel('salesTable')" style="float: right;"> Export</button>
+        <div class="col-md-1">
+            <button class="btn btn-secondary pull-left" (click)="exportTableToPdf()" style="float: right;">Pdf</button>
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary pull-left" (click)="exportTableToExcel('salesTable')" style="float: right;">Excel</button>
         </div>
     </div>
 
@@ -32,7 +35,7 @@
             <table id="salesTable" class='table table-bordered' *ngIf='sales && sales.length' style="border: 2px solid #ddd;">
                 <thead>
                     <tr>
-                        <th colspan="6" class="text-center">
+                        <th colspan="7" class="text-center">
                             <strong>{{ company?.NameEnglish }}</strong>
                             <br/> Sales Voucher
                             <br/> {{ sfromDate }} - {{ stoDate }}
@@ -45,6 +48,7 @@
                         <th>Voucher No.</th>
                         <th>Debit (Rs.)</th>
                         <th>Credit (Rs.)</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody *ngFor="let row of sales">
@@ -54,6 +58,11 @@
                         <td>{{ row.VType }}</td>
                         <td>{{ row.VoucherNo }}</td>
                         <td colspan="2">&nbsp;</td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm">
+                                <i class="fa fa-print"></i>
+                            </button>
+                        </td>
                     </tr>
                     <tr *ngFor="let transaction of row.AccountTransactionValues">
                         <td>&nbsp;</td>
@@ -64,6 +73,7 @@
                         <td>
                             {{ transaction.CreditAmount !== 0 ? transaction.CreditAmount.toFixed(2) : '' }}
                         </td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>

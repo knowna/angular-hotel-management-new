@@ -4,7 +4,9 @@ import { DatePipe } from '@angular/common';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs/Rx';
 import * as XLSX from 'xlsx';
-
+//generating pdf
+import * as jsPDF from 'jspdf'
+import 'jspdf-autotable';
 
 
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
@@ -16,6 +18,7 @@ import { AccountTransValuesService } from 'src/app/Service/accountTransValues.se
 import { FileService } from 'src/app/Service/file.service';
 import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
 import { ToastrService } from 'ngx-toastr';
+import { Router, ActivatedRoute } from '@angular/router';
 
 // Accessing global variable
 type CSV = any[][];
@@ -43,10 +46,11 @@ export class JournalVouchercomponent implements OnInit {
     modalBtnTitle: string;
     dropMessage: string = "Upload Reference File";
     toExportData: CSV = [
-        ["Journal Voucher of " + this.date.transform(new Date, "dd-MM-yyyy")],
+        ["Journal Voucher of " + this.date.transform(new Date, "yyyy-MM-dd")],
         ['Date', 'Particular', 'Voucher Type', 'Voucher No.', 'Debit Amount', 'Credit Amount']
     ];
-    toExportFileName: string = 'Journal-voucher-' + this.date.transform(new Date, "dd-MM-yyyy") + '.xlsx';
+    toExportFileName: string = 'Journal Voucher Report-' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
+    toPdfFileName: string = 'Journal Voucher Report-' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
     uploadUrl = Global.BASE_FILE_UPLOAD_ENDPOINT;
     fileUrl: string = '';
     settings = {
@@ -56,7 +60,7 @@ export class JournalVouchercomponent implements OnInit {
         defaultOpen: false
     };
 
-    public account: Observable<Account>;
+    public account: Account[] = [];
     public journalFrm: FormGroup;
     private formSubmitAttempt: boolean;
     private buttonDisabled: boolean;
@@ -78,7 +82,9 @@ export class JournalVouchercomponent implements OnInit {
         private _accountTransValues: AccountTransValuesService, private date: DatePipe,
         private modalService: BsModalService,
         private fileService: FileService,
-        private toastrService: ToastrService
+        private toastrService: ToastrService,
+        private router: Router,
+        private route: ActivatedRoute
     ) {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -129,36 +135,223 @@ export class JournalVouchercomponent implements OnInit {
      * @param filename 
      */
     exportTableToExcel(tableID, filename = '') {
-        var downloadLink;
-        var dataType = 'application/vnd.ms-excel';
-        var clonedtable = $('#' + tableID);
-        var clonedHtml = clonedtable.clone();
-        $(clonedtable).find('.export-no-display').remove();
-        var tableSelect = document.getElementById(tableID);
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-        $('#' + tableID).html(clonedHtml.html());
+        // var downloadLink;
+        // var dataType = 'application/vnd.ms-excel';
+        // var clonedtable = $('#' + tableID);
+        // var clonedHtml = clonedtable.clone();
+        // $(clonedtable).find('.export-no-display').remove();
+        // var tableSelect = document.getElementById(tableID);
+        // var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        // $('#' + tableID).html(clonedHtml.html());
 
-        // Specify file name
-        filename = filename ? filename + '.xls' : 'Journal Voucher of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
+        // // Specify file name
+        // filename = filename ? filename + '.xls' : 'Journal Voucher of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
 
-        // Create download link element
-        downloadLink = document.createElement("a");
+        // // Create download link element
+        // downloadLink = document.createElement("a");
 
-        document.body.appendChild(downloadLink);
+        // document.body.appendChild(downloadLink);
 
-        if (navigator.msSaveOrOpenBlob) {
-            var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
-            navigator.msSaveOrOpenBlob(blob, filename);
-        } else {
-            // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+        // if (navigator.msSaveOrOpenBlob) {
+        //     var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
+        //     navigator.msSaveOrOpenBlob(blob, filename);
+        // } else {
+        //     // Create a link to the file
+        //     downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
 
-            // Setting the file name
-            downloadLink.download = filename;
+        //     // Setting the file name
+        //     downloadLink.download = filename;
 
-            //triggering the function
-            downloadLink.click();
+        //     //triggering the function
+        //     downloadLink.click();
+        // }
+
+        let element = document.getElementById('voucherTable'); 
+        const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+        ws['!cols'] = [];
+        ws['!cols'][6] = { hidden: true };
+
+        /* generate workbook and add the worksheet */
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        /* save to file */
+        XLSX.writeFile(wb, this.toExportFileName);
+    }
+
+
+    exportTableToPdf() {
+        var doc = new jsPDF("p", "mm", "a4");
+        var rows = [];
+        let sn = 1;
+
+        rows.push(['S.No','Date','Particular','Voucher Type','Voucher No','Debit Amount','Credit Amount']);
+
+        this.journalVoucher.forEach(voucher => {
+            var tempVoucher = [
+                sn,
+                voucher.VDate,
+                voucher.Name,
+                voucher.VType,
+                voucher.VoucherNo,
+                '',
+                ''
+            ];
+        
+            sn = sn * 1 + 1;
+            rows.push(tempVoucher);
+
+            voucher.AccountTransactionValues.forEach(account => {
+                var tempAccount = [
+                    '',
+                    '',
+                    account.Name,
+                    '',
+                    '',
+                    account.DebitAmount > 0 ? account.DebitAmount.toFixed(2) : '',
+                    account.CreditAmount> 0 ? account.CreditAmount.toFixed(2) : '',
+                ]
+                rows.push(tempAccount);
+            });
+
+        });
+
+        doc.setFontSize(14);
+        doc.text(80,20, `${this.company?.NameEnglish}`);
+        doc.text(87,30,'Journal Voucher');
+        doc.text(80,40,`${this.sfromDate} - ${this.stoDate}`);
+        doc.autoTable({
+            margin: {left: 10,bottom:20},
+            setFontSize: 14,
+      
+            //for next page 
+            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50,
+            rowPageBreak: 'avoid',
+            body: rows,
+            bodyStyles: {
+              fontSize: 9,
+            },
+            columnStyles: {
+              0: {cellWidth: 25},
+              1: {cellWidth: 25},
+              2: {cellWidth: 25},
+              3: {cellWidth: 25},
+              4: {cellWidth: 25},
+              5: {
+                  cellWidth: 25,
+                  halign: 'right',
+                },
+              6: {
+                  cellWidth: 25,
+                  halign: 'right',
+                },
+            },
+      
+            // customize table header and rows format
+            theme: 'striped'
+        });
+
+
+        const pages = doc.internal.getNumberOfPages();
+        const pageWidth = doc.internal.pageSize.width;  //Optional
+        const pageHeight = doc.internal.pageSize.height;  //Optional
+        doc.setFontSize(10);  //Optional
+
+        for(let j = 1; j < pages + 1 ; j++) {
+            let horizontalPos = pageWidth / 2;  //Can be fixed number
+            let verticalPos = pageHeight - 10;  //Can be fixed number
+            doc.setPage(j);
+            doc.text(`${j} of ${pages}`, horizontalPos, verticalPos, {align: 'center' }); //Optional text styling});
         }
+                
+        doc.save(this.toPdfFileName);
+    }
+
+    exportRowToPdf(Id: number) {
+        this._journalvoucherService.get(Global.BASE_JOURNALVOUCHER_ENDPOINT + '?TransactionId=' + Id)
+            .subscribe((journalVoucher: any) => {
+                // console.log('the journal voucher is', journalVoucher)
+                var doc = new jsPDF("p", "mm", "a4");
+                
+                var rows = [];
+
+                let sn = 1;
+
+                rows.push(['S.No','Dr/Cr','Account','Debit Amount','Credit Amount','Description']);
+                    journalVoucher.AccountTransactionValues.forEach(data => {
+                    let account = this.account.find(a => a.Id == data.AccountId);
+                    var tempData = [
+                    sn,
+                    data.entityLists,
+                    account.Name,
+                    data.Debit > 0 ? data.Debit.toFixed(2) : '',
+                    data.Credit > 0 ? data.Credit.toFixed(2) : '',
+                    data.Description
+                    ];
+            
+                    sn = sn * 1 + 1;
+                    rows.push(tempData);
+                    
+                })
+
+                rows.push(['','','Total',journalVoucher.drTotal,journalVoucher.crTotal,''])
+                rows.push(['','','Voucher Description','','',journalVoucher.Description])
+
+                doc.setFontSize(14);
+                doc.text(80,20, `${this.company?.NameEnglish}`);
+                doc.text(87,30,'Journal Voucher');
+                doc.text(10,40,'Voucher No');
+                doc.text(40,40,` : ${journalVoucher.Name}`);
+                doc.text(120,40,'Voucher Date');
+                doc.text(150,40,` : ${journalVoucher.AccountTransactionValues[0]['NVDate']}`);
+
+                doc.autoTable({
+                    margin: {left: 10,bottom:20},
+                    setFontSize: 14,
+            
+                    //for next page 
+                    startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50,
+                    rowPageBreak: 'avoid',
+                    body: rows,
+                    bodyStyles: {
+                    fontSize: 9,
+                    },
+                    columnStyles: {
+                        0: {cellWidth: 30},
+                        1: {cellWidth: 30},
+                        2: {cellWidth: 30},
+                        3: {
+                            cellWidth: 30,
+                            halign: 'right',
+                        },
+                        4: {
+                            cellWidth: 30,
+                            halign: 'right',
+                        },
+                        5: {
+                            cellWidth: 30
+                        }
+                    },
+            
+                    // customize table header and rows format
+                    theme: 'striped'
+                });
+
+                const pages = doc.internal.getNumberOfPages();
+                const pageWidth = doc.internal.pageSize.width;  //Optional
+                const pageHeight = doc.internal.pageSize.height;  //Optional
+                doc.setFontSize(10);  //Optional
+
+                for(let j = 1; j < pages + 1 ; j++) {
+                    let horizontalPos = pageWidth / 2;  //Can be fixed number
+                    let verticalPos = pageHeight - 10;  //Can be fixed number
+                    doc.setPage(j);
+                    doc.text(`${j} of ${pages}`, horizontalPos, verticalPos, {align: 'center' }); //Optional text styling});
+                }
+
+                doc.save('Journal-Vocuher- ' + journalVoucher.Id + '-'+ `${this.date.transform(new Date, "dd-MM-yyyy")}` + '.pdf');
+            });
+    
     }
 
     voucherDateValidator(currentdate: string) {
@@ -253,17 +446,18 @@ export class JournalVouchercomponent implements OnInit {
      * Open Add New Journal Voucher Form Modal
      */
     addJournalVoucher() {
-        this.dbops = DBOperation.create;
-        this.SetControlsState(true);
-        this.modalTitle = "Add Journal";
-        this.modalBtnTitle = "Save";
-        this.reset();
-        this.journalFrm.controls['Name'].setValue("Journal");
-        this.modalRef = this.modalService.show(this.TemplateRef, {
-            backdrop: 'static',
-            keyboard: false,
-            class: 'modal-xl'
-        });
+        // this.dbops = DBOperation.create;
+        // this.SetControlsState(true);
+        // this.modalTitle = "Add Journal";
+        // this.modalBtnTitle = "Save";
+        // this.reset();
+        // this.journalFrm.controls['Name'].setValue("Journal");
+        // this.modalRef = this.modalService.show(this.TemplateRef, {
+        //     backdrop: 'static',
+        //     keyboard: false,
+        //     class: 'modal-xl'
+        // });
+        this.router.navigate(['add'], {relativeTo: this.route});
     }
 
     /**
@@ -280,62 +474,58 @@ export class JournalVouchercomponent implements OnInit {
      * @param Id {String} Voucher Id
      */
     editJournalVoucher(Id: number) {
-        this.dbops = DBOperation.update;
-        this.SetControlsState(true);
-        this.modalTitle = "Edit Journal";
-        this.modalBtnTitle = "Save";
-        this.reset();
-        this.getJournalVoucher(Id)
-            .subscribe((journalVoucher: AccountTrans) => {
-                console.log('the journal voucher is', journalVoucher)
-                this.indLoading = false;
-                this.journalFrm.controls['Id'].setValue(journalVoucher.Id);
-                // this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
-                this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
+        this.router.navigate(['edit/' + Id], {relativeTo: this.route});
+        // this.dbops = DBOperation.update;
+        // this.SetControlsState(true);
+        // this.modalTitle = "Edit Journal";
+        // this.modalBtnTitle = "Save";
+        // this.reset();
+        // this.getJournalVoucher(Id)
+        //     .subscribe((journalVoucher: AccountTrans) => {
+        //         console.log('the journal voucher is', journalVoucher)
+        //         this.indLoading = false;
+        //         this.journalFrm.controls['Id'].setValue(journalVoucher.Id);
+        //         this.journalFrm.controls['Name'].setValue(journalVoucher.Name);
 
-                this.journalFrm.controls['Date'].setValue(journalVoucher.AccountTransactionValues[0]['NVDate']);
-                this.journalFrm.controls['AccountTransactionDocumentId'].setValue(journalVoucher.AccountTransactionDocumentId);
-                this.journalFrm.controls['Description'].setValue(journalVoucher.Description);
-                this.journalFrm.controls['Amount'].setValue(journalVoucher.Amount);
-                this.journalFrm.controls['drTotal'].setValue(journalVoucher.drTotal);
-                this.journalFrm.controls['crTotal'].setValue(journalVoucher.crTotal);
-                this.journalFrm.controls['AccountTransactionValues'] = this.fb.array([]);
-                const control = <FormArray>this.journalFrm.controls['AccountTransactionValues'];
+        //         this.journalFrm.controls['Date'].setValue(journalVoucher.AccountTransactionValues[0]['NVDate']);
+        //         this.journalFrm.controls['AccountTransactionDocumentId'].setValue(journalVoucher.AccountTransactionDocumentId);
+        //         this.journalFrm.controls['Description'].setValue(journalVoucher.Description);
+        //         this.journalFrm.controls['Amount'].setValue(journalVoucher.Amount);
+        //         this.journalFrm.controls['drTotal'].setValue(journalVoucher.drTotal);
+        //         this.journalFrm.controls['crTotal'].setValue(journalVoucher.crTotal);
+        //         this.journalFrm.controls['AccountTransactionValues'] = this.fb.array([]);
+        //         const control = <FormArray>this.journalFrm.controls['AccountTransactionValues'];
 
-                for (let i = 0; i < journalVoucher.AccountTransactionValues.length; i++) {
-                    // this.currentaccount = this.account.filter(x => x.Id === journalVoucher.AccountTransactionValues[i]["AccountId"])[0];
-                    const account = this.account.find(x => x.Id === journalVoucher.AccountTransactionValues[i].AccountId);
-                    let valuesFromServer = journalVoucher.AccountTransactionValues[i];
-                    let instance = this.fb.group(valuesFromServer);
-                    console.log('accountis', account);
-                    // if (this.currentaccount !== undefined) {
-                        // instance.controls["AccountId"].setValue(this.currentaccount.Name);
-                        instance.controls["AccountId"].setValue(account);
-                    // }
+        //         for (let i = 0; i < journalVoucher.AccountTransactionValues.length; i++) {
+        //             const account = this.account.find(x => x.Id === journalVoucher.AccountTransactionValues[i].AccountId);
+        //             let valuesFromServer = journalVoucher.AccountTransactionValues[i];
+        //             let instance = this.fb.group(valuesFromServer);
+        //             console.log('accountis', account);
+        //             instance.controls["AccountId"].setValue(account);
 
-                    if (valuesFromServer['entityLists'] === "Dr") {
-                        instance.controls['Credit'].disable();
-                    }
+        //             if (valuesFromServer['entityLists'] === "Dr") {
+        //                 instance.controls['Credit'].disable();
+        //             }
 
-                    if (valuesFromServer['entityLists'] === "Cr") {
-                        instance.controls['Debit'].disable();
-                    }
+        //             if (valuesFromServer['entityLists'] === "Cr") {
+        //                 instance.controls['Debit'].disable();
+        //             }
 
-                    instance.controls["Debit"].setValue(journalVoucher.AccountTransactionValues[i].Debit);
-                    instance.controls["Credit"].setValue(journalVoucher.AccountTransactionValues[i].Credit);
-                    instance.controls["Description"].setValue(journalVoucher.AccountTransactionValues[i].Description);
+        //             instance.controls["Debit"].setValue(journalVoucher.AccountTransactionValues[i].Debit);
+        //             instance.controls["Credit"].setValue(journalVoucher.AccountTransactionValues[i].Credit);
+        //             instance.controls["Description"].setValue(journalVoucher.AccountTransactionValues[i].Description);
 
-                    control.push(instance);
-                }
+        //             control.push(instance);
+        //         }
 
-                console.log('the control after push is', control);
-                this.modalRef = this.modalService.show(this.TemplateRef, {
-                    backdrop: 'static',
-                    keyboard: false,
-                    class: 'modal-xl'
-                });
-            },
-                error => this.msg = <any>error);
+        //         console.log('the control after push is', control);
+        //         this.modalRef = this.modalService.show(this.TemplateRef, {
+        //             backdrop: 'static',
+        //             keyboard: false,
+        //             class: 'modal-xl'
+        //         });
+        //     },
+        //         error => this.msg = <any>error);
     }
 
     /**

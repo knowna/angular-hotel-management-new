@@ -1,7 +1,5 @@
 ﻿import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { ReservationTypeService } from '../../../services/reservation/reservation-type.services';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { ReservationType } from '../../../models/reservation/reservation-type.model';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
@@ -9,6 +7,8 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { DBOperation } from '../../../Shared/enum';
 import { Observable } from 'rxjs/Rx';
 import { Global } from '../../../Shared/global';
+import { ReservationType } from 'src/app/Model/reservation/reservation-type.model';
+import { ReservationTypeService } from 'src/app/Service/reservation/reservation-type.services';
 
 @Component({
     templateUrl: './reservation-type.component.html'
@@ -59,7 +59,7 @@ export class ReservationTypeComponent implements OnInit {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Reservation Type";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.reservationType = this.reservationTypes.filter(x => x.Id == id)[0];
         this.reservationTypeForm.setValue(this.reservationType);
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
@@ -95,7 +95,7 @@ export class ReservationTypeComponent implements OnInit {
         if (departfrm.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
-                    this._reservationTypeService.post(Global.BASE_RESERVATION_TYPES_ENDPOINT, formData._value).subscribe(
+                    this._reservationTypeService.post(Global.BASE_RESERVATION_TYPES_ENDPOINT, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -113,7 +113,7 @@ export class ReservationTypeComponent implements OnInit {
                     );
                     break;
                 case DBOperation.update:
-                    this._reservationTypeService.put(Global.BASE_RESERVATION_TYPES_ENDPOINT, formData._value.Id, formData._value).subscribe(
+                    this._reservationTypeService.put(Global.BASE_RESERVATION_TYPES_ENDPOINT, formData.value.Id, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
@@ -131,11 +131,11 @@ export class ReservationTypeComponent implements OnInit {
                     );
                     break;
                 case DBOperation.delete:
-                    this._reservationTypeService.delete(Global.BASE_RESERVATION_TYPES_ENDPOINT, formData._value.Id).subscribe(
+                    this._reservationTypeService.delete(Global.BASE_RESERVATION_TYPES_ENDPOINT, formData.value.Id).subscribe(
                         data => {
                             if (data == 1) //Success
                             {
-                                alert("Department successfully deleted.");
+                                alert("Data successfully deleted.");
                                 this.modalRef.hide();
                                 this.LoadReservationTypes();
                                 this.formSubmitAttempt = false;

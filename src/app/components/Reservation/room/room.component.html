@@ -1,5 +1,69 @@
-﻿<reservationdashboard-app></reservationdashboard-app>
-<div class='panel panel-primary'>
+﻿<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Rooms</h2>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="Search by Name">
+        </div>
+       
+        <div class="col-md-4">
+            <button class="btn btn-success" (click)="openModal(template)" style="float: right">
+                <strong>
+                    <i class="fa fa-plus"></i>
+                    Add
+                </strong>
+            </button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="isLoading">
+                <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
+            </div>
+            <div *ngIf='rooms && rooms.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table class='table table-bordered' *ngIf='rooms && rooms.length'>
+                <thead>
+                    <tr>
+                        <th>Room Number</th>
+                        <th>Max Capacity</th>
+                        <th>RoomTypeId</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let room of rooms">
+                        <td>{{room.RoomNumber}}</td>
+                        <td>{{room.MaxCapacity}}</td>
+                        <td>{{getRoomType(room.RoomTypeId).Name}}</td>
+                        <td>
+                            <div class="d-flex">
+                                <button class="btn btn-primary btn-sm" (click)="editRoom(room.Id,template)">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm ml-2" (click)="deleteRoom(room.Id,template)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
+
+    </div>
+</div>
+
+<!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
         ROOMS
     </div>
@@ -48,7 +112,8 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
+
 <ng-template #template>
     <form class="panel-primary" novalidate (ngSubmit)="onSubmit(roomForm)" [formGroup]="roomForm">
         <div class="modal-header panel-heading">
@@ -59,47 +124,49 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="form-group" style="margin-right: auto">
-                    <label class="control-label col-sm-4">Room Number:</label>
-                    <div class="col-sm-6" style="margin: inherit;">
-                        <input type="text" class="form-control" placeholder="" formControlName="RoomNumber" setAutoFocus  tabindex="1">
-                        <div class="alert alert-danger" *ngIf="roomForm.get('RoomNumber').hasError('required') && formSubmitAttempt">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label">Room Number</label>
+                        <input type="text" class="form-control" placeholder="Room Number" formControlName="RoomNumber" setAutoFocus  tabindex="1">
+                        <div class="alert alert-danger mt-1" *ngIf="roomForm.get('RoomNumber').hasError('required') && formSubmitAttempt">
                             Room Number is required
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="row">
-                <div class="form-group" style="margin-right: auto">
-                    <label class="control-label col-sm-4">Max Capacity:</label>
-                    <div class="col-sm-6" style="margin: inherit;">
-                        <input type="number" class="form-control" placeholder="" formControlName="MaxCapacity" tabindex="2">
-                        <div class="alert alert-danger" *ngIf="roomForm.get('MaxCapacity').hasError('required') && formSubmitAttempt">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label">Max Capacity</label>
+                        <input type="number" class="form-control" placeholder="Max Capacity" formControlName="MaxCapacity" tabindex="2">
+                        <div class="alert alert-danger mt-1" *ngIf="roomForm.get('MaxCapacity').hasError('required') && formSubmitAttempt">
                             Max Capacity is required
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="row">
-                <div class="form-group" style="margin-right: auto">
-                    <label class="control-label col-sm-4">Room Price:</label>
-                    <div class="col-sm-6" style="margin: inherit;">
-                        <input type="number" class="form-control" placeholder="" formControlName="RoomPrice" tabindex="3">
-                        <div class="alert alert-danger" *ngIf="roomForm.get('RoomPrice').hasError('required') && formSubmitAttempt">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label">Room Price</label>
+                        <input type="number" class="form-control" placeholder="Room" formControlName="RoomPrice" tabindex="3">
+                        <div class="alert alert-danger mt-1" *ngIf="roomForm.get('RoomPrice').hasError('required') && formSubmitAttempt">
                             Room Price is required
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="row">
-                <div class="form-group" style="margin-right: auto">
-                    <label class="control-label col-sm-4">Room Type:</label>
-                    <div class="col-sm-6" style="margin: inherit;">
-                        <select class="col-md-3 form-control" formControlName="RoomTypeId" tabindex="4">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label">Room Type</label>
+                        <select class="form-control" formControlName="RoomTypeId" tabindex="4">
                             <option class="form-control" *ngFor="let RType of roomTypes" [ngValue]="RType.Id">{{RType.Name}}</option>
                         </select>
-                        <br/>
-                        <div class="alert alert-danger" *ngIf="roomForm.get('RoomTypeId').hasError('required') && formSubmitAttempt">
+                        <div class="alert alert-danger mt-1" *ngIf="roomForm.get('RoomTypeId').hasError('required') && formSubmitAttempt">
                             Room Type field is required
                         </div>
                     </div>
@@ -109,7 +176,7 @@
         <div class="modal-footer">
             <div>
                 <button type="submit" class="btn btn-success pull-left" tabindex="5">{{modalBtnTitle}}</button>
-                <a class="btn btn-danger pull-right" (click)="modalRef.hide()" tabindex="6">Cancel</a>
+                <button type="button" class="btn btn-danger pull-right ml-2" (click)="modalRef.hide();">Cancel</button>
             </div>
         </div>
     </form>

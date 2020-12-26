@@ -24,8 +24,11 @@
         <div class="col-md-2">
             <button class="btn btn-success" (click)="loadPurchaseList(sfromDate, stoDate)">GO</button>
         </div>
-        <div class="col-md-2">
-            <button class="btn btn-primary" (click)="exportTableToExcel('purchaseTable')" style="float: right;"> Export</button>
+        <div class="col-md-1">
+            <button class="btn btn-secondary pull-left" (click)="exportTableToPdf()" style="float: right;">Pdf</button>
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary" (click)="exportTableToExcel('purchaseTable')" style="float: right;"> Excel</button>
         </div>
         <!-- <div class="col-md-9">
             <div class="row" style="padding-top: 17px;">
@@ -89,10 +92,13 @@
                         </td>
                         <td class="export-no-display">
                             <div class="d-flex">
-                                <button class="btn btn-primary btn-sm" (click)="editPurchase(row.Id)">
+                                <button class="btn btn-secondary btn-sm" (click)="exportRowToPdf(row.Id)">
+                                    <i class="fa fa-download"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm ml-1" (click)="editPurchase(row.Id)">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-sm ml-2" (click)="deletePurchase(row.Id)">
+                                <button class="btn btn-danger btn-sm ml-1" (click)="deletePurchase(row.Id)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </div>
@@ -234,7 +240,7 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label class="control-label">
                             <strong>Voucher Type</strong>
@@ -248,10 +254,10 @@
                     </div>
                 </div>
                 
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label class="control-label">
-                            <strong>Voucher Date:</strong>
+                            <strong>Voucher Date</strong>
                         </label>
                         <input class="form-control" type="text" placeholder="yyyy.mm.dd" formControlName="Date" />
                         <div class="text-danger" *ngIf="(purchaseFrm.get('Date').hasError('InvalidDate') || purchaseFrm.get('Date').hasError('required')) && formSubmitAttempt">

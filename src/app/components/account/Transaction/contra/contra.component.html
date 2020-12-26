@@ -1,7 +1,7 @@
 ﻿<div class="container" style="padding-top: 20px;">
     <div class="row m-0 mt-3">
         <div class="col-md-4">
-            <h2 class="header">Cash/Bank</h2>
+            <h2 class="header">Bank/Cash</h2>
         </div>
     </div>
 
@@ -24,8 +24,11 @@
         <div class="col-md-2">
             <button class="btn btn-success" (click)="loadContraList(sfromDate, stoDate)"> GO</button>
         </div>
-        <div class="col-md-2">
-            <button class="btn btn-primary pull-left" (click)="exportTableToExcel('voucherTable')" style="float: right;"> Export</button>
+        <div class="col-md-1">
+            <button class="btn btn-secondary pull-left" (click)="exportTableToPdf()" style="float: right;">Pdf</button>
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary pull-left" (click)="exportTableToExcel('contraTable')" style="float: right;">Excel</button>
         </div>
     </div>
 
@@ -35,7 +38,7 @@
                 <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
             </div>
             <div *ngIf='paymentList && paymentList.length==0' class="alert alert-info" role="alert">No record found!</div>
-            <table id="voucherTable" class='table table-striped' *ngIf='paymentList && paymentList.length' style="border: 2px solid #ddd;">
+            <table id="contraTable" class='table table-striped' *ngIf='paymentList && paymentList.length' style="border: 2px solid #ddd;">
                 <thead>
                     <tr>
                         <th colspan="8" class="text-center">
@@ -68,10 +71,13 @@
                         </td>
                         <td class="export-no-display">
                             <div class="d-flex">
-                                <button class="btn btn-primary btn-sm" (click)="editPayment(row.Id)">
+                                <button class="btn btn-secondary btn-sm" (click)="exportRowToPdf(row.Id)">
+                                    <i class="fa fa-download"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm ml-1" (click)="editPayment(row.Id)">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-sm ml-2" (click)="deletePayment(row.Id)">
+                                <button class="btn btn-danger btn-sm ml-1" (click)="deletePayment(row.Id)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </div>
@@ -234,7 +240,7 @@
                 <label class="control-label col-md-2 text-right">
                     <strong>Account:</strong>
                 </label>
-                <div class="form-group col-md-10">
+                <div class="form-group col-md-4">
                     <ngx-select-dropdown (searchChange)="searchChange($event)" formControlName="SourceAccountTypeId" [config]="config" [options]="account"></ngx-select-dropdown>
                     <div class="text-danger" *ngIf="contraForm.get('SourceAccountTypeId').hasError('required') && formSubmitAttempt">
                         Ledger Name is required

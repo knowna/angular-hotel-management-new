@@ -1,7 +1,7 @@
 
 <div class="text-center font-weight-bold mt-5">
     <h3>
-        Welcome : {{company.NameEnglish}}
+        Welcome : {{company?.NameEnglish}}
     </h3>
 </div>
  
@@ -11,7 +11,7 @@
                 src="../../../../assets/images/logo.png" 
                 alt="DCube Hotel System" class="img-circle"/>
         </div>
-        <form (ngSubmit)="onSubmit()" [formGroup]="form">
+        <form [formGroup]="form">
             <div class="text-center title">
                 <h4>LOGIN</h4>
                 <div class="marker"></div>     
@@ -41,7 +41,7 @@
                 <input type="checkbox"  class="custom" formControlName="Remember" />
                 <label>Keep me signed in</label>
             </div>
-            <button type="submit" class="btn btn-success draw">Login</button>
+            <button type="button" class="btn btn-success draw" (click)="onSubmit()">Login</button>
 
         </form>
 </div>

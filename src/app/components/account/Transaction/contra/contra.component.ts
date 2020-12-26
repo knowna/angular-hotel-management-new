@@ -15,6 +15,10 @@ import { AccountTrans } from 'src/app/Model/AccountTransaction/accountTrans';
 import { ToastrService } from 'ngx-toastr';
 
 type CSV = any[][];
+//generating pdf
+import * as jsPDF from 'jspdf'
+import 'jspdf-autotable';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     templateUrl: './contra.component.html',
@@ -55,6 +59,9 @@ export class ContraComponent implements OnInit{
     public currentUser: any = {};
     public company: any = {};
 
+    toExportFileName: string = 'Bank-Cash Report -' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
+    toPdfFileName: string = 'Bank-Cash Report -' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
+
     constructor(
         private fb: FormBuilder,
         private _journalvoucherService: JournalVoucherService,
@@ -62,7 +69,9 @@ export class ContraComponent implements OnInit{
         private date: DatePipe,
         private modalService: BsModalService,
         private fileService: FileService,
-        private toastrService: ToastrService
+        private toastrService: ToastrService,
+        private router: Router,
+        private route: ActivatedRoute
     ) {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -186,54 +195,229 @@ export class ContraComponent implements OnInit{
             error => this.msg = <any>error);
     }
 
-    exportTableToExcel(tableID, filename = '') {
-        var downloadLink;
-        var dataType = 'application/vnd.ms-excel';
-        var clonedtable = $('#' + tableID);
-        var clonedHtml = clonedtable.clone();
-        $(clonedtable).find('.export-no-display').remove();
-        var tableSelect = document.getElementById(tableID);
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-        $('#' + tableID).html(clonedHtml.html());
+    exportRowToPdf(Id: number) {
+        this._journalvoucherService.get(Global.BASE_JOURNALVOUCHER_ENDPOINT + '?TransactionId=' + Id)
+        .subscribe((contra: any) => {
+            // console.log('the contra is', contra)
+            var doc = new jsPDF("p", "mm", "a4");
+            
+            var rows = [];
 
-        // Specify file name
-        filename = filename ? filename + '.xls' : 'Contra Voucher of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
+            let sn = 1;
 
-        // Create download link element
-        downloadLink = document.createElement("a");
+            rows.push(['S.No','Account','Debit Amount','Description']);
+                contra.AccountTransactionValues.forEach(data => {
+                let account = this.account.find(a => a.Id == data.AccountId);
+                var tempData = [
+                    sn,
+                    account.Name,
+                    data.Debit.toFixed(2),
+                    // data.Credit,
+                    data.Description
+                ];
+        
+                sn = sn * 1 + 1;
+                rows.push(tempData);
+                
+            })
 
-        document.body.appendChild(downloadLink);
+            rows.push(['','Total',contra.drTotal,''])
+            rows.push(['','Voucher Description','',contra.Description])
 
-        if (navigator.msSaveOrOpenBlob) {
-            var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
-            navigator.msSaveOrOpenBlob(blob, filename);
-        } else {
-            // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+            doc.setFontSize(14);
+            doc.text(80,20, `${this.company?.NameEnglish}`);
+            doc.text(87,30,'Bank/Cash Voucher');
+            doc.text(10,40,'Voucher No');
+            doc.text(40,40,` : ${contra.Name}`);
+            doc.text(120,40,'Voucher Date');
+            doc.text(150,40,` : ${contra.AccountTransactionValues[0]['NVDate']}`);
 
-            // Setting the file name
-            downloadLink.download = filename;
+            let accountType = this.account.find(x => x.Id == contra.SourceAccountTypeId);
+            doc.text(10,50,'Account');
+            doc.text(40,50, ` : ${accountType.Name}`)
 
-            //triggering the function
-            downloadLink.click();
+            doc.autoTable({
+                margin: {left: 10, bottom: 20},
+                setFontSize: 14,
+        
+                //for next page 
+                startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 60,
+                rowPageBreak: 'avoid',
+                body: rows,
+                bodyStyles: {
+                fontSize: 9,
+                },
+                columnStyles: {
+                // 0: {cellWidth: 35},
+                // 1: {cellWidth: 35},
+                2: { halign: 'right',},
+                // 3: {cellWidth: 35},
+                },
+        
+                // customize table header and rows format
+                theme: 'striped'
+            });
+
+            const pages = doc.internal.getNumberOfPages();
+            const pageWidth = doc.internal.pageSize.width;  //Optional
+            const pageHeight = doc.internal.pageSize.height;  //Optional
+            doc.setFontSize(10);  //Optional
+
+            for(let j = 1; j < pages + 1 ; j++) {
+                let horizontalPos = pageWidth / 2;  //Can be fixed number
+                let verticalPos = pageHeight - 10;  //Can be fixed number
+                doc.setPage(j);
+                doc.text(`${j} of ${pages}`, horizontalPos, verticalPos, {align: 'center' }); //Optional text styling});
+            }
+
+            doc.save('Bank-Cash-Report-Of- ' + contra.Id + '-'+ `${this.date.transform(new Date, "yyyy-MM-dd")}` + '.pdf');
+        });
+    }
+
+
+
+    exportTableToPdf() {
+        var doc = new jsPDF("p", "mm", "a4");
+        var rows = [];
+        let sn = 1;
+
+        rows.push(['S.No','Date','Particular','Voucher Type','Voucher No','Debit(Rs)','Credit(Rs)']);
+
+        this.paymentList.forEach(p => {
+            var tempPayment = [
+                sn,
+                p.VDate,
+                p.Name,
+                p.VType,
+                p.VoucherNo,
+                '',
+                ''
+            ];
+        
+            sn = sn * 1 + 1;
+            rows.push(tempPayment);
+
+            p.AccountTransactionValues.forEach(account => {
+                var tempAccount = [
+                    '',
+                    '',
+                    account.Name,
+                    '',
+                    '',
+                    account.DebitAmount > 0 ? account.DebitAmount.toFixed(2) : '',
+                    account.CreditAmount> 0 ? account.CreditAmount.toFixed(2) : '',
+                ]
+                rows.push(tempAccount);
+            });
+
+        });
+
+        doc.setFontSize(14);
+        doc.text(80,20, `${this.company?.NameEnglish}`);
+        doc.text(87,30,'Bank/Cash Voucher');
+        doc.text(80,40,`${this.sfromDate} - ${this.stoDate}`);
+        doc.autoTable({
+            margin: {left: 10, bottom: 20},
+            setFontSize: 14,
+      
+            //for next page 
+            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50,
+            rowPageBreak: 'avoid',
+            body: rows,
+            bodyStyles: {
+              fontSize: 9,
+            },
+            columnStyles: {
+              0: {cellWidth: 15},
+              1: {cellWidth: 25},
+              2: {cellWidth: 35},
+              3: {cellWidth: 35},
+              4: {cellWidth: 25},
+              5: {cellWidth: 25, halign: 'right',},
+              6: {cellWidth: 25, halign: 'right',},
+            },
+      
+            // customize table header and rows format
+            theme: 'striped'
+        });
+
+        const pages = doc.internal.getNumberOfPages();
+        const pageWidth = doc.internal.pageSize.width;  //Optional
+        const pageHeight = doc.internal.pageSize.height;  //Optional
+        doc.setFontSize(10);  //Optional
+
+        for(let j = 1; j < pages + 1 ; j++) {
+            let horizontalPos = pageWidth / 2;  //Can be fixed number
+            let verticalPos = pageHeight - 10;  //Can be fixed number
+            doc.setPage(j);
+            doc.text(`${j} of ${pages}`, horizontalPos, verticalPos, {align: 'center' }); //Optional text styling});
         }
+
+        doc.save(this.toPdfFileName);
+    }
+
+    exportTableToExcel(tableID, filename = '') {
+        // var downloadLink;
+        // var dataType = 'application/vnd.ms-excel';
+        // var clonedtable = $('#' + tableID);
+        // var clonedHtml = clonedtable.clone();
+        // $(clonedtable).find('.export-no-display').remove();
+        // var tableSelect = document.getElementById(tableID);
+        // var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        // $('#' + tableID).html(clonedHtml.html());
+
+        // // Specify file name
+        // filename = filename ? filename + '.xls' : 'Contra Voucher of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
+
+        // // Create download link element
+        // downloadLink = document.createElement("a");
+
+        // document.body.appendChild(downloadLink);
+
+        // if (navigator.msSaveOrOpenBlob) {
+        //     var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
+        //     navigator.msSaveOrOpenBlob(blob, filename);
+        // } else {
+        //     // Create a link to the file
+        //     downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+        //     // Setting the file name
+        //     downloadLink.download = filename;
+
+        //     //triggering the function
+        //     downloadLink.click();
+        // }
+        let element = document.getElementById('contraTable'); 
+        const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+        ws['!cols'] = [];
+        ws['!cols'][6] = { hidden: true };
+        ws['!cols'][7] = { hidden: true };
+
+        /* generate workbook and add the worksheet */
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        /* save to file */
+        XLSX.writeFile(wb, this.toExportFileName);
     }
 
     /**
      * Add Payment
      */
     addPayment() {
-        this.dbops = DBOperation.create;
-        this.SetControlsState(true);
-        this.modalTitle = "Add Cash/Bank";
-        this.modalBtnTitle = "Save";
-        this.reset();
-        this.contraForm.controls['Name'].setValue('Contra');
-        this.modalRef = this.modalService.show(this.TemplateRef, {
-            backdrop: 'static',
-            keyboard: false,
-            class: 'modal-lg'
-        });
+        // this.dbops = DBOperation.create;
+        // this.SetControlsState(true);
+        // this.modalTitle = "Add Cash/Bank";
+        // this.modalBtnTitle = "Save";
+        // this.reset();
+        // this.contraForm.controls['Name'].setValue('Contra');
+        // this.modalRef = this.modalService.show(this.TemplateRef, {
+        //     backdrop: 'static',
+        //     keyboard: false,
+        //     class: 'modal-lg'
+        // });
+        this.router.navigate(['add'], {relativeTo: this.route});
     }
 
     /**
@@ -250,60 +434,61 @@ export class ContraComponent implements OnInit{
      * @param Id 
      */
     editPayment(Id: number) {
-        this.reset();
-        this.dbops = DBOperation.update;
-        this.SetControlsState(true);
-        this.modalTitle = "Edit Cash/Bank";
-        this.modalBtnTitle = "Save";
-        this.getJournalVoucher(Id)
-            .subscribe((contra: AccountTrans) => {
-                console.log('the contra is', contra)
-                this.indLoading = false;
-                this.contraForm.controls['Id'].setValue(contra.Id);
-                this.contraForm.controls['Name'].setValue(contra.Name);
-                this.contraForm.controls['AccountTransactionDocumentId'].setValue(contra.AccountTransactionDocumentId);
-                this.currentaccount = this.account.filter(x => x.Id === contra.SourceAccountTypeId)[0];
-                if (this.currentaccount!== undefined) {
-                    this.contraForm.controls['SourceAccountTypeId'].setValue(this.currentaccount);
-                }
-                this.contraForm.controls['Description'].setValue(contra.Description);
-                this.contraForm.controls['Date'].setValue(contra.AccountTransactionValues[0]['NVDate']);
+        this.router.navigate(['edit/' + Id], {relativeTo: this.route});
+        // this.reset();
+        // this.dbops = DBOperation.update;
+        // this.SetControlsState(true);
+        // this.modalTitle = "Edit Cash/Bank";
+        // this.modalBtnTitle = "Save";
+        // this.getJournalVoucher(Id)
+        //     .subscribe((contra: AccountTrans) => {
+        //         console.log('the contra is', contra)
+        //         this.indLoading = false;
+        //         this.contraForm.controls['Id'].setValue(contra.Id);
+        //         this.contraForm.controls['Name'].setValue(contra.Name);
+        //         this.contraForm.controls['AccountTransactionDocumentId'].setValue(contra.AccountTransactionDocumentId);
+        //         this.currentaccount = this.account.filter(x => x.Id === contra.SourceAccountTypeId)[0];
+        //         if (this.currentaccount!== undefined) {
+        //             this.contraForm.controls['SourceAccountTypeId'].setValue(this.currentaccount);
+        //         }
+        //         this.contraForm.controls['Description'].setValue(contra.Description);
+        //         this.contraForm.controls['Date'].setValue(contra.AccountTransactionValues[0]['NVDate']);
 
-                this.contraForm.controls['AccountTransactionValues'] = this.fb.array([]);
-                const control = <FormArray>this.contraForm.controls['AccountTransactionValues'];
-
-
-                for (var i = 0; i < contra.AccountTransactionValues.length; i++) {
-                    const account = this.account.find(x => x.Id === contra.AccountTransactionValues[i].AccountId);
-                    let currentaccountvoucher = contra.AccountTransactionValues[i];
-                    let instance = this.fb.group(currentaccountvoucher);
-                    instance.controls["AccountId"].setValue(account);
-                    instance.controls["Debit"].setValue(contra.AccountTransactionValues[i].Debit);
-                    instance.controls["Credit"].setValue(contra.AccountTransactionValues[i].Credit);
-                    instance.controls["Description"].setValue(contra.AccountTransactionValues[i].Description);
-
-                    control.push(instance);
-                }
+        //         this.contraForm.controls['AccountTransactionValues'] = this.fb.array([]);
+        //         const control = <FormArray>this.contraForm.controls['AccountTransactionValues'];
 
 
+        //         for (var i = 0; i < contra.AccountTransactionValues.length; i++) {
+        //             const account = this.account.find(x => x.Id === contra.AccountTransactionValues[i].AccountId);
+        //             let currentaccountvoucher = contra.AccountTransactionValues[i];
+        //             let instance = this.fb.group(currentaccountvoucher);
+        //             instance.controls["AccountId"].setValue(account);
+        //             instance.controls["Debit"].setValue(contra.AccountTransactionValues[i].Debit);
+        //             instance.controls["Credit"].setValue(contra.AccountTransactionValues[i].Credit);
+        //             instance.controls["Description"].setValue(contra.AccountTransactionValues[i].Description);
+
+        //             control.push(instance);
+        //         }
 
 
-                // for (var i = 0; i < contra.AccountTransactionValues.length; i++) {
-                //     this.currentaccount = this.account.filter(x => x.Id === contra.AccountTransactionValues[i]["AccountId"])[0];
-                //     if (this.currentaccount !== undefined) {
-                //         let currentaccountvoucher = contra.AccountTransactionValues[i];
-                //         let instance = this.fb.group(currentaccountvoucher);
-                //         instance.controls["AccountId"].setValue(this.currentaccount.Name);
-                //         control.push(instance);
-                //     }
-                // }
-                this.modalRef = this.modalService.show(this.TemplateRef, {
-                    backdrop: 'static',
-                    keyboard: false,
-                    class: 'modal-lg'
-                });
-            },
-            error => this.msg = <any>error);
+
+
+        //         // for (var i = 0; i < contra.AccountTransactionValues.length; i++) {
+        //         //     this.currentaccount = this.account.filter(x => x.Id === contra.AccountTransactionValues[i]["AccountId"])[0];
+        //         //     if (this.currentaccount !== undefined) {
+        //         //         let currentaccountvoucher = contra.AccountTransactionValues[i];
+        //         //         let instance = this.fb.group(currentaccountvoucher);
+        //         //         instance.controls["AccountId"].setValue(this.currentaccount.Name);
+        //         //         control.push(instance);
+        //         //     }
+        //         // }
+        //         this.modalRef = this.modalService.show(this.TemplateRef, {
+        //             backdrop: 'static',
+        //             keyboard: false,
+        //             class: 'modal-lg'
+        //         });
+        //     },
+        //     error => this.msg = <any>error);
     }
 
     /**
