@@ -26,6 +26,8 @@ export class KitchenOrderViewComponent implements OnInit {
 
   showLoader: boolean = false;
 
+  showItemLoader: boolean = false;
+
   constructor(
     private _departmentService: DepartmentService,
     private mergeService: MergeService,
@@ -46,11 +48,13 @@ export class KitchenOrderViewComponent implements OnInit {
           this.departments = departments; 
           this.tempDepartments = departments;
           this.showLoader = false; 
+          this.selectDepartment(this.departments[0]);
       },
       error => this.msg = error);
   }
 
   selectDepartment(department: IDepartment) {
+    // this.showItemLoader = true;
     this.filteredItemList = [];
     this.selectedDepartment = department;
     this.filteredItemList  = this.itemList.filter(item => item.DepartmentId == this.selectedDepartment.Id);
