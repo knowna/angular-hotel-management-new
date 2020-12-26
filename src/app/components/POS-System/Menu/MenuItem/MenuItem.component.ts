@@ -58,9 +58,13 @@ export class MenuItemComponent implements OnInit {
         private _menuportionservice: BillingService,
         private modalService: BsModalService)
     {
-        this._menuItemService.getMenuCategories().subscribe(data => { this.menucategory = data },
-                                error=>console.log(error)
-                );
+        this._menuItemService.getCategories()
+            .subscribe(
+                data => { 
+                    this.menucategory = data 
+                },
+                error=>console.log(error)
+            );
     }
 
     ngOnInit(): void {
@@ -250,7 +254,8 @@ export class MenuItemComponent implements OnInit {
         this.msg = "";
         this.formSubmitAttempt = true;
         let menuitemform = this.MenuItemForm;
-        if (menuitemform.valid && fileUpload.fileUpload != null) {
+        console.log('the form', menuitemform)
+        if (menuitemform.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
                     let AddMenuItemObj = {

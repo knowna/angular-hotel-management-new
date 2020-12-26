@@ -634,7 +634,8 @@ export class PosTableComponent implements OnInit {
             "TotalAmount": total,
             "Tags": "New Order",
             "IsSelected": false,
-            "IsVoid": false
+            "IsVoid": false,
+            "DepartmentId": product.DepartmentId
         };
         ListOrderItem.push(OrderItem);
     });
