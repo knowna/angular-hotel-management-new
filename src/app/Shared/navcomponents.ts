@@ -138,7 +138,13 @@ export const navcomponents=[
             
           ],
         },
-        
+        {
+          title: 'Notification',
+          img:'../../../assets/images/report.png',
+          link: 'pos-dashboard/table/kitchen-order',
+          permission:'Billing:Notification',
+          show: false,
+        },
         {
           title: 'Customer',
           img:'../../../assets/images/customer.png',
@@ -194,13 +200,6 @@ export const navcomponents=[
             },
           ],
         },
-        {
-          title: 'Notification',
-          img:'../../../assets/images/report.png',
-          link: 'pos-dashboard/table/kitchen-order',
-          permission:'Billing:Notification',
-          show: false,
-        }
       ],    
     },
     {

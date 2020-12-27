@@ -223,7 +223,7 @@
         </div>
         <div class="modal-footer">
             <div>
-                <button type="button" class="btn btn-danger pull-right ml-2" [disabled]="buttonDisabled" (click)="reset(); modalRef.hide();">Cancel</button>
+                <button type="button" class="btn btn-danger pull-right ml-2" (click)="reset(); modalRef.hide();">Cancel</button>
                 <button type="submit" [disabled]="acctransTypeFrm.invalid" class="btn btn-success pull-left">{{modalBtnTitle}} </button>
             </div>
         </div>
