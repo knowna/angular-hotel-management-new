@@ -607,7 +607,7 @@ const routes: Routes = [
   },
   {
     path: 'pos-dashboard/table/category',
-    component: CategoryComponent,
+    component: MenuCategoryComponent,
     canActivate: [AuthGuard]
   },
   {
