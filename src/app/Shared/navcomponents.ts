@@ -167,6 +167,12 @@ export const navcomponents=[
           show: false,
           children: [
             {
+              title: 'Menu Price',
+              img:'../../../assets/images/dish.png',
+              link: 'pos-dashboard/table/menu-price',
+              permission:'Billing:Menu:Price',
+            },
+            {
               title: 'Item',
               img:'../../../assets/images/dish.png',
               link: 'pos-dashboard/table/items',
