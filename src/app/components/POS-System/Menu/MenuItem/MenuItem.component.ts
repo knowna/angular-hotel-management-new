@@ -12,6 +12,7 @@ import { Observable } from 'rxjs/Rx';
 import { Global } from '../../../../Shared/global';
 import { Router } from '@angular/router';
 import { BillingService } from 'src/app/Service/Billing/billing.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -56,7 +57,8 @@ export class MenuItemComponent implements OnInit {
         private fb: FormBuilder,
         private _menuItemService: BillingService,
         private _menuportionservice: BillingService,
-        private modalService: BsModalService)
+        private modalService: BsModalService,
+        private toastrService: ToastrService)
     {
         this._menuItemService.getCategories()
             .subscribe(
@@ -255,6 +257,14 @@ export class MenuItemComponent implements OnInit {
         this.formSubmitAttempt = true;
         let menuitemform = this.MenuItemForm;
         console.log('the form', menuitemform)
+        console.log('the file is', fileUpload)
+
+        // let image =  fileUpload.fileToUpload ? fileUpload.fileToUpload : formData.value.PhoteIdentity;
+
+        // if(image == null) {
+        //     this.toastrService.info('Please upload a image !');
+        // }
+
         if (menuitemform.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
@@ -319,9 +329,12 @@ export class MenuItemComponent implements OnInit {
                         Tag: this.MenuItemForm.controls['Tag'].value,
                         DepartmentId:this.MenuItemForm.controls['DepartmentId'].value,
                         Description: this.MenuItemForm.controls['Description'].value,
-                        MenuItemPortions: this.MenuItemForm.controls['MenuItemPortions'].value
+                        MenuItemPortions: this.MenuItemForm.controls['MenuItemPortions'].value,
+                        PhoteIdentity: this.MenuItemForm.controls['PhoteIdentity'].value
                     }
 
+
+                    console.log('MenuItemObj', MenuItemObj);
                     this._menuItemService.put(Global.BASE_MENUITEM_ENDPOINT, formData.value.Id, MenuItemObj).subscribe(
                         
                         async (data) => {

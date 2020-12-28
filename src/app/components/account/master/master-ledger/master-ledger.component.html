@@ -179,6 +179,17 @@
                                 <div class="row m-0">
                                     <div class="col-md-6">
                                         <div class="form-group">
+                                            <label class="control-label">Dr/Cr</label>
+                                            <select class="form-control" formControlName="DRCR">
+                                                <option *ngFor="let entityList of entityLists" [ngValue]="entityList.name">{{ entityList.name }}</option>
+                                            </select>
+                                            <div *ngIf="masterLedgerFrm.get('DRCR').hasError('required') && formSubmitAttempt" class="alert alert-danger">
+                                                Select Dr/Cr
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
                                             <label class="control-label">Amount</label>
                                             <input type="text" name="Amount" ng-model="settingFrm.Amount" class="form-control" formControlName="Amount" />
                                         </div>

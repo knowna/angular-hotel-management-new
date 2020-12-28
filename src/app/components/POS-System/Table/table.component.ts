@@ -15,6 +15,7 @@ import { TableStoreService } from '../../../Service/Billing/table.store.service'
 import { RoomTypeService } from 'src/app/Service/reservation/room-type.services';
 import { RoomType } from 'src/app/Model/reservation/customer-screen.model';
 import { async } from '@angular/core/testing';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'my-table-list',
@@ -47,6 +48,7 @@ export class TableComponent implements OnInit {
         private _tableStoreService: TableStoreService, 
         private modalService: BsModalService,
         private _roomTypeService: RoomTypeService, 
+        private toastrService: ToastrService
     ) { 
         this.LoadDepartments();
         this.LoadRoomTypes();
@@ -153,7 +155,11 @@ export class TableComponent implements OnInit {
         console.log('the value is', formData.value)
         console.log('file in add', fileUpload)
 
-        if (tablefrm.valid && fileUpload.fileUpload != null) {
+        // if(fileUpload.fileToUpload == null) {
+        //     this.toastrService.info('Please upload a image !');
+        // }
+
+        if (tablefrm.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
                     this._BillingService.post(Global.BASE_TABLEAPI_ENDPOINT, formData.value).subscribe(

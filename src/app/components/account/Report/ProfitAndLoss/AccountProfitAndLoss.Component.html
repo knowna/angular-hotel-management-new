@@ -3,9 +3,12 @@
         <div class="col-md-4">
             <h2 class="header">Profit &amp; Loss</h2>
         </div>
-        <div class="col-md-4"></div>
-        <div class="col-md-4" *ngIf='profitandloss && profitandloss.length'>
-            <button class="btn btn-primary" (click)="exportTableToExcel('ProfitLossTable')" style="float: right"> Export</button>
+        <!-- <div class="col-md-4"></div> -->
+        <div class="col-md-1  offset-md-6" *ngIf='profitandloss && profitandloss.length'>
+            <button class="btn btn-secondary pull-left" (click)="exportTableToPdf()" style="float: right;">Pdf</button>
+        </div>
+        <div class="col-md-1" *ngIf='profitandloss && profitandloss.length'>
+            <button class="btn btn-primary" (click)="exportTableToExcel('ProfitLossTable')" style="float: right"> Excel</button>
         </div>
     </div>
 

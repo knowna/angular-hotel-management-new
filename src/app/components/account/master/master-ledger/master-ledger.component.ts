@@ -12,6 +12,10 @@ import { DBOperation } from 'src/app/Shared/enum';
 import { MasterLedgerService } from './services/MasterLedger.service';
 import { Global } from 'src/app/Shared/global';
 
+import * as XLSX from 'xlsx';
+import { DatePipe } from '@angular/common';
+import { EntityMock } from 'src/app/Model/Account/account';
+
 @Component({
     templateUrl: './master-ledger.component.html'
 })
@@ -34,10 +38,19 @@ export class MasterLedgerComponent implements OnInit {
     modalBtnTitle: string;
     private formSubmitAttempt: boolean;
     private buttonDisabled: boolean;
+    public entityLists: EntityMock[];
     
     searchKeyword = '';
+
+    toExportFileName: string = 'Master Ledger-' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
+    toPdfFileName: string = 'Master Ledger-' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
     
-    constructor(private fb: FormBuilder, private _masterLedgerService: MasterLedgerService, private modalService: BsModalService) { }
+    constructor(private fb: FormBuilder, private _masterLedgerService: MasterLedgerService, private modalService: BsModalService,private date: DatePipe,) { 
+        this.entityLists = [
+            { id: 0, name: 'Dr' },
+            { id: 1, name: 'Cr' }
+        ];
+    }
 
     ngOnInit(): void {
         this.masterLedgerFrm = this.fb.group({
@@ -397,5 +410,19 @@ export class MasterLedgerComponent implements OnInit {
             }
         );
         this.masterLedgers = filteredMasterLedgers;
+    }
+
+    exportTableToExcel(tableID) {
+        let element = document.getElementById('ledgersTable'); 
+        const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+        ws['!cols'] = [];
+        ws['!cols'][1] = { hidden: true };
+
+        /* generate workbook and add the worksheet */
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        /* save to file */
+        XLSX.writeFile(wb, this.toExportFileName);
     }
 }

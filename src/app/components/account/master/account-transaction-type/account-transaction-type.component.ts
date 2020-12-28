@@ -10,6 +10,8 @@ import { AccountTransType } from 'src/app/Model/AccountTransactionType/accountTr
 import { DBOperation } from 'src/app/Shared/enum';
 import { Global } from 'src/app/Shared/global';
 
+import * as XLSX from 'xlsx';
+
 @Component({
     templateUrl: './account-transaction-type.component.html'
 })
@@ -35,6 +37,9 @@ export class AccountTransactionTypeComponent implements OnInit {
     private buttonDisabled: boolean;
 
     searchKeyword = '';
+
+    toExportFileName: string = 'Transaction Type -' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
+    toPdfFileName: string = 'Transaction Type -' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
 
     constructor(private fb: FormBuilder, private acctransTypeService: AccountTransactionTypeService, private date: DatePipe, private modalService: BsModalService) {
         this.acctransTypeService.getAccountTypes()
@@ -75,36 +80,48 @@ export class AccountTransactionTypeComponent implements OnInit {
     }
 
     exportTableToExcel(tableID, filename = '') {
-        var downloadLink;
-        var dataType = 'application/vnd.ms-excel';
-        var clonedtable = $('#' + tableID);
-        var clonedHtml = clonedtable.clone();
-        $(clonedtable).find('.export-no-display').remove();
-        var tableSelect = document.getElementById(tableID);
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-        $('#' + tableID).html(clonedHtml.html());
+        // var downloadLink;
+        // var dataType = 'application/vnd.ms-excel';
+        // var clonedtable = $('#' + tableID);
+        // var clonedHtml = clonedtable.clone();
+        // $(clonedtable).find('.export-no-display').remove();
+        // var tableSelect = document.getElementById(tableID);
+        // var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        // $('#' + tableID).html(clonedHtml.html());
 
-        // Specify file name
-        filename = filename ? filename + '.xls' : 'Trial Balance of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
+        // // Specify file name
+        // filename = filename ? filename + '.xls' : 'Trial Balance of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
 
-        // Create download link element
-        downloadLink = document.createElement("a");
+        // // Create download link element
+        // downloadLink = document.createElement("a");
 
-        document.body.appendChild(downloadLink);
+        // document.body.appendChild(downloadLink);
 
-        if (navigator.msSaveOrOpenBlob) {
-            var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
-            navigator.msSaveOrOpenBlob(blob, filename);
-        } else {
-            // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+        // if (navigator.msSaveOrOpenBlob) {
+        //     var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
+        //     navigator.msSaveOrOpenBlob(blob, filename);
+        // } else {
+        //     // Create a link to the file
+        //     downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
 
-            // Setting the file name
-            downloadLink.download = filename;
+        //     // Setting the file name
+        //     downloadLink.download = filename;
 
-            //triggering the function
-            downloadLink.click();
-        }
+        //     //triggering the function
+        //     downloadLink.click();
+        // }
+
+        let element = document.getElementById('TransactionTypeTable'); 
+        const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+        ws['!cols'] = [];
+        ws['!cols'][1] = { hidden: true };
+        
+        /* generate workbook and add the worksheet */
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        /* save to file */
+        XLSX.writeFile(wb, this.toExportFileName);
     }
 
     addAcctransType() {

@@ -8,6 +8,11 @@ import { DatePipe } from '@angular/common';
 import { Global } from 'src/app/Shared/global';
 import { CategorysService } from '../../services/Category.services';
 
+import * as XLSX from 'xlsx';
+//generating pdf
+import * as jsPDF from 'jspdf'
+import 'jspdf-autotable';
+
 @Component({
     templateUrl: './balance-sheet.component.html',
     styleUrls: ['./balance-sheet.component.scss']
@@ -19,6 +24,9 @@ export class BalanceSheetComponent implements OnInit {
     balanceSheet: any;
     msg: string;
     isLoading: boolean = false;
+
+    toExportFileName: string = 'Balance Sheet-' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
+    toPdfFileName: string = 'Balance Sheet-' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
 
     constructor(
         private _categoryService: CategorysService,
@@ -93,5 +101,15 @@ export class BalanceSheetComponent implements OnInit {
             //triggering the function
             downloadLink.click();
         }
+
+        // let element = document.getElementById(tableID); 
+        // const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+        // /* generate workbook and add the worksheet */
+        // const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        // XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        // /* save to file */
+        // XLSX.writeFile(wb, this.toExportFileName);
     }
 }
