@@ -18,8 +18,11 @@
         <div class="col-md-2">
             <button class="btn btn-success" (click)="SearchLedgerTransaction()"> GO</button>
         </div>
-        <div class="col-md-2">
-            <button class="btn btn-primary pull-left" (click)="exportTableToExcel('SalesItemTable')"> Export</button>
+        <div class="col-md-1"*ngIf='SaleBooks && SaleBooks.length'>
+            <button class="btn btn-secondary pull-left" (click)="exportTableToPdf()" style="float: right;">Pdf</button>
+        </div>
+        <div class="col-md-1" *ngIf='SaleBooks && SaleBooks.length'>
+            <button class="btn btn-primary pull-left" (click)="exportTableToExcel('SalesItemTable')">Excel</button>
         </div>
     </div>
 
@@ -32,6 +35,8 @@
                     <tr>
                         <th colspan="4" class="text-center">
                             <strong>{{ company?.NameEnglish }}</strong>
+                            <br /> Sales Item Wise
+                            <br /> {{ fromDate | date : 'yyyy.MM.dd'}} - {{ toDate | date : 'yyyy.MM.dd'}}
                         </th>
                     </tr>
                     <tr>
