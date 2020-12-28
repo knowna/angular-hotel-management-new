@@ -129,6 +129,7 @@ import { ReceiptAddEditComponent } from './components/account/Transaction/receip
 import { PaymentAddEditComponent } from './components/account/Transaction/payment/payment-add-edit/payment-add-edit.component';
 import { ContraAddEditComponent } from './components/account/Transaction/contra/contra-add-edit/contra-add-edit.component';
 import { KitchenOrderViewComponent } from './components/POS-System/kitchen-order-view-component/kitchen-order-view.component';
+import { MenuPriceComponent } from './components/POS-System/Menu/menu-price/menu-price.component';
 
 
 const routes: Routes = [
@@ -593,6 +594,11 @@ const routes: Routes = [
   {
     path: 'pos-dashboard/table/items',
     component: MenuItemComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pos-dashboard/table/menu-price',
+    component: MenuPriceComponent,
     canActivate: [AuthGuard]
   },
   {
