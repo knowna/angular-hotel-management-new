@@ -3,9 +3,12 @@
         <div class="col-md-4">
             <h2 class="header">Materialized View</h2>
         </div>
-        <div class="col-md-4"></div>
-        <div class="col-md-4"*ngIf='materializedViews && materializedViews.length'>
-            <button *ngIf='materializedViews && materializedViews.length' class="btn btn-primary pull-left" (click)="exportTableToExcel('MaterializedViewTable')" style="float: right"> Export</button>
+        <div class="col-md-1 offset-md-6" *ngIf='materializedViews && materializedViews.length'>
+            <button class="btn btn-secondary pull-left" (click)="exportTableToPdf()" style="float: right;">Pdf</button>
+        </div>
+
+        <div class="col-md-1" *ngIf='materializedViews && materializedViews.length'>
+            <button *ngIf='materializedViews && materializedViews.length' class="btn btn-primary pull-left" (click)="exportTableToExcel('MaterializedViewTable')" style="float: right"> Excel</button>
         </div>
     </div>
 
