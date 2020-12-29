@@ -116,8 +116,8 @@ export class AccountLedgerViewComponent {
 
         doc.setFontSize(14);
         doc.text(80,20, `${this.company?.NameEnglish}`);
-        doc.text(87,30,'Ledger View');
-        doc.text(80,40,'Account : ' + account.Name);
+        doc.text(70,30,this.selectedAccountName() +' Account Ledger View');
+        doc.text(80,40,`${this.currentYear?.NepaliStartDate} - ${this.currentYear?.NepaliEndDate}`);
 
         doc.autoTable({
             margin: {left: 10,bottom:20},
@@ -131,16 +131,10 @@ export class AccountLedgerViewComponent {
             fontSize: 9,
             },
             columnStyles: {
-                0: {cellWidth: 30},
-                1: {cellWidth: 30},
-                2: {cellWidth: 30},
-                3: {cellWidth: 30},
                 4: {
-                    cellWidth: 30,
                     halign: 'right',
                 },
                 5: {
-                    cellWidth: 30,
                     halign: 'right',
                 }
             },
