@@ -25,6 +25,7 @@ export class MenuPriceComponent implements OnInit {
     displayKey:"Name",
     searchOnKey: 'Name',
     height: '300px',
+    placeholder:'Select Category' 
 }
 
 
