@@ -13,11 +13,20 @@ export class MenuPriceComponent implements OnInit {
   productList=[];
   tempProductList=[];
 
-  menucategories: IMenuCategory[];
+  menucategories: any[] = [];
+  tempMenucategories: any[] = [];
   
   selectedCategory = '';
 
   indLoading: boolean = false;
+
+  config = {
+    search:true,
+    displayKey:"Name",
+    searchOnKey: 'Name',
+    height: '300px',
+}
+
 
   constructor(
     private billService: BillingService,
@@ -25,7 +34,7 @@ export class MenuPriceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.LoadMenuCategory();
+    // this.LoadMenuCategory();
     this.loadProducts();
   }
 
@@ -47,8 +56,30 @@ export class MenuPriceComponent implements OnInit {
         data => { 
           this.productList = data;
           this.tempProductList = data;
-          // console.log(this.productList);
+
           this.indLoading = false;
+
+          // console.log(this.productList);
+          if(this.productList) {
+            this.billService.get(Global.BASE_MENUCATEGORY_ENDPOINT)
+              .subscribe(
+                menucategories => { 
+                  this.menucategories = menucategories; 
+                  this.tempMenucategories = menucategories;
+
+                  this.menucategories.forEach(category => {
+                    const idx = this.tempMenucategories.indexOf(category);
+                    category.itemList = this.productList.filter(item => item.CategoryId == category.Id);
+                    this.tempMenucategories[idx].itemList = category.itemList;
+                  });
+
+                  // console.log('the menu categoriesa re', this.menucategories);
+                },
+                error => {}
+              );
+          }
+
+          
         },
         error => {
           this.productList = [];
@@ -59,9 +90,9 @@ export class MenuPriceComponent implements OnInit {
 
   filterItems(Id: string) {
     if(Id == "") {
-      this.tempProductList = this.productList;
+      this.tempMenucategories = this.menucategories;
     }else{
-      this.tempProductList = this.productList.filter(x => x.CategoryId == Id);
+      this.tempMenucategories = this.menucategories.filter(x => x.Id == Id);
     }
     // console.log('the id is', Id);
   }
