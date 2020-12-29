@@ -58,7 +58,7 @@ export class AccountSaleBookDaywise {
         this.SaleBooks.forEach(SaleBook => {
             var tempSaleBook = [
                 sn,
-                this.date.transform( SaleBook.VDate,'yyyy.MM.dd'),
+                this.date.transform(SaleBook.VDate,'yyyy.MM.dd'),
                 SaleBook.BillNo,
                 SaleBook.BuyerName,
                 SaleBook.BuyerPAN,

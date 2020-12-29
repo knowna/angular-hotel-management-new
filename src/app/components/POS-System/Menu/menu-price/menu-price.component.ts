@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { IMenuCategory } from 'src/app/Model/Menu/MenuCategory';
 import { BillingService } from 'src/app/Service/Billing/billing.service';
+import { Global } from 'src/app/Shared/global';
 
 @Component({
   selector: 'app-menu-price',
@@ -9,16 +11,34 @@ import { BillingService } from 'src/app/Service/Billing/billing.service';
 export class MenuPriceComponent implements OnInit {
 
   productList=[];
+  tempProductList=[];
+
+  menucategories: IMenuCategory[];
+  
+  selectedCategory = '';
 
   indLoading: boolean = false;
 
   constructor(
-    private billService: BillingService) {
+    private billService: BillingService,
+    ) {
   }
 
   ngOnInit(): void {
+    this.LoadMenuCategory();
     this.loadProducts();
   }
+
+  LoadMenuCategory(): void {
+    this.billService.get(Global.BASE_MENUCATEGORY_ENDPOINT)
+      .subscribe(
+        menucategories => { 
+          this.menucategories = menucategories; 
+        },
+      error => {}
+      );
+  } 
+
 
   loadProducts(): void {
     this.indLoading = true;
@@ -26,6 +46,8 @@ export class MenuPriceComponent implements OnInit {
       .subscribe(
         data => { 
           this.productList = data;
+          this.tempProductList = data;
+          // console.log(this.productList);
           this.indLoading = false;
         },
         error => {
@@ -33,6 +55,15 @@ export class MenuPriceComponent implements OnInit {
           this.indLoading = false;
         }
       );
+  }
+
+  filterItems(Id: string) {
+    if(Id == "") {
+      this.tempProductList = this.productList;
+    }else{
+      this.tempProductList = this.productList.filter(x => x.CategoryId == Id);
+    }
+    // console.log('the id is', Id);
   }
 
 

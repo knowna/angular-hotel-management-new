@@ -9,6 +9,24 @@
     </div>
 
     <div class="row m-0 mt-2">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="control-label">
+                    <strong>Select Category</strong>
+                </label>
+                <select [(ngModel)]="selectedCategory" class="form-control" (change)="filterItems($event.target.value)">
+                    <option value="">All Items</option>
+                    <option *ngFor="let category of menucategories" [value]="category.Id">
+                        {{category.Name}}
+                    </option>
+                </select>
+            </div>
+        </div>
+       
+    </div>
+
+
+    <div class="row m-0 mt-2">
         <div class="col-sm-12 table-responsive">
             <table class='table table-bordered' *ngIf='productList && productList.length'>
                 <thead>
@@ -20,19 +38,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let product of productList;index as i">
+                    <tr *ngFor="let product of tempProductList;index as i">
                         <td>{{i+1}}</td>
                         <td>{{product.Name}}</td>
                         <td>{{product.Qty}}</td>
                         <td>{{product.UnitPrice}}</td>
                     </tr>
                 </tbody>
+
             </table>
 
             <div class="alert alert-info" role="alert" *ngIf="indLoading">
                 <img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...
             </div>
-            <div *ngIf='productList && productList.length == 0' class="alert alert-info" role="alert">No record found!</div>
+            <div *ngIf='tempProductList && tempProductList.length == 0' class="alert alert-info" role="alert">No record found!</div>
 
         </div>
     </div>
