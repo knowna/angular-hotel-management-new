@@ -66,8 +66,12 @@
                 (keyup)="searchItem()" 
                 [(ngModel)]="searchKeyword">
         </div>
-        <div class="col-md-2">
-            <button *ngIf='accounttransTypes && accounttransTypes.length' class="btn btn-primary pull-left" (click)="exportTableToExcel('TransactionTypeTable')"> Export</button>
+        <div class="col-md-1">
+            <button *ngIf='accounttransTypes && accounttransTypes.length' class="btn btn-secondary pull-left" (click)="exportTableToPdf()" style="float: right;">Pdf</button>
+        </div>
+
+        <div class="col-md-1">
+            <button *ngIf='accounttransTypes && accounttransTypes.length' class="btn btn-primary pull-left" (click)="exportTableToExcel('TransactionTypeTable')">Excel</button>
         </div>
         <div class="col-md-2">
             <button class="btn btn-success" (click)="addAcctransType()" style="float: right">
@@ -84,6 +88,12 @@
             <div *ngIf='accounttransTypes && accounttransTypes.length==0' class="alert alert-info" role="alert">No record found!</div>
             <table id="TransactionTypeTable" class='table table-bordered' *ngIf='accounttransTypes && accounttransTypes.length'>
                 <thead>
+                    <tr>
+                        <th colspan="2" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                        </th>
+                    </tr>
+
                     <tr>
                         <th>Name</th>
                         <th>Action</th>

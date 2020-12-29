@@ -12,8 +12,12 @@
                 (keyup)="searchItem()" 
                 [(ngModel)]="searchKeyword">
         </div>
-        <div class="col-md-2">
-            <button *ngIf='masterLedgers && masterLedgers.length' class="btn btn-primary pull-left" (click)="exportTableToExcel('ledgersTable')"> Export</button>
+        <div class="col-md-1">
+            <button *ngIf='masterLedgers && masterLedgers.length' class="btn btn-secondary pull-left" (click)="exportTableToPdf()" style="float: right;">Pdf</button>
+        </div>
+
+        <div class="col-md-1">
+            <button *ngIf='masterLedgers && masterLedgers.length' class="btn btn-primary pull-left" (click)="exportTableToExcel('ledgersTable')">Excel</button>
         </div>
         <div class="col-md-2">
             <button class="btn btn-success" (click)="addMasterLedger()" style="float: right">
@@ -33,6 +37,12 @@
             <!-- <table class='table table-bordered'> -->
             <table id="ledgersTable" class='table table-bordered' *ngIf='masterLedgers && masterLedgers.length'>
                 <thead>
+                    <tr>
+                        <th colspan="2" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                            <!-- <br>Ledger -->
+                        </th>
+                    </tr>
                     <tr>
                         <th>Name</th>
                         <!-- <th>UnderGroup Master</th> -->

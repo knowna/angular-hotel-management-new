@@ -19,6 +19,12 @@
             <table id="ProfitLossTable" class='table table-bordered' *ngIf='profitandloss && profitandloss.length'>
                 <thead>
                     <tr>
+                        <th colspan="2" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                            <br/> Profit and Loss
+                        </th>
+                    </tr>
+                    <tr>
                         <th>Particular</th>
                         <th style="text-align: right;">Amount (Rs.)</th>
                     </tr>
