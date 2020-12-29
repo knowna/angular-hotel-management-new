@@ -237,6 +237,10 @@ import { CreditNoteAddEditComponent } from './components/account/Transaction/cre
 import { DebitNoteAddEditComponent } from './components/account/Transaction/debit-note/debit-note-add-edit/debit-note-add-edit.component';
 import { KitchenOrderViewComponent } from './components/POS-System/kitchen-order-view-component/kitchen-order-view.component';
 import { MenuPriceComponent } from './components/POS-System/Menu/menu-price/menu-price.component';
+import { InventoryReceiptComponent } from './components/InventoryDashboard/inventory-receipt/inventory-receipt.component';
+import { InventoryReceiptDetailsComponent } from './components/InventoryDashboard/inventory-receipt/inventory-receiptdetails/inventory-receiptdetails.component';
+import { InventoryReceiptService } from './Service/Inventory/InventoryReceipt.service';
+import { InventoryReceiptDetailsService } from './Service/Inventory/InventoryReceiptDetails.service';
 
 @NgModule({
   imports: [
@@ -325,8 +329,8 @@ import { MenuPriceComponent } from './components/POS-System/Menu/menu-price/menu
     // InventoryDashboardComponent,
     InventoryItemComponent,
     StockInHandComponent,
-    // InventoryReceiptComponent,
-    // InventoryReceiptDetailsComponent,
+    InventoryReceiptComponent,
+    InventoryReceiptDetailsComponent,
     // PeriodicConsumptionComponent,
     // StockDamageComponent,
     // StockDamageDetailsComponent,
@@ -469,7 +473,9 @@ import { MenuPriceComponent } from './components/POS-System/Menu/menu-price/menu
     InventoryItemService,
     RoomService,
     AccountService,
-    CategorysService
+    CategorysService,
+    InventoryReceiptService,
+    InventoryReceiptDetailsService
   ],
 
   bootstrap: [AppComponent]

@@ -245,7 +245,7 @@ export class ContraAddEditComponent implements OnInit{
   editPayment(Id: number) {
       this.reset();
       this.dbops = DBOperation.update;
-      this.SetControlsState(true);
+      // this.SetControlsState(true);
       this.modalTitle = "Edit Cash/Bank";
       this.modalBtnTitle = "Save";
       this.getJournalVoucher(Id)
@@ -283,7 +283,7 @@ export class ContraAddEditComponent implements OnInit{
               }
 
 
-
+              this.SetControlsState(true);
 
               // for (var i = 0; i < contra.AccountTransactionValues.length; i++) {
               //     this.currentaccount = this.account.filter(x => x.Id === contra.AccountTransactionValues[i]["AccountId"])[0];

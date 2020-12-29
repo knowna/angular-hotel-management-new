@@ -1,0 +1,298 @@
+﻿<ng-template #templateNested>
+    <div class="modal-body text-center">
+        <p>Data saved sucessfully!</p>
+        <button type="button" class="btn btn-default" (click)="confirm()">Ok</button>
+    </div>
+</ng-template>
+
+<ng-template #template>
+    <form (ngSubmit)="onSubmit(InventReceiptFrm)" [formGroup]="InventReceiptFrm">
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Receipt No.</label>
+                    <input type="number" class="form-control" formControlName="ReceiptNumber" />
+                    <div class="alert alert-danger" *ngIf="InventReceiptFrm.get('ReceiptNumber').hasError('required') && formSubmitAttempt">
+                        Receipt Number is required
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label>Name</label>
+                    <select class="form-control" formControlName="AccountTypeId">
+                        <option disabled>Select</option>
+                        <option *ngFor="let accounts of account" [ngValue]="accounts.Id">{{accounts.Name}}</option>
+                    </select>
+                    <div class="alert alert-danger" *ngIf="InventReceiptFrm.get('AccountTypeId').hasError('required') && formSubmitAttempt">
+                        SourceAccountTypeId is required
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label>Date</label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="day/month/year" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" formControlName="Date" />
+                        <div class="text-danger" *ngIf="(InventReceiptFrm.get('Date').hasError('InvalidDate') || InventReceiptFrm.get('Date').hasError('required'))">
+                            {{ InventReceiptFrm.get('Date').getError('InvalidDate') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="container col-md-12">
+                    <div formArrayName="InventoryReceiptDetails">
+                        <div *ngFor="let InventoryReceiptDetails of InventReceiptFrm.controls.InventoryReceiptDetails.controls; let i=index" [formGroupName]="i">
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <my-inventoryDetail-list [group]="InventReceiptFrm.controls.InventoryReceiptDetails.controls[i]"></my-inventoryDetail-list>
+                                </div>
+                                <div class="col-md-1">
+                                    <span *ngIf="InventReceiptFrm.controls.InventoryReceiptDetails.controls.length > 1" style="cursor: pointer; font-size: 30px; margin-top: 105px;" class="fa fa-window-close pull-right" (click)="removeInventory(i)"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button style="margin-right: 20px; margin-bottom: 15px;" type="button" class="btn btn-success pull-right" [disabled]="InventReceiptFrm.controls.InventoryReceiptDetails.invalid" (click)="addDetails()">Add Row +</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <div>
+                <button type="submit" class="btn btn-success pull-left" [disabled]="InventReceiptFrm.invalid">{{modalBtnTitle}} </button>
+                <button type="button" class="btn btn-danger pull-right ml-2" (click)="modalRef.hide()" aria-label="Close">Cancel</button>
+            </div>
+        </div>
+
+    </form>
+</ng-template>
+
+
+
+<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Inventory Receipt</h2>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-md-2">
+            <button class="btn btn-success" (click)="addInventoryReceipt()">
+                <i class="fa fa-plus"></i>
+                Add
+            </button>
+        </div>
+        <div class="col-md-2">
+            Filter By Date:
+        </div>
+        <div class="col-md-2">
+            <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [(ngModel)]="fromDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+        </div>
+        <div class="col-md-2">
+            <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [(ngModel)]="toDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-success" (click)="filterJournalByDate()"> GO</button>
+        </div>
+        <div class="col-md-1">
+            <button *ngIf='inventoryReceipt && inventoryReceipt.length' class="btn btn-secondary pull-left" (click)="exportTableToPdf()" style="float: right;">Pdf</button>
+        </div>
+        <div class="col-md-1">
+            <button *ngIf='inventoryReceipt && inventoryReceipt.length' class="btn btn-primary pull-left" (click)="exportTableToExcel('inventoryTable')">Excel</button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <div *ngIf='inventoryReceipt && inventoryReceipt.length==0' class="alert alert-info" role="alert">No record found!</div>
+
+            <table id="inventoryTable" class='table table-bordered' *ngIf='inventoryReceipt && inventoryReceipt.length'>
+                <thead>
+                    <tr>
+                        <th colspan="7" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                            <br/> Inventory Receipt
+                            <br/> {{ fromDate | date: 'yyyy.MM.dd'}} - {{ toDate | date: 'yyyy.MM.dd'}}
+                        </th>
+                    </tr>
+
+                    <tr>
+                        <th>Receipt No.</th>
+                        <th>Date</th>
+                        <th>Rate</th>
+                        <th>Total Amount</th>
+                        <th>BatchNo</th>
+                        <th colspan="2">Actions</th>
+                        <!-- <th>Delete</th> -->
+                    </tr>
+                </thead>
+                <tbody *ngFor="let IReceipts of inventoryReceipt">
+                    <tr>
+                        <td>{{IReceipts.ReceiptNumber}}</td>
+                        <td>{{IReceipts.Date | date:'dd/MM/yyyy'}}</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td colspan="2">
+                            <div class="d-flex">
+                                <button class="btn btn-primary btn-sm ml-1" (click)="editInventoryReceipt(IReceipts.Id)">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm ml-1" (click)="deleteInventory(IReceipts.Id)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                        <!-- <td>
+                            <span><img style="cursor: pointer;" src="../../images/Delete.png" (click)="deleteInventory(IReceipts.Id)" height="60" width="60" /></span>
+                        </td> -->
+                    </tr>
+                    <tr>
+                        <th>Item Name:</th>
+                        <th>Quality</th>
+                        <th>Rate</th>
+                        <th>TotalAmount</th>
+                        <th>BatchNo</th>
+                        <th>Mdate</th>
+                        <th>Edate</th>
+                    </tr>
+                    <tr *ngFor="let transaction of IReceipts.InventoryReceiptDetails">
+                        <td> {{getIRItem(transaction.InventoryItemId)?.Name}}</td>
+                        <td> {{transaction.Quantity}}</td>
+                        <td> {{transaction.Rate}}</td>
+                        <td>{{transaction.TotalAmount}}</td>
+                        <td> {{transaction.BatchNo}}</td>
+                        <td> {{transaction.Mdate | date:'dd/MM/yyyy'}}</td>
+                        <td> {{transaction.Edate | date:'dd/MM/yyyy'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
+    </div>
+</div>
+
+<!-- <div class='panel panel-primary'>
+    <div class='panel-heading'>
+        Inventory Receipt
+    </div>
+
+    <div class='panel-body'>
+        <div class='table-responsive-xl' style="min-height: 400px;">
+            <div style="padding-bottom:10px; cursor: pointer;">
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div (click)="addInventoryReceipt()" style="cursor: pointer">
+                            <span>
+                                <img src="../../images/Add.png" height="60" width="60" />
+                                Add Inventory Receipt
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="padding-top: 17px;">
+                            <div class="col-md-2">
+                                Filter By Date:
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [(ngModel)]="fromDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [(ngModel)]="toDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" />
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-success" (click)="filterJournalByDate()"> GO</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button *ngIf='inventoryReceipt && inventoryReceipt.length' class="btn btn-primary pull-left" (click)="exportTableToExcel('inventoryTable')"> Export</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../images/loading.gif" width="32" height="32" /> Loading...</div>
+            <div *ngIf='inventoryReceipt && inventoryReceipt.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table id="inventoryTable" class='table table-striped' *ngIf='inventoryReceipt && inventoryReceipt.length'>
+                <thead>
+                    <tr>
+                        <th width="150px;">Receipt No.</th>
+
+                        <th width="150px;">Date</th>
+
+                        <th width="150px">Rate</th>
+
+                        <th width="150px">Total Amount</th>
+
+                        <th width="150px">BatchNo</th>
+
+                        <th width="150px;">Edit</th>
+
+                        <th width="150px;">Delete</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let IReceipts of inventoryReceipt">
+                    <tr>
+                        <td>{{IReceipts.ReceiptNumber}}</td>
+                        <td>{{IReceipts.Date | date:'dd/MM/yyyy'}}</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>
+                            <span><img style="cursor: pointer;" src="../../images/Edit.png" (click)="editInventoryReceipt(IReceipts.Id)" height="60" width="60" /></span>
+                        </td>
+                        <td>
+                            <span><img style="cursor: pointer;" src="../../images/Delete.png" (click)="deleteInventory(IReceipts.Id)" height="60" width="60" /></span>
+                        </td>
+                    </tr>
+                    <tr style="color: blue;">
+                        <th>Item Name:</th>
+                        <th>Quality</th>
+                        <th>Rate</th>
+                        <th>TotalAmount</th>
+                        <th>BatchNo</th>
+                        <th>Mdate</th>
+                        <th>Edate</th>
+                    </tr>
+                    <tr *ngFor="let transaction of IReceipts.InventoryReceiptDetails">
+                        <td> {{getIRItem(transaction.InventoryItemId)?.Name}}</td>
+                        <td> {{transaction.Quantity}}</td>
+                        <td> {{transaction.Rate}}</td>
+                        <td>{{transaction.TotalAmount}}</td>
+                        <td> {{transaction.BatchNo}}</td>
+                        <td> {{transaction.Mdate | date:'dd/MM/yyyy'}}</td>
+                        <td> {{transaction.Edate | date:'dd/MM/yyyy'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
+    </div>
+</div> -->
+
+
+

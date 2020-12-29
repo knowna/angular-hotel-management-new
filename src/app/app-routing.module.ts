@@ -130,6 +130,7 @@ import { PaymentAddEditComponent } from './components/account/Transaction/paymen
 import { ContraAddEditComponent } from './components/account/Transaction/contra/contra-add-edit/contra-add-edit.component';
 import { KitchenOrderViewComponent } from './components/POS-System/kitchen-order-view-component/kitchen-order-view.component';
 import { MenuPriceComponent } from './components/POS-System/Menu/menu-price/menu-price.component';
+import { InventoryReceiptComponent } from './components/InventoryDashboard/inventory-receipt/inventory-receipt.component';
 
 
 const routes: Routes = [
@@ -302,11 +303,11 @@ const routes: Routes = [
     component: UnitTypeComponent,
     canActivate: [AuthGuard]
   },
-  // {
-  //   path: 'Inventory/inventory-receipt',
-  //   component: InventoryReceiptComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'Inventory/inventory-receipt',
+    component: InventoryReceiptComponent,
+    canActivate: [AuthGuard]
+  },
   // {
   //   path: 'Inventory/consumption',
   //   component: PeriodicConsumptionComponent, canActivate: [AuthGuard]
