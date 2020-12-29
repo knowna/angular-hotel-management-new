@@ -30,6 +30,9 @@ export class AccountProfitAndLossComponent implements OnInit {
     modalRef: BsModalRef;
     private formSubmitAttempt: boolean;
 
+    public fromDate: any;
+    public toDate: any;
+
     toExportFileName: string = 'Profit and Loss-' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
     toPdfFileName: string = 'Profit and Loss-' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
 
@@ -41,6 +44,8 @@ export class AccountProfitAndLossComponent implements OnInit {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.company = JSON.parse(localStorage.getItem('company'));
+        this.fromDate = this.currentYear['NepaliStartDate'];
+        this.toDate = this.currentYear['NepaliEndDate'];
     }
 
     ngOnInit(): void {
@@ -72,6 +77,7 @@ export class AccountProfitAndLossComponent implements OnInit {
         doc.setFontSize(14);
         doc.text(80,20, `${this.company?.NameEnglish}`);
         doc.text(87,30,'Profit and Loss');
+        doc.text(80,40,`${this.fromDate} - ${this.toDate}`);
         // doc.text(80,40,'Account : ' + account.Name);
 
         doc.autoTable({
@@ -79,7 +85,7 @@ export class AccountProfitAndLossComponent implements OnInit {
             setFontSize: 14,
     
             //for next page 
-            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 40,
+            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50,
             rowPageBreak: 'avoid',
             body: rows,
             bodyStyles: {
