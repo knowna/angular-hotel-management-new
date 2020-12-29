@@ -241,6 +241,14 @@ import { InventoryReceiptComponent } from './components/InventoryDashboard/inven
 import { InventoryReceiptDetailsComponent } from './components/InventoryDashboard/inventory-receipt/inventory-receiptdetails/inventory-receiptdetails.component';
 import { InventoryReceiptService } from './Service/Inventory/InventoryReceipt.service';
 import { InventoryReceiptDetailsService } from './Service/Inventory/InventoryReceiptDetails.service';
+import { PeriodicConsumptionService } from './Service/Inventory/periodic-consumption.service';
+import { PeriodicConsumptionItemService } from './Service/Inventory/peroidic-consumption-item.service';
+import { MenuConsumptionService } from './Service/Inventory/MenuConsumptionService';
+import { MenuConsumptionDetailsService } from './Service/Inventory/MenuConsumptionDetailsService';
+import { PeriodicConsumptionComponent } from './components/InventoryDashboard/periodic-consumption/periodic-consumption.component';
+import { PeriodicConsumptionItemComponent } from './components/InventoryDashboard/periodic-consumption/periodic-consumption-items/periodic-consumption-item.component';
+import { StockDamageComponent } from './components/InventoryDashboard/stock-damage/stock-damage.component';
+import { StockDamageDetailsComponent } from './components/InventoryDashboard/stock-damage/stock-damage-details/stock-damage-details.component';
 
 @NgModule({
   imports: [
@@ -331,14 +339,15 @@ import { InventoryReceiptDetailsService } from './Service/Inventory/InventoryRec
     StockInHandComponent,
     InventoryReceiptComponent,
     InventoryReceiptDetailsComponent,
-    // PeriodicConsumptionComponent,
-    // StockDamageComponent,
-    // StockDamageDetailsComponent,
+    PeriodicConsumptionComponent,
+    PeriodicConsumptionItemComponent,
+    StockDamageComponent,
+    StockDamageDetailsComponent,
     UnitTypeComponent,
     WareHouseComponent,
     WareHouseTypeComponent,
     // WareHousesComponent,
-    // PeriodicConsumptionItemComponent,
+    
     ContraComponent,
     SalesComponent,
     SalesDetailComponent,
@@ -475,7 +484,11 @@ import { InventoryReceiptDetailsService } from './Service/Inventory/InventoryRec
     AccountService,
     CategorysService,
     InventoryReceiptService,
-    InventoryReceiptDetailsService
+    InventoryReceiptDetailsService,
+    PeriodicConsumptionService,
+    PeriodicConsumptionItemService,
+    MenuConsumptionService,
+    MenuConsumptionDetailsService
   ],
 
   bootstrap: [AppComponent]

@@ -27,7 +27,7 @@ export class InventoryReceiptService {
                 catchError(this.handleError));
     }
 
-   put(url: string, id: number, model: any): Observable<any> {
+    put(url: string, id: number, model: any): Observable<any> {
         let body = JSON.stringify(model);
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let options = ({ headers: headers });
@@ -45,8 +45,7 @@ export class InventoryReceiptService {
 
    
     private handleError (error:HttpErrorResponse) {
-        console.error(error);
-           return  throwError(error.error|| 'Server error');  
+        return  throwError(error.error|| 'Server error');  
     }
 
   
