@@ -262,7 +262,7 @@ export class PaymentAddEditComponent implements OnInit {
   editPayment(Id: number) {
       this.reset();
       this.dbops = DBOperation.update;
-      this.SetControlsState(true);
+      // this.SetControlsState(true);
       this.modalTitle = "Edit Payment";
       this.modalBtnTitle = "Save";
       this.getJournalVoucher(Id)
@@ -298,6 +298,8 @@ export class PaymentAddEditComponent implements OnInit {
                   
                   control.push(instance);
               }
+
+              this.SetControlsState(true);
 
 
               // for (var i = 0; i < payment.AccountTransactionValues.length; i++) {

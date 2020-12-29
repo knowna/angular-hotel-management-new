@@ -256,7 +256,7 @@ export class ReceiptAddEditComponent implements OnInit {
   editReceipt(Id: number) {
     this.reset();
     this.dbops = DBOperation.update;
-    this.SetControlsState(true);
+    // this.SetControlsState(true);
     this.modalTitle = "Edit Recepit";
     this.modalBtnTitle = "Save";
     this.getJournalVoucher(Id)
@@ -290,6 +290,8 @@ export class ReceiptAddEditComponent implements OnInit {
             }
         }
 
+        this.SetControlsState(true);
+        
         // this.modalRef = this.modalService.show(this.TemplateRef, {
         //     backdrop: 'static',
         //     keyboard: false,

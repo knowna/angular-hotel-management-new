@@ -92,7 +92,7 @@ export class JournalAddEditComponent implements OnInit {
     // Initialize reactive form 
     this.journalFrm = this.fb.group({
       Id: [''],
-      Name: ['',],
+      Name: [''],
       AccountTransactionDocumentId: [''],
       Description: [''],
       Amount: [''],
@@ -207,7 +207,7 @@ export class JournalAddEditComponent implements OnInit {
  */ 
   editJournalVoucher(Id: number) {
     this.dbops = DBOperation.update;
-    this.SetControlsState(true);
+    // this.SetControlsState(true);
     this.modalTitle = "Edit Journal";
     this.modalBtnTitle = "Save";
     this.reset();
@@ -262,6 +262,10 @@ export class JournalAddEditComponent implements OnInit {
 
             control.push(instance);
         }
+
+        this.SetControlsState(true);
+
+        // console.log('the status of form',this.journalFrm)
       },
       error => this.msg = <any>error);
   }
