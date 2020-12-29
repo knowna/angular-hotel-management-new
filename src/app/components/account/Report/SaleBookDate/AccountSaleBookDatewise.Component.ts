@@ -8,6 +8,10 @@ import { DatePipe } from '@angular/common';
 import { SaleBookDate } from 'src/app/Model/SaleBook';
 import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
 import { Global } from 'src/app/Shared/global';
+import * as XLSX from 'xlsx';
+//generating pdf
+import * as jsPDF from 'jspdf'
+import 'jspdf-autotable';
 
 @Component({
     templateUrl: './AccountSaleBookDatewise.Component.html'
@@ -22,6 +26,8 @@ export class AccountSaleBookDaywise {
     isLoading: boolean = false;
     modalRef: BsModalRef;
     selectedMonths: any = null;
+    toExportFileName: string = 'Sales Date Wise-' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
+    toPdfFileName: string = 'Sales Date Wise-' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
     /**
      * Sale Book Constructor
      */
@@ -42,37 +48,128 @@ export class AccountSaleBookDaywise {
                 error => this.msg = <any>error);
     }
 
-    exportTableToExcel(tableID, filename = '') {
-        var downloadLink;
-        var dataType = 'application/vnd.ms-excel';
-        var clonedtable = $('#' + tableID);
-        var clonedHtml = clonedtable.clone();
-        $(clonedtable).find('.export-no-display').remove();
-        var tableSelect = document.getElementById(tableID);
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-        $('#' + tableID).html(clonedHtml.html());
+    exportTableToPdf(){
+        var doc = new jsPDF("p", "mm", "a4");
+        var rows = [];
+        let sn = 1;
 
-        // Specify file name
-        filename = filename ? filename + '.xls' : 'Account Sale Book Date wise of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
+        rows.push(['S.No','Date','Invoice No','Name','Pan No','Amount']);
 
-        // Create download link element
-        downloadLink = document.createElement("a");
+        this.SaleBooks.forEach(SaleBook => {
+            var tempSaleBook = [
+                sn,
+                this.date.transform( SaleBook.VDate,'yyyy.MM.dd'),
+                SaleBook.BillNo,
+                SaleBook.BuyerName,
+                SaleBook.BuyerPAN,
+                SaleBook.TotalSale.toFixed(2)
+            ];
 
-        document.body.appendChild(downloadLink);
+            sn = sn * 1 + 1;
 
-        if (navigator.msSaveOrOpenBlob) {
-            var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
-            navigator.msSaveOrOpenBlob(blob, filename);
-        } else {
-            // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+            rows.push(tempSaleBook);
 
-            // Setting the file name
-            downloadLink.download = filename;
+            rows.push(['','Name','Qty (UT)','Rate','Amount',''])
 
-            //triggering the function
-            downloadLink.click();
+            SaleBook.SalesBillItems.forEach(IRItemName => {
+                var tempIRItemName = [
+                    '',
+                    IRItemName.ItemName,
+                    IRItemName.Quantity,
+                    IRItemName.Rate,
+                    IRItemName.Amount.toFixed(2),
+                    ''
+                ];
+
+                rows.push(tempIRItemName);
+            });
+        });
+
+        doc.setFontSize(14);
+        doc.text(80,20, `${this.company?.NameEnglish}`);
+        doc.text(87,30,'Sales Book');
+        doc.text(80,40,`${this.date.transform(this.fromDate,'yyyy.MM.dd')} - ${this.date.transform(this.toDate,'yyyy.MM.dd')}`);
+
+        doc.autoTable({
+            margin: {left: 10,bottom:20},
+            setFontSize: 14,
+      
+            //for next page 
+            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50,
+            rowPageBreak: 'avoid',
+            body: rows,
+            bodyStyles: {
+              fontSize: 9,
+            },
+            columnStyles: {
+              5: {
+                  halign: 'right',
+                },
+            },
+      
+            // customize table header and rows format
+            theme: 'striped'
+        });
+
+
+        const pages = doc.internal.getNumberOfPages();
+        const pageWidth = doc.internal.pageSize.width;  //Optional
+        const pageHeight = doc.internal.pageSize.height;  //Optional
+        doc.setFontSize(10);  //Optional
+
+        for(let j = 1; j < pages + 1 ; j++) {
+            let horizontalPos = pageWidth / 2;  //Can be fixed number
+            let verticalPos = pageHeight - 10;  //Can be fixed number
+            doc.setPage(j);
+            doc.text(`${j} of ${pages}`, horizontalPos, verticalPos, {align: 'center' }); //Optional text styling});
         }
+                
+        doc.save(this.toPdfFileName);
+
+
+    }
+
+    exportTableToExcel(tableID, filename = '') {
+        // var downloadLink;
+        // var dataType = 'application/vnd.ms-excel';
+        // var clonedtable = $('#' + tableID);
+        // var clonedHtml = clonedtable.clone();
+        // $(clonedtable).find('.export-no-display').remove();
+        // var tableSelect = document.getElementById(tableID);
+        // var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        // $('#' + tableID).html(clonedHtml.html());
+
+        // // Specify file name
+        // filename = filename ? filename + '.xls' : 'Account Sale Book Date wise of ' + this.date.transform(new Date, 'dd-MM-yyyy') + '.xls';
+
+        // // Create download link element
+        // downloadLink = document.createElement("a");
+
+        // document.body.appendChild(downloadLink);
+
+        // if (navigator.msSaveOrOpenBlob) {
+        //     var blob = new Blob(['\ufeff', tableHTML], { type: dataType });
+        //     navigator.msSaveOrOpenBlob(blob, filename);
+        // } else {
+        //     // Create a link to the file
+        //     downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+        //     // Setting the file name
+        //     downloadLink.download = filename;
+
+        //     //triggering the function
+        //     downloadLink.click();
+        // }
+        let element = document.getElementById(tableID); 
+        const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+        /* generate workbook and add the worksheet */
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        /* save to file */
+        XLSX.writeFile(wb, this.toExportFileName);
+
     }
 
     calcTotalSale(SaleBooks) {

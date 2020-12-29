@@ -6,7 +6,7 @@
     SortOrder: number;
     Tags: string;
     UnderGroupLedger: string;
-    NatureOfGroup: string;
+    NatureofGroup: string;
     GroupSubLedger: boolean;
     DebitCreditBalanceReporting: boolean;
     UsedForCalculation: boolean;
