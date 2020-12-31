@@ -307,6 +307,9 @@ export class MasterLedgerComponent implements OnInit {
         this.msg = "";
         let master = this.masterLedgerFrm;
         this.formSubmitAttempt = true;
+
+        console.log(this.masterLedgerFrm);
+        
                     
         // if (master.valid) {
                     
@@ -483,7 +486,7 @@ export class MasterLedgerComponent implements OnInit {
         }
                 
         doc.save(this.toPdfFileName);
-        
+
 
     }
 }

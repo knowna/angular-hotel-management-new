@@ -25,7 +25,13 @@
 </div>
 
 
-<div [formGroup]="postableForm" class="row m-3 mt-4">
+<div class="row m-3 mt-4" *ngIf="selectedCustomerId == 0">
+    <div class="col-md-12">
+        <h4 class="font-weight-bold">Table No : {{tableNew?.Name}}</h4>
+    </div>
+</div>
+
+<div [formGroup]="postableForm" class="row m-3 mt-2">
     <div class="col-md-7 card" >
         <div formArrayName="AccountTransactionValues">
             <div class="row m-0 mt-3" *ngFor="let AccountTransactionValue of AccountTransactionValues.controls; let i=index" [formGroupName]="i">
