@@ -59,6 +59,28 @@ img {
     .no-print{
         display: none !important;
     }
+
+    @page :footer {color: #fff }
+    @page :header {color: #fff}
+
+    html, body {
+        height:100%; 
+        margin: 0 !important; 
+        padding: 0 !important;
+        overflow: hidden;
+        position: absolute;
+    }
+
+    .printable{
+      display: block !important;
+      page-break-after: always; 
+      page-break-after: avoid; 
+      font-size: 24pt !important;
+      color: black;
+      margin-top: 0;
+      margin-left: 0.01in;
+      margin-right: 0.01in;
+    }
 }
   .btn {
     white-space:normal !important;

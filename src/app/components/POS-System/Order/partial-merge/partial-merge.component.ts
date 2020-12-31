@@ -442,19 +442,17 @@ export class PartialMergeComponent implements OnInit {
 
       console.log('the details is', details);
 
-      // this.mergeService.partialMerge(details)
-      //   .subscribe(
-      //     data => {
-      //       this.toastrService.success('Partial merged successfully!');
-      //       window.location.reload();
-      //     },
-      //     error => {
-      //       console.log(error);
-            
-
-      //       console.error('the error is', error);
-      //     }
-      //   );
+      this.mergeService.partialMerge(details)
+        .subscribe(
+          data => {
+            this.toastrService.success('Partial merged successfully!');
+            window.location.reload();
+          },
+          error => {
+            console.log(error);
+            console.error('the error is', error);
+          }
+        );
 
     }else{
       this.toastrService.info('Partial Merge is not possible!');

@@ -690,7 +690,11 @@ export class PosTableComponent implements OnInit {
                 console.log('the orders new are', this.ordersNew)
                
             }else{
-                this.router.navigate(['table/' + data.TableId + '/ticket/'+ data.TicketId]);
+                if(this.selectedCustomerId != 0) {
+                    this.router.navigate(['customer/' + this.selectedCustomerId + '/ticket/'+ data.TicketId]);
+                }else{
+                    this.router.navigate(['table/' + data.TableId + '/ticket/'+ data.TicketId]);
+                }
             }
         }
     )
