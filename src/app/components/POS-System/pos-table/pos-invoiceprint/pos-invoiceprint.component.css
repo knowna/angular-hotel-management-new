@@ -50,6 +50,12 @@ img {
     width: inherit;
 }
 
+.printable{
+    display: none !important;
+}
+
+
+
 @media print {
     .hidden-print,
     .hidden-print * {

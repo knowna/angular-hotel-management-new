@@ -87,6 +87,7 @@ export class SplitMergeComponent implements OnInit {
     .subscribe(
         data =>{
           this.tempPrimaryOrderList = data;
+          console.log('unsettles', this.tempPrimaryOrderList)
           this.secondaryOrderList = data;
           this.primaryOrderList = this.primaryOrderList.map(function(x) {
             x.show = false;
@@ -96,6 +97,8 @@ export class SplitMergeComponent implements OnInit {
   }
 
   showDetail(event){
+    console.log('event is', event)
+    this.secondaryTicket = {};
     this.selectedTicket = event.value;
     this.selectedTicket.ItemList = [];
     this.selectedTicket.Orders = [];
