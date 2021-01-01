@@ -20,14 +20,14 @@
                
                 <div class="input-group">
                     <span class="input-group-addon"><strong><i class="fa fa-user"></i>&nbsp;</strong></span>
-                    <input type="text" class="form-control" formControlName="UserName" placeholder="Username" />
+                    <input type="text" class="form-control" formControlName="UserName" placeholder="Username" autocomplete="off"/>
                 </div>
             </div>
             <div class="form-group mt-5">
                 
                 <div class="input-group">
                     <span class="input-group-addon"><strong><i class="fa fa-key"></i></strong></span>
-                    <input [type]="showPassword ? 'text' : 'password'" class="form-control" formControlName="Password" placeholder="*******"/>
+                    <input [type]="showPassword ? 'text' : 'password'" class="form-control" formControlName="Password" placeholder="*******" autocomplete="off"/>
                     <!-- <span>
                         <i class="fa field-icon"  
                             [class.fa-eye]="showPassword"

@@ -129,6 +129,10 @@ import { ReceiptAddEditComponent } from './components/account/Transaction/receip
 import { PaymentAddEditComponent } from './components/account/Transaction/payment/payment-add-edit/payment-add-edit.component';
 import { ContraAddEditComponent } from './components/account/Transaction/contra/contra-add-edit/contra-add-edit.component';
 import { KitchenOrderViewComponent } from './components/POS-System/kitchen-order-view-component/kitchen-order-view.component';
+import { MenuPriceComponent } from './components/POS-System/Menu/menu-price/menu-price.component';
+import { InventoryReceiptComponent } from './components/InventoryDashboard/inventory-receipt/inventory-receipt.component';
+import { PeriodicConsumptionComponent } from './components/InventoryDashboard/periodic-consumption/periodic-consumption.component';
+import { StockDamageComponent } from './components/InventoryDashboard/stock-damage/stock-damage.component';
 
 
 const routes: Routes = [
@@ -301,20 +305,21 @@ const routes: Routes = [
     component: UnitTypeComponent,
     canActivate: [AuthGuard]
   },
-  // {
-  //   path: 'Inventory/inventory-receipt',
-  //   component: InventoryReceiptComponent,
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Inventory/consumption',
-  //   component: PeriodicConsumptionComponent, canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'Inventory/stock-damage',
-  //   component: StockDamageComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  {
+    path: 'Inventory/inventory-receipt',
+    component: InventoryReceiptComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Inventory/consumption',
+    component: PeriodicConsumptionComponent, 
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Inventory/stock-damage',
+    component: StockDamageComponent,
+    canActivate: [AuthGuard]
+  },
 
   // {
   //   path: 'Inventory/warehouses',
@@ -596,6 +601,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'pos-dashboard/table/menu-price',
+    component: MenuPriceComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'pos-dashboard/table/menu',
     component: MenuComponent,
     canActivate: [AuthGuard]
@@ -607,7 +617,7 @@ const routes: Routes = [
   },
   {
     path: 'pos-dashboard/table/category',
-    component: CategoryComponent,
+    component: MenuCategoryComponent,
     canActivate: [AuthGuard]
   },
   {

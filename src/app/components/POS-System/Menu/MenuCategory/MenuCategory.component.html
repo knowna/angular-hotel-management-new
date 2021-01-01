@@ -1,5 +1,59 @@
-﻿
-<div class='panel panel-primary'>
+﻿<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Category</h2>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" [(ngModel)]="MenuCategory" placeholder="Search by Name">
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-success" (click)="addMenuCategory(template)" style="float: right">
+                <strong>
+                    <i class="fa fa-plus"></i>
+                    Add
+                </strong>
+            </button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <table class='table table-bordered' *ngIf='menucategories && menucategories.length'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let menucategory of (menucategories | filterByCategory:MenuCategory)">
+                        <td>{{menucategory.Name}}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" (click)="editMenuCategory(menucategory.Id, template)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteMenuCategory(menucategory.Id, template)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="alert alert-info" role="alert" *ngIf="indLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <div *ngIf='menucategories && menucategories.length==0' class="alert alert-info" role="alert">No record found!</div>
+        </div>
+        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
+    </div>
+</div>
+
+
+
+<!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
         Menu Category
     </div>
@@ -20,7 +74,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- <tr *ngFor="let menucategory of menucategories | FilterMenuCategory: MenuCategory"> -->
                     <tr *ngFor="let menucategory of menucategories ">
                         <td>{{menucategory.Name}}</td>
                         <td>
@@ -38,7 +91,7 @@
             {{msg}}
         </div>
     </div>
-</div>
+</div> -->
 
 <ng-template #template data-backdrop="static" data-keyboard="false" data-target="#template">
     <form class="panel-primary" novalidate (ngSubmit)="onSubmit(MenuCategoryFrm)" [formGroup]="MenuCategoryFrm">
@@ -50,11 +103,11 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="form-group">
-                    <label class="control-label col-sm-2">Name:</label>
-                    <div class="col-sm-9">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="control-label">Name</label>
                         <input type="text" class="form-control" placeholder="" formControlName="Name">
-                        <div class="alert alert-danger" *ngIf="MenuCategoryFrm.get('Name').hasError('required') && formSubmitAttempt">
+                        <div class="alert alert-danger mt-1" *ngIf="MenuCategoryFrm.get('Name').hasError('required') && formSubmitAttempt">
                             CategoryName is required
                         </div>
                     </div>
@@ -64,7 +117,13 @@
         <div class="modal-footer">
             <div>
                 <button type="submit" class="btn btn-success pull-left">{{modalBtnTitle}}</button>
-                <a class="btn btn-danger pull-right" (click)="modalRef.hide()">Cancel</a>
+                <!-- <a class="btn btn-danger pull-right" (click)="modalRef.hide()">Cancel</a> -->
+                <button 
+                    type="button"
+                    class="btn btn-danger ml-1"
+                    (click)="modalRef.hide()">
+                    Cancel
+                </button>
             </div>
         </div>
     </form>

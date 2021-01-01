@@ -31,14 +31,14 @@
     margin: 5px;
     color: #182133;
 }
-.item:hover {
+/* .item:hover {
     background: #8491ac;
     border-radius: 10px;
     padding: 10px 15px;
     cursor: pointer;
     margin: 5px;
     color: #182133;
-}
+} */
 
 .selected{
     background: #364a70;

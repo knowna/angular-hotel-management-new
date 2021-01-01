@@ -212,7 +212,7 @@ export class PurchaseAddEditComponent implements OnInit {
    */
   editPurchase(Id: number) {
       this.dbops = DBOperation.update;
-      this.SetControlsState(true);
+      // this.SetControlsState(true);
       this.modalTitle = "Edit Purchase";
       this.modalBtnTitle = "Save";
       this.reset();
@@ -272,6 +272,8 @@ export class PurchaseAddEditComponent implements OnInit {
                   // instance.controls["Description"].setValue(purchase.AccountTransactionValues[i].Description);
                   controlAc.push(instance);
               }
+
+              this.SetControlsState(true);
 
               // console.log('the control', controlAc);
 

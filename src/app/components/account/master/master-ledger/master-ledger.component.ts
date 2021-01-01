@@ -12,6 +12,14 @@ import { DBOperation } from 'src/app/Shared/enum';
 import { MasterLedgerService } from './services/MasterLedger.service';
 import { Global } from 'src/app/Shared/global';
 
+import * as XLSX from 'xlsx';
+//generating pdf
+import * as jsPDF from 'jspdf'
+import 'jspdf-autotable';
+
+import { DatePipe } from '@angular/common';
+import { EntityMock } from 'src/app/Model/Account/account';
+
 @Component({
     templateUrl: './master-ledger.component.html'
 })
@@ -34,10 +42,24 @@ export class MasterLedgerComponent implements OnInit {
     modalBtnTitle: string;
     private formSubmitAttempt: boolean;
     private buttonDisabled: boolean;
+    public entityLists: EntityMock[];
     
     searchKeyword = '';
+
+    public company: any = {};
+
+
+    toExportFileName: string = 'Master Ledger-' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
+    toPdfFileName: string = 'Master Ledger-' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
     
-    constructor(private fb: FormBuilder, private _masterLedgerService: MasterLedgerService, private modalService: BsModalService) { }
+    constructor(private fb: FormBuilder, private _masterLedgerService: MasterLedgerService, private modalService: BsModalService,private date: DatePipe,) { 
+        this.entityLists = [
+            { id: 0, name: 'Dr' },
+            { id: 1, name: 'Cr' }
+        ];
+
+        this.company = JSON.parse(localStorage.getItem('company'));
+    }
 
     ngOnInit(): void {
         this.masterLedgerFrm = this.fb.group({
@@ -285,6 +307,9 @@ export class MasterLedgerComponent implements OnInit {
         this.msg = "";
         let master = this.masterLedgerFrm;
         this.formSubmitAttempt = true;
+
+        console.log(this.masterLedgerFrm);
+        
                     
         // if (master.valid) {
                     
@@ -397,5 +422,71 @@ export class MasterLedgerComponent implements OnInit {
             }
         );
         this.masterLedgers = filteredMasterLedgers;
+    }
+
+    exportTableToExcel(tableID) {
+        let element = document.getElementById('ledgersTable'); 
+        const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+        ws['!cols'] = [];
+        ws['!cols'][1] = { hidden: true };
+
+        /* generate workbook and add the worksheet */
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        /* save to file */
+        XLSX.writeFile(wb, this.toExportFileName);
+    }
+
+    exportTableToPdf() {
+        var doc = new jsPDF("p", "mm", "a4");
+        var rows = [];
+        let sn = 1;
+
+        rows.push(['S.No','Name']);
+
+        this.masterLedgers.forEach(masterLedger => {
+            var tempMasterLedger = [
+                sn,
+                masterLedger.Name,
+            ];
+
+            sn = sn * 1 + 1;
+            rows.push(tempMasterLedger);
+        });
+
+        doc.setFontSize(14);
+        doc.text(80,20, `${this.company?.NameEnglish}`);
+        doc.autoTable({
+            margin: {left: 10,bottom:20},
+            setFontSize: 14,
+      
+            //for next page 
+            startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 30,
+            rowPageBreak: 'avoid',
+            body: rows,
+            bodyStyles: {
+              fontSize: 9,
+            },
+      
+            // customize table header and rows format
+            theme: 'striped'
+        });
+
+        const pages = doc.internal.getNumberOfPages();
+        const pageWidth = doc.internal.pageSize.width;  //Optional
+        const pageHeight = doc.internal.pageSize.height;  //Optional
+        doc.setFontSize(10);  //Optional
+
+        for(let j = 1; j < pages + 1 ; j++) {
+            let horizontalPos = pageWidth / 2;  //Can be fixed number
+            let verticalPos = pageHeight - 10;  //Can be fixed number
+            doc.setPage(j);
+            doc.text(`${j} of ${pages}`, horizontalPos, verticalPos, {align: 'center' }); //Optional text styling});
+        }
+                
+        doc.save(this.toPdfFileName);
+
+
     }
 }

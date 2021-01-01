@@ -3,13 +3,29 @@
         <div class="col-md-4">
             <h2 class="header">Sales Book</h2>
         </div>
-        <div class="col-md-4"></div>
-        <div class="col-md-4" *ngIf='SaleBooks && SaleBooks.length'>
-            <button class="btn btn-primary pull-left" (click)="exportTableToExcel('CoustomerSalesTable')" style="float: right"> Export</button>
+        <div class="col-md-4">
+            <div class="form-group">
+                <!-- <label class="control-label">
+                    <strong>Account/Ledger</strong>
+                </label> -->
+                <select [(ngModel)]="selectedName" class="form-control" (change)="SearchLedgerTransaction($event.target.value)">
+                    <option value="">Select Account/Ledger</option>
+                    <option *ngFor="let accounts of accountledger" [value]="accounts.Id">
+                        {{accounts.Name}}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-1 offset-md-2" *ngIf='SaleBooks && SaleBooks.length'>
+            <button class="btn btn-secondary pull-left" (click)="exportTableToPdf()" style="float: right;">Pdf</button>
+        </div>
+
+        <div class="col-md-1" *ngIf='SaleBooks && SaleBooks.length'>
+            <button class="btn btn-primary pull-left" (click)="exportTableToExcel('CoustomerSalesTable')" style="float: right">Excel</button>
         </div>
     </div>
 
-    <div class="row m-0 mt-2">
+    <!-- <div class="row m-0 mt-2">
         <div class="col-md-4">
             <div class="form-group">
                 <label class="control-label">
@@ -24,7 +40,7 @@
             </div>
         </div>
        
-    </div>
+    </div> -->
 
     <div class="row m-0 mt-2">
         <div class="col-sm-12 table-responsive">

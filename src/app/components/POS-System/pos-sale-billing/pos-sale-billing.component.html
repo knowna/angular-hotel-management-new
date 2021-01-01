@@ -8,9 +8,9 @@
         <div class='table-responsive'>
             <div style="padding-bottom:10px">
                 <div class="row">
-                    <div class="col-md-3">
-                    </div>
-                    <div class="col-md-9">
+                    <!-- <div class="col-md-3">
+                    </div> -->
+                    <div class="col-md-12">
                         <div class="row" style="padding-top: 17px;">
                             <div class="col-md-2">
                                 Filter By Date:
@@ -20,7 +20,9 @@
                                 <np-datepicker
                                     [(ngModel)]="sfromDate"
                                     language="en"
-                                    [dateFormatter]="startFormatter">
+                                    [dateFormatter]="startFormatter"
+                                    class="form-group"
+                                    inputClass="form-control">
                                 </np-datepicker>
                             </div>
                             <!-- <div class="col-md-3">
@@ -36,14 +38,16 @@
                                 <np-datepicker
                                     [(ngModel)]="stoDate"
                                     language="en"
-                                    [dateFormatter]="endFormatter">
+                                    [dateFormatter]="endFormatter"
+                                    class="form-group"
+                                    inputClass="form-control">
                                 </np-datepicker>
                             </div>
                             <div class="col-md-2">
                                 <button class="btn btn-success" (click)="filterJournalByDate(sfromDate, stoDate)"> GO</button>
                             </div>
                             <div class="col-md-2">
-                                <button class="btn btn-primary pull-left" (click)="exportTableToExcel('salebillingbookTable')"> Export as excel</button>
+                                <button class="btn btn-primary pull-left" (click)="exportTableToExcel('salebillingbookTable')"> Excel</button>
                                 <!-- <button class="btn btn-primary pull-left" (click)="exportTableToPdf()"> Export as pdf</button> -->
 
                             </div>
@@ -61,7 +65,7 @@
                             <th colspan="8" class="text-center">
                                 <strong>{{ company?.NameEnglish }}</strong>
                                 <br /> Billing
-                                <br /> {{ sfromDate }} - {{ stoDate }}
+                                <br /> {{ fromDate }} - {{ toDate }}
                             </th>
                         </tr>
                         <tr>

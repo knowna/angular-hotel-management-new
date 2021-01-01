@@ -58,7 +58,7 @@ export class MenuCategoryComponent implements OnInit {
     addMenuCategory(template: TemplateRef<any>) {
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
-        this.modalTitle = "Add New MenuCategory";
+        this.modalTitle = "Add Category";
         this.modalBtnTitle = "Save";
         this.MenuCategoryFrm.reset();
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });
@@ -68,7 +68,7 @@ export class MenuCategoryComponent implements OnInit {
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Category";
-        this.modalBtnTitle = "Update";
+        this.modalBtnTitle = "Save";
         this.menucategory = this.menucategories.filter(x => x.Id == Id)[0];
         this.MenuCategoryFrm.setValue(this.menucategory);
         this.modalRef = this.modalService.show(template, { backdrop: 'static', keyboard: false });

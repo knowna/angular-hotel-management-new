@@ -49,6 +49,7 @@ export class UserComponent implements OnInit {
             Password: ['', [Validators.required,Validators.pattern(this.checkPattern.passwordPattern)]],
             Email: ['', [Validators.required,Validators.pattern(this.checkPattern.emailPatternError)]],
             ConfirmPassword: ['', Validators.required],
+            IsActive: false
             // PhoneNumber: ['', Validators.required],
             // IsActive: ['',],
             // ResetPassword: [''],
@@ -107,6 +108,7 @@ export class UserComponent implements OnInit {
         this.userFrm.controls['Password'].setValue(this.users.Password);
         this.userFrm.controls['ConfirmPassword'].setValue(this.users.Password);
         this.userFrm.controls['Email'].setValue(this.users.Email);
+        this.userFrm.controls['IsActive'].setValue(this.users.IsActive);
         // console.log('the found user is', this.users);
 
         // this.userFrm.setValue(this.users);
@@ -121,7 +123,7 @@ export class UserComponent implements OnInit {
 
     deleteUser(Id: number) {
         this.dbops = DBOperation.delete;
-        this.SetControlsState(false);
+        // this.SetControlsState(false);
         this.modalTitle = "Confirm to Delete User?";
         this.modalBtnTitle = "Delete";
         this.users = this.user.filter(x => x.Id == Id)[0];
@@ -134,6 +136,7 @@ export class UserComponent implements OnInit {
         this.userFrm.controls['Password'].setValue(this.users.Password);
         this.userFrm.controls['ConfirmPassword'].setValue(this.users.Password);
         this.userFrm.controls['Email'].setValue(this.users.Email);
+        this.userFrm.controls['IsActive'].setValue(this.users.IsActive);
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
@@ -174,6 +177,8 @@ export class UserComponent implements OnInit {
         this.formSubmitAttempt = true;
         this.msg = "";
         let users = this.userFrm;
+
+        // console.log('the form', users)
 
         if (users.valid) {
             switch (this.dbops) {

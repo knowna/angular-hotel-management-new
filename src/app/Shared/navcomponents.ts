@@ -138,7 +138,13 @@ export const navcomponents=[
             
           ],
         },
-        
+        {
+          title: 'Notification',
+          img:'../../../assets/images/report.png',
+          link: 'pos-dashboard/table/kitchen-order',
+          permission:'Billing:Notification',
+          show: false,
+        },
         {
           title: 'Customer',
           img:'../../../assets/images/customer.png',
@@ -160,6 +166,12 @@ export const navcomponents=[
           permission:'Billing:Menu',
           show: false,
           children: [
+            {
+              title: 'Menu Price',
+              img:'../../../assets/images/dish.png',
+              link: 'pos-dashboard/table/menu-price',
+              permission:'Billing:Menu:Price',
+            },
             {
               title: 'Item',
               img:'../../../assets/images/dish.png',
@@ -194,13 +206,6 @@ export const navcomponents=[
             },
           ],
         },
-        {
-          title: 'Notification',
-          img:'../../../assets/images/report.png',
-          link: 'pos-dashboard/table/kitchen-order',
-          permission:'Billing:Notification',
-          show: false,
-        }
       ],    
     },
     {

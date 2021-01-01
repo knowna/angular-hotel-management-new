@@ -14,7 +14,7 @@
         <!-- <div class="col-md-6">
             <button class="btn btn-danger no-print" id="CloseButton" (click)="close()">Close</button>
         </div> -->
-        <div class="row">
+        <div class="row d-print-none">
             <div class="col-sm-12">
                 <table id="InvoiceTable" class='table table-striped' *ngIf='parsedOrders && parsedOrders.length'>
                     <thead>
@@ -95,4 +95,71 @@
 </div>
 <iframe id='iframePrint' frameborder="0" name='fancyiframe' style="visibility: hidden;height:0px;width:0px;"></iframe>
 
+
+<div class="col-12 d-none d-print-block">
+    <div class="row">
+        <div class="col-12 text-center font-weight-bold">
+            {{ company?.NameEnglish }}
+        </div>
+        <div class="col-12 text-center font-weight-bold">
+            {{ company?.Address }} {{ company?.Street }} {{ company?.City }} {{ company?.District }}
+        </div>
+        <div class="col-12 text-center font-weight-bold">
+            {{ company?.Email }} {{ company?.Phone }}
+        </div>
+        <div class="col-12 text-center font-weight-bold">
+            PAN/VAT : {{ company?.Pan_Vat }}
+        </div>
+        <div class="col-12 text-center font-weight-bold">
+            Bill No: {{ ticket ? '#' + ticket?.TicketId : '' }}
+        </div>
+        <div class="col-12 text-center font-weight-bold">
+            Date : {{ticket.TicketOpeningTime | date :'yyyy-MM-dd hh:mm' }}
+        </div>
+    </div>
+    <table class="table table-bordered table-sm">
+        <thead>
+            <tr>
+                <th>S.N. </th>
+                <th>Details</th>
+                <th>Qty</th>
+                <th>Unit(Rs.)</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of OrderItems; let i = index ">
+                <td>
+                    {{i + 1}}
+                </td>
+                <td>
+                    <span>{{ getProductById(productList, item.ItemId)?.Name }}</span>
+                </td>
+                <td>
+                    <strong>{{ item.Qty }}</strong>
+                </td>
+                <td>
+                    {{ CurrentUnitPrice(item.UnitPrice) }}
+                </td>
+                <td>
+                    {{ ProductPrice(item.UnitPrice, item.Qty) }}
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5" class="text-right">Total : {{ calculateSum().toFixed(2) }}</td>
+            </tr>
+            <tr>
+                <td colspan="5" class="text-right">Discount : {{ calculateDiscount()}}</td>
+            </tr>
+            <tr>
+                <td colspan="5" class="text-right">VAT % : {{ calculateVat() }}</td>
+            </tr>
+            <tr>
+                <td colspan="5" class="text-right">Grand Total : {{ getGrandTotal() }}</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
 <!-- commented -->

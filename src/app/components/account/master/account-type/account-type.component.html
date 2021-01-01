@@ -79,8 +79,11 @@
                 (keyup)="searchItem()" 
                 [(ngModel)]="searchKeyword">
         </div>
-        <div class="col-md-2">
-            <button *ngIf='accountTypes && accountTypes.length' class="btn btn-primary pull-left" (click)="exportTableToExcel('GroupLedgerTable')">Export</button>
+        <div class="col-md-1">
+            <button *ngIf='accountTypes && accountTypes.length' class="btn btn-secondary pull-left" (click)="exportTableToPdf()" style="float: right;">Pdf</button>
+        </div>
+        <div class="col-md-1">
+            <button *ngIf='accountTypes && accountTypes.length' class="btn btn-primary pull-left" (click)="exportTableToExcel('GroupLedgerTable')">Excel</button>
         </div>
         <div class="col-md-2">
             <button class="btn btn-success" (click)="addAccType()" style="float: right">
@@ -98,6 +101,12 @@
             </div>
             <table id="GroupLedgerTable" class='table table-bordered' *ngIf='accountTypes && accountTypes.length'>
                 <thead>
+                    <tr>
+                        <th colspan="4" class="text-center">
+                            <strong>{{ company?.NameEnglish }}</strong>
+                        </th>
+                    </tr>
+
                     <tr>
                         <th>Group Name</th>
                         <th>UnderGroup Ledger</th>
