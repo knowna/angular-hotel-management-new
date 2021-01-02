@@ -68,8 +68,10 @@ export class PeriodicConsumptionComponent implements OnInit {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.company = JSON.parse(localStorage.getItem('company'));
-        this.fromDate = new Date(this.currentYear['StartDate']);
-        this.toDate = new Date(this.currentYear['EndDate']);
+        // this.fromDate = new Date(this.currentYear['StartDate']);
+        // this.toDate = new Date(this.currentYear['EndDate']);
+        this.fromDate = this.currentYear['NepaliStartDate'];
+        this.toDate = this.currentYear['NepaliEndDate'];
     }
 
     ngOnInit(): void {
@@ -486,12 +488,43 @@ export class PeriodicConsumptionComponent implements OnInit {
         return true;
     }
 
+    nepaliDateStringValidator(control: string) {
+        let pattern = new RegExp(/(^[0-9]{4})\.([0-9]{2})\.([0-9]{2})/g);
+        let isValid = pattern.test(control);
+        if (!isValid) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
     /**
    *  Get the list of filtered journals by the form and to date
    */
-    filterJournalByDate() {
+    filterJournalByDate(sfromdate: string, stodate: string) {
         this.indLoading = true;
-        this._pConsumeservice.get(Global.BASE_PERIODICCONSUMPTION_ENDPOINT + '?fromDate=' + this.date.transform(this.fromDate, 'dd-MM-yyyy') + '&toDate=' + this.date.transform(this.toDate, 'dd-MM-yyyy') + '&TransactionTypeId=' + 5)
+        if (sfromdate == "undefined" || sfromdate == null) {
+            alert("Enter Start Date");
+            return false;
+        }
+        if (stodate == "undefined" || stodate == null) {
+            alert("Enter End Date");
+            return false;
+        }
+        if (this.nepaliDateStringValidator(stodate) === false) {
+            alert("Enter Valid End Date");
+            return false;
+        }
+        if (this.nepaliDateStringValidator(sfromdate) === false) {
+            alert("Enter Valid Start Date");
+            return false;
+        }
+
+        this.fromDate = sfromdate;
+        this.toDate = stodate;
+
+        this._pConsumeservice.get(Global.BASE_PERIODICCONSUMPTION_ENDPOINT + '?fromDate=' + this.fromDate + '&toDate=' + this.toDate + '&TransactionTypeId=' + 5)
             .subscribe(pConsumes => {
                 this.indLoading = false;
                 return this.pConsumes = pConsumes;

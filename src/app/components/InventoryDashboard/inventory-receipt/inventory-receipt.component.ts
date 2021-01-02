@@ -52,6 +52,7 @@ export class InventoryReceiptComponent implements OnInit {
         format: 'dd/MM/yyyy',
         defaultOpen: false,
     };
+    public vdate: string;
 
     toExportFileName: string = 'Inventory Receipt-' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
     toPdfFileName: string = 'Inventory Receipt-' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
@@ -63,8 +64,10 @@ export class InventoryReceiptComponent implements OnInit {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.company = JSON.parse(localStorage.getItem('company'));
-        this.fromDate = new Date(this.currentYear['StartDate']);
-        this.toDate = new Date(this.currentYear['EndDate']);
+        // this.fromDate = new Date(this.currentYear['StartDate']);
+        // this.toDate = new Date(this.currentYear['EndDate']);
+        this.fromDate = this.currentYear['NepaliStartDate'];
+        this.toDate = this.currentYear['NepaliEndDate'];
         this._inventoryReceiptService.getAccounts().subscribe(data => { this.account = data });
         this._inventoryReceiptService.getInventoryItems().subscribe(data => { this.inventoryReceiptItem = data });   
     }
@@ -296,7 +299,7 @@ export class InventoryReceiptComponent implements OnInit {
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class: 'modal-lg',
+            class: 'modal-xl',
         });
     }
 
@@ -311,7 +314,8 @@ export class InventoryReceiptComponent implements OnInit {
             this.InventReceiptFrm.controls['Id'].setValue(inventoryReceipts.Id);
             this.InventReceiptFrm.controls['AccountTypeId'].setValue(inventoryReceipts.AccountTypeId);
             this.InventReceiptFrm.controls['ReceiptNumber'].setValue(inventoryReceipts.ReceiptNumber);
-            this.InventReceiptFrm.controls['Date'].setValue(new Date(inventoryReceipts.Date));
+            // this.InventReceiptFrm.controls['Date'].setValue(new Date(inventoryReceipts.Date));
+            this.InventReceiptFrm.controls['Date'].setValue(inventoryReceipts.Date);
 
             this.InventReceiptFrm.controls['InventoryReceiptDetails'] = this.fb.array([]);
             const control = <FormArray>this.InventReceiptFrm.controls['InventoryReceiptDetails'];
@@ -325,15 +329,17 @@ export class InventoryReceiptComponent implements OnInit {
                 instance.controls['Rate'].setValue(valuesFromServer.Rate);
                 instance.controls['TotalAmount'].setValue(valuesFromServer.TotalAmount);
                 instance.controls['BatchNo'].setValue(valuesFromServer.BatchNo);
-                instance.controls['Mdate'].setValue(new Date(valuesFromServer.Mdate));
-                instance.controls['Edate'].setValue(new Date(valuesFromServer.Edate));
+                // instance.controls['Mdate'].setValue(new Date(valuesFromServer.Mdate));
+                // instance.controls['Edate'].setValue(new Date(valuesFromServer.Edate));
+                instance.controls['Mdate'].setValue(valuesFromServer.Mdate);
+                instance.controls['Edate'].setValue(valuesFromServer.Edate);
                 control.push(instance);
             }
 
             this.modalRef = this.modalService.show(this.TemplateRef, {
                 backdrop: 'static',
                 keyboard: false,
-                class: 'modal-lg'
+                class: 'modal-xl'
             });
         },
             error => this.msg = <any>error);
@@ -352,7 +358,8 @@ export class InventoryReceiptComponent implements OnInit {
             this.InventReceiptFrm.controls['Id'].setValue(inventoryReceipts.Id);
             this.InventReceiptFrm.controls['AccountTypeId'].setValue(inventoryReceipts.AccountTypeId);
             this.InventReceiptFrm.controls['ReceiptNumber'].setValue(inventoryReceipts.ReceiptNumber);
-            this.InventReceiptFrm.controls['Date'].setValue(new Date(inventoryReceipts.Date));
+            // this.InventReceiptFrm.controls['Date'].setValue(new Date(inventoryReceipts.Date));
+            this.InventReceiptFrm.controls['Date'].setValue(inventoryReceipts.Date);
 
             this.InventReceiptFrm.controls['InventoryReceiptDetails'] = this.fb.array([]);
             const control = <FormArray>this.InventReceiptFrm.controls['InventoryReceiptDetails'];
@@ -366,15 +373,17 @@ export class InventoryReceiptComponent implements OnInit {
                 instance.controls['Rate'].setValue(valuesFromServer.Rate);
                 instance.controls['TotalAmount'].setValue(valuesFromServer.TotalAmount);
                 instance.controls['BatchNo'].setValue(valuesFromServer.BatchNo);
-                instance.controls['Mdate'].setValue(new Date(valuesFromServer.Mdate));
-                instance.controls['Edate'].setValue(new Date(valuesFromServer.Edate));
+                // instance.controls['Mdate'].setValue(new Date(valuesFromServer.Mdate));
+                // instance.controls['Edate'].setValue(new Date(valuesFromServer.Edate));
+                instance.controls['Mdate'].setValue(valuesFromServer.Mdate);
+                instance.controls['Edate'].setValue(valuesFromServer.Edate);
                 control.push(instance);
             }
 
             this.modalRef = this.modalService.show(this.TemplateRef, {
                 backdrop: 'static',
                 keyboard: false,
-                class: 'modal-lg'
+                class: 'modal-xl'
             });
         },
             error => this.msg = <any>error);
@@ -400,10 +409,10 @@ export class InventoryReceiptComponent implements OnInit {
         this.msg = "";
         this.formSubmitAttempt = true;
         let inventRec = this.InventReceiptFrm;
-        let InventoryDate = new Date(inventRec.get('Date').value);
-        inventRec.get('Date').setValue(InventoryDate);
+        // let InventoryDate = new Date(inventRec.get('Date').value);
+        // inventRec.get('Date').setValue(InventoryDate);
 
-        if (!this.voucherDateValidator(inventRec.get('Date'))) {
+        if (!this.voucherDateValidator(inventRec.get('Date').value)) {
             return false;
         }
 
@@ -500,17 +509,51 @@ export class InventoryReceiptComponent implements OnInit {
         isEnable ? this.InventReceiptFrm.enable() : this.InventReceiptFrm.disable();
     }
 
+    nepaliDateStringValidator(control: string) {
+        let pattern = new RegExp(/(^[0-9]{4})\.([0-9]{2})\.([0-9]{2})/g);
+        let isValid = pattern.test(control);
+        if (!isValid) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
     /**
     *  Get the list of filtered journals by the form and to date
     */
-    filterJournalByDate() {
+    filterJournalByDate(sfromdate: string, stodate: string) {
         this.indLoading = true;
-        this._inventoryReceiptService.get(Global.BASE_INVENTORYRECEIPT_ENDPOINT + '?fromDate=' + this.date.transform(this.fromDate, 'dd-MM-yyyy') + '&toDate=' + this.date.transform(this.toDate, 'dd-MM-yyyy') + '&TransactionTypeId=' + 5)
+        if (sfromdate == "undefined" || sfromdate == null) {
+            alert("Enter Start Date");
+            return false;
+        }
+        if (stodate == "undefined" || stodate == null) {
+            alert("Enter End Date");
+            return false;
+        }
+        if (this.nepaliDateStringValidator(stodate) === false) {
+            alert("Enter Valid End Date");
+            return false;
+        }
+        if (this.nepaliDateStringValidator(sfromdate) === false) {
+            alert("Enter Valid Start Date");
+            return false;
+        }
+
+        this.fromDate = sfromdate;
+        this.toDate = stodate;
+
+        this._inventoryReceiptService.get(Global.BASE_INVENTORYRECEIPT_ENDPOINT + '?fromDate=' + this.fromDate + '&toDate=' + this.toDate + '&TransactionTypeId=' + 5)
             .subscribe(inventoryReceipt => {
                 this.indLoading = false;
                 return this.inventoryReceipt = inventoryReceipt;
             },
-            error => this.msg = <any>error);
+            error => {
+                this.indLoading = false;
+                this.msg = <any>error
+            });
     }
 
     onFilterDateSelect(selectedDate) {
@@ -536,23 +579,71 @@ export class InventoryReceiptComponent implements OnInit {
         this.InventReceiptFrm.controls['InventoryReceiptDetails'] = this.fb.array([]);
     }
 
-    voucherDateValidator(control: any) {
-        let today = new Date;
-        if (!control.value) {
-            alert("Please select the Inventory Date");
+    // voucherDateValidator(control: any) {
+    //     let today = new Date;
+    //     if (!control.value) {
+    //         alert("Please select the Inventory Date");
+    //         return false;
+    //     }
+
+    //     let InventoryDate = new Date(control.value);
+    //     let currentYearStartDate = new Date(this.currentYear.StartDate);
+    //     let currentYearEndDate = new Date(this.currentYear.EndDate);
+
+    //     if ((InventoryDate < currentYearStartDate) || (InventoryDate > currentYearEndDate) || (InventoryDate > today))
+    //    {
+    //         alert("Date should be within current financial year's start date and end date inclusive, Error Occured!");
+    //         return false;
+    //     }
+
+    //     return true;
+    // }
+    voucherDateValidator(currentdate: string) {
+        console.log('the current date is', currentdate);
+    
+        if (currentdate == "") {
+            alert("Please enter the voucher date");
             return false;
         }
-
-        let InventoryDate = new Date(control.value);
+        let today = new Date;
+        this._inventoryReceiptService.get(Global.BASE_NEPALIMONTH_ENDPOINT + '?NDate=' + currentdate)
+          .subscribe(SB => {
+            this.vdate = SB;
+            console.log('data is', SB)
+          },
+          error => this.msg = <any>error);
+    
+        if (this.vdate === "undefined") {
+          alert("Please enter the voucher valid date");
+          return false;
+        }
+    
+        console.log('the database date is', this.vdate , currentdate)
+        let voucherDate = new Date(this.vdate);
+    
+        let tomorrow = new Date(today.setDate(today.getDate() + 1));
+    
         let currentYearStartDate = new Date(this.currentYear.StartDate);
         let currentYearEndDate = new Date(this.currentYear.EndDate);
-
-        if ((InventoryDate < currentYearStartDate) || (InventoryDate > currentYearEndDate) || (InventoryDate > today))
-       {
-            alert("Date should be within current financial year's start date and end date inclusive, Error Occured!");
-            return false;
+    
+        // console.log('the current date is', currentdate);
+        console.log('the voucher date', voucherDate)
+        console.log('the tomorrow date is', tomorrow);
+        console.log('the current year start date', currentYearStartDate);
+        console.log('the end year dateis', currentYearEndDate);
+    
+        // let voucherDateConverted = this. datepipe. transform(voucherDate, 'yyyy-MM-dd');
+        // let currentYearStartDateConverted = this. datepipe. transform(currentYearStartDate, 'yyyy-MM-dd');
+        // let currentYearEndDateConverted = this. datepipe. transform(currentYearEndDate, 'yyyy-MM-dd');
+        // let tomorrowConverted = this. datepipe. transform(tomorrow, 'yyyy-MM-dd');
+    
+        if ((voucherDate < currentYearStartDate) || (voucherDate > currentYearEndDate) || voucherDate >= tomorrow) {
+          alert("Date should be within current financial year's start date and end date inclusive");
+          return false;
         }
-
-        return true;
-    }
+        else {
+            return true;
+        }
+        
+      }
 }
