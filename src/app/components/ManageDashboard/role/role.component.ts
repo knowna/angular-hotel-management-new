@@ -34,6 +34,17 @@ export class RoleComponent implements OnInit {
     searchKeyword='';
     showChildrenIfExist= false;
 
+    permissionList: any[] = [
+        "POS:Order:SplitOrder",
+        "POS:Order:PartialMerge",
+        "POS:Order:FullMerge",
+        "POS:Report",
+        "Account:Transaction:Purchase",
+        "Inventory:Transaction:Consumption",
+        "Inventory:Transaction:Receipt",
+        "Inventory:Transaction:StockDamage"
+    ];
+
     constructor(private fb: FormBuilder,
         @Inject("NAVCOMPONENTS") public  items:any[],
          private _roleService: RoleService, private date: DatePipe, private modalService: BsModalService) { }
@@ -285,7 +296,17 @@ export class RoleComponent implements OnInit {
     }
 
     changePermission(permission) {
-        console.log('the checked event is', permission)
+        if(this.permissionList.includes(permission)) {
+            const idx = this.permissionList.indexOf(permission);
+            this.permissionList.splice(idx,1);
+        }else{
+            this.permissionList.push(permission);
+        }
+        console.log('the permission list is', this.permissionList)
+    }
+
+    hasPermission(permission) {
+        return this.permissionList.includes(permission);
     }
 
 }
