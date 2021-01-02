@@ -1,5 +1,5 @@
 ﻿<!-- <reservationdashboard-app></reservationdashboard-app> -->
-<div class='panel panel-primary'>
+<!-- <div class='panel panel-primary'>
     <div class='panel-heading'>
         PAYMENT TYPES
     </div>
@@ -36,7 +36,71 @@
             </div>
         </div>
     </div>
+</div> -->
+
+
+
+
+<div class="container" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Payment Types</h2>
+        </div>
+        <div class="col-md-4">
+            <input 
+                type="text" 
+                class="form-control" 
+                placeholder="Search by User Name" 
+                (keyup)="searchItem()" 
+                [(ngModel)]="searchKeyword" >
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-success" (click)="openModal(template)" style="float: right">
+                <strong>
+                    <i class="fa fa-plus"></i>
+                    Add
+                </strong>
+            </button>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="isLoading"><img src="../../../../assets/images/loading.gif" width="32" height="32" /> Loading...</div>
+            <table class='table table-bordered'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let customerType of paymentTypes">
+                        <td>{{customerType.Name}}</td>
+                        <td>
+
+                            <button class="btn btn-primary btn-sm" (click)="editDepartment(customerType.Id,template)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm ml-2" (click)="deleteDepartment(customerType.Id,template)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- <div *ngIf='menus && menus.length==0' class="alert alert-info" role="alert">No record found!</div> -->
+        </div>
+    </div>
+
+
+    
 </div>
+
+
+
+
+
 <ng-template #template>
     <form class="panel-primary" novalidate (ngSubmit)="onSubmit(paymentTypeForm)" [formGroup]="paymentTypeForm">
         <div class="modal-header panel-heading">

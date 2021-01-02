@@ -1,5 +1,5 @@
 ﻿import { DatePipe } from '@angular/common';
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
@@ -32,10 +32,33 @@ export class RoleComponent implements OnInit {
     formattedDate: any;
 
     searchKeyword='';
+    showChildrenIfExist= false;
 
-    constructor(private fb: FormBuilder, private _roleService: RoleService, private date: DatePipe, private modalService: BsModalService) { }
+    constructor(private fb: FormBuilder,
+        @Inject("NAVCOMPONENTS") public  items:any[],
+         private _roleService: RoleService, private date: DatePipe, private modalService: BsModalService) { }
 
     ngOnInit(): void {
+       
+
+
+
+        this.items.forEach(item => {
+            item.show = false;
+            if(item.children != null) {
+                 item.children.forEach(child => {
+                    child.show = false;
+ 
+                     if(child.children != null) {
+                        child.children?.forEach(c => {
+                            c.show = false;
+                        });
+                     }
+                 });
+            }
+        })
+
+        
         this.RoleFrm = this.fb.group({
             Id: [''],
             // RoleName: [''],

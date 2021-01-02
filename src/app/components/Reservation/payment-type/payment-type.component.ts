@@ -24,6 +24,7 @@ export class PaymentTypeComponent implements OnInit {
     modalTitle: string;
     modalBtnTitle: string;
     modalRef: BsModalRef;
+    searchKeyword ='';
     private formSubmitAttempt: boolean;
     
     constructor(private fb: FormBuilder, private _paymentTypeService: PaymentTypeService, private modalService: BsModalService) { }
@@ -162,4 +163,6 @@ export class PaymentTypeComponent implements OnInit {
     SetControlsState(isEnable: boolean) {
         isEnable ? this.paymentTypeForm.enable() : this.paymentTypeForm.disable();
     }
+
+    searchItem(){}
 }
