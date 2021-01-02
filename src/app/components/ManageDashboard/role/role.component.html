@@ -108,7 +108,7 @@
 
 <ng-template #template>
     <form class="panel-primary" novalidate (ngSubmit)="onSubmit(RoleFrm)" [formGroup]="RoleFrm">
-        <div class="modal-header panel-heading">
+        <div class="modal-header" style="background-color: #364a70;">
             <h4 class="modal-title pull-left">{{modalTitle}}</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
                 <span aria-hidden="true">&times;</span>
@@ -152,8 +152,49 @@
 
 
             <label class="control-label">Permission</label>
-            <div class="row">
-                <div class="col-md-3">
+
+            <div *ngFor="let item of items;index as i" class="row m-0">
+                <div class="col-md-12">
+
+                    <div class="ml-2 mt-3">
+                        <h5><b>{{ item?.title}}</b> </h5>
+                    </div>
+
+                    <div class="col-md-12 mt-4" *ngFor="let child of item.children;index as j">
+                        <div class="form-check">
+                            <input 
+                                class="form-check-input"
+                                *ngIf="!child.children" 
+                                (change)="changePermission(child.permission)"
+                                [checked]="hasPermission(child.permission)"
+                                [id]="'first'+i+j"
+                                type="checkbox">
+                            <label class="form-check-label" [for]="'first'+i+j">
+                                <b>{{ child?.title}} </b>
+                            </label>
+
+                        </div>
+
+                        <div class="row m-0">
+                            <div *ngFor="let chil of child.children;index as k" class="col-md-3">
+                                <div class="form-check ml-2">
+                                    <input 
+                                        class="form-check-input" 
+                                        type="checkbox" 
+                                        [id]="'second'+i+j+k"
+                                        (change)="changePermission(chil.permission)"
+                                        [checked]="hasPermission(chil.permission)">
+                                    <label class="form-check-label" [for]="'second'+i+j+k">
+                                        {{chil?.title}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <hr>            
+                </div>
+                <!-- <div class="col-md-3">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox"  name="Add" id="Add" ng-model="RoleFrm.IsAdd" formControlName="IsAdd">
                         <label class="form-check-label" for="Add">
@@ -161,6 +202,7 @@
                         </label>
                     </div>
                 </div>
+
                 <div class="col-md-3">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox"  name="Edit" id="Edit" ng-model="RoleFrm.IsEdit" formControlName="IsEdit">
@@ -177,14 +219,14 @@
                         </label>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-check">
+                <div class="col-md-3"> -->
+                    <!-- <div clas="form-check">
                         <input class="form-check-input" type="checkbox"  name="View" id="View" ng-model="RoleFrm.IsView" formControlName="IsView">
                         <label class="form-check-label" for="View">
                             View
                         </label>
-                    </div>
-                </div>
+                    </div> -->
+                <!-- </div> -->
                 <!-- <div class="col-md-8">
                     <div class="form-group col-md-2">
                         <label class="control-label">Add</label>
@@ -208,6 +250,7 @@
                 </div> -->
             </div>
         </div>
+
         <div class="modal-footer">
             <div>
                 <button type="button" class="btn btn-danger pull-right ml-2" [disabled]="buttonDisabled" (click)="modalRef.hide();">Cancel</button>

@@ -44,7 +44,8 @@
         <div class="col-md-4">
             <label>M.Date</label>
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" formControlName="Mdate" />
+                <!-- <input type="text" class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" formControlName="Mdate" /> -->
+                <input type="text" class="form-control" placeholder="yyyy.mm.dd" formControlName="Mdate" />
                 <div class="text-danger" *ngIf="(InventoryReceiptDetails.get('Mdate').hasError('InvalidDate') || InventoryReceiptDetails.get('Mdate').hasError('required'))">
                     {{ InventoryReceiptDetails.get('Mdate').getError('InvalidDate') }}
                 </div>
@@ -53,7 +54,8 @@
         <div class="col-md-4">
             <label>E.Date</label>
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" formControlName="Edate" />
+                <!-- <input type="text" class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" formControlName="Edate" /> -->
+                <input type="text" class="form-control" placeholder="yyyy.mm.dd" formControlName="Edate" />
                 <div class="text-danger" *ngIf="(InventoryReceiptDetails.get('Edate').hasError('InvalidDate') || InventoryReceiptDetails.get('Edate').hasError('required'))">
                     {{ InventoryReceiptDetails.get('Edate').getError('InvalidDate') }}
                 </div>

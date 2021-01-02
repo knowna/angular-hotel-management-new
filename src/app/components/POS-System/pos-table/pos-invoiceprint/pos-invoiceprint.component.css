@@ -85,8 +85,10 @@ img {
       font-size: 24pt !important;
       color: black;
       margin-top: 0;
-      margin-left: 0.01in;
-      margin-right: 0.01in;
+      /* margin-left: 0.01in;
+      margin-right: 0.01in; */
+      margin-left: 0;
+      margin-right: 0;
       width: 76mm;
     }
 }

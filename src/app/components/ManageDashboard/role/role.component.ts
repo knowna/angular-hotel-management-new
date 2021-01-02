@@ -1,5 +1,5 @@
 ﻿import { DatePipe } from '@angular/common';
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
@@ -32,10 +32,44 @@ export class RoleComponent implements OnInit {
     formattedDate: any;
 
     searchKeyword='';
+    showChildrenIfExist= false;
 
-    constructor(private fb: FormBuilder, private _roleService: RoleService, private date: DatePipe, private modalService: BsModalService) { }
+    permissionList: any[] = [
+        "POS:Order:SplitOrder",
+        "POS:Order:PartialMerge",
+        "POS:Order:FullMerge",
+        "POS:Report",
+        "Account:Transaction:Purchase",
+        "Inventory:Transaction:Consumption",
+        "Inventory:Transaction:Receipt",
+        "Inventory:Transaction:StockDamage"
+    ];
+
+    constructor(private fb: FormBuilder,
+        @Inject("NAVCOMPONENTS") public  items:any[],
+         private _roleService: RoleService, private date: DatePipe, private modalService: BsModalService) { }
 
     ngOnInit(): void {
+       
+
+
+
+        this.items.forEach(item => {
+            item.show = false;
+            if(item.children != null) {
+                 item.children.forEach(child => {
+                    child.show = false;
+ 
+                     if(child.children != null) {
+                        child.children?.forEach(c => {
+                            c.show = false;
+                        });
+                     }
+                 });
+            }
+        })
+
+        
         this.RoleFrm = this.fb.group({
             Id: [''],
             // RoleName: [''],
@@ -81,7 +115,7 @@ export class RoleComponent implements OnInit {
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class: 'modal-lg'
+            class: 'modal-xl'
         });
     }
 
@@ -103,7 +137,7 @@ export class RoleComponent implements OnInit {
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class: 'modal-lg'
+            class: 'modal-xl'
         });
 
     }
@@ -126,7 +160,7 @@ export class RoleComponent implements OnInit {
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
             keyboard: false,
-            class: 'modal-lg'
+            class: 'modal-xl'
         });
     }
 
@@ -259,6 +293,20 @@ export class RoleComponent implements OnInit {
             }
         );
         this.roles = filteredRoles;
+    }
+
+    changePermission(permission) {
+        if(this.permissionList.includes(permission)) {
+            const idx = this.permissionList.indexOf(permission);
+            this.permissionList.splice(idx,1);
+        }else{
+            this.permissionList.push(permission);
+        }
+        console.log('the permission list is', this.permissionList)
+    }
+
+    hasPermission(permission) {
+        return this.permissionList.includes(permission);
     }
 
 }
