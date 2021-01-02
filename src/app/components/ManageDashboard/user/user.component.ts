@@ -9,6 +9,7 @@ import { Global } from '../../../Shared/global'; import { AccountTransactionType
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { CheckPattern } from 'src/app/models/check-pattern.model';
+import { RoleService } from 'src/app/Service/role.service';
 
 @Component({
     templateUrl: './user.component.html'
@@ -22,6 +23,7 @@ export class UserComponent implements OnInit {
     tempUser: IUser[];
     users: IUser;
     msg: string;
+    userRole='';
     indLoading: boolean = false;
     userFrm: FormGroup;
     dbops: DBOperation;
@@ -31,13 +33,22 @@ export class UserComponent implements OnInit {
     public formSubmitAttempt: boolean;
     buttonDisabled: boolean;
     passwordNotMatch = false;
+    roles =[];
+
+    config = {
+        search:true,
+        displayKey:"Name",
+        searchOnKey: 'Name',
+        height: '300px'
+    }
 
 
     checkPattern : CheckPattern = new CheckPattern();
  
     searchKeyword='';
 
-    constructor(private fb: FormBuilder, private _userService: UsersService, private modalService: BsModalService) { }
+    constructor(private _roleService: RoleService,
+        private fb: FormBuilder, private _userService: UsersService, private modalService: BsModalService) { }
 
     ngOnInit(): void {
         this.userFrm = this.fb.group({
@@ -56,6 +67,7 @@ export class UserComponent implements OnInit {
         });
 
         this.LoadUsers();
+        this.LoadRoles();
     }
 
     get Email() {
@@ -65,6 +77,29 @@ export class UserComponent implements OnInit {
     get Password() {
     return this.userFrm.controls.Password;
     }
+
+     LoadRoles(): void {
+        this.indLoading = true;
+        this._roleService.get(Global.BASE_ROLES_ENDPOINT)
+            .subscribe(roles => { 
+                this.roles = roles; 
+                console.log('roles in users sefnsdgnsgnsgn',this.roles);
+                
+                this.indLoading = false; 
+            },
+            // error =>{
+            //     this.msg = error,
+            //     this.indLoading=false,
+            //     console.log("Error:"+error)    
+            // }
+             );
+    }
+
+    setRole(event){
+       this.userRole= event.value.Id;
+
+    }
+
 
     LoadUsers(): void {
         this.indLoading = true;
@@ -183,7 +218,7 @@ export class UserComponent implements OnInit {
         if (users.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
-                    console.log(formData.value);
+                    formData.value.RoleName= this.userRole;
                     
                     this._userService.post(Global.BASE_USERACCOUNT_CREATE_ENDPOINT, formData.value, ).subscribe(
                         data => {

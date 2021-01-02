@@ -196,13 +196,12 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label">Role Name</label>
-                        <input type="test" class="form-control" placeholder="Role Name" formControlName="RoleName">
-                        <div class="alert alert-danger mt-1" *ngIf="userFrm.get('RoleName').hasError('required') && formSubmitAttempt">
-                            Role name is required
-                        </div>
-                    </div>
+                    <ngx-select-dropdown
+                        (change)="setRole($event)"
+                        [multiple]="false"
+                        [config]="config"
+                        [options]="roles">
+                    </ngx-select-dropdown>
                 </div>
 
                 <div class="col-md-6">
