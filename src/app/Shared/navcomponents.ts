@@ -1,94 +1,94 @@
 export const navcomponents=[
-    {
-      title: 'Front Office',
-      img:'../../../assets/images/frontOffice.png',
-      permission:'Front Office',
-      children: [
-        {
-          title: 'Booking',
-          icon: 'fa fa-circle',
-          permission:'Front Office:Booking',
-          img:'../../../assets/images/bookingBooking.png',
-          children: [
-            {
-              title: 'Reservation',
-              link: 'reservation',
-              img:'../../../assets/images/bookingBooking.png',
-              permission:'Front Office:Booking:Booking',
-            },
-            {
-              title: 'Check-in',
-              link: 'reservation/checkin',
-              img:'../../../assets/images/check-in.png',
-              permission:'Front Office:Booking:Check-in',
-            },
-            {
-              title: 'Room Status',
-              link: 'reservation/reservationstatus',
-              img:'../../../assets/images/status.png',
-              permission:'Front Office:Booking:Room Status',
-            },
-            {
-              title: 'Check-Out',
-              link: 'reservation/checkout',
-              img:'../../../assets/images/check-out.png',
-              permission:'Front Office:Booking:Check-Out',
-            },
+    // {
+    //   title: 'Front Office',
+    //   img:'../../../assets/images/frontOffice.png',
+    //   permission:'Front Office',
+    //   children: [
+    //     {
+    //       title: 'Booking',
+    //       icon: 'fa fa-circle',
+    //       permission:'Front Office:Booking',
+    //       img:'../../../assets/images/bookingBooking.png',
+    //       children: [
+    //         {
+    //           title: 'Reservation',
+    //           link: 'reservation',
+    //           img:'../../../assets/images/bookingBooking.png',
+    //           permission:'Front Office:Booking:Booking',
+    //         },
+    //         {
+    //           title: 'Check-in',
+    //           link: 'reservation/checkin',
+    //           img:'../../../assets/images/check-in.png',
+    //           permission:'Front Office:Booking:Check-in',
+    //         },
+    //         {
+    //           title: 'Room Status',
+    //           link: 'reservation/reservationstatus',
+    //           img:'../../../assets/images/status.png',
+    //           permission:'Front Office:Booking:Room Status',
+    //         },
+    //         {
+    //           title: 'Check-Out',
+    //           link: 'reservation/checkout',
+    //           img:'../../../assets/images/check-out.png',
+    //           permission:'Front Office:Booking:Check-Out',
+    //         },
            
-            {
-              title: 'Inquiry',
-              link: 'reservation/reservationinquiry',
-              img:'../../../assets/images/inquiry.png',
-              permission:'Front Office:Booking:Inquiry',
-            },
-            {
-              title: 'Customer',
-              link: 'reservation/customer',
-              img:'../../../assets/images/customer-booking.png',
-              permission:'Front Office:Booking:Customer',
-            }
+    //         {
+    //           title: 'Inquiry',
+    //           link: 'reservation/reservationinquiry',
+    //           img:'../../../assets/images/inquiry.png',
+    //           permission:'Front Office:Booking:Inquiry',
+    //         },
+    //         {
+    //           title: 'Customer',
+    //           link: 'reservation/customer',
+    //           img:'../../../assets/images/customer-booking.png',
+    //           permission:'Front Office:Booking:Customer',
+    //         }
                      
-          ]
-        },
-        {
-          title: 'Master Setup',
-          permission:'Front Office:master',
-          icon: 'fa fa-book',
-          children: [
-            {
-              title: 'Payment Types',
-              link: 'reservation/payment',
-              permission:'Front Office:master:Payment',
-            },
-            {
-              title: 'Facility',
-              link: 'reservation/facility',
-              permission:'Front Office:master:facility',
-            },
-            {
-              title: 'Room Types',
-              link: 'reservation/roomtype',
-              permission:'Front Office:master:roomtype',
-            },
-            {
-              title: 'Customer Types',
-              permission:'Front Office:master:customertypes',
-              link: 'reservation/customertypes',
-            },
-            {
-              title: 'Reservation Type',
-              permission:'Front Office:master:reservationtype',
-              link: 'reservation/reservationtype',
-            },
-            {
-              title: 'Rooms Setup',
-              permission:'Front Office:master:room',
-              link: 'reservation/room',
-            },
-          ]
-        },
-      ],
-    }, 
+    //       ]
+    //     },
+    //     {
+    //       title: 'Master Setup',
+    //       permission:'Front Office:master',
+    //       icon: 'fa fa-book',
+    //       children: [
+    //         {
+    //           title: 'Payment Types',
+    //           link: 'reservation/payment',
+    //           permission:'Front Office:master:Payment',
+    //         },
+    //         {
+    //           title: 'Facility',
+    //           link: 'reservation/facility',
+    //           permission:'Front Office:master:facility',
+    //         },
+    //         {
+    //           title: 'Room Types',
+    //           link: 'reservation/roomtype',
+    //           permission:'Front Office:master:roomtype',
+    //         },
+    //         {
+    //           title: 'Customer Types',
+    //           permission:'Front Office:master:customertypes',
+    //           link: 'reservation/customertypes',
+    //         },
+    //         {
+    //           title: 'Reservation Type',
+    //           permission:'Front Office:master:reservationtype',
+    //           link: 'reservation/reservationtype',
+    //         },
+    //         {
+    //           title: 'Rooms Setup',
+    //           permission:'Front Office:master:room',
+    //           link: 'reservation/room',
+    //         },
+    //       ]
+    //     },
+    //   ],
+    // }, 
     // {
     //   title: 'POS',
     //   img:'../../../assets/images/pos1.svg',
@@ -101,13 +101,13 @@ export const navcomponents=[
       title: 'POS',
       img:'../../../assets/images/pos.png',
       icon: 'fa fa-shopping-cart-outline',
-      permission:'Billing',
+      permission:'POS',
       show: false,
       children: [
         {
           title: 'Order',
           img:'../../../assets/images/order.png',
-          permission:'Billing:Order',
+          permission:'POS:Order',
           home: true,
           show: false,
           children: [
@@ -115,25 +115,25 @@ export const navcomponents=[
               title: 'New Order',
               img:'../../../assets/images/dish.png',
               link: 'pos-dashboard/tables',
-              permission:'Billing:Menu:Item',
+              permission:'POS:Order:NewOrder',
             },
             {
               title: 'Full Merge',
               img:'../../../assets/images/category.png',
               link: 'full-merge',
-              permission:'Billing:Menu:Category',
+              permission:'POS:Order:FullMerge',
             },
             {
               title: 'Partial Merge',
               img:'../../../assets/images/consumption.png',
               link: 'partial-merge',
-              permission:'Billing:Menu:Consumption',
+              permission:'POS:Order:PartialMerge',
             },
             {
               title: 'Split Order',
               link: 'split-order',
               img:'../../../assets/images/menu.png',
-              permission:'Billing:Menu:Menu',
+              permission:'POS:Order:SplitOrder',
             },
             
           ],
@@ -142,75 +142,75 @@ export const navcomponents=[
           title: 'Notification',
           img:'../../../assets/images/report.png',
           link: 'pos-dashboard/table/kitchen-order',
-          permission:'Billing:Notification',
+          permission:'POS:Notification',
           show: false,
         },
         {
           title: 'Customer',
           img:'../../../assets/images/customer.png',
           link: 'pos-dashboard/customers',
-          permission:'Billing:Customer',
+          permission:'POS:Customer',
           show: false,
         },
         {
           title: 'Report',
           img:'../../../assets/images/report.png',
           link: 'pos-dashboard/table/posbilling',
-          permission:'Billing:Billing',
+          permission:'POS:Report',
           show: false,
         },
         {
           title: 'Menu Setup',
           img:'../../../assets/images/menu.png',
           icon: 'layout-outline',
-          permission:'Billing:Menu',
+          permission:'POS:MenuSetup',
           show: false,
           children: [
             {
               title: 'Menu Price',
               img:'../../../assets/images/dish.png',
               link: 'pos-dashboard/table/menu-price',
-              permission:'Billing:Menu:Price',
+              permission:'POS:MenuSetup:MenuPrice',
             },
             {
               title: 'Item',
               img:'../../../assets/images/dish.png',
               link: 'pos-dashboard/table/items',
-              permission:'Billing:Menu:Item',
+              permission:'POS:MenuSetup:Item',
             },
             {
               title: 'Category',
               img:'../../../assets/images/category.png',
               link: 'pos-dashboard/table/category',
-              permission:'Billing:Menu:Category',
+              permission:'POS:MenuSetup:Category',
             },
             {
               title: 'Consumption',
               img:'../../../assets/images/consumption.png',
 
               link: 'pos-dashboard/table/menuconsumption',
-              permission:'Billing:Menu:Consumption',
+              permission:'POS:MenuSetup:Consumption',
             },
             {
               title: 'Menu Configure',
               link: 'pos-dashboard/table/menu',
               img:'../../../assets/images/menu.png',
-              permission:'Billing:Menu:Menu',
+              permission:'POS:MenuSetup:MenuConfigure',
             },
             {
               title: 'Table/Room Setup',
               pathMatch: 'prefix',
               link: 'pos-dashboard/table/table',
               img:'../../../assets/images/table.png',
-              permission:'Billing:Menu:Table and Room Design',
+              permission:'POS:MenuSetup:TableRoomSetup',
             },
           ],
         },
       ],    
     },
     {
-      title: 'Accounts',
-      permission:'Account / Finance',
+      title: 'Account',
+      permission:'Account',
       group: true,
       img:'../../../assets/images/accounts.png',
       children: [
@@ -246,17 +246,17 @@ export const navcomponents=[
             },
             {
               title: 'Bank/Cash',
-              permission:'Account:Transaction:Bank',
+              permission:'Account:Transaction:BankCash',
               link: 'Account/contra',
             },
             {
               title: 'Credit Note',
-              permission:'Account:Transaction:Credit',
+              permission:'Account:Transaction:CreditNote',
               link: 'Account/credit-note',
             },  
             {
               title: 'Debit Note',
-              permission:'Account:Transaction:Debit',
+              permission:'Account:Transaction:DebitNote',
               link: 'Account/debit-note',
             },
           ],
@@ -270,7 +270,7 @@ export const navcomponents=[
             {
               title: 'Day Book',
               link: 'Account/journalVoucher',
-              permission:'Account:Report:Day'
+              permission:'Account:Report:DayBook'
             },
             {
               title: 'Ledger',
@@ -305,22 +305,22 @@ export const navcomponents=[
             {
               title: 'Sales Book',
               link: 'Account/SaleBook',
-              permission:'Account:Report:SaleBook'
+              permission:'Account:Report:SalesBook'
             },
             {
               title: 'Sales Item Wise',
               link: 'Account/SaleItemWise',
-              permission:'Account:Report:SaleItemWise'
+              permission:'Account:Report:SalesItemWise'
             },
             {
               title: 'Sales Date Wise',
               link: 'Account/SaleDateWise',
-              permission:'Account:Report:SaleDateWise'
+              permission:'Account:Report:SalesDateWise'
             },
             {
               title: 'Sales Customer Wise',
               link: 'Account/SaleCustomerWise',
-              permission:'Account:Report:SaleCustomerWise'
+              permission:'Account:Report:SalesCustomerWise'
             },
             {
               title: 'Purchase Book',
@@ -348,20 +348,20 @@ export const navcomponents=[
           children: [
             {
               title: 'Ledger',
-              permission:'Account:Master:legder',
+              permission:'Account:Master:Ledger',
               link: 'Account/ledger',
               img:'../../../assets/images/ledger.png',
             },
             {
               title: 'Group Ledger',
-              permission:'Account:Master:group',
+              permission:'Account:Master:GroupLedger',
               link: 'Account/accountType',
               img:'../../../assets/images/group-ledger.png',
             },
             {
               title: 'Transaction Type',
               link: 'Account/accounttransType',
-              permission:'Account:Master:legder:transactionType',
+              permission:'Account:Master:TransactionType',
               img:'../../../assets/images/transaction.png',
             },
           ],
@@ -394,7 +394,7 @@ export const navcomponents=[
             {
               title: 'Stock Damage',
               link: 'Inventory/stock-damage',
-              permission: 'Inventory:Transaction:Stock'
+              permission: 'Inventory:Transaction:StockDamage'
             },
           ],
         },
@@ -420,7 +420,7 @@ export const navcomponents=[
             {
               title: 'Unit Type',
               link: 'Inventory/unittype',
-              permission: 'Inventory:Master:Unit',
+              permission: 'Inventory:Master:UnitType',
               img:'../../../assets/images/unitType.png',
             },      
           ],
@@ -431,29 +431,29 @@ export const navcomponents=[
           permission:'Inventory:Report',
           children: [
             {
-              title: 'Stockin-hand',
+              title: 'Stock In Hand',
               link: 'Inventory/stockinhand',
-              permission: 'Inventory:Report:Stock'
+              permission: 'Inventory:Report:StockInHand'
             },
           ],
         },
         {
           title: 'Warehouses',
           icon: 'browser-outline',
-          permission:'Inventory:Warehouse',
+          permission:'Inventory:Warehouses',
           img:'../../../assets/images/warehouses.png',
           children: [
             {
               title: 'Warehouse',
               link: 'Inventory/WareHouse',
-              permission: 'Inventory:Warehouse:Warehouse',
+              permission: 'Inventory:Warehouses:Warehouse',
               img:'../../../assets/images/warehouse.png',
             },
             {
               title: 'Warehouse Type',
               link: 'Inventory/WareHouseType',
               img:'../../../assets/images/warehouseType.png',
-              permission: 'Inventory:Warehouse:WareHouseType'
+              permission: 'Inventory:Warehouses:WareHouseType'
             },
           ],
         },
@@ -461,12 +461,12 @@ export const navcomponents=[
       ]
     }, 
     
-    {
-      title: 'User Management',
-      group: true,
-      permission:'User Management',
+    // {
+    //   title: 'User Management',
+    //   group: true,
+    //   permission:'User Management',
       
-    }, 
+    // }, 
 
     {
       title: 'Manage',
@@ -477,7 +477,7 @@ export const navcomponents=[
         {
           title: 'User',
           icon: 'lock-outline',
-          permission:'Manage:user',
+          permission:'Manage:User',
           img:'../../../assets/images/user.png',
           children: [
             // {
@@ -488,25 +488,25 @@ export const navcomponents=[
             {
               title: 'Users',
               link: '/user',
-              permission:'Manage:user:users',
+              permission:'Manage:User:Users',
               img:'../../../assets/images/group.png',
             },
             {
               title: 'Roles',
               link: '/managedashboard/role',
-              permission: 'Manage:user:roles',
+              permission: 'Manage:User:Roles',
               img:'../../../assets/images/roles.png',
             },
             {
               title: 'Role Module',
               link: '/managedashboard/rolemodule',
-              permission:'Manage:user:role module',
+              permission:'Manage:User:RoleModule',
               img:'../../../assets/images/roleModule.png',
             },
             {
               title: 'User Roles',
               link: '/managedashboard/userRole',
-              permission:'Manage:user:user roles',
+              permission:'Manage:User:UserRoles',
               img:'../../../assets/images/userRole.png',
             },
           ],
@@ -514,31 +514,31 @@ export const navcomponents=[
         {
           title: 'Management',
           icon: 'home-outline',
-          permission:'Manage',
+          permission:'Manage:Management',
           img:'../../../assets/images/management.png',
           children: [
             {
               title: 'Department',
               link: '/managedashboard/department',
-              permission: 'Manage:management:department',
+              permission: 'Manage:Management:Department',
               img:'../../../assets/images/department.png',
             },
             {
               title: 'Table/Room Type',
               link: '/managedashboard/table-room',
-              permission: 'Manage:management:table-room-type',
+              permission: 'Manage:Management:TableRoomType',
               img:'../../../assets/images/manage-roomtype.png',
             },
             {
               title: 'Financial Year',
               link: '/managedashboard/financial',
-              permission:'Manage:management : financial year',
+              permission:'Manage:Management:FinancialYear',
               img:'../../../assets/images/financial-year.png',
             },
             {
               title: 'Company',
               link: '/managedashboard/company',
-              permission: 'Manage:management: company',
+              permission: 'Manage:Management:Company',
               img:'../../../assets/images/company.png',
             },
           ],

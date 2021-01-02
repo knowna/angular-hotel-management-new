@@ -152,50 +152,46 @@
 
 
             <label class="control-label">Permission</label>
-            <div *ngFor="let item of items;index as i" class="col-md-12">
-                
-                <div class="form-check ml-2 mt-3">
-                    <!-- <input class="form-check-input" type="checkbox" 
-                    [id]="i"
-                    (change)="item.show = !item.show"
-                    name="Add" id="Add" ng-model="RoleFrm.IsAdd" formControlName="IsAdd"> -->
-                    <!-- <label class="form-check-label" for="Add">
-                       {{ item?.title}}
-                    </label> -->
-                    <h5><b>{{ item?.title}}</b> </h5>
-                </div>
-                
 
-                <div class="col-md-12 mt-4" *ngFor="let child of item.children;index as j">
-                    <div>
-                        <div   class="form-check">
-                            <input class="form-check-input"
-                            *ngIf="!child.children" 
-                            (change)="child.show = !child.show"
-                            style="background-color: #364a70;"[id]='ij'
-                            type="checkbox"  name="Add" id="Add" ng-model="RoleFrm.IsAdd" formControlName="IsAdd">
-                            <!-- <label class="form-check-label" for="Add">
-                            </label> --><b>{{ child?.title}} </b>
+            <div *ngFor="let item of items;index as i" class="row m-0">
+                <div class="col-md-12">
 
-                        </div>
-
-                    </div> 
-               
-
-                    <div *ngFor="let chil of child.children" class="col-md-4">
-                        <div>
-                            <div class="form-check ml-2">
-                                <input class="form-check-input" type="checkbox"  name="Add" id="Add" ng-model="RoleFrm.IsAdd" formControlName="IsAdd">
-                                <label class="form-check-label" for="Add">
-                                    {{chil?.title}}
-                                </label>
-                            </div>
-
-                        </div>
+                    <div class="ml-2 mt-3">
+                        <h5><b>{{ item?.title}}</b> </h5>
                     </div>
-                </div>
-                    <hr>            
 
+                    <div class="col-md-12 mt-4" *ngFor="let child of item.children;index as j">
+                        <div class="form-check">
+                            <input 
+                                class="form-check-input"
+                                *ngIf="!child.children" 
+                                (change)="changePermission(child.permission)"
+                                [id]="'first'+i+j"
+                                type="checkbox">
+                            <label class="form-check-label" [for]="'first'+i+j">
+                                <b>{{ child?.title}} </b>
+                            </label>
+
+                        </div>
+
+                        <div class="row m-0">
+                            <div *ngFor="let chil of child.children;index as k" class="col-md-3">
+                                <div class="form-check ml-2">
+                                    <input 
+                                        class="form-check-input" 
+                                        type="checkbox" 
+                                        [id]="'second'+i+j+k"
+                                        (change)="changePermission(chil.permission)">
+                                    <label class="form-check-label" [for]="'second'+i+j+k">
+                                        {{chil?.title}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <hr>            
+                </div>
                 <!-- <div class="col-md-3">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox"  name="Add" id="Add" ng-model="RoleFrm.IsAdd" formControlName="IsAdd">
