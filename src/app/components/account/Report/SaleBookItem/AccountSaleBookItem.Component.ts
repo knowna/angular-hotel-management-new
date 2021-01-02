@@ -27,6 +27,10 @@ export class AccountSaleBookItem {
     modalRef: BsModalRef;
     selectedMonths: any = null;
 
+    public fromDate: any;
+    public toDate: any;
+
+
     toExportFileName: string = 'Sales Item Wise-' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
     toPdfFileName: string = 'Sales Item Wise-' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
     /**
@@ -36,18 +40,55 @@ export class AccountSaleBookItem {
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.company = JSON.parse(localStorage.getItem('company'));
-    }
-    public fromDate: any;
-    public toDate: any;
+        this.fromDate = this.currentYear['NepaliStartDate'];
+        this.toDate = this.currentYear['NepaliEndDate'];
 
-    SearchLedgerTransaction() {
+        this.SearchLedgerTransaction(this.fromDate, this.toDate);
+    }
+   
+
+    SearchLedgerTransaction(sfromdate: string, stodate: string) {
         this.isLoading = true;
-        this._journalvoucherService.get(Global.BASE_ACCOUNTSALEBOOK_ENDPOINT + '?fromDate=' + this.date.transform(this.fromDate, 'yyyy-MM-dd') + '&toDate=' + this.date.transform(this.toDate, 'yyyy-MM-dd') + '&Item=Item')
+        if (sfromdate == "undefined" || sfromdate == null) {
+            alert("Enter Start Date");
+            return false;
+        }
+        if (stodate == "undefined" || stodate == null) {
+            alert("Enter End Date");
+            return false;
+        }
+        if (this.nepaliDateStringValidator(stodate) === false) {
+            alert("Enter Valid End Date");
+            return false;
+        }
+        if (this.nepaliDateStringValidator(sfromdate) === false) {
+            alert("Enter Valid Start Date");
+            return false;
+        }
+
+        this.fromDate = sfromdate;
+        this.toDate = stodate;
+        console.log('the from date is', this.fromDate);
+        console.log('the to date is', this.toDate);
+
+        this._journalvoucherService.get(Global.BASE_ACCOUNTSALEBOOK_ENDPOINT + '?fromDate=' + this.fromDate + '&toDate=' + this.toDate + '&Item=Item')
             .subscribe(SB => {
                 this.SaleBooks = SB; this.isLoading = false;
             },
                 error => this.msg = <any>error);
     }
+
+    nepaliDateStringValidator(control: string) {
+        let pattern = new RegExp(/(^[0-9]{4})\.([0-9]{2})\.([0-9]{2})/g);
+        let isValid = pattern.test(control);
+        if (!isValid) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
 
 
     exportTableToPdf() {

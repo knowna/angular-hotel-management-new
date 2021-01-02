@@ -75,6 +75,7 @@ img {
         padding: 0 !important;
         overflow: hidden;
         position: absolute;
+        width: 76mm;
     }
 
     .printable{
@@ -86,6 +87,7 @@ img {
       margin-top: 0;
       margin-left: 0.01in;
       margin-right: 0.01in;
+      width: 76mm;
     }
 }
   .btn {
