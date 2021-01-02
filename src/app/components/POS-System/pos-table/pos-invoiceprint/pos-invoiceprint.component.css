@@ -60,10 +60,18 @@ img {
     .hidden-print,
     .hidden-print * {
         display: none !important;
+        height: 0;
+        width: 0;
+        margin: 0;
+        padding: 0;
     }
 
     .no-print{
         display: none !important;
+        height: 0;
+        width: 0;
+        margin: 0;
+        padding: 0;
     }
 
     @page :footer {color: #fff }
