@@ -461,12 +461,12 @@ export class PosTableComponent implements OnInit {
         }
         console.log(orderRequest);
 
-        // this.orderApi.voidOrderItem(orderRequest)
-        // .subscribe(
-        //     data=>{
-        //         console.log('void order response',data);
-        //     }
-        // )
+        this.orderApi.voidOrderItem(orderRequest)
+        .subscribe(
+            data=>{
+                console.log('void order response',data);
+            }
+        )
         
     
 
