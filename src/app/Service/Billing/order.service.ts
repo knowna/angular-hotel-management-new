@@ -108,6 +108,11 @@ export class OrderService {
            
     }
 
+    voidOrderItem(orderItemRequest: any) {
+        let newRequest = JSON.parse(JSON.stringify(orderItemRequest));
+        return this.http.post(Global.BASE_ORDERS_VOID_ITEM_ENDPOINT , newRequest)
+    }
+
 	/**
 	 * Adds product in the given order
 	 * @param payload 
