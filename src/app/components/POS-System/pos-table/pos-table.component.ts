@@ -422,6 +422,7 @@ export class PosTableComponent implements OnInit {
 
         OrderItem.Tags ='Void';
         OrderItem.FinancialYear = this.currentYear.Name;
+        OrderItem.IsVoid = true;
 
 
         // let ticketTotalWithoutVat = (OrderItem.UnitPrice*OrderItem.Qty);
