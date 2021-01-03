@@ -397,23 +397,58 @@ export class PosTableComponent implements OnInit {
 	 * @param OrderItem 
 	 */
     voidItem(OrderItem: OrderItem) {
-        let submittedIndex = OrderItem.Tags.indexOf('Submitted');
+        console.log(this.selectedTicket);
+        
+        console.log(OrderItem);
+        OrderItem.Tags ='Void';
 
-        if (submittedIndex !== -1 && OrderItem.IsVoid) {
-            OrderItem.IsVoid = false;
-            OrderItem.TotalAmount = OrderItem.Qty * OrderItem.UnitPrice / 1.13; //Add Function VAT Value Minues;
 
-            let requestObject: OrderItemRequest = this.prepareOrderItemRequest(OrderItem.OrderId, OrderItem);
-            this.orderStoreApi.unVoidOrderitem(requestObject);
+        let ticketTotalWithoutVat = (OrderItem.UnitPrice*OrderItem.Qty);
+
+        let vatAmount =(0.13*ticketTotalWithoutVat);
+        let grandTotal = vatAmount+ticketTotalWithoutVat;
+    
+        let orderRequest : OrderItemRequest={
+       
+            "TicketId":this.selectedTicket?this.selectedTicket:0,
+            "TableId":''+(this.selectedTable?this.selectedTable:0),
+            "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
+            "OrderId":0,
+            "TicketTotal":OrderItem.UnitPrice*OrderItem.Qty,
+            "Discount":this.selectedTicket.OrderItem.TotalAmount,
+            "ServiceCharge":0,
+            "VatAmount": vatAmount,
+            "GrandTotal":grandTotal,
+            "Balance":grandTotal,
+            "UserId":this.currentUser.UserName,
+            "FinancialYear":this.currentYear.Name,
+            "OrderItem":OrderItem
+    
+    
         }
+        console.log(orderRequest);
+        
+    
 
-        if (submittedIndex !== -1 && !OrderItem.IsVoid) {
-            OrderItem.IsVoid = true;
-            OrderItem.TotalAmount = 0;
 
-            let requestObject: OrderItemRequest = this.prepareOrderItemRequest(OrderItem.OrderId, OrderItem);
-            this.orderStoreApi.voidOrderitem(requestObject);
-        }
+
+        // let submittedIndex = OrderItem.Tags.indexOf('Submitted');
+
+        // if (submittedIndex !== -1 && OrderItem.IsVoid) {
+        //     OrderItem.IsVoid = false;
+        //     OrderItem.TotalAmount = OrderItem.Qty * OrderItem.UnitPrice / 1.13; //Add Function VAT Value Minues;
+
+        //     let requestObject: OrderItemRequest = this.prepareOrderItemRequest(OrderItem.OrderId, OrderItem);
+        //     this.orderStoreApi.unVoidOrderitem(requestObject);
+        // }
+
+        // if (submittedIndex !== -1 && !OrderItem.IsVoid) {
+        //     OrderItem.IsVoid = true;
+        //     OrderItem.TotalAmount = 0;
+
+        //     let requestObject: OrderItemRequest = this.prepareOrderItemRequest(OrderItem.OrderId, OrderItem);
+        //     this.orderStoreApi.voidOrderitem(requestObject);
+        // }
     }
 
 	/**
@@ -460,7 +495,7 @@ export class PosTableComponent implements OnInit {
         .subscribe(
             data=>{
                 
-                console.log(data);
+                console.log('increment',data);
                 
             }
         )

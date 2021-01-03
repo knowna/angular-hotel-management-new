@@ -48,7 +48,8 @@ export class UserComponent implements OnInit {
     searchKeyword='';
 
     constructor(private _roleService: RoleService,
-        private fb: FormBuilder, private _userService: UsersService, private modalService: BsModalService) { }
+        private fb: FormBuilder,
+         private _userService: UsersService, private modalService: BsModalService) { }
 
     ngOnInit(): void {
         this.userFrm = this.fb.group({
@@ -209,6 +210,8 @@ export class UserComponent implements OnInit {
     }
 
     onSubmit(formData:any) {
+        formData.value.RoleName= this.userRole;
+
         this.formSubmitAttempt = true;
         this.msg = "";
         let users = this.userFrm;
@@ -218,7 +221,6 @@ export class UserComponent implements OnInit {
         if (users.valid) {
             switch (this.dbops) {
                 case DBOperation.create:
-                    formData.value.RoleName= this.userRole;
                     
                     this._userService.post(Global.BASE_USERACCOUNT_CREATE_ENDPOINT, formData.value, ).subscribe(
                         data => {

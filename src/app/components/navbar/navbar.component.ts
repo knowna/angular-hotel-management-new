@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { AuthenticationService } from 'src/app/Service/authentication.service';
 
 import * as authReducer from '../../reducers/auth.reducer';
+import { UserComponent } from '../ManageDashboard/user/user.component';
 
 @Component({
   selector: 'app-navbar',
@@ -16,6 +18,7 @@ export class NavbarComponent implements OnInit {
   company: any;
 
   constructor(public authService:AuthenticationService,
+    private modal: NgbModal,
     public store:Store<{auth:authReducer.State}>
     ) { }
   public authenticated:boolean;
@@ -28,6 +31,13 @@ export class NavbarComponent implements OnInit {
     }
  logout(){
   this.authService.logout()
+ }
+
+
+ profile(){
+  const modal: NgbModalRef = this.modal.open(UserComponent, {size: 'lg', backdrop: 'static'});
+  // modal.componentInstance.mode = mode;
+  // modal.componentInstance.user = user;
  }
   }
 

@@ -181,6 +181,7 @@ export class RoleComponent implements OnInit {
     }
 
     onSubmit(formData: any) {
+        
         this.msg = "";
         let Role = this.RoleFrm;
         this.formSubmitAttempt = true;
@@ -200,12 +201,9 @@ export class RoleComponent implements OnInit {
                         // "IsSysAdmin":formData.value.IsSysAdmin,
                         // "IsView":formData.value.IsView
                     }
-                    console.log(formData.value.Name);
-                    console.log(roleData);
                     
                     this._roleService.post(Global.BASE_ROLES_ADD_ENDPOINT, roleData).subscribe(
                         data => {
-                            console.log('response',data);
                             if (data == 1) //Success
                             {
                                 // this.openModal2(this.TemplateRef2);
@@ -243,6 +241,8 @@ export class RoleComponent implements OnInit {
                     )
                     break;
                 case DBOperation.delete:
+                    console.log(formData.value.Id);
+                    
                     this._roleService.delete(Global.BASE_ROLES_DELETE_ENDPOINT, formData.value.Id).subscribe(
                         data => {
                             if (data == 1) //Success
