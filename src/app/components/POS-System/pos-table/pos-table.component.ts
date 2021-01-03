@@ -264,6 +264,7 @@ export class PosTableComponent implements OnInit {
         });
     }
 
+
     buildMenuForm() {
         //initialize our vouchers
         return this.fb.group({
@@ -397,23 +398,97 @@ export class PosTableComponent implements OnInit {
 	 * @param OrderItem 
 	 */
     voidItem(OrderItem: OrderItem) {
-        let submittedIndex = OrderItem.Tags.indexOf('Submitted');
+        console.log('the selected ticket is',this.ticket);
+        console.log('the list of orders are', this.ordersNew);
+        console.log('the selected item is',OrderItem);
 
-        if (submittedIndex !== -1 && OrderItem.IsVoid) {
-            OrderItem.IsVoid = false;
-            OrderItem.TotalAmount = OrderItem.Qty * OrderItem.UnitPrice / 1.13; //Add Function VAT Value Minues;
+        
+        let newDiscount = 0;
+        let prevTotal = 0;
+        let totalWithDiscount = 0;
+        let vatAfterDiscount = 0;
+        let totalWithVatAfterDiscount = 0;
+        this.ordersNew.forEach(order => {
+            order.OrderItems.forEach(item => {
+                prevTotal += item.TotalAmount;
+            });
+        });
 
-            let requestObject: OrderItemRequest = this.prepareOrderItemRequest(OrderItem.OrderId, OrderItem);
-            this.orderStoreApi.unVoidOrderitem(requestObject);
+        newDiscount = this.ticket.Discount + OrderItem.UnitPrice*OrderItem.Qty;
+        totalWithDiscount = prevTotal - newDiscount;
+        vatAfterDiscount = (0.13 * totalWithDiscount);
+        totalWithVatAfterDiscount = totalWithDiscount + vatAfterDiscount;
+
+
+        OrderItem.Tags ='Void';
+        OrderItem.FinancialYear = this.currentYear.Name;
+        OrderItem.IsVoid = true;
+
+
+        // let ticketTotalWithoutVat = (OrderItem.UnitPrice*OrderItem.Qty);
+        // let vatAmount =(0.13*ticketTotalWithoutVat);
+        // let grandTotal = vatAmount+ticketTotalWithoutVat;
+        // let orderRequest : OrderItemRequest={
+        //     "TicketId":this.selectedTicket?this.selectedTicket:0,
+        //     "TableId":''+(this.selectedTable?this.selectedTable:0),
+        //     "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
+        //     "OrderId":0,
+        //     "TicketTotal":OrderItem.UnitPrice*OrderItem.Qty,
+        //     "Discount":this.ticket.Discount + OrderItem.UnitPrice*OrderItem.Qty,
+        //     "ServiceCharge":0,
+        //     "VatAmount": vatAmount,
+        //     "GrandTotal":grandTotal,
+        //     "Balance":grandTotal,
+        //     "UserId":this.currentUser.UserName,
+        //     "FinancialYear":this.currentYear.Name,
+        //     "OrderItem":OrderItem
+        // }
+
+        let orderRequest : OrderItemRequest={
+            "TicketId":this.selectedTicket?this.selectedTicket:0,
+            "TableId":''+(this.selectedTable?this.selectedTable:0),
+            "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
+            "OrderId":0,
+            "TicketTotal":prevTotal,
+            "Discount":newDiscount,
+            "ServiceCharge":0,
+            "VatAmount": vatAfterDiscount,
+            "GrandTotal":totalWithVatAfterDiscount,
+            "Balance":totalWithVatAfterDiscount,
+            "UserId":this.currentUser.UserName,
+            "FinancialYear":this.currentYear.Name,
+            "OrderItem":OrderItem
         }
+        console.log(orderRequest);
 
-        if (submittedIndex !== -1 && !OrderItem.IsVoid) {
-            OrderItem.IsVoid = true;
-            OrderItem.TotalAmount = 0;
+        this.orderApi.voidOrderItem(orderRequest)
+        .subscribe(
+            data=>{
+                console.log('void order response',data);
+            }
+        )
+        
+    
 
-            let requestObject: OrderItemRequest = this.prepareOrderItemRequest(OrderItem.OrderId, OrderItem);
-            this.orderStoreApi.voidOrderitem(requestObject);
-        }
+
+
+        // let submittedIndex = OrderItem.Tags.indexOf('Submitted');
+
+        // if (submittedIndex !== -1 && OrderItem.IsVoid) {
+        //     OrderItem.IsVoid = false;
+        //     OrderItem.TotalAmount = OrderItem.Qty * OrderItem.UnitPrice / 1.13; //Add Function VAT Value Minues;
+
+        //     let requestObject: OrderItemRequest = this.prepareOrderItemRequest(OrderItem.OrderId, OrderItem);
+        //     this.orderStoreApi.unVoidOrderitem(requestObject);
+        // }
+
+        // if (submittedIndex !== -1 && !OrderItem.IsVoid) {
+        //     OrderItem.IsVoid = true;
+        //     OrderItem.TotalAmount = 0;
+
+        //     let requestObject: OrderItemRequest = this.prepareOrderItemRequest(OrderItem.OrderId, OrderItem);
+        //     this.orderStoreApi.voidOrderitem(requestObject);
+        // }
     }
 
 	/**
