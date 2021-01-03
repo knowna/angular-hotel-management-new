@@ -497,12 +497,12 @@ export const navcomponents=[
               permission:'Manage:User:Users',
               img:'../../../assets/images/group.png',
             },
-            // {
-            //   title: 'Roles',
-            //   link: '/managedashboard/role',
-            //   permission: 'Manage:User:Roles',
-            //   img:'../../../assets/images/roles.png',
-            // },
+            {
+              title: 'Change Password',
+              link: '/managedashboard/change-password',
+              permission: 'Manage:User:ChangePassword',
+              img:'../../../assets/images/roles.png',
+            },
             // {
             //   title: 'Role Module',
             //   link: '/managedashboard/rolemodule',

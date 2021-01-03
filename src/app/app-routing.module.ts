@@ -133,6 +133,7 @@ import { MenuPriceComponent } from './components/POS-System/Menu/menu-price/menu
 import { InventoryReceiptComponent } from './components/InventoryDashboard/inventory-receipt/inventory-receipt.component';
 import { PeriodicConsumptionComponent } from './components/InventoryDashboard/periodic-consumption/periodic-consumption.component';
 import { StockDamageComponent } from './components/InventoryDashboard/stock-damage/stock-damage.component';
+import { ChangePasswordComponent } from './components/ManageDashboard/change-password/change-password.component';
 
 
 const routes: Routes = [
@@ -255,6 +256,12 @@ const routes: Routes = [
   {
     path: 'managedashboard/role',
     component: RoleComponent,
+    canActivate: [AuthGuard]
+  },
+
+  {
+    path: 'managedashboard/change-password',
+    component: ChangePasswordComponent,
     canActivate: [AuthGuard]
   },
   {

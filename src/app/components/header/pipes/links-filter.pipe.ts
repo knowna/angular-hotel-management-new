@@ -84,6 +84,7 @@ export class LinksFilterPipe implements PipeTransform {
     'Manage:Management:TableRoomType',
     'Manage:Management:FinancialYear',
     'Manage:Management:Company',
+    'Manage:User:ChangePassword'
     
     // 'Front Office',
     // 'Front Office:Booking',
