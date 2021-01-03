@@ -19,16 +19,40 @@ export class ChangePasswordComponent implements OnInit {
     @ViewChild('templateNested',{static:false}) TemplateRef2: TemplateRef<any>;
     
     user: any;
+    userRequest:any;
     openPasswordForm = false;
+    confirmPassword ='';
+    password ='';
+    passwordNotMatch = false;
+
     constructor(private _roleService: RoleService,
         private fb: FormBuilder,
          private _userService: UsersService, private modalService: BsModalService) { }
 
     ngOnInit(): void {
-       this.user = localStorage.getItem('userInformation');
+       this.user = JSON.parse(localStorage.getItem('userInformation'));
       
-       
-       
+    }
+
+    passwordMatch(){
+        console.log(this.password, this.confirmPassword);
+        
+        this.passwordNotMatch = false;
+        
+        if(this.password!= this.confirmPassword){
+            this.passwordNotMatch = true;
+        }
+        else{
+            this.passwordNotMatch = false; 
+        }
+        console.log(this.passwordNotMatch);
+        
+    }
+
+    onSave(){
+        this.userRequest.FirstName = this.user.FirstName;
+        this.userRequest.LastName = this.user.LastName;
+        this.userRequest.Email = this.user.Email;
     }
 
    

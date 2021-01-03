@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
                 (data) => {
                     
                     if (data!= null ) {
-                        console.log('details', data);
+                        console.log('details', data.FirstName);
                         localStorage.setItem("userInformation",JSON.stringify(data));
                         localStorage.setItem("userToken",data.Token);
                         this.authService.authenticate();
