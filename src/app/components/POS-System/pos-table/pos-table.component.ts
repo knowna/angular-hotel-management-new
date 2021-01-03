@@ -420,6 +420,7 @@ export class PosTableComponent implements OnInit {
 
 
         OrderItem.Tags ='Void';
+        OrderItem.FinancialYear = this.currentYear.Name;
 
 
         // let ticketTotalWithoutVat = (OrderItem.UnitPrice*OrderItem.Qty);
@@ -446,7 +447,7 @@ export class PosTableComponent implements OnInit {
             "TableId":''+(this.selectedTable?this.selectedTable:0),
             "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
             "OrderId":0,
-            "TicketTotal":totalWithDiscount,
+            "TicketTotal":prevTotal,
             "Discount":newDiscount,
             "ServiceCharge":0,
             "VatAmount": vatAfterDiscount,
@@ -458,12 +459,12 @@ export class PosTableComponent implements OnInit {
         }
         console.log(orderRequest);
 
-        this.orderApi.voidOrderItem(orderRequest)
-        .subscribe(
-            data=>{
-                console.log('void order response',data);
-            }
-        )
+        // this.orderApi.voidOrderItem(orderRequest)
+        // .subscribe(
+        //     data=>{
+        //         console.log('void order response',data);
+        //     }
+        // )
         
     
 
