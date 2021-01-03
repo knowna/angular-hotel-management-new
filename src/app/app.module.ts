@@ -490,6 +490,7 @@ import { StockDamageDetailsComponent } from './components/InventoryDashboard/sto
     MenuConsumptionService,
     MenuConsumptionDetailsService
   ],
+  
 
   bootstrap: [AppComponent]
 })

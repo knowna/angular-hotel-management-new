@@ -47,6 +47,8 @@ export class RoleService {
     }
 
     delete(url: string, id: number): Observable<any> {
+        console.log(url,id);
+        
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let options = ({ headers: headers });
         return this._http.delete(url + '?id=' + id, options).pipe(
