@@ -264,6 +264,7 @@ export class PosTableComponent implements OnInit {
         });
     }
 
+    
     buildMenuForm() {
         //initialize our vouchers
         return this.fb.group({
@@ -397,8 +398,6 @@ export class PosTableComponent implements OnInit {
 	 * @param OrderItem 
 	 */
     voidItem(OrderItem: OrderItem) {
-        console.log(this.selectedTicket);
-        
         console.log(OrderItem);
         OrderItem.Tags ='Void';
 
@@ -415,7 +414,7 @@ export class PosTableComponent implements OnInit {
             "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
             "OrderId":0,
             "TicketTotal":OrderItem.UnitPrice*OrderItem.Qty,
-            "Discount":this.selectedTicket.OrderItem.TotalAmount,
+            "Discount":OrderItem.TotalAmount,
             "ServiceCharge":0,
             "VatAmount": vatAmount,
             "GrandTotal":grandTotal,
@@ -426,7 +425,7 @@ export class PosTableComponent implements OnInit {
     
     
         }
-        console.log(orderRequest);
+        console.log();
         
     
 
@@ -495,7 +494,7 @@ export class PosTableComponent implements OnInit {
         .subscribe(
             data=>{
                 
-                console.log('increment',data);
+                console.log(data);
                 
             }
         )

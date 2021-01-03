@@ -246,6 +246,7 @@ export class PosOrdersComponent implements OnInit {
      * Calculates void and gift sum
      */
     calculateVoidGiftSum(): number {
+
         let totalSum = 0;
 
         if (this.orders.length) {
@@ -260,6 +261,8 @@ export class PosOrdersComponent implements OnInit {
 
         return eval(totalSum.toFixed(2));
     }
+
+    
 
     /**
      * Calculates the grand total of the ticket
