@@ -249,6 +249,7 @@ import { PeriodicConsumptionComponent } from './components/InventoryDashboard/pe
 import { PeriodicConsumptionItemComponent } from './components/InventoryDashboard/periodic-consumption/periodic-consumption-items/periodic-consumption-item.component';
 import { StockDamageComponent } from './components/InventoryDashboard/stock-damage/stock-damage.component';
 import { StockDamageDetailsComponent } from './components/InventoryDashboard/stock-damage/stock-damage-details/stock-damage-details.component';
+import { ChangePasswordComponent } from './components/ManageDashboard/change-password/change-password.component';
 
 @NgModule({
   imports: [
@@ -303,6 +304,7 @@ import { StockDamageDetailsComponent } from './components/InventoryDashboard/sto
     HeaderComponent,
     NavbarComponent,
     TestComponent,
+
     RoomTypeComponent,
     MasterLedgerComponent,
     PagenotfoundComponent,
@@ -310,7 +312,7 @@ import { StockDamageDetailsComponent } from './components/InventoryDashboard/sto
     FileUploadComponent,
     MenuCategoryComponent1,
     JournalVouchercomponent,
-
+    ChangePasswordComponent,
     RoomStatusComponent,
     ReservationComponent,
     CheckOutComponent,
