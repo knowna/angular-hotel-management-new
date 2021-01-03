@@ -264,7 +264,7 @@ export class PosTableComponent implements OnInit {
         });
     }
 
-    
+
     buildMenuForm() {
         //initialize our vouchers
         return this.fb.group({
@@ -398,34 +398,73 @@ export class PosTableComponent implements OnInit {
 	 * @param OrderItem 
 	 */
     voidItem(OrderItem: OrderItem) {
-        console.log(OrderItem);
+        console.log('the selected ticket is',this.ticket);
+        console.log('the list of orders are', this.ordersNew);
+        console.log('the selected item is',OrderItem);
+
+        
+        let newDiscount = 0;
+        let prevTotal = 0;
+        let totalWithDiscount = 0;
+        let vatAfterDiscount = 0;
+        let totalWithVatAfterDiscount = 0;
+        this.ordersNew.forEach(order => {
+            order.OrderItems.forEach(item => {
+                prevTotal += item.TotalAmount;
+            });
+        });
+
+        newDiscount = this.ticket.Discount + OrderItem.UnitPrice*OrderItem.Qty;
+        totalWithDiscount = prevTotal - newDiscount;
+        vatAfterDiscount = (0.13 * totalWithDiscount);
+        totalWithVatAfterDiscount = totalWithDiscount + vatAfterDiscount;
+
+
         OrderItem.Tags ='Void';
 
 
-        let ticketTotalWithoutVat = (OrderItem.UnitPrice*OrderItem.Qty);
+        // let ticketTotalWithoutVat = (OrderItem.UnitPrice*OrderItem.Qty);
+        // let vatAmount =(0.13*ticketTotalWithoutVat);
+        // let grandTotal = vatAmount+ticketTotalWithoutVat;
+        // let orderRequest : OrderItemRequest={
+        //     "TicketId":this.selectedTicket?this.selectedTicket:0,
+        //     "TableId":''+(this.selectedTable?this.selectedTable:0),
+        //     "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
+        //     "OrderId":0,
+        //     "TicketTotal":OrderItem.UnitPrice*OrderItem.Qty,
+        //     "Discount":this.ticket.Discount + OrderItem.UnitPrice*OrderItem.Qty,
+        //     "ServiceCharge":0,
+        //     "VatAmount": vatAmount,
+        //     "GrandTotal":grandTotal,
+        //     "Balance":grandTotal,
+        //     "UserId":this.currentUser.UserName,
+        //     "FinancialYear":this.currentYear.Name,
+        //     "OrderItem":OrderItem
+        // }
 
-        let vatAmount =(0.13*ticketTotalWithoutVat);
-        let grandTotal = vatAmount+ticketTotalWithoutVat;
-    
         let orderRequest : OrderItemRequest={
-       
             "TicketId":this.selectedTicket?this.selectedTicket:0,
             "TableId":''+(this.selectedTable?this.selectedTable:0),
             "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
             "OrderId":0,
-            "TicketTotal":OrderItem.UnitPrice*OrderItem.Qty,
-            "Discount":OrderItem.TotalAmount,
+            "TicketTotal":totalWithDiscount,
+            "Discount":newDiscount,
             "ServiceCharge":0,
-            "VatAmount": vatAmount,
-            "GrandTotal":grandTotal,
-            "Balance":grandTotal,
+            "VatAmount": vatAfterDiscount,
+            "GrandTotal":totalWithVatAfterDiscount,
+            "Balance":totalWithVatAfterDiscount,
             "UserId":this.currentUser.UserName,
             "FinancialYear":this.currentYear.Name,
             "OrderItem":OrderItem
-    
-    
         }
-        console.log();
+        console.log(orderRequest);
+
+        this.orderApi.voidOrderItem(orderRequest)
+        .subscribe(
+            data=>{
+                console.log('void order response',data);
+            }
+        )
         
     
 
