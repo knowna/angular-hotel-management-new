@@ -14,6 +14,7 @@ export class LinksFilterPipe implements PipeTransform {
     'POS',
     'POS:Order',
     'POS:Order:NewOrder',
+    'POS:Order:OrderTicket',
     'POS:Order:FullMerge',
     'POS:Order:PartialMerge',
     'POS:Order:SplitOrder',
@@ -84,6 +85,7 @@ export class LinksFilterPipe implements PipeTransform {
     'Manage:Management:TableRoomType',
     'Manage:Management:FinancialYear',
     'Manage:Management:Company',
+    'Manage:User:ChangePassword'
     
     // 'Front Office',
     // 'Front Office:Booking',

@@ -1,0 +1,118 @@
+<div class="container no-print" style="padding-top: 20px;">
+    <div class="row m-0 mt-3">
+        <div class="col-md-4">
+            <h2 class="header">Order Ticket</h2>
+        </div>
+    </div>
+
+    <div class="row m-0 mt-2">
+        <div class="col-sm-12 table-responsive">
+            <div class="alert alert-info" role="alert" *ngIf="indLoading">
+                <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
+            </div>
+            <div *ngIf='ticketList && ticketList.length==0' class="alert alert-info" role="alert">No record found!</div>
+            <table class="table table-bordered" *ngIf="ticketList && ticketList.length">
+                <thead>
+                    <tr>
+                        <th>S.N</th>
+                        <th>Ticket Name</th>
+                        <th>Ticket Date</th>
+                        <th>Total Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let ticket of ticketList;index as i">
+                        <td>{{i+1}}</td>
+                        <td>{{ticket.Name}}#{{ticket.TicketId}}</td>
+                        <td>{{ticket.TicketOpeningTime | date: 'dd MMM yyyy,hh:mm a'}}</td>
+                        <td>{{ticket.TotalAmount}}</td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm" (click)="printTicket(ticket)">
+                                <i class="fa fa-print"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-12 d-none d-print-block printable" style="width: 76mm;margin: 0;">
+        <div class="row">
+            <div class="col-12 text-center font-weight-bold">
+                {{ company?.NameEnglish }}
+            </div>
+            <div class="col-12 text-center font-weight-bold">
+                {{ company?.Address }} {{ company?.Street }} {{ company?.City }} {{ company?.District }}
+            </div>
+            <div class="col-12 text-center font-weight-bold">
+                {{ company?.Email }} {{ company?.Phone }}
+            </div>
+            <div class="col-12 text-center font-weight-bold">
+                PAN/VAT : {{ company?.Pan_Vat }}
+            </div>
+            <div class="col-12 text-center font-weight-bold">
+                Bill No: {{ selectedTicket ? '#' + selectedTicket?.TicketId : '' }}
+            </div>
+            <div class="col-12 text-center font-weight-bold">
+                Date : {{selectedTicket.TicketOpeningTime | date :'yyyy-MM-dd hh:mm a' }}
+            </div>
+        </div>
+        <table class="table table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th>S.N. </th>
+                    <th>Details</th>
+                    <th>Qty</th>
+                    <th>Unit(Rs.)</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of selectedTicket.itemList; let i = index ">
+                    <td>
+                        {{i + 1}}
+                    </td>
+                    <td>
+                        <span>{{ getProductById(productList, item.ItemId)?.Name }}</span>
+                    </td>
+                    <td>
+                        <strong>{{ item.Qty }}</strong>
+                    </td>
+                    <td>
+                        {{ CurrentUnitPrice(item.UnitPrice) }}
+                    </td>
+                    <td>
+                        {{ ProductPrice(item.UnitPrice, item.Qty) }}
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5" class="text-right">Total : {{ calculateSum().toFixed(2) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="text-right">Discount : {{selectedTicket.Discount}}</td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="text-right">VAT % : {{ calculateVat() }}</td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="text-right">Grand Total : {{ getGrandTotal() }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
