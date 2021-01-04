@@ -118,6 +118,12 @@ export const navcomponents=[
               permission:'POS:Order:NewOrder',
             },
             {
+              title: 'Order Ticket',
+              img:'../../../assets/images/dish.png',
+              link: 'order-ticket',
+              permission:'POS:Order:OrderTicket',
+            },
+            {
               title: 'Full Merge',
               img:'../../../assets/images/category.png',
               link: 'full-merge',
