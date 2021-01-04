@@ -19,7 +19,7 @@ export class ChangePasswordComponent implements OnInit {
     @ViewChild('templateNested',{static:false}) TemplateRef2: TemplateRef<any>;
     
     user: any;
-    userRequest:any;
+    userRequest:any={};
     openPasswordForm = false;
     confirmPassword ='';
     password ='';
@@ -50,9 +50,31 @@ export class ChangePasswordComponent implements OnInit {
     }
 
     onSave(){
+        
+        this.userRequest.Id = this.user.Id;
         this.userRequest.FirstName = this.user.FirstName;
         this.userRequest.LastName = this.user.LastName;
         this.userRequest.Email = this.user.Email;
+        this.userRequest.UserName = this.user.UserName;
+        this.userRequest.RoleName = this.user.RoleName;
+        this.userRequest.IsActive = this.user.IsActive;
+        this.userRequest.Password = this.password;
+        this.userRequest.ConfirmPassword = this.confirmPassword;
+
+        this._userService.put(Global.BASE_USERACCOUNT_UPDATE_ENDPOINT, this.userRequest.Id, this.userRequest).subscribe(
+            data => {
+                if (data == 1) //Success
+                {
+                    alert("Data updated successfully.");
+                    
+                }
+                else {
+                    alert("There is some issue in saving records, please contact to system administrator!");
+                }
+            },
+
+        );
+        
     }
 
    

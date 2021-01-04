@@ -28,7 +28,7 @@ export class UsersService {
     put(url: string, id: number, model: any): Observable<any> {
         //  ;
         const body = JSON.stringify(model);
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
         const options = {
             headers
          };
