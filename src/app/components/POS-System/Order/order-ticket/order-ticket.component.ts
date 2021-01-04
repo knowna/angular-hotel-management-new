@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { tick } from '@angular/core/testing';
+import { ToastrService } from 'ngx-toastr';
 import { Order } from 'src/app/Model/order.model';
 import { Product } from 'src/app/Model/product.model';
 import { BillingService } from 'src/app/Service/Billing/billing.service';
@@ -31,6 +32,7 @@ export class OrderTicketComponent implements OnInit {
     private mergeService: MergeService,
     private orderApi: OrderService, 
     private billService: BillingService,
+    private toastrService: ToastrService
   ) {
     this.company = JSON.parse(localStorage.getItem('company'));
    }
@@ -87,6 +89,8 @@ export class OrderTicketComponent implements OnInit {
               (window as any).print();
             }, 1000);
             // console.log('the item list is', this.selectedTicket.itemList)
+          }else{
+            this.toastrService.info('No items found in the ticket!');
           }
           
         }
