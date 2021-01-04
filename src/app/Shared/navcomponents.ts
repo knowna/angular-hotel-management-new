@@ -124,6 +124,12 @@ export const navcomponents=[
               permission:'POS:Order:OrderTicket',
             },
             {
+              title: 'Void Order',
+              img:'../../../assets/images/dish.png',
+              link: 'void-order',
+              permission:'POS:Order:VoidOrder',
+            },
+            {
               title: 'Full Merge',
               img:'../../../assets/images/category.png',
               link: 'full-merge',

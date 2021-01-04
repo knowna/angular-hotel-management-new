@@ -1,0 +1,166 @@
+<div class="row m-0 mb-5">
+    <div class="col-sm-12">
+        <h2 class="header mt-3">{{modalTitle}}</h2>
+    </div>
+</div> 
+
+<!-- <form class="panel-primary" novalidate>
+    <div class="modal-header panel-heading" style="background-color: #364a70;">
+        <h4 class="modal-title pull-left">{{modalTitle}}</h4>
+    </div>
+
+    <div class="card"> -->
+        <div class="row ml-5 m-0">
+            
+            <div class="col-sm-5 ml-5 mr-auto" style="margin: inherit;">
+                <span> Ticket No:  </span>
+                <ngx-select-dropdown
+                    (change)="secondaryChanged($event)"
+                    [multiple]="false"
+                    [config]="config"
+                    [options]="secondaryOrderList">
+                </ngx-select-dropdown>
+            </div>  
+
+           
+            <div class="col-md-2 mr-auto">
+                <button type="button" (click)="merge()" style="float: right;"  class="btn btn-success mt-4 w-100">void </button>
+            </div>  
+
+
+            
+        </div>
+
+        <!-- <div class="row m-0 mt-4">
+            <div class="col-11">
+
+            </div>
+            <div  class="col-1">
+                <button type="button" (click)="merge()" style="float: right;"  class="btn btn-success">Merge </button>
+
+            </div>
+        </div> -->
+
+
+      
+
+        
+        <div class="ml-5 mb-2 mt-2 row  m-0">
+
+          
+            <div *ngIf="deatilSecondaryTicket.Name" class="card col-md-5 ml-5 mt-1" style="cursor: pointer;">
+                <span style="width:100%"> 
+                    
+                    {{deatilSecondaryTicket?.Name}}  {{deatilSecondaryTicket?.TicketId}}
+                </span>
+
+                <div *ngIf="deatilSecondaryTicket?.orders.length > 0" class="mb-3">
+                    <div *ngFor="let o of deatilSecondaryTicket.orders">
+                        <table>
+                            <caption style="caption-side:top">
+                                Order No: {{o.OrderNumber}},
+                                {{o.UserId}} -
+                                {{o.OrderOpeningTime}}
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Qty</th>
+                                    <th>Unit Price</th>
+                                    <th>Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                 <tr *ngFor="let item of o.OrderItems">
+                                    <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
+                                    <td>{{item.Qty}}</td>
+                                    <td>{{item.UnitPrice}}</td>
+                                    <td>{{item.TotalAmount}}</td>
+                                </tr> 
+                                <tr *ngIf="o.OrderItems.length==0" class="text-center">
+                                    No record found!!
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> 
+
+               
+
+               
+                
+            </div>
+           
+
+            <div *ngIf="detailPrimaryTicket.Name" class="card col-md-5 mt-1 ml-3" style="cursor: pointer;">
+                <span style="width:100%"> 
+                    
+                    {{detailPrimaryTicket?.Name}}  {{detailPrimaryTicket?.TicketId}}
+                </span>
+
+                <div *ngIf="detailPrimaryTicket.orders?.length > 0"  class="mb-3">
+                    <div *ngFor="let o of detailPrimaryTicket.orders">
+                        <table>
+                            <caption style="caption-side:top">
+                                Order No: {{o.OrderNumber}},
+                                {{o.UserId}} -
+                                {{o.OrderOpeningTime}}
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Qty</th>
+                                    <th>Unit Price</th>
+                                    <th>Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                 <tr *ngFor="let item of o.OrderItems">
+                                    <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
+                                    <td>{{item.Qty}}</td>
+                                    <td>{{item.UnitPrice}}</td>
+                                    <td>{{item.TotalAmount}}</td>
+                                </tr> 
+                                <tr *ngIf="o.OrderItems.length==0" class="text-center">
+                                    No record found!!
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> 
+                 </div>  
+
+               
+
+              
+                
+            </div>
+            
+        </div>
+
+        
+        <!-- <div *ngIf="showOrders" class="row m-0 mb-2">
+            <div *ngFor="let item of order.OrderItems;index as i " class="row">
+                <table class="table table-borderless">
+                    <tr>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+        </div> -->
+
+
+    <!-- </div> -->
+
+
+    <!-- <div class="modal-footer">
+        <button type="submit" [disabled]="MenuConsumptionForm.invalid" class="btn btn-success pull-left">{{modalBtnTitle}}</button>
+        <button type="reset" class="btn btn-danger" (click)="cancel()">Cancel</button>
+    </div> -->
+<!-- </form> -->
+
+
+
+
+
+
