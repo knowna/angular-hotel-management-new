@@ -14,6 +14,7 @@ export class LinksFilterPipe implements PipeTransform {
     'POS',
     'POS:Order',
     'POS:Order:NewOrder',
+    'POS:Order:OrderTicket',
     'POS:Order:FullMerge',
     'POS:Order:PartialMerge',
     'POS:Order:SplitOrder',

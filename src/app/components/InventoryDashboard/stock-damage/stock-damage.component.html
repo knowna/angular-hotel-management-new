@@ -20,7 +20,8 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>StartDate</label>  
-                        <input type="text" class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" formControlName="StartDate" />
+                        <!-- <input type="text" class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" formControlName="StartDate" /> -->
+                        <input class="form-control" type="text" placeholder="yyyy.mm.dd" formControlName="StartDate" />
                         <div class="text-danger mt-1" *ngIf="(pConsumeFrm.get('StartDate').hasError('InvalidDate') || pConsumeFrm.get('StartDate').hasError('required')) && formSubmitAttempt">
                             {{ pConsumeFrm.get('StartDate').getError('InvalidDate') }}
                         </div>

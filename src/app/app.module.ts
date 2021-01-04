@@ -250,6 +250,7 @@ import { PeriodicConsumptionItemComponent } from './components/InventoryDashboar
 import { StockDamageComponent } from './components/InventoryDashboard/stock-damage/stock-damage.component';
 import { StockDamageDetailsComponent } from './components/InventoryDashboard/stock-damage/stock-damage-details/stock-damage-details.component';
 import { ChangePasswordComponent } from './components/ManageDashboard/change-password/change-password.component';
+import { OrderTicketComponent } from './components/POS-System/Order/order-ticket/order-ticket.component';
 
 @NgModule({
   imports: [
@@ -430,7 +431,8 @@ import { ChangePasswordComponent } from './components/ManageDashboard/change-pas
     CreditNoteAddEditComponent,
     DebitNoteAddEditComponent,
     KitchenOrderViewComponent,
-    MenuPriceComponent
+    MenuPriceComponent,
+    OrderTicketComponent
 
   ],
   providers: [

@@ -277,7 +277,7 @@ export class PeriodicConsumptionComponent implements OnInit {
             this.pConsumeFrm.controls['Name'].setValue(periodicConsumption.Name);
             //this.formattedSDate = this.date.transform(periodicConsumption.StartDate, 'dd/MM/yyyy');
             //this.pConsumeFrm.controls['StartDate'].setValue(this.formattedSDate);
-            this.pConsumeFrm.controls['StartDate'].setValue(new Date(periodicConsumption.StartDate));
+            this.pConsumeFrm.controls['StartDate'].setValue(periodicConsumption.StartDate);
 
             this.pConsumeFrm.controls['PeriodicConsumptionItems'] = this.fb.array([]);
             const control = <FormArray>this.pConsumeFrm.controls['PeriodicConsumptionItems'];
@@ -306,7 +306,8 @@ export class PeriodicConsumptionComponent implements OnInit {
             this.pConsumeFrm.controls['Name'].setValue(periodicConsumption.Name);
            // this.formattedSDate = this.date.transform(periodicConsumption.StartDate, 'dd/MM/yyyy');
             //this.pConsumeFrm.controls['StartDate'].setValue(this.formattedSDate);
-            this.pConsumeFrm.controls['StartDate'].setValue(new Date(periodicConsumption.StartDate));
+            // this.pConsumeFrm.controls['StartDate'].setValue(new Date(periodicConsumption.StartDate));
+            this.pConsumeFrm.controls['StartDate'].setValue((periodicConsumption.StartDate));
 
             this.pConsumeFrm.controls['PeriodicConsumptionItems'] = this.fb.array([]);
             const control = <FormArray>this.pConsumeFrm.controls['PeriodicConsumptionItems'];
@@ -379,7 +380,7 @@ export class PeriodicConsumptionComponent implements OnInit {
         //if (!this.voucherDateValidator(pConsumer.get('StartDate'))) {
         //    return false;
         //}
-        let pConsumptionDate = new Date(pConsumer.get('StartDate').value);
+        let pConsumptionDate = (pConsumer.get('StartDate').value);
         pConsumer.get('StartDate').setValue(pConsumptionDate);
 
         if (!this.voucherDateValidator(pConsumer.get('StartDate'))) {

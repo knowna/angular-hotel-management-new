@@ -134,6 +134,7 @@ import { InventoryReceiptComponent } from './components/InventoryDashboard/inven
 import { PeriodicConsumptionComponent } from './components/InventoryDashboard/periodic-consumption/periodic-consumption.component';
 import { StockDamageComponent } from './components/InventoryDashboard/stock-damage/stock-damage.component';
 import { ChangePasswordComponent } from './components/ManageDashboard/change-password/change-password.component';
+import { OrderTicketComponent } from './components/POS-System/Order/order-ticket/order-ticket.component';
 
 
 const routes: Routes = [
@@ -176,6 +177,10 @@ const routes: Routes = [
   {
     path: "split-order",
     component: SplitMergeComponent
+  },
+  {
+    path : 'order-ticket',
+    component: OrderTicketComponent
   },
   {
     path: "reservation",

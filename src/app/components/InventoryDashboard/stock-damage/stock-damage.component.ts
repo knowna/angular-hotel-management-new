@@ -256,7 +256,8 @@ export class StockDamageComponent implements OnInit {
             this.indLoading = false;
             this.pConsumeFrm.controls['Id'].setValue(periodicConsumption.Id);
             this.pConsumeFrm.controls['Name'].setValue(periodicConsumption.Name);
-            this.pConsumeFrm.controls['StartDate'].setValue(new Date(periodicConsumption.StartDate));
+            // this.pConsumeFrm.controls['StartDate'].setValue(new Date(periodicConsumption.StartDate));
+            this.pConsumeFrm.controls['StartDate'].setValue((periodicConsumption.StartDate));
 
             this.pConsumeFrm.controls['PeriodicConsumptionItems'] = this.fb.array([]);
             const control = <FormArray>this.pConsumeFrm.controls['PeriodicConsumptionItems'];
@@ -283,7 +284,8 @@ export class StockDamageComponent implements OnInit {
             this.indLoading = false;
             this.pConsumeFrm.controls['Id'].setValue(periodicConsumption.Id);
             this.pConsumeFrm.controls['Name'].setValue(periodicConsumption.Name);
-            this.pConsumeFrm.controls['StartDate'].setValue(new Date(periodicConsumption.StartDate));
+            // this.pConsumeFrm.controls['StartDate'].setValue(new Date(periodicConsumption.StartDate));
+            this.pConsumeFrm.controls['StartDate'].setValue(periodicConsumption.StartDate);
 
             this.pConsumeFrm.controls['PeriodicConsumptionItems'] = this.fb.array([]);
             const control = <FormArray>this.pConsumeFrm.controls['PeriodicConsumptionItems'];
@@ -349,7 +351,7 @@ export class StockDamageComponent implements OnInit {
         this.msg = "";
         this.formSubmitAttempt = true;
         let pConsumer = this.pConsumeFrm;
-        let pConsumptionDate = new Date(pConsumer.get('StartDate').value);
+        let pConsumptionDate = (pConsumer.get('StartDate').value);
         pConsumer.get('StartDate').setValue(pConsumptionDate);
 
         if (!this.voucherDateValidator(pConsumer.get('StartDate'))) {
