@@ -135,6 +135,7 @@ import { PeriodicConsumptionComponent } from './components/InventoryDashboard/pe
 import { StockDamageComponent } from './components/InventoryDashboard/stock-damage/stock-damage.component';
 import { ChangePasswordComponent } from './components/ManageDashboard/change-password/change-password.component';
 import { OrderTicketComponent } from './components/POS-System/Order/order-ticket/order-ticket.component';
+import { VoidOrderComponent } from './components/POS-System/Order/void-order/void-order.component';
 
 
 const routes: Routes = [
@@ -181,6 +182,10 @@ const routes: Routes = [
   {
     path : 'order-ticket',
     component: OrderTicketComponent
+  },
+  {
+    path : 'void-order',
+    component: VoidOrderComponent
   },
   {
     path: "reservation",

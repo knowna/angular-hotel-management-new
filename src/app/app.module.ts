@@ -251,6 +251,7 @@ import { StockDamageComponent } from './components/InventoryDashboard/stock-dama
 import { StockDamageDetailsComponent } from './components/InventoryDashboard/stock-damage/stock-damage-details/stock-damage-details.component';
 import { ChangePasswordComponent } from './components/ManageDashboard/change-password/change-password.component';
 import { OrderTicketComponent } from './components/POS-System/Order/order-ticket/order-ticket.component';
+import { VoidOrderComponent } from './components/POS-System/Order/void-order/void-order.component';
 
 @NgModule({
   imports: [
@@ -325,7 +326,7 @@ import { OrderTicketComponent } from './components/POS-System/Order/order-ticket
     ReservationTypeComponent,
     // RoomTypeComponent,
     CustomerTypeComponent,
-
+    VoidOrderComponent,
     UserComponent,
     CompanyComponent,
     DepartmentComponent,
