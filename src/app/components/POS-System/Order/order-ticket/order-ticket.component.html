@@ -84,29 +84,41 @@
         </div>
         <table class="table table-bordered" width="450px">
             <thead>
+                <!-- <tr>
+                    <th colspan="2">
+                        <span class="text-center font-weight-bold">
+                            Bill No: {{ selectedTicket ? '#' + selectedTicket?.TicketId : '' }}
+                        </span>
+                    </th>                
+                    <th colspan="3" align="right">
+                        <span class="text-center font-weight-bold">
+                            Date : {{selectedTicket.TicketOpeningTime | date :'yyyy-MM-dd hh:mm' }}
+                        </span>
+                    </th>
+                </tr> -->
                 <tr>
-                    <th>S.N. </th>
-                    <th>Details</th>
-                    <th>Qty</th>
-                    <th>Unit(Rs.)</th>
-                    <th>Total</th>
+                    <th width="20px">S. No. </th>
+                    <th width="220px">Details</th>
+                    <th width="70px">Qty</th>
+                    <th width="70px">Unit (Rs.)</th>
+                    <th width="70px">Total</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let item of selectedTicket.itemList; let i = index ">
-                    <td>
+                    <td width="20px">
                         {{i + 1}}
                     </td>
-                    <td>
+                    <td align="left" width="170px">
                         <span>{{ getProductById(productList, item.ItemId)?.Name }}</span>
                     </td>
-                    <td>
+                    <td align="right" width="70px">
                         <strong>{{ item.Qty }}</strong>
                     </td>
-                    <td>
+                    <td align="right" width="70px">
                         {{ CurrentUnitPrice(item.UnitPrice) }}
                     </td>
-                    <td>
+                    <td align="right" width="70px">
                         {{ ProductPrice(item.UnitPrice, item.Qty) }}
                     </td>
                 </tr>
