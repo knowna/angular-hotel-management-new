@@ -23,15 +23,17 @@ export class NavbarComponent implements OnInit {
     ) { }
   public authenticated:boolean;
   ngOnInit() {
+
     this.userInformation = JSON.parse(localStorage.getItem("userInformation"));
     this.company = JSON.parse(localStorage.getItem("company"));
+    
     
     this.store.subscribe(data=>this.authenticated=data.auth.IsAuthenticated)
      
     }
- logout(){
-  this.authService.logout()
- }
+  logout(){
+    this.authService.logout()
+  }
 
 
  profile(){

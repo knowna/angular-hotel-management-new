@@ -102,6 +102,8 @@ export class VoidOrderComponent implements OnInit {
     }
    
     secondaryChanged(event){
+      console.log(event);
+      
         this.moveFromOrderItems = [];
 
         // console.log(event);
