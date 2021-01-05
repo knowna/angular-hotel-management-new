@@ -7,6 +7,8 @@ import { Order } from 'src/app/Model/order.model';
 import { Product } from 'src/app/Model/product.model';
 import { BillingService } from 'src/app/Service/Billing/billing.service';
 import { OrderService } from 'src/app/Service/Billing/order.service';
+import { RoleService } from 'src/app/Service/role.service';
+import { Global } from 'src/app/Shared/global';
 import { MergeService } from '../services/merge.service';
 
 @Component({
@@ -17,7 +19,7 @@ import { MergeService } from '../services/merge.service';
 export class VoidOrderComponent implements OnInit {
   currentUser: any;
     currentYear: any;
-
+itemList=[];
     productList = [];
     deatilSecondaryTicket:any={'orders':[]};
     
@@ -25,7 +27,7 @@ export class VoidOrderComponent implements OnInit {
     orders:Order[]=[];
     showOrders=false;
     ticketIdTobeDeleted=0;
-
+    selectedOrder:any={}
    moveFromOrderItems=[];
    moveToOrderItems=[];
     primaryOrderList=[];
@@ -53,6 +55,7 @@ export class VoidOrderComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private router: Router,
         private orderApi: OrderService,  
+        private _roleService: RoleService,
         private billService: BillingService,
         private toastrService: ToastrService
 
@@ -102,8 +105,7 @@ export class VoidOrderComponent implements OnInit {
     }
    
     secondaryChanged(event){
-      console.log(event);
-      
+        this.selectedOrder = event;    
         this.moveFromOrderItems = [];
 
         // console.log(event);
@@ -279,4 +281,43 @@ export class VoidOrderComponent implements OnInit {
                
         })
     }
+
+
+    void(){
+        console.log(this.selectedOrder);
+
+        this.selectedOrder.value.orders.forEach(order => {
+            order.OrderItems.forEach(item => {
+              this.itemList.push(item);
+            });
+          });
+                    
+            let orderRequest={
+               "TicketId":this.selectedOrder.value.TicketId?this.selectedOrder.value.TicketId:0,
+               "TableId":this.selectedOrder.value.TicketId?this.selectedOrder.value.TicketId:0,
+               "CustomerId":this.selectedOrder.value.CustomerId?this.selectedOrder.value.CustomerId:0,
+               "OrderId":this.selectedOrder.value.Id,
+               "TicketTotal":0,
+               "Discount":0,
+               "ServiceCharge":0,
+               "VatAmount": 0,
+               "GrandTotal":0,
+               "Balance":0,
+               "UserId":this.currentUser.UserName,
+               "FinancialYear":this.currentYear.Name,
+               "ListOrderItem":this.itemList
+           }
+
+           console.log('orderRequest is',JSON.stringify(orderRequest));
+           
+           this._roleService.post(Global.BASE_ORDERS_VOID_ENDPOINT,orderRequest)
+           .subscribe(data => { 
+            console.log(data);
+            this.toastrService.success('Order Void Successfully');
+               
+           },
+
+           );
+        }
+    
 }
