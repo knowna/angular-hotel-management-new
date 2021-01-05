@@ -28,6 +28,8 @@ export class OrderTicketComponent implements OnInit {
 
   productList:Product[]=[];
 
+  orderNo = '';
+
   constructor(
     private mergeService: MergeService,
     private orderApi: OrderService, 
@@ -78,6 +80,8 @@ export class OrderTicketComponent implements OnInit {
       .subscribe(
         data => {
           this.ordersNew = data;
+          // console.log('the orders', this.ordersNew)
+          this.orderNo = this.ordersNew[0].OrderNumber + '';
           this.ordersNew.forEach(order => {
             order.OrderItems.forEach(item => {
               this.selectedTicket.itemList.push(item);

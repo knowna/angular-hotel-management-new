@@ -43,8 +43,12 @@
       margin-top: 0;
       /* margin-left: 0.01in;
       margin-right: 0.01in; */
-      margin-left: 0;
+      /* margin-left: 0;
       margin-right: 0;
-      width: 76mm;
+      width: 76mm; */
+      margin-left: 0.000001in;
+      margin-right: 0;
+      margin-bottom:auto;
+      width: 80mm;
     }
 }

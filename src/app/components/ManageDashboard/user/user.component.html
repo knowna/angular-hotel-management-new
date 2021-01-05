@@ -196,11 +196,13 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                   Role  <ngx-select-dropdown
+                    <label class="control-label">Role</label>
+                    <ngx-select-dropdown
                         (change)="setRole($event)"
                         [multiple]="false"
                         [config]="config"
-                        [options]="roles">
+                        [options]="roles"
+                        formControlName="RoleName">
                     </ngx-select-dropdown>
                 </div>
 
