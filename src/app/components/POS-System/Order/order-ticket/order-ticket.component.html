@@ -49,12 +49,24 @@
 
 
 <div class="row">
-    <div class="col-12 d-none d-print-block printable" style="width: 76mm;margin: 0;">
+    <div class="col-12 d-none d-print-block printable" style="width: 100mm;margin: 0;">
         <div class="row">
-            <div class="col-12 text-center font-weight-bold">
-                {{ company?.NameEnglish }}
+            <div class="col-12 text-center font-weight-bold mb-2">
+                Order Ticket
             </div>
-            <div class="col-12 text-center font-weight-bold">
+            <div class="col-6 text-left font-weight-bold">
+                Order No : {{orderNo}}
+            </div>
+            <div class="col-6 font-weight-bold">
+                Date : {{selectedTicket.TicketOpeningTime | date :'dd MMM yyyy' }}
+            </div>
+            <div class="col-6 text-left font-weight-bold">
+                Table No : {{selectedTicket.TableId}}
+            </div>
+            <div class="col-6 font-weight-bold">
+                Time : {{selectedTicket.TicketOpeningTime | date :'hh:mm a' }}
+            </div>
+            <!-- <div class="col-12 text-center font-weight-bold">
                 {{ company?.Address }} {{ company?.Street }} {{ company?.City }} {{ company?.District }}
             </div>
             <div class="col-12 text-center font-weight-bold">
@@ -68,9 +80,9 @@
             </div>
             <div class="col-12 text-center font-weight-bold">
                 Date : {{selectedTicket.TicketOpeningTime | date :'yyyy-MM-dd hh:mm a' }}
-            </div>
+            </div> -->
         </div>
-        <table class="table table-bordered table-sm">
+        <table class="table table-bordered" width="450px">
             <thead>
                 <tr>
                     <th>S.N. </th>

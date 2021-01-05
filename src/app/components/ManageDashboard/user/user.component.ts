@@ -216,7 +216,7 @@ export class UserComponent implements OnInit {
         this.msg = "";
         let users = this.userFrm;
 
-        // console.log('the form', users)
+        console.log('the form', users)
 
         if (users.valid) {
             switch (this.dbops) {
