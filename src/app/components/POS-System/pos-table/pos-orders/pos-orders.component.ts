@@ -119,13 +119,27 @@ export class PosOrdersComponent implements OnInit {
 
     // Calculates Discount
     calculateDiscount() {
-        let sum = this.calculateSum();
-        let giftSum = this.calculateVoidGiftSum();
-        let value = (giftSum / sum) * 100 || 0;
+        let discount = this.ticket.Discount;
 
-       return (this.ticket.Discount)
-            ? this.ticket.Discount.toFixed(2)
-            : (sum * (value / 100)).toFixed(2);
+        this.orders.forEach(order => {
+            order.OrderItems.forEach(item => {
+                // console.log('the item in discount is', item)
+                if(item.Tags === 'Void'){
+                    discount += item.TotalAmount;
+                }
+            });
+        });
+
+        return discount.toFixed(2);
+        
+    //     let sum = this.calculateSum();
+    //     let giftSum = this.calculateVoidGiftSum();
+    //     let value = (giftSum / sum) * 100 || 0;
+
+    //    return (this.ticket.Discount)
+    //         ? this.ticket.Discount.toFixed(2)
+    //         : (sum * (value / 100)).toFixed(2);
+            
     }
 	/**
 	 * Item Price
