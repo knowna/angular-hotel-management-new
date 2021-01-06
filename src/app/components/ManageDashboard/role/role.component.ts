@@ -34,7 +34,8 @@ export class RoleComponent implements OnInit {
     searchKeyword='';
     showChildrenIfExist= false;
 
-    permissionList: any[] = [
+    permissionListArray: any[] = [];
+    permissionList='';
         // "POS:Order:SplitOrder",
         // "POS:Order:PartialMerge",
         // "POS:Order:FullMerge",
@@ -43,7 +44,7 @@ export class RoleComponent implements OnInit {
         // "Inventory:Transaction:Consumption",
         // "Inventory:Transaction:Receipt",
         // "Inventory:Transaction:StockDamage"
-    ];
+    
 
     constructor(private fb: FormBuilder,
         @Inject("NAVCOMPONENTS") public  items:any[],
@@ -78,7 +79,7 @@ export class RoleComponent implements OnInit {
             // CreatedBy: [''],
             // LastChangedDate: [''],
             // LastChangedBy: [''],
-            // Selected: [''],
+            PermissionList: [''],
             IsSysAdmin: false,
 
             Name:[''],
@@ -107,7 +108,7 @@ export class RoleComponent implements OnInit {
     }
 
     addRoles() {
-        this.permissionList =[];
+        this.permissionListArray =[];
         this.dbops = DBOperation.create;
         this.SetControlsState(true);
         this.modalTitle = "Add Role";
@@ -121,11 +122,21 @@ export class RoleComponent implements OnInit {
     }
 
     editUserRole(Id: number) {
+        let permissionArray=[];
         this.dbops = DBOperation.update;
         this.SetControlsState(true);
         this.modalTitle = "Edit Role";
         this.modalBtnTitle = "Save";
         this.role = this.roles.filter(x => x.Id == Id)[0];
+        permissionArray =this.role.PermissionList != null? this.role.PermissionList.split(','):[];
+        if (permissionArray.includes('')||permissionArray.includes(null)){
+            let index = permissionArray.indexOf('');
+            permissionArray.splice(index,1);
+        }
+        this.permissionListArray = permissionArray;
+        
+
+
         // this.RoleFrm.setValue(this.role);
         this.RoleFrm.controls['Id'].setValue(this.role.Id);
         this.RoleFrm.controls['Name'].setValue(this.role.Name);
@@ -144,11 +155,20 @@ export class RoleComponent implements OnInit {
     }
 
     deleteUserRole(id: number) {
+        let permissionArray=[];
         this.dbops = DBOperation.delete;
         this.SetControlsState(true);
         this.modalTitle = "Confirm to Delete?";
         this.modalBtnTitle = "Delete";
         this.role = this.roles.filter(x => x.Id == id)[0];
+
+        permissionArray =this.role.PermissionList != null? this.role.PermissionList.split(','):[];
+        if (permissionArray.includes('')||permissionArray.includes(null)){
+            let index = permissionArray.indexOf('');
+            permissionArray.splice(index,1);
+        }
+        this.permissionListArray = permissionArray;
+
         // this.RoleFrm.setValue(this.role);
         this.RoleFrm.controls['Id'].setValue(this.role.Id);
         this.RoleFrm.controls['Name'].setValue(this.role.Name);
@@ -185,8 +205,15 @@ export class RoleComponent implements OnInit {
         this.msg = "";
         let Role = this.RoleFrm;
         this.formSubmitAttempt = true;
+        this.permissionListArray.forEach(permission => {
+            console.log(permission);
 
-        // console.log('post data',formData)
+            this.permissionList =this.permissionList+ permission+',';
+            
+        }
+        
+        );
+
 
         if (Role.valid) {
             switch (this.dbops) {
@@ -195,6 +222,7 @@ export class RoleComponent implements OnInit {
                         "Name":formData.value.Name,
                         "Description":formData.value.Description,
                         "PermissionList":this.permissionList
+                        
                         // "IsAdd":formData.value.IsAdd,
                         // "IsDelete":formData.value.IsDelete,
                         // "IsEdit":formData.value.IsEdit,
@@ -223,6 +251,7 @@ export class RoleComponent implements OnInit {
                     );
                     break;
                 case DBOperation.update:
+                        formData.value.PermissionList = this.permissionList;
                     this._roleService.put(Global.BASE_ROLES_EDIT_ENDPOINT, formData.value.Id, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
@@ -301,18 +330,18 @@ export class RoleComponent implements OnInit {
     }
 
     changePermission(permission) {
-        if(this.permissionList.includes(permission)) {
+        if(this.permissionListArray.includes(permission)) {
 
-            const idx = this.permissionList.indexOf(permission);
-            this.permissionList.splice(idx,1);
+            const idx = this.permissionListArray.indexOf(permission);
+            this.permissionListArray.splice(idx,1);
         }else{
-            this.permissionList.push(permission);
+            this.permissionListArray.push(permission);
         }
-        console.log('the permission list is', this.permissionList);
+        console.log('the permission list is', this.permissionListArray);
     }
 
     hasPermission(permission) {
-        return this.permissionList.includes(permission);
+        return this.permissionListArray.includes(permission);
     }
 
 }
