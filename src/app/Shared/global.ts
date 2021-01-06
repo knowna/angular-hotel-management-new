@@ -53,6 +53,7 @@
     public static BASE_ORDERINVOICEPRINT_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/OrderInvoice/';
     public static BASE_ORDERS_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/OrderAPI';
 
+    public static BASE_ORDERS_VOID_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/OrderVoid/';
 
     public static BASE_ORDERS_VOID_ITEM_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/OrderVoidItem/';
     public static BASE_ORDERSUPDATE_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/OrderUpdateAPI/';
