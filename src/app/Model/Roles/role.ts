@@ -13,6 +13,7 @@
     IsDelete:boolean,
     IsEdit:boolean,
     IsView:boolean
+    PermissionList: string;
 }
 
 export interface IScreenRoleName {
