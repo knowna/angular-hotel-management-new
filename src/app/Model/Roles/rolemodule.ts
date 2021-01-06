@@ -3,4 +3,5 @@
     RoleId: number;
     ModuleId: number;
     ParentModuleId: number;
+    
 }
