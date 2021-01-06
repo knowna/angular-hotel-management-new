@@ -188,7 +188,19 @@ export class PosInvoicePrintComponent implements OnInit {
 
     // Calculates Discount
     calculateDiscount() {
-        return 0.00;
+        let discount = this.ticket.Discount;
+
+        this.parsedOrders.forEach(order => {
+            order.OrderItems.forEach(item => {
+                // console.log('the item in discount is', item)
+                if(item.Tags === 'Void'){
+                    discount += item.TotalAmount;
+                }
+            });
+        });
+
+        return discount.toFixed(2);
+        // return 0.00;
         // let sum = this.calculateSum();
         // let giftSum = this.calculateVoidGiftSum();
         // let value = (giftSum / sum) * 100 || 0;
@@ -226,8 +238,8 @@ export class PosInvoicePrintComponent implements OnInit {
 
     // Calculates VAT Amount
     calculateVat() {
-        let taxableAmount = this.calculateSum();
-        // let taxableAmount = this.calculateSum() - eval(this.calculateDiscount()) + eval(this.calculateServiceCharge());
+        // let taxableAmount = this.calculateSum();
+        let taxableAmount = this.calculateSum() - eval(this.calculateDiscount()) + eval(this.calculateServiceCharge());
         return (taxableAmount * 0.13).toFixed(2);
     }
 
@@ -235,8 +247,8 @@ export class PosInvoicePrintComponent implements OnInit {
      * Calculates the grand total of the ticket
      */
     getGrandTotal() {
-        let taxableAmount = this.calculateSum();
-        // let taxableAmount = this.calculateSum() - eval(this.calculateDiscount()) + eval(this.calculateServiceCharge());
+        // let taxableAmount = this.calculateSum();
+        let taxableAmount = this.calculateSum() - eval(this.calculateDiscount()) + eval(this.calculateServiceCharge());
         return (taxableAmount + taxableAmount * 0.13).toFixed(2);
     }
 

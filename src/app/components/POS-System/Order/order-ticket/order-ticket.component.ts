@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { tick } from '@angular/core/testing';
 import { ToastrService } from 'ngx-toastr';
+import { IDepartment } from 'src/app/Model/Department';
 import { Order } from 'src/app/Model/order.model';
 import { Product } from 'src/app/Model/product.model';
 import { BillingService } from 'src/app/Service/Billing/billing.service';
 import { OrderService } from 'src/app/Service/Billing/order.service';
+import { DepartmentService } from 'src/app/Service/Department.service';
+import { Global } from 'src/app/Shared/global';
 import { MergeService } from '../services/merge.service';
 
 @Component({
@@ -30,21 +33,40 @@ export class OrderTicketComponent implements OnInit {
 
   orderNo = '';
 
+  departments: IDepartment[];
+  tempDepartments: IDepartment[];
+  showLoader: boolean = false;
+
   constructor(
     private mergeService: MergeService,
     private orderApi: OrderService, 
     private billService: BillingService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private _departmentService: DepartmentService,
   ) {
     this.company = JSON.parse(localStorage.getItem('company'));
    }
 
   ngOnInit(): void {
+    this.LoadDepartment();
     this.billService.loadProducts()
       .subscribe(data => { 
         this.productList = data;
     });
     this.getAllUnsettledTicket();
+  }
+
+  LoadDepartment(): void {
+    this.showLoader = true;
+    this._departmentService.get(Global.BASE_DEPARTMENT_ENDPOINT)
+      .subscribe(departments => { 
+          this.departments = departments; 
+          this.tempDepartments = departments;
+          console.log('the departments are', this.departments);
+          this.showLoader = false; 
+          // this.selectDepartment(this.departments[0]);
+      },
+      error => this.msg = error);
   }
 
   getProductById(products: Product[], productId: number) {
@@ -62,7 +84,7 @@ export class OrderTicketComponent implements OnInit {
         data => {
           this.indLoading = false;
           this.ticketList = data;
-          // console.log('the ticket list are', this.ticketList);
+          console.log('the ticket list are', this.ticketList);
         },
         error => {
           this.indLoading = false;
