@@ -107,7 +107,7 @@ export class LinksFilterPipe implements PipeTransform {
     
 
 ];
-
+// permissionList = localStorage.getItem('permissionList');
 
   transform(items): any {
 
