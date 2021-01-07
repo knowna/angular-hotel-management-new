@@ -37,7 +37,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let users of user; let i = index">
-                        <td>{{users.FullName}}</td>
+                        <td>{{users.FullName?users.FullName:users.FirstName+' '+users.LastName}}</td>
                         <td>{{users.UserName}}</td>
                         <td>{{users.Email}}</td>
                         <td>
@@ -198,7 +198,6 @@
                 <div class="col-md-6">
                     <label class="control-label">Role</label>
                     <ngx-select-dropdown
-                        (change)="setRole($event)"
                         [multiple]="false"
                         [config]="config"
                         [options]="roles"

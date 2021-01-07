@@ -13,6 +13,10 @@ export class UsersService {
         return this.http.get(url).pipe(
             catchError(this.handleError));
     }
+    getById(url: string,id): Observable<any> {
+        return this.http.get(url+'?Id='+id).pipe(
+            catchError(this.handleError));
+    }
 
     post(url: string, model: any): Observable<any> {
        //  ;

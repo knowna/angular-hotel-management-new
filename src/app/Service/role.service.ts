@@ -15,7 +15,7 @@ export class RoleService {
     }
 
     post(url: string, model: any): Observable<any> {
-        let body = JSON.stringify(model);
+        let body = JSON.stringify(url);
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let options = ({ headers: headers });
         return this._http.post(url, body, options).pipe(

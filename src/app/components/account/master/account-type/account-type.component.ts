@@ -205,6 +205,11 @@ export class AccountTypeComponent implements OnInit {
         this.modalTitle = "Edit Group";
         this.modalBtnTitle = "Save";
         this.accountType = this.accountTypes.filter(x => x.Id == Id)[0];
+
+        let accountType = this.accountTypes.find(x => x.Name === this.accountType.UnderGroupLedger);
+
+        this.accountType.UnderGroupLedger = accountType?.Id+'';
+
         this.accTypeFrm.setValue(this.accountType);
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
@@ -249,6 +254,8 @@ export class AccountTypeComponent implements OnInit {
         this.msg = "";
         let accountType = this.accTypeFrm
         this.formSubmitAttempt = true;
+
+        // console.log('the account tyoe', accountType.value)
 
         if (accountType.valid) {
             switch (this.dbops) {

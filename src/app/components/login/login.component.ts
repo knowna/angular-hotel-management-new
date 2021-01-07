@@ -7,6 +7,7 @@ import { LoginService } from '../../Service/login.service';
 import { DBOperation } from '../../Shared/enum';
 import { Global } from '../../Shared/global';
 import { ToastrService } from 'ngx-toastr';
+import { UsersService } from 'src/app/Service/user.service';
 
 
 @Component({
@@ -34,7 +35,8 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private authService:AuthenticationService,
-        private toastrService: ToastrService
+        private toastrService: ToastrService,
+        private _userService: UsersService,
       
     ) { }
 
@@ -64,13 +66,38 @@ export class LoginComponent implements OnInit {
                 (data) => {
                     
                     if (data!= null ) {
-                        console.log('details', data.FirstName);
                         localStorage.setItem("userInformation",JSON.stringify(data));
                         localStorage.setItem("userToken",data.Token);
                         this.authService.authenticate();
+
+
+
+                        this._userService.getById(Global.BASE_ROLE_ENDPOINT,data.RoleName)
+                        .subscribe(data => { 
+                            let PermissionList=data[0].PermissionList.split(',');
+                            if(PermissionList.includes('')){
+                                let index = PermissionList.indexOf('');
+                                PermissionList.splice(index,1);
+                            }
+                            
+                            localStorage.setItem('permissionList',PermissionList);
+                            if(PermissionList.length>0){
+
+                                this.router.navigate(["/dashboard"]);
+                                this.toastrService.success('You are successfully logged in!');
+                            }
+                            
+                
+                        },
+                        error =>{
+                           
+                        } );
+                    
+
+                        // this.getPermissionByRoleId(data.RoleName);
                         // window.location.reload();
-                        this.router.navigate(["/dashboard"]);
-                        this.toastrService.success('You are successfully logged in!');
+                        // this.router.navigate(["/dashboard"]);
+                        // this.toastrService.success('You are successfully logged in!');
                         // window.location.reload();
                     } else {
                         // alert("Login failed no data");
@@ -83,5 +110,28 @@ export class LoginComponent implements OnInit {
                     console.log(error);
                 }
             );
+
+
+    }
+
+    getPermissionByRoleId(RoleId){
+        
+        this._userService.getById(Global.BASE_ROLE_ENDPOINT,RoleId)
+        .subscribe(data => { 
+            console.log(data.PermissionList);
+            let PermissionList=data.PerPermissionList.split(',');
+            if(PermissionList.includes('')){
+                let index = PermissionList.indexOf('');
+                PermissionList.splice(index,1);
+            }
+            localStorage.setItem('permissionList',PermissionList);
+            console.log(localStorage.getItem('permissionList'));
+            
+
+        },
+        error =>{
+           
+        } );
+    
     }
 }
