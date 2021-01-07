@@ -66,9 +66,9 @@ export class UserComponent implements OnInit {
             // IsActive: ['',],
             // ResetPassword: [''],
         });
-
-        this.LoadUsers();
         this.LoadRoles();
+        // this.LoadUsers();
+       
     }
 
     get Email() {
@@ -80,13 +80,12 @@ export class UserComponent implements OnInit {
     }
 
      LoadRoles(): void {
-        this.indLoading = true;
         this._roleService.get(Global.BASE_ROLES_ENDPOINT)
             .subscribe(roles => { 
                 this.roles = roles; 
-                console.log('roles in users sefnsdgnsgnsgn',this.roles);
-                
-                this.indLoading = false; 
+                if(this.roles){
+                    this.LoadUsers();
+                }                
             },
             // error =>{
             //     this.msg = error,
@@ -95,6 +94,17 @@ export class UserComponent implements OnInit {
             // }
              );
     }
+
+    // LoadRole(id){
+    //     this._userService.getById(Global.BASE_ROLE_ENDPOINT,id)
+    //     .subscribe(data => { 
+    //         this.userFrm.controls['RoleName'].setValue(data);
+    //     },
+    //     error =>{
+    //         this.msg = error,
+    //         this.indLoading=false
+    //     } );
+    // }
 
     setRole(event){
        this.userRole= event.value.Id;
@@ -140,7 +150,10 @@ export class UserComponent implements OnInit {
         this.userFrm.controls['FirstName'].setValue(this.users.FirstName);
         this.userFrm.controls['LastName'].setValue(this.users.LastName);
         this.userFrm.controls['UserName'].setValue(this.users.UserName);
-        this.userFrm.controls['RoleName'].setValue('');
+
+        let role = this.roles.find(role => role.Id === this.users.RoleName);
+        
+        this.userFrm.controls['RoleName'].setValue(role);
         this.userFrm.controls['Password'].setValue(this.users.Password);
         this.userFrm.controls['ConfirmPassword'].setValue(this.users.Password);
         this.userFrm.controls['Email'].setValue(this.users.Email);
@@ -154,7 +167,7 @@ export class UserComponent implements OnInit {
             class:'modal-lg'
         });
 
-     
+    //  this.LoadRole(this.users.RoleName)
     }
 
     deleteUser(Id: number) {
@@ -168,7 +181,11 @@ export class UserComponent implements OnInit {
         this.userFrm.controls['FirstName'].setValue(this.users.FirstName);
         this.userFrm.controls['LastName'].setValue(this.users.LastName);
         this.userFrm.controls['UserName'].setValue(this.users.UserName);
-        this.userFrm.controls['RoleName'].setValue('');
+
+        let role = this.roles.find(role => role.Id === this.users.RoleName);
+        
+        this.userFrm.controls['RoleName'].setValue(role);
+
         this.userFrm.controls['Password'].setValue(this.users.Password);
         this.userFrm.controls['ConfirmPassword'].setValue(this.users.Password);
         this.userFrm.controls['Email'].setValue(this.users.Email);
@@ -193,8 +210,6 @@ export class UserComponent implements OnInit {
 
     passwordMatch(){
         this.passwordNotMatch = false;
-        console.log(this.userFrm.controls['Password'].value ,this.userFrm.controls['ConfirmPassword'].value);
-        
         if(this.userFrm.controls['Password'].value != this.userFrm.controls['ConfirmPassword'].value){
             this.passwordNotMatch = true;
         }
@@ -210,13 +225,10 @@ export class UserComponent implements OnInit {
     }
 
     onSubmit(formData:any) {
-        formData.value.RoleName= this.userRole;
-
+        formData.value.RoleName= formData.value.RoleName.Id;
         this.formSubmitAttempt = true;
         this.msg = "";
         let users = this.userFrm;
-
-        console.log('the form', users)
 
         if (users.valid) {
             switch (this.dbops) {
