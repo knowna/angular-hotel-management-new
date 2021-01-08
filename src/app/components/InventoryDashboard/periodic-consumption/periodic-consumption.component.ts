@@ -115,7 +115,10 @@ export class PeriodicConsumptionComponent implements OnInit {
                 
                 this.indLoading = false; 
             },
-            error => this.msg = <any>error);
+            error => {
+                this.msg = <any>error;
+                this.indLoading = false; 
+            });
     }
 
     getIRItem(Id: number) {

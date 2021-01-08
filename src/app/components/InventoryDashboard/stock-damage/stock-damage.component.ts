@@ -102,7 +102,10 @@ export class StockDamageComponent implements OnInit {
         this.indLoading = true;
         this._pConsumeservice.get(Global.BASE_PERIODICCONSUMPTION_ENDPOINT)
             .subscribe(pConsumes => { this.pConsumes = pConsumes; this.indLoading = false; },
-            error => this.msg = <any>error);
+            error => {
+                this.msg = <any>error;
+                this.indLoading = false;
+            });
     }
 
     getIRItem(Id: number) {
