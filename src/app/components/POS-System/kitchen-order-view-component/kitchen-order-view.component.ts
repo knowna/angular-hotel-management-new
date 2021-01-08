@@ -48,7 +48,7 @@ export class KitchenOrderViewComponent implements OnInit {
           this.departments = departments; 
           this.tempDepartments = departments;
           this.showLoader = false; 
-          this.selectDepartment(this.departments[0]);
+          // this.selectDepartment(this.departments[0]);
       },
       error => this.msg = error);
   }
