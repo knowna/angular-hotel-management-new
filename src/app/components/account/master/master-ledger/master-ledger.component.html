@@ -152,15 +152,31 @@
             <div class="container">
                 <div class="panel panel-defaut">
                     <div class="tab-v1">
-                        <ul class="nav nav-tabs">
-                            <li class="active"><a href="#Ledger" data-toggle="tab">Ledger</a></li>
-                            <li><a href="#Taxation" data-toggle="tab">Taxation</a></li>
-                            <li><a href="#Settings" data-toggle="tab">Settings</a></li>
-                            <li><a href="#Address" data-toggle="tab">Address</a></li>
+                        <ul class="nav nav-tabs"  id="myTab" role="tablist">
+                            <li class="nav-item waves-effect waves-light">
+                                <a href="#Ledger" class="nav-link m-1 active" id="Ledger-tab" data-toggle="tab" role="tab" aria-controls="Ledger" aria-selected="true">
+                                    Ledger
+                                </a>
+                            </li>
+                            <li class="nav-item waves-effect waves-light">
+                                <a href="#Taxation" class="nav-link m-1" id="Taxation-tab" data-toggle="tab" role="tab" aria-controls="Taxation" aria-selected="false">
+                                    Taxation
+                                </a>
+                            </li>
+                            <li class="nav-item waves-effect waves-light">
+                                <a href="#Settings" class="nav-link m-1" id="Settings-tab" data-toggle="tab" role="tab" aria-controls="Settings" aria-selected="false">
+                                    Settings
+                                </a>
+                            </li>
+                            <li class="nav-item waves-effect waves-light">
+                                <a href="#Address" class="nav-link m-1" id="Address-tab" data-toggle="tab" role="tab" aria-controls="Address" aria-selected="false">
+                                    Address
+                                </a>
+                            </li>
                         </ul>
-                        <div class="tab-content">
+                        <div class="tab-content" id="myTabContent">
                             <br />
-                            <div class="tab-pane fade show active" id="Ledger">
+                            <div class="tab-pane fade active show" id="Ledger" role="tabpanel" aria-labelledby="Ledger-tab">
                                 <div class="row m-0">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -277,7 +293,7 @@
                                 </div> -->
                             </div>
 
-                            <div class="tab-pane fade in" id="Taxation">
+                            <div class="tab-pane fade" id="Taxation" role="tabpanel" aria-labelledby="Taxation-tab">
                                 <div class="row m-0">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -361,7 +377,7 @@
 
                             </div>
 
-                            <div class="tab-pane fade in" id="Address">
+                            <div class="tab-pane fade" id="Address" role="tabpanel" aria-labelledby="Address-tab">
                                 <div class="row m-0">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -453,7 +469,7 @@
 
                             </div>
 
-                            <div class="tab-pane fade in" id="Settings">
+                            <div class="tab-pane fade" id="Settings" role="tabpanel" aria-labelledby="Settings-tab">
                                 <div class="row m-0">
                                     <div class="col-md-4">
                                         <div class="form-check">
@@ -695,5 +711,3 @@
     </form>
 
 </ng-template>
-
-
