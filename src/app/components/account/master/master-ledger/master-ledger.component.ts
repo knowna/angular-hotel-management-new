@@ -19,6 +19,8 @@ import 'jspdf-autotable';
 
 import { DatePipe } from '@angular/common';
 import { EntityMock } from 'src/app/Model/Account/account';
+import { AccountTypeService } from './services/account-type.service';
+import { AccountType } from 'src/app/Model/AccountType/accountType';
 
 @Component({
     templateUrl: './master-ledger.component.html'
@@ -48,11 +50,18 @@ export class MasterLedgerComponent implements OnInit {
 
     public company: any = {};
 
+    accountTypes: AccountType[];
+
 
     toExportFileName: string = 'Master Ledger-' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
     toPdfFileName: string = 'Master Ledger-' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
     
-    constructor(private fb: FormBuilder, private _masterLedgerService: MasterLedgerService, private modalService: BsModalService,private date: DatePipe,) { 
+    constructor(
+        private fb: FormBuilder, 
+        private _masterLedgerService: MasterLedgerService, 
+        private modalService: BsModalService,
+        private date: DatePipe,
+        private accTypeService: AccountTypeService) { 
         this.entityLists = [
             { id: 0, name: 'Dr' },
             { id: 1, name: 'Cr' }
@@ -119,8 +128,22 @@ export class MasterLedgerComponent implements OnInit {
             // entityLists: ['', Validators.required],
         })
 
+        this.LoadAccTypes();
         this.LoadMasters();
 
+    }
+
+    LoadAccTypes(): void {
+        this.accTypeService.get(Global.BASE_ACCOUNTTYPE_ENDPOINT)
+            .subscribe(accounttypes => { 
+                this.accountTypes = accounttypes; 
+            },
+            error => this.msg = <any>error);
+    }
+
+    getGroupName(accountTypes: AccountType[], underGroupId: number) {
+        let group = this.accountTypes.find(x => x.Id == underGroupId);
+        return group? group : {};
     }
 
     LoadMasters(): void {
@@ -308,7 +331,7 @@ export class MasterLedgerComponent implements OnInit {
         let master = this.masterLedgerFrm;
         this.formSubmitAttempt = true;
 
-        console.log(this.masterLedgerFrm);
+        // console.log(this.masterLedgerFrm);
         
                     
         // if (master.valid) {
