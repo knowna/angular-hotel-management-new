@@ -29,6 +29,9 @@ export class OrderTicketComponent implements OnInit {
 
   selectedTicket: any = {};
 
+
+  selectedOrder: any = {};
+
   productList:Product[]=[];
 
   orderNo = '';
@@ -157,33 +160,19 @@ export class OrderTicketComponent implements OnInit {
   }
 
 
-  printTicket(ticket) {
-    this.selectedTicket = ticket;
-    // console.log('the ticket is', ticket)
-    this.selectedTicket.itemList = [];
-    this.orderApi.loadOrdersNew(ticket.Id)
-      .subscribe(
-        data => {
-          this.ordersNew = data;
-          // console.log('the orders', this.ordersNew)
-          this.orderNo = this.ordersNew[0].OrderNumber + '';
-          this.ordersNew.forEach(order => {
-            order.OrderItems.forEach(item => {
-              this.selectedTicket.itemList.push(item);
-            });
-          });
-
-          if(this.selectedTicket.itemList.length > 0) {
-            setTimeout(function(){ 
-              (window as any).print();
-            }, 1000);
-            // console.log('the item list is', this.selectedTicket.itemList)
-          }else{
-            this.toastrService.info('No items found in the ticket!');
-          }
+  printOrder(order) {
+    this.selectedOrder = order;
+    // console.log('the selected order  is', this.selectedOrder)
+    
+    if(this.selectedOrder.itemList.length > 0) {
+      setTimeout(function(){ 
+        (window as any).print();
+      }, 1000);
+      // console.log('the item list is', this.selectedTicket.itemList)
+    }else{
+      this.toastrService.info('No items found in the order!');
+    }
           
-        }
-      )
   }
 
   // Calculates VAT Amount
