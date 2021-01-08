@@ -36,13 +36,45 @@
         <div class="card-body">
             <div class="row m-0 mt-3">
                 <div class="col-md-4">
-                    <h2 class="header">Order Ticket</h2>
+                    <h2 class="header">Order List</h2>
                 </div>
             </div>
             
             <hr>
 
-            <div class="row m-0 mt-2">
+            <div *ngFor="let order of orderList;index as i">
+                <table class="table table-bordered">
+                    <caption style="caption-side:top">
+                        Order No: {{order.orderNumber}}
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th>S.N</th>
+                            <th>Item Name</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Per Unit(Rs.)</th>
+                            <th>Total(Rs)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of order.itemList;index as j">
+                            <td>{{j+1}}</td>
+                            <td>{{ getProductById(productList, item.ItemId)?.Name }}</td>
+                            <td>{{item.OrderDescription}}</td>
+                            <td>{{item.Qty}}</td>
+                            <td>{{ CurrentUnitPrice(item.UnitPrice) }}</td>
+                            <td> {{ ProductPrice(item.UnitPrice, item.Qty) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div *ngIf="orderList.length == 0" class="text-center">
+                No orders found !
+              </div>
+
+            <!-- <div class="row m-0 mt-2">
                 <div class="col-sm-12 table-responsive">
                     <div class="alert alert-info" role="alert" *ngIf="indLoading">
                         <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
@@ -54,7 +86,6 @@
                                 <th>S.N</th>
                                 <th>Ticket Name</th>
                                 <th>Ticket Date</th>
-                                <!-- <th>Total Amount</th> -->
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -63,7 +94,6 @@
                                 <td>{{i+1}}</td>
                                 <td>{{ticket.Name}}#{{ticket.TicketId}}</td>
                                 <td>{{ticket.TicketOpeningTime | date: 'dd MMM yyyy,hh:mm a'}}</td>
-                                <!-- <td>{{ticket.TotalAmount}}</td> -->
                                 <td>
                                     <button class="btn btn-secondary btn-sm" (click)="printTicket(ticket)">
                                         <i class="fa fa-print"></i>
@@ -81,7 +111,7 @@
                     <span class="sr-only">Error:</span>
                     {{msg}}
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     

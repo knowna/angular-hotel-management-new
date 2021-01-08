@@ -35,7 +35,13 @@ export class OrderTicketComponent implements OnInit {
 
   departments: IDepartment[];
   tempDepartments: IDepartment[];
+  selectedDepartment: IDepartment;
   showLoader: boolean = false;
+
+  itemList = [];
+  filteredItemList = [];
+
+  orderList = [];
 
   constructor(
     private mergeService: MergeService,
@@ -69,6 +75,35 @@ export class OrderTicketComponent implements OnInit {
       error => this.msg = error);
   }
 
+  selectDepartment(department: IDepartment) {
+    // this.showItemLoader = true;
+    this.orderList = [];
+    this.filteredItemList = [];
+    this.selectedDepartment = department;
+    this.filteredItemList  = this.itemList.filter(item => item.DepartmentId == this.selectedDepartment.Id);
+    this.filteredItemList.forEach(item => {
+      const order = this.orderList.find(o => o.orderNumber == item.OrderNumber);
+      if(order) {
+        order.itemList.push(item);
+      }else{
+        let order = {
+          orderNumber : '',
+          itemList : []
+        };
+        order.itemList = [];
+        order.orderNumber = item.OrderNumber,
+        order.itemList.push(item);
+
+        this.orderList.push(order);
+      }
+    });
+
+    console.log('the selected department', this.selectedDepartment);
+    console.log('the order list are', this.orderList);
+    console.log('the filtered item list are', this.filteredItemList)
+  }
+
+
   getProductById(products: Product[], productId: number) {
     var products: Product[] = products.filter((product: Product) => product.Id === productId);
     // Return product
@@ -77,20 +112,48 @@ export class OrderTicketComponent implements OnInit {
 
 
 
-  getAllUnsettledTicket() {
-    this.indLoading = true;
+  // getAllUnsettledTicket() {
+  //   this.indLoading = true;
+  //   this.mergeService.getunsettleOrders()
+  //     .subscribe(
+  //       data => {
+  //         this.indLoading = false;
+  //         this.ticketList = data;
+  //         console.log('the ticket list are', this.ticketList);
+  //       },
+  //       error => {
+  //         this.indLoading = false;
+  //         this.msg = <any>error
+  //       }
+  //     )
+  // }
+
+  getAllUnsettledTicket(){
     this.mergeService.getunsettleOrders()
-      .subscribe(
-        data => {
-          this.indLoading = false;
-          this.ticketList = data;
-          console.log('the ticket list are', this.ticketList);
-        },
-        error => {
-          this.indLoading = false;
-          this.msg = <any>error
+    .subscribe(
+        data =>{
+          data.forEach(ticket => {
+            this.orderApi.loadOrdersNew(ticket.Id)
+            .subscribe(
+              order => {
+
+                if(order != null) {
+                  order.forEach(or => {
+                    or.OrderItems.forEach(item => {
+                      this.itemList.push(item);
+                    });
+                  });
+                }
+
+              }
+            )
+          });
+
+
+          console.log('the items are', this.itemList);
+
         }
-      )
+    )
   }
 
 
