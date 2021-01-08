@@ -208,7 +208,7 @@ export class AccountTypeComponent implements OnInit {
 
         let accountType = this.accountTypes.find(x => x.Name === this.accountType.UnderGroupLedger);
 
-        this.accountType.UnderGroupLedger = accountType?.Id+'';
+        this.accountType.UnderGroupLedger = accountType ? accountType.Id+'' : '';
 
         this.accTypeFrm.setValue(this.accountType);
         this.modalRef = this.modalService.show(this.TemplateRef, {

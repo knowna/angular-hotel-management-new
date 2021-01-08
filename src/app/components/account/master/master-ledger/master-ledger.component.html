@@ -38,21 +38,22 @@
             <table id="ledgersTable" class='table table-bordered' *ngIf='masterLedgers && masterLedgers.length'>
                 <thead>
                     <tr>
-                        <th colspan="2" class="text-center">
+                        <th colspan="3" class="text-center">
                             <strong>{{ company?.NameEnglish }}</strong>
                             <!-- <br>Ledger -->
                         </th>
                     </tr>
                     <tr>
                         <th>Name</th>
-                        <!-- <th>UnderGroup Master</th> -->
+                        <th>UnderGroup Master</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let masterLedger of masterLedgers">
                         <td>{{masterLedger.Name}}</td>
-                        <!-- <td>{{masterLedger.UnderGroupMaster}}</td> -->
+                        <!-- <td>{{masterLedger.UnderGroupMaster || ''}}</td> -->
+                        <td>{{ getGroupName(accountTypes,masterLedger.UnderGroupMaster)?.Name }}</td>
 
                         <td>
 
@@ -174,10 +175,12 @@
                                         <div class="form-group">
                                             <label class="control-label">UnderGroup Master </label>
                                             <select class="form-control" placeholder="UnderGroupMaster" formControlName="UnderGroupMaster">
+                                                <!-- <option value=""></option>
                                                 <option>Test</option>
                                                 <option>Test1</option>
                                                 <option>Test2</option>
-                                                <option>Test3</option>
+                                                <option>Test3</option> -->
+                                                <option *ngFor="let accountTypes of accountTypes" value={{accountTypes.Id}}>{{accountTypes.Name}}</option>
                                             </select>
                                             <div class="alert alert-danger" *ngIf="masterLedgerFrm.get('UnderGroupMaster').hasError('required') && formSubmitAttempt">
                                                 UnderGroupMaster is required
