@@ -108,8 +108,15 @@ export class InventoryReceiptComponent implements OnInit {
     loadInventoryReceipt(): void {
         this.indLoading = true;
         this._inventoryReceiptService.get(Global.BASE_INVENTORYRECEIPT_ENDPOINT)
-            .subscribe(inventoryReceipt => { this.inventoryReceipt = inventoryReceipt; this.indLoading = false; },
-            error => this.msg = <any>error);
+            .subscribe(
+                inventoryReceipt => { 
+                    this.inventoryReceipt = inventoryReceipt; 
+                    this.indLoading = false; 
+                },
+                error => {
+                    this.msg = <any>error;
+                    this.indLoading = false;
+                });
     }
 
     /**
