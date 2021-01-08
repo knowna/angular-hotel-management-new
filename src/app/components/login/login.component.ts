@@ -72,32 +72,39 @@ export class LoginComponent implements OnInit {
 
 
 
-                        // this._userService.getById(Global.BASE_ROLE_ENDPOINT,data.RoleName)
-                        // .subscribe(data => { 
-                        //     let PermissionList=data[0].PermissionList.split(',');
-                        //     if(PermissionList.includes('')){
-                        //         let index = PermissionList.indexOf('');
-                        //         PermissionList.splice(index,1);
-                        //     }
+                        this._userService.getById(Global.BASE_ROLE_ENDPOINT,data.RoleName)
+                        .subscribe(data => { 
+                            let PermissionList=data[0].PermissionList.split(',');
+                            if(PermissionList.includes('')){
+                                let index = PermissionList.indexOf('');
+                                PermissionList.splice(index,1);
+                            }
                             
-                        //     localStorage.setItem('permissionList',PermissionList);
-                        //     if(PermissionList.length>0){
+                            localStorage.setItem('permissionList',JSON.stringify(PermissionList));
+                            if(PermissionList.length>0){
+                                
+                                this.router.navigate(["/dashboard"]);
+                                window.location.reload();
+                                
+                                this.toastrService.success('You are successfully logged in!');
+                            }
+                            
 
-                        //         this.router.navigate(["/dashboard"]);
-                        //         this.toastrService.success('You are successfully logged in!');
-                        //     }
-                            
+                            // if(localStorage.getItem('permissionList').length!=null){
+                            //     console.log('sjdshhsfhshgfgshhg',);
+                            //     this.router.navigate(["/dashboard"]);
+                            // }
                 
-                        // },
-                        // error =>{
+                        },
+                        error =>{
                            
-                        // } );
+                        } );
                     
 
                         // this.getPermissionByRoleId(data.RoleName);
                         // window.location.reload();
-                        this.router.navigate(["/dashboard"]);
-                        this.toastrService.success('You are successfully logged in!');
+                        // this.router.navigate(["/dashboard"]);
+                        // this.toastrService.success('You are successfully logged in!');
                         // window.location.reload();
                     } else {
                         // alert("Login failed no data");
