@@ -59,6 +59,7 @@ export class LoginComponent implements OnInit {
             }
         });
     }
+    
     onSubmit() {
         let loginfrm = this.form;
         
