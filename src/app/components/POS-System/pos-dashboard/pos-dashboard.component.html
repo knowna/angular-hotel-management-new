@@ -118,7 +118,7 @@
             <div>
                 <div class="panel panel-defaut">
                     <div class="tab-v1">
-                        <ul class="nav nav-tabs">
+                        <!-- <ul class="nav nav-tabs">
                             <li class="active">
                                 <a href="#Ledger" data-toggle="tab">Ledger</a>
                             </li>
@@ -131,8 +131,30 @@
                             <li>
                                 <a href="#Address" data-toggle="tab">Address</a>
                             </li>
+                        </ul> -->
+                        <ul class="nav nav-tabs"  id="myTab" role="tablist">
+                            <li class="nav-item waves-effect waves-light">
+                                <a href="#Ledger" class="nav-link m-1 active" id="Ledger-tab" data-toggle="tab" role="tab" aria-controls="Ledger" aria-selected="true">
+                                    Ledger
+                                </a>
+                            </li>
+                            <li class="nav-item waves-effect waves-light">
+                                <a href="#Taxation" class="nav-link m-1" id="Taxation-tab" data-toggle="tab" role="tab" aria-controls="Taxation" aria-selected="false">
+                                    Taxation
+                                </a>
+                            </li>
+                            <li class="nav-item waves-effect waves-light">
+                                <a href="#Settings" class="nav-link m-1" id="Settings-tab" data-toggle="tab" role="tab" aria-controls="Settings" aria-selected="false">
+                                    Settings
+                                </a>
+                            </li>
+                            <li class="nav-item waves-effect waves-light">
+                                <a href="#Address" class="nav-link m-1" id="Address-tab" data-toggle="tab" role="tab" aria-controls="Address" aria-selected="false">
+                                    Address
+                                </a>
+                            </li>
                         </ul>
-                        <div class="tab-content">
+                        <div class="tab-content" id="myTabContent">
                             <br />
                             <div class="tab-pane fade show active" id="Ledger">
                                 <div class="row">
