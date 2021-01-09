@@ -141,8 +141,8 @@ export class MasterLedgerComponent implements OnInit {
             error => this.msg = <any>error);
     }
 
-    getGroupName(accountTypes: AccountType[], underGroupId: number) {
-        let group = this.accountTypes.find(x => x.Id == underGroupId);
+    getGroupName(accountTypes: AccountType[], AccountTypeId: number) {
+        let group = this.accountTypes?.find(x => x.Id == AccountTypeId);
         return group? group : {};
     }
 
