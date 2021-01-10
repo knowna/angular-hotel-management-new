@@ -36,6 +36,8 @@ export class UsersService {
         const options = {
             headers
          };
+        //  console.log(body,'url is ',url + '?id=' +id);
+         
       //  const options =  ({ headers  });
         return this.http.put(url + '?id=' +id, body, options).pipe(
                  catchError(this.handleError));

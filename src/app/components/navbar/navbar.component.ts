@@ -37,7 +37,7 @@ export class NavbarComponent implements OnInit {
   }
 
 
- profile(){
+profile(){
   const modal: NgbModalRef = this.modal.open(UserComponent, {size: 'lg', backdrop: 'static'});
   // modal.componentInstance.mode = mode;
   // modal.componentInstance.user = user;

@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { UsersService } from 'src/app/Service/user.service';
 import { navcomponents } from 'src/app/Shared/navcomponents';
 
 @Pipe({
@@ -9,6 +10,11 @@ import { navcomponents } from 'src/app/Shared/navcomponents';
 
 export class LinksFilterPipe implements PipeTransform {
 
+  constructor(
+    private useService: UsersService
+  ){
+
+  }
 
   permissionList=[
     'POS',
@@ -107,10 +113,11 @@ export class LinksFilterPipe implements PipeTransform {
     
 
 ];
-// permissionList = localStorage.getItem('permissionList');
+//  permissionList = localStorage.getItem('permissionList');
 
   transform(items): any {
 
+    
   if(!items) return [];
    
     

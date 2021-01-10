@@ -101,7 +101,7 @@ export const navcomponents=[
       title: 'POS',
       img:'../../../assets/images/pos.png',
       icon: 'fa fa-shopping-cart-outline',
-      permission:'POS',
+      permission:'POS:Order:NewOrder',
       show: false,
       children: [
         {
