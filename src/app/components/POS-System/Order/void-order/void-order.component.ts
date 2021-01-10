@@ -307,7 +307,6 @@ itemList=[];
                "ListOrderItem":this.itemList
            }
 
-           console.log('orderRequest is',JSON.stringify(orderRequest) ,);
            
            this._roleService.post(Global.BASE_ORDERS_VOID_ENDPOINT,orderRequest)
            .subscribe(data => { 

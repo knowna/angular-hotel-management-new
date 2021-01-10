@@ -10,14 +10,15 @@ export class RoleService {
 
     get(url: string): Observable<any> {
         return this._http.get(url).pipe(
-                tap(data => console.log("All: " + JSON.stringify(data))),
+                
             catchError(this.handleError));
     }
 
     post(url: string, model: any): Observable<any> {
-        let body = JSON.stringify(url);
+        let body = JSON.stringify(model);
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let options = ({ headers: headers });
+        
         return this._http.post(url, body, options).pipe(
                 catchError(this.handleError));
     }
@@ -47,7 +48,6 @@ export class RoleService {
     }
 
     delete(url: string, id: number): Observable<any> {
-        console.log(url,id);
         
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let options = ({ headers: headers });

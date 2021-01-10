@@ -67,45 +67,47 @@ export class LoginComponent implements OnInit {
                 (data) => {
                     
                     if (data!= null ) {
+                        console.log(data);
+                        
+
                         localStorage.setItem("userInformation",JSON.stringify(data));
                         localStorage.setItem("userToken",data.Token);
                         this.authService.authenticate();
 
 
 
-                        this._userService.getById(Global.BASE_ROLE_ENDPOINT,data.RoleName)
-                        .subscribe(data => { 
-                            let PermissionList=data[0].PermissionList.split(',');
-                            if(PermissionList.includes('')){
-                                let index = PermissionList.indexOf('');
-                                PermissionList.splice(index,1);
-                            }
+                        // this._userService.getById(Global.BASE_ROLE_ENDPOINT,data.RoleName)
+                        // .subscribe(data => { 
+                        //     let PermissionList=data[0].PermissionList.split(',');
+                        //     if(PermissionList.includes('')){
+                        //         let index = PermissionList.indexOf('');
+                        //         PermissionList.splice(index,1);
+                        //     }
                             
-                            localStorage.setItem('permissionList',JSON.stringify(PermissionList));
-                            if(PermissionList.length>0){
+                        //     localStorage.setItem('permissionList',JSON.stringify(PermissionList));
+                        //     if(PermissionList.length>0){
                                 
-                                this.router.navigate(["/dashboard"]);
-                                window.location.reload();
+                        //         this.router.navigate(["/dashboard"]);
+                        //         window.location.reload();
                                 
-                                this.toastrService.success('You are successfully logged in!');
-                            }
+                        //         this.toastrService.success('You are successfully logged in!');
+                        //     }
                             
 
-                            // if(localStorage.getItem('permissionList').length!=null){
-                            //     console.log('sjdshhsfhshgfgshhg',);
-                            //     this.router.navigate(["/dashboard"]);
-                            // }
+                        //     // if(localStorage.getItem('permissionList').length!=null){
+                        //     //     console.log('sjdshhsfhshgfgshhg',);
+                        //     //     this.router.navigate(["/dashboard"]);
+                        //     // }
                 
-                        },
-                        error =>{
+                        // },
+                        // error =>{
                            
-                        } );
+                        // } );
                     
 
-                        // this.getPermissionByRoleId(data.RoleName);
                         // window.location.reload();
-                        // this.router.navigate(["/dashboard"]);
-                        // this.toastrService.success('You are successfully logged in!');
+                        this.router.navigate(["/dashboard"]);
+                        this.toastrService.success('You are successfully logged in!');
                         // window.location.reload();
                     } else {
                         // alert("Login failed no data");
@@ -122,24 +124,24 @@ export class LoginComponent implements OnInit {
 
     }
 
-    getPermissionByRoleId(RoleId){
+    // getPermissionByRoleId(RoleId){
         
-        this._userService.getById(Global.BASE_ROLE_ENDPOINT,RoleId)
-        .subscribe(data => { 
-            console.log(data.PermissionList);
-            let PermissionList=data.PerPermissionList.split(',');
-            if(PermissionList.includes('')){
-                let index = PermissionList.indexOf('');
-                PermissionList.splice(index,1);
-            }
-            localStorage.setItem('permissionList',PermissionList);
-            console.log(localStorage.getItem('permissionList'));
+    //     this._userService.getById(Global.BASE_ROLE_ENDPOINT,RoleId)
+    //     .subscribe(data => { 
+    //         console.log(data.PermissionList);
+    //         let PermissionList=data.PerPermissionList.split(',');
+    //         if(PermissionList.includes('')){
+    //             let index = PermissionList.indexOf('');
+    //             PermissionList.splice(index,1);
+    //         }
+    //         localStorage.setItem('permissionList',PermissionList);
+    //         console.log(localStorage.getItem('permissionList'));
             
 
-        },
-        error =>{
+    //     },
+    //     error =>{
            
-        } );
+    //     } );
     
-    }
+    // }
 }
