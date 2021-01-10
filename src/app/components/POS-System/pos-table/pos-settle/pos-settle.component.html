@@ -204,9 +204,10 @@
                             <div class="col-md-12">
                                 <button type="button" class="btn btn-default" (click)="addDiscount()" [disabled]="calculateVoidGiftSum() > 0 || getFinalBalance().toFixed(2) === '0.00' || selectedValue == 0">Discount</button>
                                 <!--<button type="button" class="btn btn-default" (click)="roundTicket(ticket)" [disabled]="selectedValue == 0 || getFinalBalance().toFixed(2) === '0.00'">Round</button>-->
+                                <!-- [disabled]="getGrandTotal() != getTotalCharged(ticket)" -->
                                 <button 
                                     type="button" 
-                                    [disabled]="getGrandTotal() != getTotalCharged(ticket)"
+                                    
                                     class="btn btn-default" 
                                     (click)="printInvoice()">
                                     Print Bill

@@ -59,7 +59,7 @@ export class OrderService {
             }));
     }
 
-    loadOrdersNew(TicketId: string): Observable<Order[]> {
+    loadOrdersNew(TicketId: string): Observable<any[]> {
         // Call to API here
         return this.http.get<Order[]>(Global.BASE_ORDERS_ENDPOINT + "?TicketId=" + TicketId).pipe(
             catchError(this.handleError)
