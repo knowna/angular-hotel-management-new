@@ -336,10 +336,10 @@ export class InventoryReceiptComponent implements OnInit {
                 instance.controls['Rate'].setValue(valuesFromServer.Rate);
                 instance.controls['TotalAmount'].setValue(valuesFromServer.TotalAmount);
                 instance.controls['BatchNo'].setValue(valuesFromServer.BatchNo);
-                // instance.controls['Mdate'].setValue(new Date(valuesFromServer.Mdate));
-                // instance.controls['Edate'].setValue(new Date(valuesFromServer.Edate));
-                instance.controls['Mdate'].setValue(valuesFromServer.Mdate);
-                instance.controls['Edate'].setValue(valuesFromServer.Edate);
+                instance.controls['Mdate'].setValue(new Date(valuesFromServer.Mdate));
+                instance.controls['Edate'].setValue(new Date(valuesFromServer.Edate));
+                // instance.controls['Mdate'].setValue(valuesFromServer.Mdate);
+                // instance.controls['Edate'].setValue(valuesFromServer.Edate);
                 control.push(instance);
             }
 
@@ -380,10 +380,10 @@ export class InventoryReceiptComponent implements OnInit {
                 instance.controls['Rate'].setValue(valuesFromServer.Rate);
                 instance.controls['TotalAmount'].setValue(valuesFromServer.TotalAmount);
                 instance.controls['BatchNo'].setValue(valuesFromServer.BatchNo);
-                // instance.controls['Mdate'].setValue(new Date(valuesFromServer.Mdate));
-                // instance.controls['Edate'].setValue(new Date(valuesFromServer.Edate));
-                instance.controls['Mdate'].setValue(valuesFromServer.Mdate);
-                instance.controls['Edate'].setValue(valuesFromServer.Edate);
+                instance.controls['Mdate'].setValue(new Date(valuesFromServer.Mdate));
+                instance.controls['Edate'].setValue(new Date(valuesFromServer.Edate));
+                // instance.controls['Mdate'].setValue(valuesFromServer.Mdate);
+                // instance.controls['Edate'].setValue(valuesFromServer.Edate);
                 control.push(instance);
             }
 

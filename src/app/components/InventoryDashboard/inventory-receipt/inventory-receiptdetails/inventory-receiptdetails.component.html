@@ -12,14 +12,14 @@
                 Item Name is required
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <label>Quantity</label>
             <input type="number" class="form-control" formControlName="Quantity" (blur)="calculateAmount(InventoryReceiptDetails.controls)" />
             <div class="alert alert-danger" *ngIf="InventoryReceiptDetails.get('Quantity').hasError('required') && formSubmitAttempt">
                 Quantity is required
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <label>Rate</label>
             <input type="number" class="form-control" formControlName="Rate" (blur)="calculateAmount(InventoryReceiptDetails.controls)" />
             <div class="alert alert-danger" *ngIf="InventoryReceiptDetails.get('Rate').hasError('required') && formSubmitAttempt">
@@ -30,10 +30,10 @@
             <label>TotalAmount</label>
             <input type="number" class="form-control" formControlName="TotalAmount" />
         </div>
-    </div>
+    <!-- </div>
     <br />
-    <div class="row">
-        <div class="col-md-4">
+    <div class="row"> -->
+        <div class="col-md-2">
             <label>Batch No.</label>
             <input type="text" class="form-control" formControlName="BatchNo" />
             <div class="alert alert-danger" *ngIf="InventoryReceiptDetails.get('BatchNo').hasError('required') && formSubmitAttempt">
@@ -41,21 +41,21 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label>M.Date</label>
             <div class="form-group">
-                <!-- <input type="text" class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" formControlName="Mdate" /> -->
-                <input type="text" class="form-control" placeholder="yyyy.mm.dd" formControlName="Mdate" />
+                <input type="text" class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" formControlName="Mdate" />
+                <!-- <input type="text" class="form-control" placeholder="yyyy.mm.dd" formControlName="Mdate" /> -->
                 <div class="text-danger" *ngIf="(InventoryReceiptDetails.get('Mdate').hasError('InvalidDate') || InventoryReceiptDetails.get('Mdate').hasError('required'))">
                     {{ InventoryReceiptDetails.get('Mdate').getError('InvalidDate') }}
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label>E.Date</label>
             <div class="form-group">
-                <!-- <input type="text" class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" formControlName="Edate" /> -->
-                <input type="text" class="form-control" placeholder="yyyy.mm.dd" formControlName="Edate" />
+                <input type="text" class="form-control" placeholder="dd/MM/yyyy" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" formControlName="Edate" />
+                <!-- <input type="text" class="form-control" placeholder="yyyy.mm.dd" formControlName="Edate" /> -->
                 <div class="text-danger" *ngIf="(InventoryReceiptDetails.get('Edate').hasError('InvalidDate') || InventoryReceiptDetails.get('Edate').hasError('required'))">
                     {{ InventoryReceiptDetails.get('Edate').getError('InvalidDate') }}
                 </div>

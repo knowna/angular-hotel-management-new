@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { IDepartment } from 'src/app/Model/Department';
 import { Order } from 'src/app/Model/order.model';
 import { Product } from 'src/app/Model/product.model';
+import { Table } from 'src/app/Model/table.model';
 import { BillingService } from 'src/app/Service/Billing/billing.service';
 import { OrderService } from 'src/app/Service/Billing/order.service';
 import { DepartmentService } from 'src/app/Service/Department.service';
@@ -46,6 +47,8 @@ export class OrderTicketComponent implements OnInit {
 
   orderList = [];
 
+  tables: Table[] = [];
+
   constructor(
     private mergeService: MergeService,
     private orderApi: OrderService, 
@@ -54,6 +57,13 @@ export class OrderTicketComponent implements OnInit {
     private _departmentService: DepartmentService,
   ) {
     this.company = JSON.parse(localStorage.getItem('company'));
+    // this.billService.loadTables()
+    //   .subscribe(
+    //     data => {
+    //         this.tables = data;
+    //     }
+    // );
+
    }
 
   ngOnInit(): void {
@@ -91,10 +101,14 @@ export class OrderTicketComponent implements OnInit {
       }else{
         let order = {
           orderNumber : '',
-          itemList : []
+          itemList : [],
+          TableNo: '',
+          TicketOpeningTime: ''
         };
         order.itemList = [];
         order.orderNumber = item.OrderNumber,
+        order.TableNo = item.TableNo,
+        order.TicketOpeningTime = item.TicketOpeningTime
         order.itemList.push(item);
 
         this.orderList.push(order);
@@ -132,31 +146,63 @@ export class OrderTicketComponent implements OnInit {
   // }
 
   getAllUnsettledTicket(){
-    this.mergeService.getunsettleOrders()
-    .subscribe(
-        data =>{
-          data.forEach(ticket => {
-            this.orderApi.loadOrdersNew(ticket.Id)
-            .subscribe(
-              order => {
-
-                if(order != null) {
-                  order.forEach(or => {
-                    or.OrderItems.forEach(item => {
-                      this.itemList.push(item);
-                    });
-                  });
-                }
-
-              }
-            )
-          });
-
-
-          console.log('the items are', this.itemList);
-
+    this.billService.loadTables()
+      .subscribe(
+        data => {
+            this.tables = data;
+            if(this.tables) {
+              this.mergeService.getunsettleOrders()
+                .subscribe(
+                    data =>{
+                      // console.log('the order ticket is', data)
+                      data.forEach(ticket => {
+                        const tableData = this.tables.find(t => t.Id == ticket.TableId);
+                        // console.log('the table data is', tableData)
+                        this.orderApi.loadOrdersNew(ticket.Id)
+                        .subscribe(
+                          order => {
+            
+                            if(order != null) {
+                              order.forEach(or => {
+                                or.OrderItems.forEach(item => {
+                                  let newItem = {
+                                    'DepartmentId': item.DepartmentId,
+                                    'FinancialYear': item.FinancialYear,
+                                    'Id': item.Id,
+                                    'IsSelected': item.IsSelected,
+                                    'IsVoid': item.IsVoid,
+                                    'ItemId': item.ItemId,
+                                    'OrderDescription': item.OrderDescription,
+                                    'OrderId': item.OrderId,
+                                    'OrderNumber': item.OrderNumber,
+                                    'Qty': item.Qty,
+                                    'Tags': item.Tags,
+                                    'TotalAmount': item.TotalAmount,
+                                    'UnitPrice': item.UnitPrice,
+                                    'UserId': item.UserId,
+                                    'TableNo':tableData.Name,
+                                    'TicketOpeningTime':ticket.TicketOpeningTime
+                                  }
+                                  this.itemList.push(newItem);
+                                });
+                              });
+                            }
+            
+                          }
+                        )
+                      });
+            
+            
+                      // console.log('the items are', this.itemList);
+            
+                    }
+                )
+            }
         }
-    )
+    );
+
+
+    
   }
 
 

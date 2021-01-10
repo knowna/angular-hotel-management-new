@@ -475,7 +475,8 @@ export class PosInvoicePrintComponent implements OnInit {
        
         let ticketId = this.selectedTicket;
         if (this.getFinalBalance() > 0) {
-            alert("Before bill print! Please settle amount");
+            // alert("Before bill print! Please settle amount");
+            (window as any).print();
         }
         else{
             this.orderApi.ticketPrintApi(ticketId)
