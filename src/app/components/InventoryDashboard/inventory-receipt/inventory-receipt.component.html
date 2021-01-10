@@ -15,7 +15,7 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label>Receipt No.</label>
                     <input type="number" class="form-control" formControlName="ReceiptNumber" />
                     <div class="alert alert-danger" *ngIf="InventReceiptFrm.get('ReceiptNumber').hasError('required') && formSubmitAttempt">
@@ -24,7 +24,7 @@
                 </div>
                 <!-- receipt number -->
 
-                <div class="col-md-4">
+                <div class="col-md-7">
                     <label>Name</label>
                     <select class="form-control" formControlName="AccountTypeId">
                         <option disabled>Select</option>
@@ -36,7 +36,7 @@
                 </div>
                 <!-- receipt name -->
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label>Date</label>
                     <div class="form-group">
                         <!-- <input type="text" class="form-control" placeholder="day/month/year" bsDatepicker [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" formControlName="Date" /> -->
