@@ -97,6 +97,7 @@ export class RoleComponent implements OnInit {
             .subscribe(roles => { 
                 this.roles = roles; 
                 this.tempRoles = roles;
+                console.log('the roles are', this.roles)
                 this.indLoading = false; 
             },
             error =>{
@@ -127,15 +128,11 @@ export class RoleComponent implements OnInit {
         this.modalTitle = "Edit Role";
         this.modalBtnTitle = "Save";
         this.role = this.roles.filter(x => x.Id == Id)[0];
-        // permissionArray =this.role.PermissionList != null? this.role.PermissionList.split(','):[];
-        permissionArray = this.role.PermissionList.split(',');
-        console.log(this.role.PermissionList);
-
+        permissionArray =this.role.PermissionList != null? this.role.PermissionList.split(','):[];
         if (permissionArray.includes('')||permissionArray.includes(null)){
             let index = permissionArray.indexOf('');
             permissionArray.splice(index,1);
         }
-        
         this.permissionListArray = permissionArray;
         
 
@@ -255,9 +252,6 @@ export class RoleComponent implements OnInit {
                     break;
                 case DBOperation.update:
                         formData.value.PermissionList = this.permissionList;
-                        console.log(this.permissionList);
-                        
-
                     this._roleService.put(Global.BASE_ROLES_EDIT_ENDPOINT, formData.value.Id, formData.value).subscribe(
                         data => {
                             if (data == 1) //Success
@@ -335,38 +329,14 @@ export class RoleComponent implements OnInit {
         this.roles = filteredRoles;
     }
 
-    changePermission(item , child?, chil?) {
-        console.log(this.permissionListArray);
-        
-        if(this.permissionListArray.includes(item)){
-            const idx = this.permissionListArray.indexOf(item);
+    changePermission(permission) {
+        if(this.permissionListArray.includes(permission)) {
+
+            const idx = this.permissionListArray.indexOf(permission);
             this.permissionListArray.splice(idx,1);
+        }else{
+            this.permissionListArray.push(permission);
         }
-
-         if(this.permissionListArray.includes(child)){
-            const idx = this.permissionListArray.indexOf(child);
-            this.permissionListArray.splice(idx,1);
-        }
-
-        if(this.permissionListArray.includes(chil)){
-            const idx = this.permissionListArray.indexOf(chil);
-            this.permissionListArray.splice(idx,1);
-        }
-        
-        
-        // if(this.permissionListArray.includes(item||child||chil)) {
-
-        //     const idx = this.permissionListArray.indexOf(permission);
-        //     this.permissionListArray.splice(idx,1);
-        // }else{
-            this.permissionListArray.push(item);
-            this.permissionListArray.push(child);
-            if(chil!= null){
-
-                this.permissionListArray.push(chil);
-            }
-
-        // }
         console.log('the permission list is', this.permissionListArray);
     }
 
