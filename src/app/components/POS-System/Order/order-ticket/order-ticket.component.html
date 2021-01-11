@@ -173,7 +173,8 @@
                 </tr> -->
                 <tr>
                     <th width="20px">S. No. </th>
-                    <th width="220px">Details</th>
+                    <th width="110px">Item Name</th>
+                    <th width="110px">Description</th>
                     <th width="70px">Qty</th>
                     <th width="70px">Unit (Rs.)</th>
                     <th width="70px">Total</th>
@@ -184,8 +185,11 @@
                     <td width="20px">
                         {{i + 1}}
                     </td>
-                    <td align="left" width="170px">
+                    <td align="left" width="110px">
                         <span>{{ getProductById(productList, item.ItemId)?.Name }}</span>
+                    </td>
+                    <td align="left" width="110px">
+                        {{item.OrderDescription}}
                     </td>
                     <td align="right" width="70px">
                         <strong>{{ item.Qty }}</strong>
