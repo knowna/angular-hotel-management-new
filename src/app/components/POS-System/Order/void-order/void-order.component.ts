@@ -304,6 +304,7 @@ itemList=[];
                "Balance":0,
                "UserId":this.currentUser.UserName,
                "FinancialYear":this.currentYear.Name,
+               "Void":true,
                "ListOrderItem":this.itemList
            }
 
