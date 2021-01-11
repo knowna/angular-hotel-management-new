@@ -166,7 +166,7 @@
                             <input 
                                 class="form-check-input"
                                 *ngIf="!child.children" 
-                                (change)="changePermission(item.title,child.permission)"
+                                (change)="changePermission(child.permission)"
                                 [checked]="hasPermission(child.permission)"
                                 [id]="'first'+i+j"
                                 type="checkbox">
@@ -183,7 +183,7 @@
                                         class="form-check-input" 
                                         type="checkbox" 
                                         [id]="'second'+i+j+k"
-                                        (change)="changePermission(item.title,child.permission,chil.permission)"
+                                        (change)="changePermission(chil.permission)"
                                         [checked]="hasPermission(chil.permission)">
                                     <label class="form-check-label" [for]="'second'+i+j+k">
                                         {{chil?.title}}

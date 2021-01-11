@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
     form: FormGroup;
     private formSubmitAttempt: boolean;
     showPassword = false;
+    filteredPermission =[];
 
     company:any;
 
@@ -62,86 +63,97 @@ export class LoginComponent implements OnInit {
     
     onSubmit() {
         let loginfrm = this.form;
+        let  PermissionListAb=[];
         
         this.authenticationSevice.login(Global.BASE_LOGIN_ENDPOINT, loginfrm.value).subscribe(
-                (data) => {
-                    
-                    if (data!= null ) {
-                        console.log(data);
+        (data) => {
+            
+            if (data!= null ) {
+
+            localStorage.setItem("userInformation",JSON.stringify(data));
+            localStorage.setItem("userToken",data.Token);
+            this.authService.authenticate();
+
+
+
+            // this._userService.getById(Global.BASE_ROLE_ENDPOINT,data.RoleName)
+            // .subscribe(data => { 
+            //     let PermissionList=data[0].PermissionList.split(',');
+            //     if(PermissionList.includes('')){
+            //         let index = PermissionList.indexOf('');
+            //         PermissionList.splice(index,1);
+            //     }
+
+            //     //breaking permissions  string to list
+            //     PermissionList.forEach(x => {
+
+            //         let y = x.split(':');
+            //         if(y.length==2){
                         
+            //             PermissionListAb.push(y[0]);
+            //             PermissionListAb.push(x);
 
-                        localStorage.setItem("userInformation",JSON.stringify(data));
-                        localStorage.setItem("userToken",data.Token);
-                        this.authService.authenticate();
+            //         }
 
-
-
-                        // this._userService.getById(Global.BASE_ROLE_ENDPOINT,data.RoleName)
-                        // .subscribe(data => { 
-                        //     let PermissionList=data[0].PermissionList.split(',');
-                        //     if(PermissionList.includes('')){
-                        //         let index = PermissionList.indexOf('');
-                        //         PermissionList.splice(index,1);
-                        //     }
-                            
-                        //     localStorage.setItem('permissionList',JSON.stringify(PermissionList));
-                        //     if(PermissionList.length>0){
-                                
-                        //         this.router.navigate(["/dashboard"]);
-                        //         window.location.reload();
-                                
-                        //         this.toastrService.success('You are successfully logged in!');
-                        //     }
-                            
-
-                        //     // if(localStorage.getItem('permissionList').length!=null){
-                        //     //     console.log('sjdshhsfhshgfgshhg',);
-                        //     //     this.router.navigate(["/dashboard"]);
-                        //     // }
-                
-                        // },
-                        // error =>{
-                           
-                        // } );
+            //         else if(y.length == 3){
+                        
+            //             PermissionListAb.push(y[0]);
+            //             PermissionListAb.push(y[0]+':'+y[1]);
+            //             PermissionListAb.push(x);
+                        
+            //         }
                     
+            //     });
 
-                        // window.location.reload();
-                        this.router.navigate(["/dashboard"]);
-                        this.toastrService.success('You are successfully logged in!');
-                        // window.location.reload();
-                    } else {
-                        // alert("Login failed no data");
-                        this.toastrService.error('Login Failed!');
-                    }
-                },
-                error => {
-                    // alert("Login failed");
-                    this.toastrService.error('Login Failed!');
-                    console.log(error);
-                }
-            );
+
+
+            //     let list=[]
+            //     // //Splicing duplicate
+            //     PermissionListAb.forEach(permission => {
+                
+            //         if(list.includes(permission)){
+                        
+            //         }else{
+                        
+            //             list.push(permission);
+            //         }
+                    
+            //     });
+            //         this.filteredPermission = list;            
+            
+            //     //todo splice and set
+                                            
+            //     localStorage.setItem('permissionList',JSON.stringify(this.filteredPermission));
+                    
+            //         this.router.navigate(["/dashboard"]);
+                    
+                    
+            //         this.toastrService.success('You are successfully logged in!');
+            //         window.location.reload();
+
+                
+
+               
+    
+            // },
+            // error =>{
+                
+            // } );
+            
+
+                this.router.navigate(["/dashboard"]);
+                this.toastrService.success('You are successfully logged in!');
+            } else {
+                this.toastrService.error('Login Failed!');
+            }
+        },
+        error => {
+            this.toastrService.error('Login Failed!');
+            console.log(error);
+        }
+    );
 
 
     }
 
-    // getPermissionByRoleId(RoleId){
-        
-    //     this._userService.getById(Global.BASE_ROLE_ENDPOINT,RoleId)
-    //     .subscribe(data => { 
-    //         console.log(data.PermissionList);
-    //         let PermissionList=data.PerPermissionList.split(',');
-    //         if(PermissionList.includes('')){
-    //             let index = PermissionList.indexOf('');
-    //             PermissionList.splice(index,1);
-    //         }
-    //         localStorage.setItem('permissionList',PermissionList);
-    //         console.log(localStorage.getItem('permissionList'));
-            
-
-    //     },
-    //     error =>{
-           
-    //     } );
-    
-    // }
-}
+   }
