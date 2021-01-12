@@ -124,7 +124,8 @@ export class PosSettleComponent implements OnInit {
             this.orderApi.loadOrdersNew(this.selectedTicket.toString())
                 .subscribe(
                     data => {
-                        this.ordersNew = data;
+                        // this.ordersNew = data;
+                        this.ordersNew = this.mergeDuplicateItems(data);
                     }
                 )
         }
@@ -254,7 +255,7 @@ export class PosSettleComponent implements OnInit {
 	 * @param Qty 
 	 */
     ProductPrice(UnitPrice: number, Qty: number) {
-        let currentprice = UnitPrice / 1.13 * Qty;
+        let currentprice = UnitPrice * Qty;
         // Return product
         return currentprice.toFixed(2);
     }
@@ -287,7 +288,7 @@ export class PosSettleComponent implements OnInit {
         if (this.ordersNew.length) {
             this.ordersNew.forEach((order) => {
                 order.OrderItems.forEach(item => {
-                    totalAmount += item.TotalAmount;
+                    totalAmount += item.Qty * item.UnitPrice;
                 });
                 // totalAmount = totalAmount +
                 //     (order.OrderItems.length) ? order.OrderItems.reduce((total: number, order: OrderItem) => {
@@ -329,8 +330,8 @@ export class PosSettleComponent implements OnInit {
     }
 
     // Calculates Discount
-    calculateDiscount() {
-        let discount = this.ticket.Discount;
+    calculateDiscount():any {
+        let discount = this.ticket?.Discount;
 
         this.ordersNew.forEach(order => {
             order.OrderItems.forEach(item => {
@@ -341,7 +342,7 @@ export class PosSettleComponent implements OnInit {
             });
         });
 
-        return discount.toFixed(2);
+        return discount?.toFixed(2) || 0.0;
     //     let sum = this.calculateSum();
     //     let giftSum = this.calculateVoidGiftSum();
     //     let value = (giftSum / sum) * 100 || 0;
@@ -445,7 +446,7 @@ export class PosSettleComponent implements OnInit {
      * @param ticket 
      */
     getTotalCharged(ticket?: Ticket) {
-        return ticket.PaymentHistory.reduce((total: number, pay: PaymentHistory) => {
+        return ticket?.PaymentHistory.reduce((total: number, pay: PaymentHistory) => {
             total = total + pay.AmountPaid;
             return total;
         }, 0);
