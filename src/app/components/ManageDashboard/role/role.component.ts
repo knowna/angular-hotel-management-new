@@ -214,6 +214,8 @@ export class RoleComponent implements OnInit {
         
         );
 
+        console.log('the permission list is', (this.permissionList))
+
 
         if (Role.valid) {
             switch (this.dbops) {
