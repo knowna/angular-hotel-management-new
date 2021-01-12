@@ -68,7 +68,9 @@ export class PosInvoicePrintComponent implements OnInit {
                     this.orderApi.loadOrdersNew(this.selectedTicket.toString())
                         .subscribe(
                             data => {
-                                this.parsedOrders = data;
+                                // this.parsedOrders = data;
+                                this.parsedOrders = this.mergeDuplicateItems(data);
+                
                                 this.parsedOrders.forEach(order => {
                                     order.OrderItems.forEach(item => {
                                         this.OrderItems.push(item);
@@ -174,7 +176,7 @@ export class PosInvoicePrintComponent implements OnInit {
         if (this.parsedOrders.length) {
             this.parsedOrders.forEach((order) => {
                 order.OrderItems.forEach(item => {
-                    totalAmount += item.TotalAmount;
+                    totalAmount += item.Qty * item.UnitPrice;
                 });
                 // totalAmount = totalAmount +
                 //     (order.OrderItems.length) ? order.OrderItems.reduce((total: number, order: OrderItem) => {
