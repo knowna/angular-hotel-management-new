@@ -3,7 +3,7 @@
         <div class="card-body">
           <div class="row m-0 mt-3">
             <div class="col-md-4">
-              <h2 class="header">Department List</h2>
+              <h2 class="header">Departments</h2>
             </div>
           </div>
           <hr>
@@ -36,7 +36,7 @@
         <div class="card-body">
             <div class="row m-0 mt-3">
                 <div class="col-md-4">
-                    <h2 class="header">Order List</h2>
+                    <h2 class="header">Orders</h2>
                 </div>
             </div>
             
@@ -54,20 +54,16 @@
                         <tr>
                             <th>S.N</th>
                             <th>Item Name</th>
-                            <th>Description</th>
                             <th>Quantity</th>
-                            <th>Per Unit(Rs.)</th>
-                            <th>Total(Rs)</th>
+                            <th>Description</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of order.itemList;index as j">
                             <td>{{j+1}}</td>
                             <td>{{ getProductById(productList, item.ItemId)?.Name }}</td>
-                            <td>{{item.OrderDescription}}</td>
                             <td>{{item.Qty}}</td>
-                            <td>{{ CurrentUnitPrice(item.UnitPrice) }}</td>
-                            <td> {{ ProductPrice(item.UnitPrice, item.Qty) }}</td>
+                            <td>{{item.OrderDescription}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -77,107 +73,50 @@
                 No orders found !
               </div>
 
-            <!-- <div class="row m-0 mt-2">
-                <div class="col-sm-12 table-responsive">
-                    <div class="alert alert-info" role="alert" *ngIf="indLoading">
-                        <img src="../../assets/images/loading.gif" width="32" height="32" /> Loading...
-                    </div>
-                    <div *ngIf='ticketList && ticketList.length==0' class="alert alert-info" role="alert">No record found!</div>
-                    <table class="table table-bordered" *ngIf="ticketList && ticketList.length">
-                        <thead>
-                            <tr>
-                                <th>S.N</th>
-                                <th>Ticket Name</th>
-                                <th>Ticket Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let ticket of ticketList;index as i">
-                                <td>{{i+1}}</td>
-                                <td>{{ticket.Name}}#{{ticket.TicketId}}</td>
-                                <td>{{ticket.TicketOpeningTime | date: 'dd MMM yyyy,hh:mm a'}}</td>
-                                <td>
-                                    <button class="btn btn-secondary btn-sm" (click)="printTicket(ticket)">
-                                        <i class="fa fa-print"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div *ngIf="msg" role="alert" class="alert alert-info alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                    <span class="sr-only">Error:</span>
-                    {{msg}}
-                </div>
-            </div> -->
         </div>
     </div>
-    
-
-    
 </div>
 
+<iframe id='iframePrint' frameborder="0" name='fancyiframe' style="visibility: hidden;height:0px;width:0px;"></iframe>
 
 <div class="row">
     <div class="col-12 d-none d-print-block printable" style="width: 100mm;margin: 0;">
-        <div class="row">
-            <div class="col-12 text-center font-weight-bold mb-2">
-                Order Ticket
-            </div>
-            <div class="col-6 text-left font-weight-bold">
-                Order No : {{selectedOrder.orderNumber}}
-            </div>
-            <div class="col-6 font-weight-bold">
-                Date : {{selectedOrder.TicketOpeningTime | date :'dd MMM yyyy' }}
-            </div>
-            <div class="col-6 text-left font-weight-bold">
-                Table No : {{selectedOrder.TableNo}}
-            </div>
-            <div class="col-6 font-weight-bold">
-                Time : {{selectedOrder.TicketOpeningTime | date :'hh:mm a' }}
-            </div>
-            <!-- <div class="col-12 text-center font-weight-bold">
-                {{ company?.Address }} {{ company?.Street }} {{ company?.City }} {{ company?.District }}
-            </div>
-            <div class="col-12 text-center font-weight-bold">
-                {{ company?.Email }} {{ company?.Phone }}
-            </div>
-            <div class="col-12 text-center font-weight-bold">
-                PAN/VAT : {{ company?.Pan_Vat }}
-            </div>
-            <div class="col-12 text-center font-weight-bold">
-                Bill No: {{ selectedTicket ? '#' + selectedTicket?.TicketId : '' }}
-            </div>
-            <div class="col-12 text-center font-weight-bold">
-                Date : {{selectedTicket.TicketOpeningTime | date :'yyyy-MM-dd hh:mm a' }}
-            </div> -->
-        </div>
-        <table class="table table-bordered" width="450px">
+        <table class="table table-bordered" style="width:450px">
             <thead>
-                <!-- <tr>
+                <tr>
+                    <th colspan="4" align="center" style="text-align:center">
+                        <span class="font-weight-bold mb-2">Order Ticket</span>
+                    </th>
+                </tr>
+                <tr>
                     <th colspan="2">
                         <span class="text-center font-weight-bold">
-                            Bill No: {{ selectedTicket ? '#' + selectedTicket?.TicketId : '' }}
-                        </span>
-                    </th>                
-                    <th colspan="3" align="right">
-                        <span class="text-center font-weight-bold">
-                            Date : {{selectedTicket.TicketOpeningTime | date :'yyyy-MM-dd hh:mm' }}
+                            Order No : {{selectedOrder.orderNumber}}
                         </span>
                     </th>
-                </tr> -->
+                    <th colspan="2" align="right">
+                        <span class="text-center font-weight-bold">
+                            Date : {{selectedOrder.TicketOpeningTime | date :'dd MMM yyyy' }}
+                        </span>
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan="2">
+                        <span class="text-center font-weight-bold">
+                            Table No : {{selectedOrder.TableNo}}
+                        </span>
+                    </th>
+                    <th colspan="2" align="right">
+                        <span class="text-center font-weight-bold">
+                            Time : {{selectedOrder.TicketOpeningTime | date :'hh:mm a' }}
+                        </span>
+                    </th>
+                </tr>
                 <tr>
                     <th width="20px">S. No. </th>
-                    <th width="110px">Item Name</th>
-                    <th width="110px">Description</th>
-                    <th width="70px">Qty</th>
-                    <th width="70px">Unit (Rs.)</th>
-                    <th width="70px">Total</th>
+                    <th width="100px">Item Name</th>
+                    <th width="80px">Qty</th>
+                    <th width="250px">Description</th>
                 </tr>
             </thead>
             <tbody>
@@ -185,37 +124,17 @@
                     <td width="20px">
                         {{i + 1}}
                     </td>
-                    <td align="left" width="110px">
+                    <td align="left" width="100px">
                         <span>{{ getProductById(productList, item.ItemId)?.Name }}</span>
                     </td>
-                    <td align="left" width="110px">
-                        {{item.OrderDescription}}
-                    </td>
-                    <td align="right" width="70px">
+                    <td align="right" width="80px">
                         <strong>{{ item.Qty }}</strong>
                     </td>
-                    <td align="right" width="70px">
-                        {{ CurrentUnitPrice(item.UnitPrice) }}
-                    </td>
-                    <td align="right" width="70px">
-                        {{ ProductPrice(item.UnitPrice, item.Qty) }}
+                    <td align="left" width="250px">
+                        {{item.OrderDescription}}
                     </td>
                 </tr>
             </tbody>
-            <!-- <tfoot>
-                <tr>
-                    <td colspan="5" class="text-right">Total : {{ calculateSum().toFixed(2) }}</td>
-                </tr>
-                <tr>
-                    <td colspan="5" class="text-right">Discount : {{selectedTicket.Discount}}</td>
-                </tr>
-                <tr>
-                    <td colspan="5" class="text-right">VAT % : {{ calculateVat() }}</td>
-                </tr>
-                <tr>
-                    <td colspan="5" class="text-right">Grand Total : {{ getGrandTotal() }}</td>
-                </tr>
-            </tfoot> -->
         </table>
     </div>
 </div>
