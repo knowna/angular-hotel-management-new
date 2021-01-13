@@ -700,9 +700,9 @@ export class PosTableComponent implements OnInit {
             "Id":0,
             "UserId": this.currentUser.UserName,
             "FinancialYear": this.currentYear.Name,
-            "OrderNumber":UnSubmittedOrder ? UnSubmittedOrder.OrderNumber : 0,
+            "OrderNumber": 0,
             "OrderDescription":product.OrderDescription,
-            "OrderId": UnSubmittedOrder ? UnSubmittedOrder.Id : 0,
+            "OrderId": 0,
             "ItemId": product.Id,
             "Qty": product.Qty,
             "UnitPrice": unitprice,
@@ -736,7 +736,7 @@ export class PosTableComponent implements OnInit {
         "TicketId":this.selectedTicket?this.selectedTicket:0,
         "TableId":this.selectedTable?this.selectedTable:0,
         "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
-        "OrderId":UnSubmittedOrder ? UnSubmittedOrder.OrderNumber : 0,
+        "OrderId": 0,
         "TicketTotal":ticketTotalWithoutVat,
         "Discount":0,
         "ServiceCharge":0,
@@ -758,9 +758,10 @@ export class PosTableComponent implements OnInit {
             console.log('the response is', data);
             this.toastrService.success('oder successfully created')
             if(this.ordersNew.length) {
-                data.ListOrder[0].OrderItems.forEach(o => {
-                    this.ordersNew[0].OrderItems.push(o);
-                });
+                this.ordersNew.push(data.ListOrder[0]);
+                // data.ListOrder[0].OrderItems.forEach(o => {
+                //     this.ordersNew[0].OrderItems.push(o);
+                // });
                 this.buildForm();
                 console.log('the orders new are', this.ordersNew)
                

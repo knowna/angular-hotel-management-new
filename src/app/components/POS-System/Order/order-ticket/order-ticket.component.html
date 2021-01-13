@@ -44,13 +44,26 @@
 
             <div *ngFor="let order of orderList;index as i">
                 <table class="table table-bordered">
-                    <caption style="caption-side:top">
-                        Order No: {{order.orderNumber}}
+                    <!-- <caption style="caption-side:top">
+                        Order No: {{order.orderNumber}} {{order.itemList[0].TableNo}}
                         <button type="button" class="btn btn-secondary btn-sm" (click)="printOrder(order)">
                             <i class="fa fa-print"></i>
                         </button>
-                    </caption>
+                    </caption> -->
                     <thead>
+                        <tr>
+                            <th>
+                                <button type="button" class="btn btn-secondary btn-sm" (click)="printOrder(order)">
+                                    <i class="fa fa-print"></i>
+                                </button>
+                            </th>
+                            <th>
+                                Order No: {{order.orderNumber}}
+                            </th>
+                            <th colspan="2">
+                                Table No: {{order.itemList[0].TableNo}}
+                            </th>
+                        </tr>
                         <tr>
                             <th>S.N</th>
                             <th>Item Name</th>
