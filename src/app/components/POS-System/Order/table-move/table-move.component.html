@@ -1,0 +1,58 @@
+<div class="row m-0 mb-5">
+    <div class="col-sm-12">
+        <h2 class="header mt-3">Table Move</h2>
+    </div>
+</div> 
+
+<div class="row m-0">
+    <div class="col-md-5">
+        <div class="row">
+            <div class="col-sm-12">
+                <span>Merge Bill From:</span>
+                <ngx-select-dropdown
+                    (change)="showBaseTable($event.value)"
+                    [multiple]="false"
+                    [config]="config"
+                    [options]="tables">
+                </ngx-select-dropdown>
+            </div>
+        </div>
+
+        <div *ngIf="baseTable.ticketList != null"  class="col-sm-12 card mt-3" style="cursor: pointer;">
+            <div class="form-group">
+                <label>Select Ticket</label>
+                <select class="form-control" [(ngModel)]="selectedTicket">
+                    <option value="">Select</option>
+                    <option 
+                        *ngFor="let ticket of baseTable.ticketList"
+                        [value]="ticket.TicketId">
+                        {{ticket.Name}} #{{ticket.TicketId}}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="row">
+            <div class="col-sm-12">
+                <span> Merge Bill To:</span>
+                <ngx-select-dropdown
+                    (change)="showDestinationTable($event.value)"
+                    [multiple]="false"
+                    [config]="config"
+                    [options]="tables">
+                </ngx-select-dropdown>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="col-md-2 mr-0">
+        <button type="button" class="btn btn-success mt-4" (click)="move()">
+            Move
+        </button>
+    </div>
+
+
+</div>

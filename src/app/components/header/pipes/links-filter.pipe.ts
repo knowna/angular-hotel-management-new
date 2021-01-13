@@ -35,6 +35,7 @@ export class LinksFilterPipe implements PipeTransform {
     'POS:MenuSetup:MenuConfigure',
     'POS:MenuSetup:TableRoomSetup',
     'POS:Order:VoidOrder',
+    'POS:Order:TableMove',
 
     'Account',
     'Account:Transaction',

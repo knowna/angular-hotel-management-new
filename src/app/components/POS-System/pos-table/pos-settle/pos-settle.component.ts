@@ -78,6 +78,9 @@ export class PosSettleComponent implements OnInit {
     ordersNew : Order[] = [];
     productList:Product[]=[];
 
+    itemList:any[] = [];
+    mergedItemList: any[] = [];
+
     // Constructor
     constructor(
         private store: Store<any>,
@@ -125,7 +128,18 @@ export class PosSettleComponent implements OnInit {
                 .subscribe(
                     data => {
                         // this.ordersNew = data;
-                        this.ordersNew = this.mergeDuplicateItems(data);
+                        // this.ordersNew = this.mergeDuplicateItems(data);
+                        data.forEach(order => {
+                            order.OrderItems.forEach(item => {
+                                this.itemList.push(item);
+                            });
+                        });
+
+                        if(this.itemList.length) {
+                            this.mergedItemList = this.mergeDuplicateItems(this.itemList);
+                        }
+
+                        console.log('the item list are', this.mergedItemList)
                     }
                 )
         }
@@ -262,40 +276,59 @@ export class PosSettleComponent implements OnInit {
     /**
      * Merge Duplicate Items
      */
-    mergeDuplicateItems(orders: Order[]) {
-        var orders: Order[] = JSON.parse(JSON.stringify(orders));
-        orders.forEach((order: Order) => {
-            var counts = [];
-            order.OrderItems.forEach((a, i) => {
-                if(counts[a.ItemId] === undefined) {
-                    counts[a.ItemId] = a;
-                } else {
-                    counts[a.ItemId].Qty += a.Qty;
-                }
-            });
-            order.OrderItems = counts;
-            order.OrderItems = order.OrderItems.filter((n) => n != undefined); 
+    // mergeDuplicateItems(orders: Order[]) {
+    //     var orders: Order[] = JSON.parse(JSON.stringify(orders));
+    //     orders.forEach((order: Order) => {
+    //         var counts = [];
+    //         order.OrderItems.forEach((a, i) => {
+    //             if(counts[a.ItemId] === undefined) {
+    //                 counts[a.ItemId] = a;
+    //             } else {
+    //                 counts[a.ItemId].Qty += a.Qty;
+    //             }
+    //         });
+    //         order.OrderItems = counts;
+    //         order.OrderItems = order.OrderItems.filter((n) => n != undefined); 
+    //     });
+
+    //     return orders;
+    // }
+
+    mergeDuplicateItems(itemList: any[]) {
+        var counts = [];
+        itemList.forEach((a, i) => {
+            if(counts[a.ItemId] === undefined) {
+                counts[a.ItemId] = a;
+            } else {
+                counts[a.ItemId].Qty += a.Qty;
+            }
         });
 
-        return orders;
+        itemList = counts;
+        itemList = itemList.filter((n) => n != undefined); 
+
+        return itemList;
     }
 
     // Calculate sum of the items in a order list
     // -> Avoids void and gift items from calculation of total
     calculateSum (): number {
         let totalAmount = 0;
+        this.mergedItemList.forEach(item => {
+            totalAmount += item.Qty * item.UnitPrice;
+        });
 
-        if (this.ordersNew.length) {
-            this.ordersNew.forEach((order) => {
-                order.OrderItems.forEach(item => {
-                    totalAmount += item.Qty * item.UnitPrice;
-                });
-                // totalAmount = totalAmount +
-                //     (order.OrderItems.length) ? order.OrderItems.reduce((total: number, order: OrderItem) => {
-                //         return eval((total + order.Qty * order.UnitPrice / 1.13).toFixed(2));
-                //     }, 0) : 0;
-            });
-        }
+        // if (this.ordersNew.length) {
+        //     this.ordersNew.forEach((order) => {
+        //         order.OrderItems.forEach(item => {
+        //             totalAmount += item.Qty * item.UnitPrice;
+        //         });
+        //         // totalAmount = totalAmount +
+        //         //     (order.OrderItems.length) ? order.OrderItems.reduce((total: number, order: OrderItem) => {
+        //         //         return eval((total + order.Qty * order.UnitPrice / 1.13).toFixed(2));
+        //         //     }, 0) : 0;
+        //     });
+        // }
 
         return eval(totalAmount.toFixed(2));
     }
@@ -333,14 +366,20 @@ export class PosSettleComponent implements OnInit {
     calculateDiscount():any {
         let discount = this.ticket?.Discount;
 
-        this.ordersNew.forEach(order => {
-            order.OrderItems.forEach(item => {
-                // console.log('the item in discount is', item)
-                if(item.Tags === 'Void'){
-                    discount += item.TotalAmount;
-                }
-            });
+        this.mergedItemList.forEach(item => {
+            if(item.Tags === 'Void'){
+                discount += item.TotalAmount;
+            }
         });
+
+        // this.ordersNew.forEach(order => {
+        //     order.OrderItems.forEach(item => {
+        //         // console.log('the item in discount is', item)
+        //         if(item.Tags === 'Void'){
+        //             discount += item.TotalAmount;
+        //         }
+        //     });
+        // });
 
         return discount?.toFixed(2) || 0.0;
     //     let sum = this.calculateSum();

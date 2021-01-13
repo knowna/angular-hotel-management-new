@@ -130,6 +130,12 @@ export const navcomponents=[
               permission:'POS:Order:VoidOrder',
             },
             {
+              title: 'Table Move',
+              img:'../../../assets/images/dish.png',
+              link: 'table-move',
+              permission:'POS:Order:TableMove',
+            },
+            {
               title: 'Full Merge',
               img:'../../../assets/images/category.png',
               link: 'full-merge',

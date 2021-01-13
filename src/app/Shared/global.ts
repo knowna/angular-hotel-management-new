@@ -133,4 +133,5 @@
     public static BASE_FULL_MERGE = Global.BASE_HOST_ENDPOINT+ '/api/OrderMergeFull/Post/';
     public static BASE_PARTIAL_MERGE = Global.BASE_HOST_ENDPOINT+ '/api/OrderMergePartial/Post/';
     public static BASE_SPLIT_ORDER = Global.BASE_HOST_ENDPOINT+ '/api/OrderSplit/Post/';
+    public static BASE_TABLE_MOVE = Global.BASE_HOST_ENDPOINT+ '/api/OrderTableMove/';
 }

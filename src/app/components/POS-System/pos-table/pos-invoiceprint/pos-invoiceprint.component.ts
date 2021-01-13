@@ -48,6 +48,8 @@ export class PosInvoicePrintComponent implements OnInit {
 
     OrderItems:any[] = [];
 
+    mergedItemList: any[] = [];
+
     // Constructor
     constructor(
         private store: Store<any>,
@@ -69,15 +71,20 @@ export class PosInvoicePrintComponent implements OnInit {
                         .subscribe(
                             data => {
                                 // this.parsedOrders = data;
-                                this.parsedOrders = this.mergeDuplicateItems(data);
+                                // this.parsedOrders = this.mergeDuplicateItems(data);
                 
-                                this.parsedOrders.forEach(order => {
+                                data.forEach(order => {
                                     order.OrderItems.forEach(item => {
                                         this.OrderItems.push(item);
                                     });
                                     
                                 });
-                                console.log('the parsed orders',this.parsedOrders)
+
+                                if(this.OrderItems.length) {
+                                    this.mergedItemList = this.mergeDuplicateItems(this.OrderItems);
+                                }
+
+                                console.log('the mergedItemList',this.mergedItemList)
                             }
                         )
                     
@@ -150,58 +157,85 @@ export class PosInvoicePrintComponent implements OnInit {
     /**
      * Merge Duplicate Items
      */
-    mergeDuplicateItems(orders: Order[]) {
-        var orders: Order[] = JSON.parse(JSON.stringify(orders));
-        orders.forEach((order: Order) => {
-            var counts = [];
-            order.OrderItems.forEach((a, i) => {
-                if (counts[a.ItemId] === undefined) {
-                    counts[a.ItemId] = a;
-                } else {
-                    counts[a.ItemId].Qty += a.Qty;
-                }
-            });
-            order.OrderItems = counts;
-            order.OrderItems = order.OrderItems.filter((n) => n != undefined);
-        });
+    // mergeDuplicateItems(orders: Order[]) {
+    //     var orders: Order[] = JSON.parse(JSON.stringify(orders));
+    //     orders.forEach((order: Order) => {
+    //         var counts = [];
+    //         order.OrderItems.forEach((a, i) => {
+    //             if (counts[a.ItemId] === undefined) {
+    //                 counts[a.ItemId] = a;
+    //             } else {
+    //                 counts[a.ItemId].Qty += a.Qty;
+    //             }
+    //         });
+    //         order.OrderItems = counts;
+    //         order.OrderItems = order.OrderItems.filter((n) => n != undefined);
+    //     });
 
-        return orders;
-    }
+    //     return orders;
+    // }
 
     // Calculate sum of the items in a order list
     // -> Avoids void and gift items from calculation of total
+    
+    mergeDuplicateItems(itemList: any[]) {
+        var counts = [];
+        itemList.forEach((a, i) => {
+            if(counts[a.ItemId] === undefined) {
+                counts[a.ItemId] = a;
+            } else {
+                counts[a.ItemId].Qty += a.Qty;
+            }
+        });
+
+        itemList = counts;
+        itemList = itemList.filter((n) => n != undefined); 
+
+        return itemList;
+    }
+
     calculateSum(): number {
         let totalAmount = 0;
 
-        if (this.parsedOrders.length) {
-            this.parsedOrders.forEach((order) => {
-                order.OrderItems.forEach(item => {
-                    totalAmount += item.Qty * item.UnitPrice;
-                });
-                // totalAmount = totalAmount +
-                //     (order.OrderItems.length) ? order.OrderItems.reduce((total: number, order: OrderItem) => {
-                //         return total + order.Qty * eval((order.UnitPrice / 1.13).toFixed(2));
-                //     }, 0) : 0;
-            });
-        }
+        this.mergedItemList.forEach(item => {
+            totalAmount += item.Qty * item.UnitPrice;
+        });
+
+        // if (this.parsedOrders.length) {
+        //     this.parsedOrders.forEach((order) => {
+        //         order.OrderItems.forEach(item => {
+        //             totalAmount += item.Qty * item.UnitPrice;
+        //         });
+        //         // totalAmount = totalAmount +
+        //         //     (order.OrderItems.length) ? order.OrderItems.reduce((total: number, order: OrderItem) => {
+        //         //         return total + order.Qty * eval((order.UnitPrice / 1.13).toFixed(2));
+        //         //     }, 0) : 0;
+        //     });
+        // }
 
         return eval(totalAmount.toFixed(2));
     }
 
     // Calculates Discount
-    calculateDiscount() {
-        let discount = this.ticket.Discount;
+    calculateDiscount():any {
+        let discount = this.ticket?.Discount;
 
-        this.parsedOrders.forEach(order => {
-            order.OrderItems.forEach(item => {
-                // console.log('the item in discount is', item)
-                if(item.Tags === 'Void'){
-                    discount += item.TotalAmount;
-                }
-            });
+        this.mergedItemList.forEach(item => {
+            if(item.Tags === 'Void'){
+                discount += item.TotalAmount;
+            }
         });
 
-        return discount.toFixed(2);
+        // this.parsedOrders.forEach(order => {
+        //     order.OrderItems.forEach(item => {
+        //         // console.log('the item in discount is', item)
+        //         if(item.Tags === 'Void'){
+        //             discount += item.TotalAmount;
+        //         }
+        //     });
+        // });
+
+        return discount?.toFixed(2) || 0.0;
         // return 0.00;
         // let sum = this.calculateSum();
         // let giftSum = this.calculateVoidGiftSum();

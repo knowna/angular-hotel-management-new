@@ -136,6 +136,7 @@ import { StockDamageComponent } from './components/InventoryDashboard/stock-dama
 import { ChangePasswordComponent } from './components/ManageDashboard/change-password/change-password.component';
 import { OrderTicketComponent } from './components/POS-System/Order/order-ticket/order-ticket.component';
 import { VoidOrderComponent } from './components/POS-System/Order/void-order/void-order.component';
+import { TableMoveComponent } from './components/POS-System/Order/table-move/table-move.component';
 
 
 const routes: Routes = [
@@ -186,6 +187,10 @@ const routes: Routes = [
   {
     path : 'void-order',
     component: VoidOrderComponent
+  },
+  {
+    path: 'table-move',
+    component: TableMoveComponent
   },
   {
     path: "reservation",

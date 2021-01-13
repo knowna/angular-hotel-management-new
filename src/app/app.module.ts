@@ -252,6 +252,7 @@ import { StockDamageDetailsComponent } from './components/InventoryDashboard/sto
 import { ChangePasswordComponent } from './components/ManageDashboard/change-password/change-password.component';
 import { OrderTicketComponent } from './components/POS-System/Order/order-ticket/order-ticket.component';
 import { VoidOrderComponent } from './components/POS-System/Order/void-order/void-order.component';
+import { TableMoveComponent } from './components/POS-System/Order/table-move/table-move.component';
 
 @NgModule({
   imports: [
@@ -433,7 +434,8 @@ import { VoidOrderComponent } from './components/POS-System/Order/void-order/voi
     DebitNoteAddEditComponent,
     KitchenOrderViewComponent,
     MenuPriceComponent,
-    OrderTicketComponent
+    OrderTicketComponent,
+    TableMoveComponent
 
   ],
   providers: [
