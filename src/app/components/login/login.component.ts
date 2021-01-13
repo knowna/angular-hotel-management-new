@@ -70,6 +70,7 @@ export class LoginComponent implements OnInit {
             
             if (data!= null ) {
 
+                console.log('the data is', data)
             localStorage.setItem("userInformation",JSON.stringify(data));
             localStorage.setItem("userToken",data.Token);
             this.authService.authenticate();
@@ -78,58 +79,59 @@ export class LoginComponent implements OnInit {
 
             // this._userService.getById(Global.BASE_ROLE_ENDPOINT,data.RoleName)
             // .subscribe(data => { 
-            //     let PermissionList=data[0].PermissionList.split(',');
-            //     if(PermissionList.includes('')){
-            //         let index = PermissionList.indexOf('');
-            //         PermissionList.splice(index,1);
-            //     }
+                // let PermissionList=data[0].PermissionList.split(',');
+                let PermissionList=data.RoleName.split(',');
+                if(PermissionList.includes('')){
+                    let index = PermissionList.indexOf('');
+                    PermissionList.splice(index,1);
+                }
 
-            //     //breaking permissions  string to list
-            //     PermissionList.forEach(x => {
+                //breaking permissions  string to list
+                PermissionList.forEach(x => {
 
-            //         let y = x.split(':');
-            //         if(y.length==2){
+                    let y = x.split(':');
+                    if(y.length==2){
                         
-            //             PermissionListAb.push(y[0]);
-            //             PermissionListAb.push(x);
+                        PermissionListAb.push(y[0]);
+                        PermissionListAb.push(x);
 
-            //         }
+                    }
 
-            //         else if(y.length == 3){
+                    else if(y.length == 3){
                         
-            //             PermissionListAb.push(y[0]);
-            //             PermissionListAb.push(y[0]+':'+y[1]);
-            //             PermissionListAb.push(x);
+                        PermissionListAb.push(y[0]);
+                        PermissionListAb.push(y[0]+':'+y[1]);
+                        PermissionListAb.push(x);
                         
-            //         }
+                    }
                     
-            //     });
+                });
 
 
 
-            //     let list=[]
-            //     // //Splicing duplicate
-            //     PermissionListAb.forEach(permission => {
+                let list=[]
+                // //Splicing duplicate
+                PermissionListAb.forEach(permission => {
                 
-            //         if(list.includes(permission)){
+                    if(list.includes(permission)){
                         
-            //         }else{
+                    }else{
                         
-            //             list.push(permission);
-            //         }
+                        list.push(permission);
+                    }
                     
-            //     });
-            //         this.filteredPermission = list;            
+                });
+                    this.filteredPermission = list;            
             
-            //     //todo splice and set
+                //todo splice and set
                                             
-            //     localStorage.setItem('permissionList',JSON.stringify(this.filteredPermission));
+                localStorage.setItem('permissionList',JSON.stringify(this.filteredPermission));
                     
-            //         this.router.navigate(["/dashboard"]);
+                    this.router.navigate(["/dashboard"]);
                     
                     
-            //         this.toastrService.success('You are successfully logged in!');
-            //         window.location.reload();
+                    this.toastrService.success('You are successfully logged in!');
+                    // window.location.reload();
 
                 
 
@@ -141,8 +143,8 @@ export class LoginComponent implements OnInit {
             // } );
             
 
-                this.router.navigate(["/dashboard"]);
-                this.toastrService.success('You are successfully logged in!');
+                // this.router.navigate(["/dashboard"]);
+                // this.toastrService.success('You are successfully logged in!');
             } else {
                 this.toastrService.error('Login Failed!');
             }
