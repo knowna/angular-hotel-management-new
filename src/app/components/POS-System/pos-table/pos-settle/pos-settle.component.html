@@ -20,27 +20,29 @@
                     </div>
                     <div class="tickets-section__body">
                         
-                            <div *ngFor="let order of ordersNew">
-                                <div class="row ticket-item" *ngFor="let item of order.OrderItems">
-                                    <div class="col-6 text-left">
-                                        <p>
-                                            <span>{{ getProductById(productList, item.ItemId)?.Name }}</span>
-                                        </p>
+                            <!-- <div *ngFor="let order of ordersNew"> -->
+                                <!-- <div class="row ticket-item" *ngFor="let item of order.OrderItems"> -->
+                                    <div class="row ticket-item" *ngFor="let item of mergedItemList">
+                                        <div class="col-6 text-left">
+                                            <p>
+                                                <span>{{ getProductById(productList, item.ItemId)?.Name }}</span>
+                                            </p>
+                                        </div>
+                                        <div class="col-2 text-left">
+                                            <p>
+                                                <span>
+                                                    <strong>{{ item.Qty }}</strong>
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <div class="col-4 text-right" style="padding-right:20px;">
+                                            <p>
+                                                <strong>Rs.{{ProductPrice(item.UnitPrice, item.Qty)}}</strong>
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div class="col-2 text-left">
-                                        <p>
-                                            <span>
-                                                <strong>{{ item.Qty }}</strong>
-                                            </span>
-                                        </p>
-                                    </div>
-                                    <div class="col-4 text-right" style="padding-right:20px;">
-                                        <p>
-                                            <strong>Rs.{{ProductPrice(item.UnitPrice, item.Qty)}}</strong>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                                <!-- </div> -->
+                            <!-- </div> -->
                         
                     </div>
                     <div class="tickets-secton__footer" style="padding-top:10px;">

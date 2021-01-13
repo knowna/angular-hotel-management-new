@@ -29,5 +29,9 @@ export class MergeService {
         return this._http.post(Global.BASE_SPLIT_ORDER, details);
     }
 
+    tableMove(details): Observable<any> {
+        return this._http.post(Global.BASE_TABLE_MOVE, details);
+    }
+
    
 }
