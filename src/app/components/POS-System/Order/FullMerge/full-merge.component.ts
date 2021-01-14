@@ -121,12 +121,22 @@ export class FullMergeComponent implements OnInit {
             this.primaryOrderList = [...this.primaryOrderList];
         }
 
+        this.deatilSecondaryTicket.showLoader = true;
         this.orderApi.loadOrdersNew(event.value.Id)
             .subscribe(
                 data => {
+                    this.deatilSecondaryTicket.showLoader = false;
+                    this.deatilSecondaryTicket.orders = data;
                     data.forEach(order => {
-                        this.moveFromOrderItems =order.OrderItems;
+                        order.OrderItems.forEach(item => {
+                            this.moveFromOrderItems.push(item);
+                        });
+                        // this.moveFromOrderItems =order.OrderItems;
                     });
+                },
+                error => {
+                    this.deatilSecondaryTicket.showLoader = false;
+                    this.deatilSecondaryTicket.orders = [];
                 }
             )
 
@@ -149,11 +159,18 @@ export class FullMergeComponent implements OnInit {
             this.secondaryOrderList = [...this.secondaryOrderList];
         }
 
+        this.detailPrimaryTicket.showLoader = true;
         this.orderApi.loadOrdersNew(event.value.Id)
         .subscribe(
             data => {
+                this.detailPrimaryTicket.showLoader = false;
+                this.detailPrimaryTicket.orders = data;
                 data.forEach(order => {
-                    this.moveToOrderItems =order.OrderItems;
+                    order.OrderItems.forEach(item => {
+                        this.moveToOrderItems.push(item);
+                    });
+
+                    // this.moveToOrderItems =order.OrderItems;
                     console.log(this.moveFromOrderItems);
                     
                     // this.moveFromOrderItems.forEach(order => {
@@ -163,6 +180,10 @@ export class FullMergeComponent implements OnInit {
 
                 // this.calculateTotalCost(this.moveToOrderItems);
                 
+            },
+            error => {
+                this.detailPrimaryTicket.showLoader = false;
+                this.detailPrimaryTicket.orders = [];
             }
         )
 
@@ -170,7 +191,6 @@ export class FullMergeComponent implements OnInit {
     }
 
     merge(){
-        debugger;
         this.moveFromOrderItems.forEach(order => {
             this.moveToOrderItems.push(order)
         });

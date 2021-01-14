@@ -59,8 +59,11 @@
                         <td>{{ row.VoucherNo }}</td>
                         <td colspan="2">&nbsp;</td>
                         <td>
-                            <button class="btn btn-secondary btn-sm">
+                            <!-- <button class="btn btn-secondary btn-sm">
                                 <i class="fa fa-print"></i>
+                            </button> -->
+                            <button class="btn btn-secondary btn-sm" (click)="exportRowToPdf(row)">
+                                <i class="fa fa-download"></i>
                             </button>
                         </td>
                     </tr>
