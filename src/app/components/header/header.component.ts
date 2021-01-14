@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit{
 
    
     ngOnInit(){ 
-        console.log(localStorage.getItem('permissionList'));
+        // console.log(localStorage.getItem('permissionList'));
 
         this.items.forEach(item => {
             item.show = false;

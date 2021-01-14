@@ -19,6 +19,10 @@ type CSV = any[][];
 //generating pdf
 import * as jsPDF from 'jspdf'
 import 'jspdf-autotable';
+import { OrderService } from 'src/app/Service/Billing/order.service';
+import { Order } from 'src/app/Model/order.model';
+import { TicketService } from 'src/app/Service/Billing/ticket.service';
+import { Ticket } from 'src/app/Model/ticket.model';
 
 @Component({
     templateUrl: './sales.component.html',
@@ -57,6 +61,11 @@ export class SalesComponent implements OnInit {
     uploadUrl = Global.BASE_FILE_UPLOAD_ENDPOINT;
     fileUrl: string = '';
     journalDetailsFrm: any
+    
+    ordersNew : Order[] = [];
+
+    ticket: Ticket;
+    
 
     /**
      * Constructor
@@ -75,7 +84,9 @@ export class SalesComponent implements OnInit {
         private _accountTransValues: AccountTransValuesService, 
         private date: DatePipe, 
         private modalService: BsModalService,
-        private fileService: FileService
+        private fileService: FileService,
+        private orderApi: OrderService,  
+        private ticketService: TicketService,
     ) {
         this._purchaseService.getAccounts().subscribe(data => { this.account = data });        
         this.currentYear = JSON.parse(localStorage.getItem('currentYear'));
@@ -132,6 +143,25 @@ export class SalesComponent implements OnInit {
         this.fileUrl = fileUrl;
         this.modalTitle = "View Attachment";
         this.modalRef = this.modalService.show(template, { keyboard: false, class: 'modal-lg' });
+    }
+
+    exportRowToPdf(sale) {
+        console.log('the detail is', sale)
+        this.ticketService.getTicketById(41)
+            .subscribe(
+                data => {
+                    this.ticket = data;
+                    if(this.ticket) {
+                        this.orderApi.loadOrdersNew(this.ticket.Id.toString())
+                        .subscribe(
+                            data => {
+                                this.ordersNew = data;
+                                console.log('the orders after fetch are', this.ordersNew)
+                            });
+                    }
+                });
+        
+        
     }
 
     exportTableToPdf() {
@@ -288,6 +318,7 @@ export class SalesComponent implements OnInit {
             sales => {
                     sales.map((purch) => purch['File'] = Global.BASE_HOST_ENDPOINT + Global.BASE_FILE_UPLOAD_ENDPOINT + '?Id=' + purch.Id + '&ApplicationModule=JournalVoucher');
                     this.sales = sales; 
+                    console.log('the sales list', this.sales)
                     this.indLoading = false; 
                 },
                 error => this.msg = <any>error

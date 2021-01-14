@@ -70,6 +70,7 @@ export class TableMoveComponent implements OnInit {
         data => {
           if(data == 1) {
             this.toastrService.success('Table moved successfully!');
+            window.location.reload();
           }else{
             this.toastrService.error('Error while moving table!');
           }

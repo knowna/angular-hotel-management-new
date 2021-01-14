@@ -13,23 +13,140 @@
         <div class="row m-0">
             
             <div class="col-sm-5 ml-auto mr-auto" style="margin: inherit;">
-                <span> Merge Bill From:  </span>
-                <ngx-select-dropdown
-                    (change)="secondaryChanged($event)"
-                    [multiple]="false"
-                    [config]="config"
-                    [options]="secondaryOrderList">
-                </ngx-select-dropdown>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <span> Merge Bill From:  </span>
+                        <ngx-select-dropdown
+                            (change)="secondaryChanged($event)"
+                            [multiple]="false"
+                            [config]="config"
+                            [options]="secondaryOrderList">
+                        </ngx-select-dropdown>
+                    </div>
+                </div>
+
+                <div *ngIf="deatilSecondaryTicket.Name" class="col-sm-12 card mt-3" style="cursor: pointer;">
+                    <span style="width:100%"> 
+                        
+                        {{deatilSecondaryTicket?.Name}}  {{deatilSecondaryTicket?.TicketId}}
+                    </span>
+    
+                    <div *ngIf="deatilSecondaryTicket?.orders.length > 0 && !deatilSecondaryTicket.showLoader" class="table-responsive mb-3">
+                        <div *ngFor="let o of deatilSecondaryTicket.orders">
+                            <table>
+                                <caption style="caption-side:top">
+                                    Order No: {{o.OrderNumber}},
+                                    {{o.UserId}} -
+                                    {{o.OrderOpeningTime}}
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Qty</th>
+                                        <th>Unit Price</th>
+                                        <th>Total Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                     <tr *ngFor="let item of o.OrderItems">
+                                        <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
+                                        <td>{{item.Qty}}</td>
+                                        <td>{{item.UnitPrice}}</td>
+                                        <td>{{item.TotalAmount}}</td>
+                                    </tr> 
+                                    <tr *ngIf="o.OrderItems.length==0" class="text-center">
+                                        No record found!!
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> 
+    
+                    <div *ngIf="deatilSecondaryTicket.orders?.length == 0 && !detailPrimaryTicket.showLoader" class="text-center">
+                        No record found!!
+                    </div>
+                    
+
+                    <div class="row" *ngIf="deatilSecondaryTicket.showLoader">
+                        <div class="col-md-12" style="height:300px">
+                          <div class="loader"></div>
+                        </div>
+                    </div>
+
+                   
+    
+                   
+                    
+                </div>
             </div>  
 
             <div class="col-sm-5 ml-auto mr-auto" style="margin: inherit;">
-                <span> Merge Bill To:  </span>
-                <ngx-select-dropdown
-                    (change)="primaryChanged($event)"
-                    [multiple]="false"
-                    [config]="config"
-                    [options]="primaryOrderList">
-                </ngx-select-dropdown>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <span> Merge Bill To:  </span>
+                        <ngx-select-dropdown
+                            (change)="primaryChanged($event)"
+                            [multiple]="false"
+                            [config]="config"
+                            [options]="primaryOrderList">
+                        </ngx-select-dropdown>
+                    </div>
+                </div>
+
+                <div *ngIf="detailPrimaryTicket.Name" class="card col-sm-12 mt-3" style="cursor: pointer;">
+                    <span style="width:100%"> 
+                        
+                        {{detailPrimaryTicket?.Name}}  {{detailPrimaryTicket?.TicketId}}
+                    </span>
+    
+                    <div *ngIf="detailPrimaryTicket.orders?.length > 0 && !detailPrimaryTicket.showLoader"  class="table-responsive mb-3">
+                        <div *ngFor="let o of detailPrimaryTicket.orders">
+                            <table>
+                                <caption style="caption-side:top">
+                                    Order No: {{o.OrderNumber}},
+                                    {{o.UserId}} -
+                                    {{o.OrderOpeningTime}}
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Qty</th>
+                                        <th>Unit Price</th>
+                                        <th>Total Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                     <tr *ngFor="let item of o.OrderItems">
+                                        <td>{{ getProductById(productList,item.ItemId)?.Name }}</td>
+                                        <td>{{item.Qty}}</td>
+                                        <td>{{item.UnitPrice}}</td>
+                                        <td>{{item.TotalAmount}}</td>
+                                    </tr> 
+                                    <tr *ngIf="o.OrderItems.length==0" class="text-center">
+                                        No record found!!
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div> 
+                     </div>  
+    
+                    <div *ngIf="detailPrimaryTicket.orders?.length == 0 && !detailPrimaryTicket.showLoader" class="text-center">
+                        No record found!!
+                    </div>
+                    
+    
+                    <div class="row" *ngIf="detailPrimaryTicket.showLoader">
+                        <div class="col-md-12" style="height:300px">
+                          <div class="loader"></div>
+                        </div>
+                    </div>
+    
+                  
+                    
+                </div>
+
+               
+
             </div> 
             <div class="col-md-2 mr-auto">
                 <button type="button" (click)="merge()" style="float: right;"  class="btn btn-success mt-4 w-100">Merge </button>
@@ -53,7 +170,7 @@
       
 
         
-        <div class="ml-3 mb-2 mt-2 row m-0">
+        <!-- <div class="ml-3 mb-2 mt-2 row m-0">
 
           
             <div *ngIf="deatilSecondaryTicket.Name" class="card col-md-5 mt-1" style="cursor: pointer;">
@@ -143,7 +260,7 @@
                 
             </div>
             
-        </div>
+        </div> -->
 
         
         <!-- <div *ngIf="showOrders" class="row m-0 mb-2">
