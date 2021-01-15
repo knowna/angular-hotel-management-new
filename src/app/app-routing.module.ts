@@ -137,6 +137,7 @@ import { ChangePasswordComponent } from './components/ManageDashboard/change-pas
 import { OrderTicketComponent } from './components/POS-System/Order/order-ticket/order-ticket.component';
 import { VoidOrderComponent } from './components/POS-System/Order/void-order/void-order.component';
 import { TableMoveComponent } from './components/POS-System/Order/table-move/table-move.component';
+import { PrinterSettingComponent } from './components/ManageDashboard/printer-setting/printer-setting.component';
 
 
 const routes: Routes = [
@@ -287,6 +288,11 @@ const routes: Routes = [
   {
     path: 'managedashboard/company',
     component: CompanyComponent,
+    pathMatch: 'full', canActivate: [AuthGuard]
+  },
+  {
+    path: 'managedashboard/printer-setting',
+    component: PrinterSettingComponent,
     pathMatch: 'full', canActivate: [AuthGuard]
   },
 

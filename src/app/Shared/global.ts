@@ -119,6 +119,7 @@
     public static BASE_CONVERT_NUMERIC_WORD_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/ConvertNumericWordAPI/';
     public static BASE_RESERVATION_INQUERY_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/ReservationInquiry/';
     public static BASE_FINANCIAL_YEAR_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/FinancialYearAPI/';
+    public static BASE_PRINTER_SETTING_ENDPOINT = Global.BASE_HOST_ENDPOINT + '/api/PrinterAPI/';
     public static BASE_BALANCE_SHEET_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/AccountBalanceSheetAPI/';
     public static BASE_POSBILLING_API_ENDPOINT=Global.BASE_HOST_ENDPOINT+ '/api/POSBillingAPI/';
 

@@ -566,6 +566,12 @@ export const navcomponents=[
               permission: 'Manage:Management:Company',
               img:'../../../assets/images/company.png',
             },
+            {
+              title: 'Printer Setting',
+              link: '/managedashboard/printer-setting',
+              permission: 'Manage:Management:PrinterSetting',
+              img:'../../../assets/images/company.png',
+            }
           ],
         },      
       ],
