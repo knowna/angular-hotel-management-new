@@ -86,7 +86,13 @@
             </div>
             
             <div class="mb-2">
-                <button (click)="createOrder()"  style="float:right" class="btn btn-success" [disabled]="!AccountTransactionValues.valid">Create Order</button>
+                <button (click)="createOrder()"  style="float:right" class="btn btn-success" [disabled]="!AccountTransactionValues.valid" *ngIf="!createOrderLoader">
+                    Create Order
+                </button>
+                <button  style="float:right" class="btn btn-success" *ngIf="createOrderLoader">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Creating Order
+                </button>
                 <!-- <button class="btn btn-secondary">Cancel Order</button> -->
             </div>
         </div>
