@@ -226,7 +226,7 @@
                                 </div>
 
                                 <div class="row m-0">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox"  name="InventoryValue" id="InventoryValue" ng-model="masterLedgerFrm.InventoryValue" formControlName="InventoryValue">
                                             <label class="form-check-label" for="InventoryValue">
@@ -235,11 +235,20 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox"  name="MaintainBilByBill" id="MaintainBilByBill" ng-model="masterLedgerFrm.MaintainBilByBill" formControlName="MaintainBilByBill">
                                             <label class="form-check-label" for="MaintainBilByBill">
                                                 Maintain balances bill by bill
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4" *ngIf="(masterLedgerFrm.value.AccountTypeId == 8) || (masterLedgerFrm.value.AccountTypeId == 12) ">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox"  name="AcceptCard" id="AcceptCard" ng-model="masterLedgerFrm.AcceptCard" formControlName="AcceptCard">
+                                            <label class="form-check-label" for="AcceptCard">
+                                                Accept Card
                                             </label>
                                         </div>
                                     </div>

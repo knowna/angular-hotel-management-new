@@ -53,6 +53,7 @@ export class MasterLedger {
     ExciseDutyType: string;
     LedgerFBTCategory: string;
     DRCR: string;
+    AcceptCard: boolean;
     
     public constructor(Name: string) {
         this.Name = Name;
