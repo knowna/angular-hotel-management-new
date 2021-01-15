@@ -253,6 +253,7 @@ import { ChangePasswordComponent } from './components/ManageDashboard/change-pas
 import { OrderTicketComponent } from './components/POS-System/Order/order-ticket/order-ticket.component';
 import { VoidOrderComponent } from './components/POS-System/Order/void-order/void-order.component';
 import { TableMoveComponent } from './components/POS-System/Order/table-move/table-move.component';
+import { PrinterSettingComponent } from './components/ManageDashboard/printer-setting/printer-setting.component';
 
 @NgModule({
   imports: [
@@ -435,7 +436,8 @@ import { TableMoveComponent } from './components/POS-System/Order/table-move/tab
     KitchenOrderViewComponent,
     MenuPriceComponent,
     OrderTicketComponent,
-    TableMoveComponent
+    TableMoveComponent,
+    PrinterSettingComponent
 
   ],
   providers: [

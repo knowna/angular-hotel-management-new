@@ -33,6 +33,7 @@ export class NavbarComponent implements OnInit {
     }
   logout(){
     localStorage.setItem('permissionList',null);
+    localStorage.setItem('userInformation',null);
     this.authService.logout()
   }
 
