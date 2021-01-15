@@ -92,6 +92,8 @@ export class PosTableComponent implements OnInit {
     ordersNew : Order[] = [];
 
     tables$: Observable<Table[]>
+
+    createOrderLoader : boolean = false;
     // dummyTable : Table = {"Id":1,"TableId":"1","Name":"101","Description":null,"OrderOpeningTime":"2020-10-26T02:51:50.3495623-07:00","TicketOpeningTime":"2020-10-26T02:51:50.3495623-07:00","LastOrderTime":"2020-10-26T02:51:50.3495623-07:00","TableStatus":"true"};
 
     // Constructor
@@ -753,10 +755,12 @@ export class PosTableComponent implements OnInit {
     console.log('the order request us', orderRequest);
     console.log('the previous orders are', this.ordersNew)
             
+    this.createOrderLoader = true;
     this.orderApi.addOrderProductList(orderRequest).subscribe(
         data =>{
             console.log('the response is', data);
-            this.toastrService.success('oder successfully created')
+            this.createOrderLoader = false;
+            this.toastrService.success('Order created successfully!')
             if(this.ordersNew.length) {
                 this.ordersNew.push(data.ListOrder[0]);
                 // data.ListOrder[0].OrderItems.forEach(o => {
@@ -772,6 +776,10 @@ export class PosTableComponent implements OnInit {
                     this.router.navigate(['table/' + data.TableId + '/ticket/'+ data.TicketId]);
                 }
             }
+        },
+        error => {
+            this.createOrderLoader = false;
+            this.toastrService.error('Error creating orders!');
         }
     )
     

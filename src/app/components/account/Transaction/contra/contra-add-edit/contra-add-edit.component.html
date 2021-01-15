@@ -23,10 +23,10 @@
             </div>
 
             <form novalidate (ngSubmit)="onSubmit(contraForm, fileUpload)" [formGroup]="contraForm">
-                <div class="hidden">
+                <!-- <div class="hidden">
                     <input type="number" class="hidden" formControlName="Id" />
                     <input type="text" class="hidden" placeholder="Voucher No" formControlName="AccountTransactionDocumentId" />
-                </div>
+                </div> -->
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
@@ -116,9 +116,9 @@
                         </div>
                         <div *ngFor="let AccountTransactionValue of contraForm.controls.AccountTransactionValues['controls']; let i=index" [formGroupName]="i" >
                             <div class="row mt-1">
-                                <div class="hidden">
+                                <!-- <div class="hidden">
                                     <input type="number" class="form-control" placeholder="Credit" formControlName="Credit" readonly="true" />
-                                </div>
+                                </div> -->
                                 <div class="form-group col-md-4">
                                     <ngx-select-dropdown (searchChange)="searchChangeAccountId($event)" formControlName="AccountId" [config]="configAccount" [options]="account"></ngx-select-dropdown>
                                     <!-- <select class="form-control " formControlName="AccountId">

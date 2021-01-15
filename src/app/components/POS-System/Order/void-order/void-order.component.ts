@@ -126,12 +126,16 @@ itemList=[];
             this.primaryOrderList = [...this.primaryOrderList];
         }
 
+        
         this.orderApi.loadOrdersNew(event.value.Id)
             .subscribe(
                 data => {
                     data.forEach(order => {
                         this.moveFromOrderItems =order.OrderItems;
                     });
+                },
+                error => {
+
                 }
             )
 
@@ -235,13 +239,15 @@ itemList=[];
     showDetail(order){
         // order.ItemList = [];
         this.deatilSecondaryTicket.orders = [];
+        this.deatilSecondaryTicket.showLoader = true;
         this.orderApi.loadOrdersNew(order.Id)
         .subscribe(
             data => {
-               this.orders = data;
-               console.log(this.orders);
-               this.deatilSecondaryTicket.orders = this.orders;
-               console.log(this.deatilSecondaryTicket.orders);
+                this.deatilSecondaryTicket.showLoader = false;
+                this.orders = data;
+                console.log(this.orders);
+                this.deatilSecondaryTicket.orders = this.orders;
+                console.log(this.deatilSecondaryTicket.orders);
                
             //    order.Orders = this.orders;
             //    console.log('the orders are', order.Orders);
@@ -251,8 +257,11 @@ itemList=[];
             //        });
                   
             //    });
-               
-        })
+           },
+           error => {
+                this.deatilSecondaryTicket.showLoader = false;
+                this.deatilSecondaryTicket.orders = [];
+           });
     }
 
 
@@ -310,13 +319,15 @@ itemList=[];
 
            
            this._roleService.post(Global.BASE_ORDERS_VOID_ENDPOINT,orderRequest)
-           .subscribe(data => { 
-            console.log(data);
-            this.toastrService.success('Order Void Successfully');
-               
-           },
-
-           );
+                .subscribe(
+                    data => { 
+                        console.log(data);
+                        this.toastrService.success('Order Void Successfully!');
+                        window.location.reload();
+                    },
+                    error => {
+                        this.toastrService.error('Error while void!');
+                    });
         }
     
 }
