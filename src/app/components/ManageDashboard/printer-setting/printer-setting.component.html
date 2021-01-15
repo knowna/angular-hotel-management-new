@@ -25,6 +25,7 @@
             <table class='table table-bordered' *ngIf='printerSettings && printerSettings.length'>
                 <thead>
                     <tr>
+                        <th>S.N</th>
                         <th>Printer Name</th>
                         <th>Share Name</th>
                         <th>Printer Type</th>
@@ -37,7 +38,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let printer of printerSettings">
+                    <tr *ngFor="let printer of printerSettings;index as i">
+                        <td>{{i+1}}</td>
                         <td>{{ printer.CustomPrinterName}}</td>
                         <td>{{ printer.ShareName }}</td>
                         <td>{{ printer.PrinterType }}</td>
@@ -165,7 +167,7 @@
 
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label class="control-label">Department Id</label>
+                        <label class="control-label">Department</label>
                         <select class="form-control" formControlName="DepartmentId">
                             <option value="" disabled>Select</option>
                             <option  *ngFor="let dep of departments" [value]="dep.Id">

@@ -125,6 +125,7 @@ export class MasterLedgerComponent implements OnInit {
             DRCR: [''],
             UnderGroupMaster:[''],
             Currency:[''],
+            AcceptCard: ['']
             // entityLists: ['', Validators.required],
         })
 
@@ -231,6 +232,7 @@ export class MasterLedgerComponent implements OnInit {
         this.masterLedgerFrm.controls['DRCR'].setValue(this.masterLedger.DRCR),
         this.masterLedgerFrm.controls['UnderGroupMaster'].setValue(this.masterLedger.UnderGroupMaster),
         this.masterLedgerFrm.controls['Currency'].setValue(this.masterLedger.Currency),
+        this.masterLedgerFrm.controls['AcceptCard'].setValue(this.masterLedger.AcceptCard),
         
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
@@ -300,6 +302,7 @@ export class MasterLedgerComponent implements OnInit {
         this.masterLedgerFrm.controls['DRCR'].setValue(this.masterLedger.DRCR),
         this.masterLedgerFrm.controls['UnderGroupMaster'].setValue(this.masterLedger.UnderGroupMaster),
         this.masterLedgerFrm.controls['Currency'].setValue(this.masterLedger.Currency),
+        this.masterLedgerFrm.controls['AcceptCard'].setValue(this.masterLedger.AcceptCard),
 
         this.modalRef = this.modalService.show(this.TemplateRef, {
             backdrop: 'static',
