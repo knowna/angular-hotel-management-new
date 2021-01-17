@@ -346,143 +346,292 @@ export class JournalAddEditComponent implements OnInit {
     
   }
 
-
   onSubmit(formData: any, fileUpload: any) {
-    // this.msg = "";
     let journal = this.journalFrm;
-    console.log('the jounra', this.journalFrm)
-
     this.formSubmitAttempt = true;
-    // let voucherDateNepali = this.voucherDateNepali.year + '.' + (this.voucherDateNepali.month*1 + 1) + '.' + this.voucherDateNepali.day;
 
-    // if (!this.voucherDateValidator(voucherDateNepali)) {
-    //     return false;
-    // }
+    let currentdate = journal.get('Date').value;
+    if(currentdate == "") {
+      alert("Please enter the voucher date");
+    }else{
+      let today = new Date;
+      this._journalvoucherService.get(Global.BASE_NEPALIMONTH_ENDPOINT + '?NDate=' + currentdate)
+        .subscribe(SB => {
+          this.vdate = SB;
+          if(this.vdate === "undefined") {
+            alert("Please enter the voucher valid date");
+          }else{
+            let voucherDate = new Date(this.vdate);
+            let tomorrow = new Date(today.setDate(today.getDate() + 1));
+            let currentYearStartDate = new Date(this.currentYear.StartDate);
+            let currentYearEndDate = new Date(this.currentYear.EndDate);
 
-    if (!this.voucherDateValidator(journal.get('Date').value)) {
-        return false;
-    }
-
-    journal.get('FinancialYear').setValue(this.currentYear['Name'] || '');
-    journal.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
-    journal.get('CompanyCode').setValue(this.company && this.company['BranchCode'] || '');
-
-    // journal.get('Date').setValue(voucherDateNepali);
-
-    if (journal.valid) {
-        let totalDebit = this.sumDebit();
-        let totalCredit = this.sumCredit();
-
-        if (totalDebit != totalCredit || totalDebit == 0 || totalCredit == 0) {
-            alert("Debit and Credit are not Equal | Value must be greater than Amount Zero.");
-            return;
-        }
-        const control = this.journalFrm.controls['AccountTransactionValues'].value;
-        const controls = <FormArray>this.journalFrm.controls['AccountTransactionValues'];
-
-        let accountList = [];
-        control.forEach(account => {
-            let Id = account.AccountId.Id;
-            account.AccountId  = Id;
-
-            accountList.push(account);
-        });
-        console.log('the list of the details are', accountList);
-       
-        let JournalObject = {
-            Id: this.journalFrm.controls['Id'].value,
-            Date: this.journalFrm.controls['Date'].value,
-            Name: this.journalFrm.controls['Name'].value,
-            AccountTransactionDocumentId: this.journalFrm.controls['AccountTransactionDocumentId'].value,
-            Description: this.journalFrm.controls['Description'].value,
-            Amount: this.journalFrm.controls['Amount'].value,
-            drTotal: this.journalFrm.controls['drTotal'].value,
-            crTotal: this.journalFrm.controls['crTotal'].value,
-            FinancialYear: this.journalFrm.controls['FinancialYear'].value,
-            UserName: this.journalFrm.controls['UserName'].value,
-            CompanyCode: this.journalFrm.controls['CompanyCode'].value,
-            // AccountTransactionValues: this.journalFrm.controls['AccountTransactionValues'].value
-            AccountTransactionValues: accountList
-        }
-        switch (this.dbops) {
-            case DBOperation.create:
-                this._journalvoucherService.post(Global.BASE_JOURNALVOUCHER_ENDPOINT, JournalObject)
-                    .subscribe(
-                        async (data) => {
-                            if (data > 0) {
-                                // file upload stuff goes here
-                                let upload = await fileUpload.handleFileUpload({
-                                    'moduleName': 'JournalVoucher',
-                                    'id': data
+            if ((voucherDate < currentYearStartDate) || (voucherDate > currentYearEndDate) || voucherDate >= tomorrow) {
+              alert("Date should be within current financial year's start date and end date inclusive");
+            }else{
+              journal.get('FinancialYear').setValue(this.currentYear['Name'] || '');
+              journal.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
+              journal.get('CompanyCode').setValue(this.company && this.company['BranchCode'] || '');
+          
+              if (journal.valid) {
+                let totalDebit = this.sumDebit();
+                let totalCredit = this.sumCredit();
+        
+                if (totalDebit != totalCredit || totalDebit == 0 || totalCredit == 0) {
+                  alert("Debit and Credit are not Equal | Value must be greater than Amount Zero.");
+                }else{
+                  const control = this.journalFrm.controls['AccountTransactionValues'].value;
+                  const controls = <FormArray>this.journalFrm.controls['AccountTransactionValues'];
+          
+                  let accountList = [];
+                  control.forEach(account => {
+                      let Id = account.AccountId.Id;
+                      account.AccountId  = Id;
+          
+                      accountList.push(account);
+                  });
+                  
+                  let JournalObject = {
+                      Id: this.journalFrm.controls['Id'].value,
+                      Date: this.journalFrm.controls['Date'].value,
+                      Name: this.journalFrm.controls['Name'].value,
+                      AccountTransactionDocumentId: this.journalFrm.controls['AccountTransactionDocumentId'].value,
+                      Description: this.journalFrm.controls['Description'].value,
+                      Amount: this.journalFrm.controls['Amount'].value,
+                      drTotal: this.journalFrm.controls['drTotal'].value,
+                      crTotal: this.journalFrm.controls['crTotal'].value,
+                      FinancialYear: this.journalFrm.controls['FinancialYear'].value,
+                      UserName: this.journalFrm.controls['UserName'].value,
+                      CompanyCode: this.journalFrm.controls['CompanyCode'].value,
+                      // AccountTransactionValues: this.journalFrm.controls['AccountTransactionValues'].value
+                      AccountTransactionValues: accountList
+                  }
+                  switch (this.dbops) {
+                    case DBOperation.create:
+                        this._journalvoucherService.post(Global.BASE_JOURNALVOUCHER_ENDPOINT, JournalObject)
+                            .subscribe(
+                                async (data) => {
+                                    if (data > 0) {
+                                        // file upload stuff goes here
+                                        let upload = await fileUpload.handleFileUpload({
+                                            'moduleName': 'JournalVoucher',
+                                            'id': data
+                                        });
+        
+                                        if (upload == 'error') {
+                                            alert('There is error uploading file!');
+                                        }
+        
+                                        if (upload == true || upload == false) {
+                                            // this.modalRef.hide();
+                                            this.formSubmitAttempt = false;
+                                            this.reset();
+                                        }
+                                        alert('Data saved successfully!');
+                                        this.router.navigate(['Account/journalVoucher']);
+                                        // this.modalRef.hide();
+                                        // this.loadJournalVoucherList(this.fromDate, this.toDate);
+                                    } else {
+                                        alert("There is some issue in saving records, please contact to system administrator!");
+                                    }
                                 });
-
-                                if (upload == 'error') {
-                                    alert('There is error uploading file!');
-                                }
-
-                                if (upload == true || upload == false) {
+                        break;
+                    case DBOperation.update:
+                        this._journalvoucherService.put(Global.BASE_JOURNALVOUCHER_ENDPOINT, journal.value.Id, JournalObject).subscribe(
+                            async (data) => {
+                                if (data > 0) {
+                                    // file upload stuff goes here
+                                    let upload = await fileUpload.handleFileUpload({
+                                        'moduleName': 'JournalVoucher',
+                                        'id': data
+                                    });
+        
+                                    if (upload == 'error') {
+                                        alert('There is error uploading file!');
+                                    }
+        
+                                    if (upload == true || upload == false) {
+                                        // this.modalRef.hide();
+                                        this.formSubmitAttempt = false;
+                                        // this.reset();
+                                    }
+                                    alert('Data updated successfully!');
+                                    this.router.navigate(['Account/journalVoucher']);
                                     // this.modalRef.hide();
-                                    this.formSubmitAttempt = false;
-                                    this.reset();
+                                    // this.loadJournalVoucherList(this.fromDate, this.toDate);
+                                } else {
+                                    alert("There is some issue in saving records, please contact to system administrator!");
                                 }
-                                alert('Data saved successfully!');
-                                this.router.navigate(['Account/journalVoucher']);
-                                // this.modalRef.hide();
-                                // this.loadJournalVoucherList(this.fromDate, this.toDate);
-                            } else {
-                                alert("There is some issue in saving records, please contact to system administrator!");
-                            }
-                        });
-                break;
-            case DBOperation.update:
-                this._journalvoucherService.put(Global.BASE_JOURNALVOUCHER_ENDPOINT, journal.value.Id, JournalObject).subscribe(
-                    async (data) => {
-                        if (data > 0) {
-                            // file upload stuff goes here
-                            let upload = await fileUpload.handleFileUpload({
-                                'moduleName': 'JournalVoucher',
-                                'id': data
-                            });
-
-                            if (upload == 'error') {
-                                alert('There is error uploading file!');
-                            }
-
-                            if (upload == true || upload == false) {
-                                // this.modalRef.hide();
+                            },
+                        );
+                        break;
+                    case DBOperation.delete:
+                        console.log(JournalObject);
+                        
+                        this._journalvoucherService.delete(Global.BASE_JOURNALVOUCHER_ENDPOINT, JournalObject).subscribe(
+                            data => {
+                                if (data == 1) {
+                                    alert("Data successfully deleted.");
+                                    // this.loadJournalVoucherList(this.fromDate, this.toDate);
+                                } else {
+                                    alert("There is some issue in saving records, please contact to system administrator!");
+                                }
                                 this.formSubmitAttempt = false;
-                                // this.reset();
-                            }
-                            alert('Data updated successfully!');
-                            this.router.navigate(['Account/journalVoucher']);
-                            // this.modalRef.hide();
-                            // this.loadJournalVoucherList(this.fromDate, this.toDate);
-                        } else {
-                            alert("There is some issue in saving records, please contact to system administrator!");
-                        }
-                    },
-                );
-                break;
-            case DBOperation.delete:
-                console.log(JournalObject);
-                
-                this._journalvoucherService.delete(Global.BASE_JOURNALVOUCHER_ENDPOINT, JournalObject).subscribe(
-                    data => {
-                        if (data == 1) {
-                            alert("Data successfully deleted.");
-                            // this.loadJournalVoucherList(this.fromDate, this.toDate);
-                        } else {
-                            alert("There is some issue in saving records, please contact to system administrator!");
-                        }
-                        this.formSubmitAttempt = false;
-                        this.journalFrm.reset();
-                    },
-                );
-        }
-    } else {
-        this.validateAllFields(journal);
+                                this.journalFrm.reset();
+                            },
+                        );
+                  }
+                }
+              } else {
+                this.validateAllFields(journal);
+              }
+            }
+          }
+        },
+        error => {
+          this.msg = <any>error
+        });
     }
+
   }
+
+
+  // onSubmit(formData: any, fileUpload: any) {
+  //   // this.msg = "";
+  //   let journal = this.journalFrm;
+  //   console.log('the jounra', this.journalFrm)
+
+  //   this.formSubmitAttempt = true;
+  //   // let voucherDateNepali = this.voucherDateNepali.year + '.' + (this.voucherDateNepali.month*1 + 1) + '.' + this.voucherDateNepali.day;
+
+  //   // if (!this.voucherDateValidator(voucherDateNepali)) {
+  //   //     return false;
+  //   // }
+
+  //   if (!this.voucherDateValidator(journal.get('Date').value)) {
+  //       return false;
+  //   }
+
+  //   journal.get('FinancialYear').setValue(this.currentYear['Name'] || '');
+  //   journal.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
+  //   journal.get('CompanyCode').setValue(this.company && this.company['BranchCode'] || '');
+
+  //   // journal.get('Date').setValue(voucherDateNepali);
+
+  //   if (journal.valid) {
+  //       let totalDebit = this.sumDebit();
+  //       let totalCredit = this.sumCredit();
+
+  //       if (totalDebit != totalCredit || totalDebit == 0 || totalCredit == 0) {
+  //           alert("Debit and Credit are not Equal | Value must be greater than Amount Zero.");
+  //           return;
+  //       }
+  //       const control = this.journalFrm.controls['AccountTransactionValues'].value;
+  //       const controls = <FormArray>this.journalFrm.controls['AccountTransactionValues'];
+
+  //       let accountList = [];
+  //       control.forEach(account => {
+  //           let Id = account.AccountId.Id;
+  //           account.AccountId  = Id;
+
+  //           accountList.push(account);
+  //       });
+  //       console.log('the list of the details are', accountList);
+       
+  //       let JournalObject = {
+  //           Id: this.journalFrm.controls['Id'].value,
+  //           Date: this.journalFrm.controls['Date'].value,
+  //           Name: this.journalFrm.controls['Name'].value,
+  //           AccountTransactionDocumentId: this.journalFrm.controls['AccountTransactionDocumentId'].value,
+  //           Description: this.journalFrm.controls['Description'].value,
+  //           Amount: this.journalFrm.controls['Amount'].value,
+  //           drTotal: this.journalFrm.controls['drTotal'].value,
+  //           crTotal: this.journalFrm.controls['crTotal'].value,
+  //           FinancialYear: this.journalFrm.controls['FinancialYear'].value,
+  //           UserName: this.journalFrm.controls['UserName'].value,
+  //           CompanyCode: this.journalFrm.controls['CompanyCode'].value,
+  //           // AccountTransactionValues: this.journalFrm.controls['AccountTransactionValues'].value
+  //           AccountTransactionValues: accountList
+  //       }
+  //       switch (this.dbops) {
+  //           case DBOperation.create:
+  //               this._journalvoucherService.post(Global.BASE_JOURNALVOUCHER_ENDPOINT, JournalObject)
+  //                   .subscribe(
+  //                       async (data) => {
+  //                           if (data > 0) {
+  //                               // file upload stuff goes here
+  //                               let upload = await fileUpload.handleFileUpload({
+  //                                   'moduleName': 'JournalVoucher',
+  //                                   'id': data
+  //                               });
+
+  //                               if (upload == 'error') {
+  //                                   alert('There is error uploading file!');
+  //                               }
+
+  //                               if (upload == true || upload == false) {
+  //                                   // this.modalRef.hide();
+  //                                   this.formSubmitAttempt = false;
+  //                                   this.reset();
+  //                               }
+  //                               alert('Data saved successfully!');
+  //                               this.router.navigate(['Account/journalVoucher']);
+  //                               // this.modalRef.hide();
+  //                               // this.loadJournalVoucherList(this.fromDate, this.toDate);
+  //                           } else {
+  //                               alert("There is some issue in saving records, please contact to system administrator!");
+  //                           }
+  //                       });
+  //               break;
+  //           case DBOperation.update:
+  //               this._journalvoucherService.put(Global.BASE_JOURNALVOUCHER_ENDPOINT, journal.value.Id, JournalObject).subscribe(
+  //                   async (data) => {
+  //                       if (data > 0) {
+  //                           // file upload stuff goes here
+  //                           let upload = await fileUpload.handleFileUpload({
+  //                               'moduleName': 'JournalVoucher',
+  //                               'id': data
+  //                           });
+
+  //                           if (upload == 'error') {
+  //                               alert('There is error uploading file!');
+  //                           }
+
+  //                           if (upload == true || upload == false) {
+  //                               // this.modalRef.hide();
+  //                               this.formSubmitAttempt = false;
+  //                               // this.reset();
+  //                           }
+  //                           alert('Data updated successfully!');
+  //                           this.router.navigate(['Account/journalVoucher']);
+  //                           // this.modalRef.hide();
+  //                           // this.loadJournalVoucherList(this.fromDate, this.toDate);
+  //                       } else {
+  //                           alert("There is some issue in saving records, please contact to system administrator!");
+  //                       }
+  //                   },
+  //               );
+  //               break;
+  //           case DBOperation.delete:
+  //               console.log(JournalObject);
+                
+  //               this._journalvoucherService.delete(Global.BASE_JOURNALVOUCHER_ENDPOINT, JournalObject).subscribe(
+  //                   data => {
+  //                       if (data == 1) {
+  //                           alert("Data successfully deleted.");
+  //                           // this.loadJournalVoucherList(this.fromDate, this.toDate);
+  //                       } else {
+  //                           alert("There is some issue in saving records, please contact to system administrator!");
+  //                       }
+  //                       this.formSubmitAttempt = false;
+  //                       this.journalFrm.reset();
+  //                   },
+  //               );
+  //       }
+  //   } else {
+  //       this.validateAllFields(journal);
+  //   }
+  // }
 
   // Push Account Values in row
   addAccountValues() {
