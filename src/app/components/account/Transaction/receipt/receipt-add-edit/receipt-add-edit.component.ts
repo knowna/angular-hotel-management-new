@@ -418,169 +418,327 @@ export class ReceiptAddEditComponent implements OnInit {
     this.formSubmitAttempt = true;
     let receipt = this.receiptFrm;
 
-    if (!this.voucherDateValidator(receipt.get('Date').value)) {
-      return false;
-    }
+    let currentdate = receipt.get('Date').value;
+    if(currentdate == "") {
+      alert("Please enter the voucher date");
+    }else{
+      let today = new Date;
+      this._journalvoucherService.get(Global.BASE_NEPALIMONTH_ENDPOINT + '?NDate=' + currentdate)
+        .subscribe(SB => {
+            this.vdate = SB;
+            if(this.vdate === "undefined") {
+              alert("Please enter the voucher valid date");
+            }else{
+              let voucherDate = new Date(this.vdate);
+              let tomorrow = new Date(today.setDate(today.getDate() + 1));
+              let currentYearStartDate = new Date(this.currentYear.StartDate);
+              let currentYearEndDate = new Date(this.currentYear.EndDate);
 
-    receipt.get('FinancialYear').setValue(this.currentYear['Name'] || '');
-    receipt.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
-    receipt.get('CompanyCode').setValue(this.currentUser && this.company['BranchCode'] || '');
-
-    if (receipt.valid) {
-      const control = this.receiptFrm.controls['AccountTransactionValues'].value;
-      const controls = <FormArray>this.receiptFrm.controls['AccountTransactionValues'];
-
-      let accountList = [];
-      control.forEach(account => {
-          let Id = account.AccountId.Id;
-          account.AccountId  = Id;
-
-          accountList.push(account);
-      });
-
-      // for (var i = 0; i < control.length; i++) {
-      //     let Id = control[i]['Id'];
-      //     if (Id > 0) {
-      //         let CurrentAccount = control[i]['AccountId'];
-      //         this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
-      //         let CurrentAccountId = this.currentaccount.Id;
-      //         let currentaccountvoucher = control[i];
-      //         let instance = this.fb.group(currentaccountvoucher);
-      //         instance.controls["AccountId"].setValue(CurrentAccountId);
-      //         controls.push(instance);
-      //     }
-      //     else {
-      //         let xcurrentaccountvoucher = control[i]['AccountId'];
-      //         let currentaccountvoucher = control[i];
-      //         let instance = this.fb.group(currentaccountvoucher);
-      //         this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
-      //         instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
-      //         controls.push(instance);
-      //     }
-      // }
-
-      let CurrentAccount = receipt.get('SourceAccountTypeId').value;
-      let currentaccount = this.accountcashbank.find(x => x.Id === CurrentAccount.Id);
-      this.SourceAccountTypeId = currentaccount.Id.toString();
-
-      // let Id = receipt.get('Id').value;
-      // if (Id > 0) {
-      //     let CurrentAccount = receipt.get('SourceAccountTypeId').value;
-      //     this.currentaccount = this.accountcashbank.filter(x => x.Name === CurrentAccount)[0];
-      //     this.SourceAccountTypeId = this.currentaccount.Id.toString();
-      //     receipt.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
-      // }
-      // else {
-      //     let CurrentAccount = receipt.get('SourceAccountTypeId').value;
-      //     this.SourceAccountTypeId = CurrentAccount.Id;
-      //     receipt.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
-      // }
-
-      let receiptObj = {
-          Id: this.receiptFrm.controls['Id'].value,
-          Date: this.receiptFrm.controls['Date'].value,
-          Name: this.receiptFrm.controls['Name'].value,
-          SourceAccountTypeId: this.SourceAccountTypeId,
-          AccountTransactionDocumentId: this.receiptFrm.controls['AccountTransactionDocumentId'].value,
-          Description: this.receiptFrm.controls['Description'].value,
-          FinancialYear: this.receiptFrm.controls['FinancialYear'].value,
-          UserName: this.receiptFrm.controls['UserName'].value,
-          CompanyCode: this.receiptFrm.controls['CompanyCode'].value,
-          // AccountTransactionValues: this.receiptFrm.controls['AccountTransactionValues'].value
-          AccountTransactionValues: accountList
-      }
-
-      switch (this.dbops) {
-          case DBOperation.create:
-              this._journalvoucherService.post(Global.BASE_JOURNALVOUCHER_ENDPOINT, receiptObj).subscribe(
-                  async (data) => {
-                      if (data > 0) {
-                          // file upload stuff goes here
-                          let upload = await fileUpload.handleFileUpload({
-                            'moduleName': 'JournalVoucher',
-                            'id': data
-                          });
-
-                          if (upload == 'error' ) {
-                              alert('There is error uploading file!');
-                          } 
-                          
-                          if (upload == true || upload == false) {
-                            this.formSubmitAttempt = false;
-                            this.reset();
-                          }
-                          alert("Data successfully added.");
-                          this.router.navigate(['Account/receipt']);
-                          // this.modalRef.hide();
-                      } else {
-                          alert("There is some issue in saving records, please contact to system administrator!");
-                      }
-                  },
-              );
-              break;
-          case DBOperation.update:
-              this._journalvoucherService.put(Global.BASE_JOURNALVOUCHER_ENDPOINT, receipt.value.Id, receiptObj).subscribe(
-                  async (data) => {
-                      if (data > 0) {
-                        // file upload stuff goes here
-                        let upload = await fileUpload.handleFileUpload({
-                            'moduleName': 'JournalVoucher',
-                            'id': data
-                        });
-
-                        if (upload == 'error' ) {
-                            alert('There is error uploading file!');
-                        } 
-                        
-                        if (upload == true || upload == false) {
-                            this.formSubmitAttempt = false;
-                            this.reset();
-                        }
-                        alert("Data successfully updated.");
-                        this.router.navigate(['Account/receipt']);
-                        // this.modalRef.hide();
-                      } else {
-                          alert("There is some issue in saving records, please contact to system administrator!");
-                      }
-                  },
-              );
-              break;
-          case DBOperation.delete:
-              // let receiptObject= {
-              //     Id: this.receiptFrm.controls['Id'].value,
-              //     Date: this.receiptFrm.controls['Date'].value,
-              //     Name: this.receiptFrm.controls['Name'].value,
-              //     SourceAccountTypeId: this.receiptFrm.controls['SourceAccountTypeId'].value,
-              //     AccountTransactionDocumentId: this.receiptFrm.controls['AccountTransactionDocumentId'].value,
-              //     Description: this.receiptFrm.controls['Description'].value,
-              //     FinancialYear: this.receiptFrm.controls['FinancialYear'].value,
-              //     UserName: this.receiptFrm.controls['UserName'].value,
-              //     CompanyCode: this.receiptFrm.controls['CompanyCode'].value,
-              //     AccountTransactionValues: this.receiptFrm.controls['AccountTransactionValues'].value
-              // }
-              this._journalvoucherService.delete(Global.BASE_JOURNALVOUCHER_ENDPOINT,  receiptObj).subscribe(
-                data => {
-                    if (data == 1) //Success
-                    {
-                      alert("Data successfully deleted.");
-                    }
-                    else {
-                      alert("There is some issue in saving records, please contact to system administrator!");
-                    }
-
-                    this.modalRef.hide();
-                    this.formSubmitAttempt = false;
-                    this.reset();
-                },
-
-              );
-      }
-    }
-
-    else {
-        this.validateAllFields(receipt);
+              if ((voucherDate < currentYearStartDate) || (voucherDate > currentYearEndDate) || voucherDate >= tomorrow) {
+                alert("Date should be within current financial year's start date and end date inclusive");
+              }
+              else {
+                receipt.get('FinancialYear').setValue(this.currentYear['Name'] || '');
+                receipt.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
+                receipt.get('CompanyCode').setValue(this.currentUser && this.company['BranchCode'] || '');
+            
+                if (receipt.valid) {
+                  const control = this.receiptFrm.controls['AccountTransactionValues'].value;
+                  const controls = <FormArray>this.receiptFrm.controls['AccountTransactionValues'];
+            
+                  let accountList = [];
+                  control.forEach(account => {
+                      let Id = account.AccountId.Id;
+                      account.AccountId  = Id;
+            
+                      accountList.push(account);
+                  });
+            
+            
+                  let CurrentAccount = receipt.get('SourceAccountTypeId').value;
+                  let currentaccount = this.accountcashbank.find(x => x.Id === CurrentAccount.Id);
+                  this.SourceAccountTypeId = currentaccount.Id.toString();
+            
+                  let receiptObj = {
+                      Id: this.receiptFrm.controls['Id'].value,
+                      Date: this.receiptFrm.controls['Date'].value,
+                      Name: this.receiptFrm.controls['Name'].value,
+                      SourceAccountTypeId: this.SourceAccountTypeId,
+                      AccountTransactionDocumentId: this.receiptFrm.controls['AccountTransactionDocumentId'].value,
+                      Description: this.receiptFrm.controls['Description'].value,
+                      FinancialYear: this.receiptFrm.controls['FinancialYear'].value,
+                      UserName: this.receiptFrm.controls['UserName'].value,
+                      CompanyCode: this.receiptFrm.controls['CompanyCode'].value,
+                      // AccountTransactionValues: this.receiptFrm.controls['AccountTransactionValues'].value
+                      AccountTransactionValues: accountList
+                  }
+            
+                  switch (this.dbops) {
+                      case DBOperation.create:
+                          this._journalvoucherService.post(Global.BASE_JOURNALVOUCHER_ENDPOINT, receiptObj).subscribe(
+                              async (data) => {
+                                  if (data > 0) {
+                                      // file upload stuff goes here
+                                      let upload = await fileUpload.handleFileUpload({
+                                        'moduleName': 'JournalVoucher',
+                                        'id': data
+                                      });
+            
+                                      if (upload == 'error' ) {
+                                          alert('There is error uploading file!');
+                                      } 
+                                      
+                                      if (upload == true || upload == false) {
+                                        this.formSubmitAttempt = false;
+                                        this.reset();
+                                      }
+                                      alert("Data successfully added.");
+                                      this.router.navigate(['Account/receipt']);
+                                      // this.modalRef.hide();
+                                  } else {
+                                      alert("There is some issue in saving records, please contact to system administrator!");
+                                  }
+                              },
+                          );
+                          break;
+                      case DBOperation.update:
+                          this._journalvoucherService.put(Global.BASE_JOURNALVOUCHER_ENDPOINT, receipt.value.Id, receiptObj).subscribe(
+                              async (data) => {
+                                  if (data > 0) {
+                                    // file upload stuff goes here
+                                    let upload = await fileUpload.handleFileUpload({
+                                        'moduleName': 'JournalVoucher',
+                                        'id': data
+                                    });
+            
+                                    if (upload == 'error' ) {
+                                        alert('There is error uploading file!');
+                                    } 
+                                    
+                                    if (upload == true || upload == false) {
+                                        this.formSubmitAttempt = false;
+                                        this.reset();
+                                    }
+                                    alert("Data successfully updated.");
+                                    this.router.navigate(['Account/receipt']);
+                                    // this.modalRef.hide();
+                                  } else {
+                                      alert("There is some issue in saving records, please contact to system administrator!");
+                                  }
+                              },
+                          );
+                          break;
+                      case DBOperation.delete:
+                          // let receiptObject= {
+                          //     Id: this.receiptFrm.controls['Id'].value,
+                          //     Date: this.receiptFrm.controls['Date'].value,
+                          //     Name: this.receiptFrm.controls['Name'].value,
+                          //     SourceAccountTypeId: this.receiptFrm.controls['SourceAccountTypeId'].value,
+                          //     AccountTransactionDocumentId: this.receiptFrm.controls['AccountTransactionDocumentId'].value,
+                          //     Description: this.receiptFrm.controls['Description'].value,
+                          //     FinancialYear: this.receiptFrm.controls['FinancialYear'].value,
+                          //     UserName: this.receiptFrm.controls['UserName'].value,
+                          //     CompanyCode: this.receiptFrm.controls['CompanyCode'].value,
+                          //     AccountTransactionValues: this.receiptFrm.controls['AccountTransactionValues'].value
+                          // }
+                          this._journalvoucherService.delete(Global.BASE_JOURNALVOUCHER_ENDPOINT,  receiptObj).subscribe(
+                            data => {
+                                if (data == 1) //Success
+                                {
+                                  alert("Data successfully deleted.");
+                                }
+                                else {
+                                  alert("There is some issue in saving records, please contact to system administrator!");
+                                }
+            
+                                this.modalRef.hide();
+                                this.formSubmitAttempt = false;
+                                this.reset();
+                            },
+            
+                          );
+                  }
+                }
+                else {
+                  this.validateAllFields(receipt);
+                }
+              }
+            }
+        },
+        error => {
+          this.msg = <any>error
+        });
     }
   }
+
+  // onSubmit(formData: any, fileUpload: any) {
+  //   this.msg = "";
+  //   this.formSubmitAttempt = true;
+  //   let receipt = this.receiptFrm;
+
+  //   if (!this.voucherDateValidator(receipt.get('Date').value)) {
+  //     return false;
+  //   }
+
+  //   receipt.get('FinancialYear').setValue(this.currentYear['Name'] || '');
+  //   receipt.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
+  //   receipt.get('CompanyCode').setValue(this.currentUser && this.company['BranchCode'] || '');
+
+  //   if (receipt.valid) {
+  //     const control = this.receiptFrm.controls['AccountTransactionValues'].value;
+  //     const controls = <FormArray>this.receiptFrm.controls['AccountTransactionValues'];
+
+  //     let accountList = [];
+  //     control.forEach(account => {
+  //         let Id = account.AccountId.Id;
+  //         account.AccountId  = Id;
+
+  //         accountList.push(account);
+  //     });
+
+  //     // for (var i = 0; i < control.length; i++) {
+  //     //     let Id = control[i]['Id'];
+  //     //     if (Id > 0) {
+  //     //         let CurrentAccount = control[i]['AccountId'];
+  //     //         this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
+  //     //         let CurrentAccountId = this.currentaccount.Id;
+  //     //         let currentaccountvoucher = control[i];
+  //     //         let instance = this.fb.group(currentaccountvoucher);
+  //     //         instance.controls["AccountId"].setValue(CurrentAccountId);
+  //     //         controls.push(instance);
+  //     //     }
+  //     //     else {
+  //     //         let xcurrentaccountvoucher = control[i]['AccountId'];
+  //     //         let currentaccountvoucher = control[i];
+  //     //         let instance = this.fb.group(currentaccountvoucher);
+  //     //         this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
+  //     //         instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
+  //     //         controls.push(instance);
+  //     //     }
+  //     // }
+
+  //     let CurrentAccount = receipt.get('SourceAccountTypeId').value;
+  //     let currentaccount = this.accountcashbank.find(x => x.Id === CurrentAccount.Id);
+  //     this.SourceAccountTypeId = currentaccount.Id.toString();
+
+  //     // let Id = receipt.get('Id').value;
+  //     // if (Id > 0) {
+  //     //     let CurrentAccount = receipt.get('SourceAccountTypeId').value;
+  //     //     this.currentaccount = this.accountcashbank.filter(x => x.Name === CurrentAccount)[0];
+  //     //     this.SourceAccountTypeId = this.currentaccount.Id.toString();
+  //     //     receipt.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
+  //     // }
+  //     // else {
+  //     //     let CurrentAccount = receipt.get('SourceAccountTypeId').value;
+  //     //     this.SourceAccountTypeId = CurrentAccount.Id;
+  //     //     receipt.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
+  //     // }
+
+  //     let receiptObj = {
+  //         Id: this.receiptFrm.controls['Id'].value,
+  //         Date: this.receiptFrm.controls['Date'].value,
+  //         Name: this.receiptFrm.controls['Name'].value,
+  //         SourceAccountTypeId: this.SourceAccountTypeId,
+  //         AccountTransactionDocumentId: this.receiptFrm.controls['AccountTransactionDocumentId'].value,
+  //         Description: this.receiptFrm.controls['Description'].value,
+  //         FinancialYear: this.receiptFrm.controls['FinancialYear'].value,
+  //         UserName: this.receiptFrm.controls['UserName'].value,
+  //         CompanyCode: this.receiptFrm.controls['CompanyCode'].value,
+  //         // AccountTransactionValues: this.receiptFrm.controls['AccountTransactionValues'].value
+  //         AccountTransactionValues: accountList
+  //     }
+
+  //     switch (this.dbops) {
+  //         case DBOperation.create:
+  //             this._journalvoucherService.post(Global.BASE_JOURNALVOUCHER_ENDPOINT, receiptObj).subscribe(
+  //                 async (data) => {
+  //                     if (data > 0) {
+  //                         // file upload stuff goes here
+  //                         let upload = await fileUpload.handleFileUpload({
+  //                           'moduleName': 'JournalVoucher',
+  //                           'id': data
+  //                         });
+
+  //                         if (upload == 'error' ) {
+  //                             alert('There is error uploading file!');
+  //                         } 
+                          
+  //                         if (upload == true || upload == false) {
+  //                           this.formSubmitAttempt = false;
+  //                           this.reset();
+  //                         }
+  //                         alert("Data successfully added.");
+  //                         this.router.navigate(['Account/receipt']);
+  //                         // this.modalRef.hide();
+  //                     } else {
+  //                         alert("There is some issue in saving records, please contact to system administrator!");
+  //                     }
+  //                 },
+  //             );
+  //             break;
+  //         case DBOperation.update:
+  //             this._journalvoucherService.put(Global.BASE_JOURNALVOUCHER_ENDPOINT, receipt.value.Id, receiptObj).subscribe(
+  //                 async (data) => {
+  //                     if (data > 0) {
+  //                       // file upload stuff goes here
+  //                       let upload = await fileUpload.handleFileUpload({
+  //                           'moduleName': 'JournalVoucher',
+  //                           'id': data
+  //                       });
+
+  //                       if (upload == 'error' ) {
+  //                           alert('There is error uploading file!');
+  //                       } 
+                        
+  //                       if (upload == true || upload == false) {
+  //                           this.formSubmitAttempt = false;
+  //                           this.reset();
+  //                       }
+  //                       alert("Data successfully updated.");
+  //                       this.router.navigate(['Account/receipt']);
+  //                       // this.modalRef.hide();
+  //                     } else {
+  //                         alert("There is some issue in saving records, please contact to system administrator!");
+  //                     }
+  //                 },
+  //             );
+  //             break;
+  //         case DBOperation.delete:
+  //             // let receiptObject= {
+  //             //     Id: this.receiptFrm.controls['Id'].value,
+  //             //     Date: this.receiptFrm.controls['Date'].value,
+  //             //     Name: this.receiptFrm.controls['Name'].value,
+  //             //     SourceAccountTypeId: this.receiptFrm.controls['SourceAccountTypeId'].value,
+  //             //     AccountTransactionDocumentId: this.receiptFrm.controls['AccountTransactionDocumentId'].value,
+  //             //     Description: this.receiptFrm.controls['Description'].value,
+  //             //     FinancialYear: this.receiptFrm.controls['FinancialYear'].value,
+  //             //     UserName: this.receiptFrm.controls['UserName'].value,
+  //             //     CompanyCode: this.receiptFrm.controls['CompanyCode'].value,
+  //             //     AccountTransactionValues: this.receiptFrm.controls['AccountTransactionValues'].value
+  //             // }
+  //             this._journalvoucherService.delete(Global.BASE_JOURNALVOUCHER_ENDPOINT,  receiptObj).subscribe(
+  //               data => {
+  //                   if (data == 1) //Success
+  //                   {
+  //                     alert("Data successfully deleted.");
+  //                   }
+  //                   else {
+  //                     alert("There is some issue in saving records, please contact to system administrator!");
+  //                   }
+
+  //                   this.modalRef.hide();
+  //                   this.formSubmitAttempt = false;
+  //                   this.reset();
+  //               },
+
+  //             );
+  //     }
+  //   }
+
+  //   else {
+  //       this.validateAllFields(receipt);
+  //   }
+  // }
 
   confirm(): void {
     this.modalRef2.hide();

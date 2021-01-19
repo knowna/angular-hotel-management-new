@@ -462,172 +462,363 @@ export class PaymentAddEditComponent implements OnInit {
       this.modalRef2 = this.modalService.show(template, { class: 'modal-sm' });
   }
 
+    onSubmit(formData: any, fileUpload: any) {
+        this.msg = "";
+        let payment = this.paymentFrm;
+
+        this.formSubmitAttempt = true;
+
+        let currentdate = payment.get('Date').value
+        if(currentdate == "") {
+            alert("Please enter the voucher date");
+        }else{
+            let today = new Date;
+            this._journalvoucherService.get(Global.BASE_NEPALIMONTH_ENDPOINT + '?NDate=' + currentdate)
+                .subscribe(SB => {
+                    this.vdate = SB;
+                    if(this.vdate === "undefined") {
+                        alert("Please enter the voucher valid date");
+                    }else{
+                        let voucherDate = new Date(this.vdate);
+                        let tomorrow = new Date(today.setDate(today.getDate() + 1));
+                        let currentYearStartDate = new Date(this.currentYear.StartDate);
+                        let currentYearEndDate = new Date(this.currentYear.EndDate);
+
+                        if ((voucherDate < currentYearStartDate) || (voucherDate > currentYearEndDate) || voucherDate >= tomorrow) {
+                            alert("Date should be within current financial year's start date and end date inclusive");
+                        }
+                        else {
+                            payment.get('FinancialYear').setValue(this.currentYear['Name'] || '');
+                            payment.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
+                            payment.get('CompanyCode').setValue(this.currentUser && this.company['BranchCode'] || '');
+                    
+                            if (payment.valid) {
+                                const control = this.paymentFrm.controls['AccountTransactionValues'].value;
+                                const controls = <FormArray>this.paymentFrm.controls['AccountTransactionValues'];
+                    
+                    
+                                let accountList = [];
+                                control.forEach(account => {
+                                    let Id = account.AccountId.Id;
+                                    account.AccountId  = Id;
+                    
+                                    accountList.push(account);
+                                });
+                    
+                                // for (var i = 0; i < control.length; i++) {
+                                //     let Id = control[i]['Id'];
+                                //     if (Id > 0) {
+                                //         let CurrentAccount = control[i]['AccountId'];
+                                //         this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
+                                //         let CurrentAccountId = this.currentaccount.Id;
+                                //         let currentaccountvoucher = control[i];
+                                //         let instance = this.fb.group(currentaccountvoucher);
+                                //         instance.controls["AccountId"].setValue(CurrentAccountId);
+                                //         controls.push(instance);
+                                //     }
+                                //     else {
+                                //         let xcurrentaccountvoucher = control[i]['AccountId'];
+                                //         let currentaccountvoucher = control[i];
+                                //         let instance = this.fb.group(currentaccountvoucher);
+                                //         this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
+                                //         instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
+                                //         controls.push(instance);
+                                //     }
+                                // }
+                    
+                                let CurrentAccount = payment.get('SourceAccountTypeId').value;
+                                // console.log('current account', CurrentAccount);
+                                // console.log('cashbank lus', this.accountcashbank)
+                                let currentaccount = this.accountcashbank.find(x => x.Id === CurrentAccount.Id);
+                                this.SourceAccountTypeId = currentaccount.Id.toString();
+                    
+                    
+                                // let Id = payment.get('Id').value;
+                                // if (Id > 0) {
+                                //     let CurrentAccount = payment.get('SourceAccountTypeId').value;
+                                //     this.currentaccount = this.accountcashbank.filter(x => x.Name === CurrentAccount)[0];
+                                //     this.SourceAccountTypeId = this.currentaccount.Id.toString();
+                                //     payment.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
+                                // }
+                                // else {
+                                //     let CurrentAccount = payment.get('SourceAccountTypeId').value;
+                                //     this.SourceAccountTypeId = CurrentAccount.Id;
+                                //     payment.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
+                                // }
+                    
+                                let paymentObj = {
+                                    Id: this.paymentFrm.controls['Id'].value,
+                                    Date: this.paymentFrm.controls['Date'].value,
+                                    Name: this.paymentFrm.controls['Name'].value,
+                                    // SourceAccountTypeId: this.paymentFrm.controls['SourceAccountTypeId'].value,
+                                    SourceAccountTypeId: this.SourceAccountTypeId,
+                                    AccountTransactionDocumentId: this.paymentFrm.controls['AccountTransactionDocumentId'].value,
+                                    Description: this.paymentFrm.controls['Description'].value,
+                                    FinancialYear: this.paymentFrm.controls['FinancialYear'].value,
+                                    UserName: this.paymentFrm.controls['UserName'].value,
+                                    CompanyCode: this.paymentFrm.controls['CompanyCode'].value,
+                                    // AccountTransactionValues: this.paymentFrm.controls['AccountTransactionValues'].value
+                                    AccountTransactionValues: accountList
+                                }
+                    
+                                // console.log('the paymet', paymentObj)
+                                switch (this.dbops) {
+                                    case DBOperation.create:
+                                        this._journalvoucherService.post(Global.BASE_JOURNALVOUCHER_ENDPOINT, paymentObj).subscribe(
+                                            async (data) => {
+                                                if (data > 0) {
+                                                    // file upload stuff goes here
+                                                    let upload = await fileUpload.handleFileUpload({
+                                                        'moduleName': 'JournalVoucher',
+                                                        'id': data
+                                                    });
+                    
+                                                    if (upload == 'error' ) {
+                                                        alert('There is error uploading file!');
+                                                    } 
+                                                    
+                                                    if (upload == true || upload == false) {
+                                                        // this.modalRef.hide();
+                                                        this.formSubmitAttempt = false;
+                                                        this.reset();
+                                                    }
+                                                    alert('Data saved successfully!');
+                                                    this.router.navigate(['Account/payment']);
+                                                    // this.modalRef.hide();
+                                                    // this.loadPaymentList(this.fromDate, this.toDate);
+                                                } else {
+                                                    alert("There is some issue in saving records, please contact to system administrator!");
+                                                }
+                                            }
+                                        );
+                                        break;
+                                    case DBOperation.update:
+                                        this._journalvoucherService.put(Global.BASE_JOURNALVOUCHER_ENDPOINT, payment.value.Id, paymentObj).subscribe(
+                                            async (data) => {
+                                                if (data > 0) {
+                                                    // file upload stuff goes here
+                                                    let upload = await fileUpload.handleFileUpload({
+                                                        'moduleName': 'JournalVoucher',
+                                                        'id': data
+                                                    });
+                    
+                                                    if (upload == 'error' ) {
+                                                        alert('There is error uploading file!');
+                                                    } 
+                                                    
+                                                    if (upload == true || upload == false) {
+                                                        // this.modalRef.hide();
+                                                        this.formSubmitAttempt = false;
+                                                        this.reset();
+                                                    }
+                                                    alert('Data updated successfully!');
+                                                    this.router.navigate(['Account/payment']);
+                                                    // this.modalRef.hide();
+                                                    // this.loadPaymentList(this.fromDate, this.toDate);
+                                                } else {
+                                                    alert("There is some issue in saving records, please contact to system administrator!");
+                                                }
+                                            },
+                                        );
+                                        break;
+                                    case DBOperation.delete:
+                                        this._journalvoucherService.delete(Global.BASE_JOURNALVOUCHER_ENDPOINT, paymentObj).subscribe(
+                                            data => {
+                                                if (data == 1) //Success
+                                                {
+                                                    alert("Data successfully deleted.");
+                                                    this.loadPaymentList(this.fromDate, this.toDate);
+                                                }
+                                                else {
+                                                    alert("There is some issue in saving records, please contact to system administrator!");
+                                                }
+                                                this.modalRef.hide();
+                                                this.formSubmitAttempt = false;
+                                                this.reset();
+                                            },
+                                        );
+                                }
+                            }
+                            else {
+                                this.validateAllFields(payment);
+                            }
+                        }
+                    }
+                },
+                error => {
+                    this.msg = <any>error
+                });
+        }
+        
+    }       
+
+
   //Submits the form//
-  onSubmit(formData: any, fileUpload: any) {
-      this.msg = "";
-      let payment = this.paymentFrm;
+//   onSubmit(formData: any, fileUpload: any) {
+//       this.msg = "";
+//       let payment = this.paymentFrm;
 
-      this.formSubmitAttempt = true;
+//       this.formSubmitAttempt = true;
 
-      if (!this.voucherDateValidator(payment.get('Date').value)) {
-          return false;
-      }
+//       if (!this.voucherDateValidator(payment.get('Date').value)) {
+//           return false;
+//       }
 
-      payment.get('FinancialYear').setValue(this.currentYear['Name'] || '');
-      payment.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
-      payment.get('CompanyCode').setValue(this.currentUser && this.company['BranchCode'] || '');
+//       payment.get('FinancialYear').setValue(this.currentYear['Name'] || '');
+//       payment.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
+//       payment.get('CompanyCode').setValue(this.currentUser && this.company['BranchCode'] || '');
 
-      if (payment.valid) {
-          const control = this.paymentFrm.controls['AccountTransactionValues'].value;
-          const controls = <FormArray>this.paymentFrm.controls['AccountTransactionValues'];
-
-
-          let accountList = [];
-          control.forEach(account => {
-              let Id = account.AccountId.Id;
-              account.AccountId  = Id;
-
-              accountList.push(account);
-          });
-
-          // for (var i = 0; i < control.length; i++) {
-          //     let Id = control[i]['Id'];
-          //     if (Id > 0) {
-          //         let CurrentAccount = control[i]['AccountId'];
-          //         this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
-          //         let CurrentAccountId = this.currentaccount.Id;
-          //         let currentaccountvoucher = control[i];
-          //         let instance = this.fb.group(currentaccountvoucher);
-          //         instance.controls["AccountId"].setValue(CurrentAccountId);
-          //         controls.push(instance);
-          //     }
-          //     else {
-          //         let xcurrentaccountvoucher = control[i]['AccountId'];
-          //         let currentaccountvoucher = control[i];
-          //         let instance = this.fb.group(currentaccountvoucher);
-          //         this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
-          //         instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
-          //         controls.push(instance);
-          //     }
-          // }
-
-          let CurrentAccount = payment.get('SourceAccountTypeId').value;
-          // console.log('current account', CurrentAccount);
-          // console.log('cashbank lus', this.accountcashbank)
-          let currentaccount = this.accountcashbank.find(x => x.Id === CurrentAccount.Id);
-          this.SourceAccountTypeId = currentaccount.Id.toString();
+//       if (payment.valid) {
+//           const control = this.paymentFrm.controls['AccountTransactionValues'].value;
+//           const controls = <FormArray>this.paymentFrm.controls['AccountTransactionValues'];
 
 
-          // let Id = payment.get('Id').value;
-          // if (Id > 0) {
-          //     let CurrentAccount = payment.get('SourceAccountTypeId').value;
-          //     this.currentaccount = this.accountcashbank.filter(x => x.Name === CurrentAccount)[0];
-          //     this.SourceAccountTypeId = this.currentaccount.Id.toString();
-          //     payment.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
-          // }
-          // else {
-          //     let CurrentAccount = payment.get('SourceAccountTypeId').value;
-          //     this.SourceAccountTypeId = CurrentAccount.Id;
-          //     payment.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
-          // }
+//           let accountList = [];
+//           control.forEach(account => {
+//               let Id = account.AccountId.Id;
+//               account.AccountId  = Id;
 
-          let paymentObj = {
-              Id: this.paymentFrm.controls['Id'].value,
-              Date: this.paymentFrm.controls['Date'].value,
-              Name: this.paymentFrm.controls['Name'].value,
-              // SourceAccountTypeId: this.paymentFrm.controls['SourceAccountTypeId'].value,
-              SourceAccountTypeId: this.SourceAccountTypeId,
-              AccountTransactionDocumentId: this.paymentFrm.controls['AccountTransactionDocumentId'].value,
-              Description: this.paymentFrm.controls['Description'].value,
-              FinancialYear: this.paymentFrm.controls['FinancialYear'].value,
-              UserName: this.paymentFrm.controls['UserName'].value,
-              CompanyCode: this.paymentFrm.controls['CompanyCode'].value,
-              // AccountTransactionValues: this.paymentFrm.controls['AccountTransactionValues'].value
-              AccountTransactionValues: accountList
-          }
+//               accountList.push(account);
+//           });
 
-          // console.log('the paymet', paymentObj)
-          switch (this.dbops) {
-              case DBOperation.create:
-                  this._journalvoucherService.post(Global.BASE_JOURNALVOUCHER_ENDPOINT, paymentObj).subscribe(
-                      async (data) => {
-                          if (data > 0) {
-                              // file upload stuff goes here
-                              let upload = await fileUpload.handleFileUpload({
-                                  'moduleName': 'JournalVoucher',
-                                  'id': data
-                              });
+//           // for (var i = 0; i < control.length; i++) {
+//           //     let Id = control[i]['Id'];
+//           //     if (Id > 0) {
+//           //         let CurrentAccount = control[i]['AccountId'];
+//           //         this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
+//           //         let CurrentAccountId = this.currentaccount.Id;
+//           //         let currentaccountvoucher = control[i];
+//           //         let instance = this.fb.group(currentaccountvoucher);
+//           //         instance.controls["AccountId"].setValue(CurrentAccountId);
+//           //         controls.push(instance);
+//           //     }
+//           //     else {
+//           //         let xcurrentaccountvoucher = control[i]['AccountId'];
+//           //         let currentaccountvoucher = control[i];
+//           //         let instance = this.fb.group(currentaccountvoucher);
+//           //         this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
+//           //         instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
+//           //         controls.push(instance);
+//           //     }
+//           // }
 
-                              if (upload == 'error' ) {
-                                  alert('There is error uploading file!');
-                              } 
+//           let CurrentAccount = payment.get('SourceAccountTypeId').value;
+//           // console.log('current account', CurrentAccount);
+//           // console.log('cashbank lus', this.accountcashbank)
+//           let currentaccount = this.accountcashbank.find(x => x.Id === CurrentAccount.Id);
+//           this.SourceAccountTypeId = currentaccount.Id.toString();
+
+
+//           // let Id = payment.get('Id').value;
+//           // if (Id > 0) {
+//           //     let CurrentAccount = payment.get('SourceAccountTypeId').value;
+//           //     this.currentaccount = this.accountcashbank.filter(x => x.Name === CurrentAccount)[0];
+//           //     this.SourceAccountTypeId = this.currentaccount.Id.toString();
+//           //     payment.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
+//           // }
+//           // else {
+//           //     let CurrentAccount = payment.get('SourceAccountTypeId').value;
+//           //     this.SourceAccountTypeId = CurrentAccount.Id;
+//           //     payment.get('SourceAccountTypeId').setValue(this.SourceAccountTypeId);
+//           // }
+
+//           let paymentObj = {
+//               Id: this.paymentFrm.controls['Id'].value,
+//               Date: this.paymentFrm.controls['Date'].value,
+//               Name: this.paymentFrm.controls['Name'].value,
+//               // SourceAccountTypeId: this.paymentFrm.controls['SourceAccountTypeId'].value,
+//               SourceAccountTypeId: this.SourceAccountTypeId,
+//               AccountTransactionDocumentId: this.paymentFrm.controls['AccountTransactionDocumentId'].value,
+//               Description: this.paymentFrm.controls['Description'].value,
+//               FinancialYear: this.paymentFrm.controls['FinancialYear'].value,
+//               UserName: this.paymentFrm.controls['UserName'].value,
+//               CompanyCode: this.paymentFrm.controls['CompanyCode'].value,
+//               // AccountTransactionValues: this.paymentFrm.controls['AccountTransactionValues'].value
+//               AccountTransactionValues: accountList
+//           }
+
+//           // console.log('the paymet', paymentObj)
+//           switch (this.dbops) {
+//               case DBOperation.create:
+//                   this._journalvoucherService.post(Global.BASE_JOURNALVOUCHER_ENDPOINT, paymentObj).subscribe(
+//                       async (data) => {
+//                           if (data > 0) {
+//                               // file upload stuff goes here
+//                               let upload = await fileUpload.handleFileUpload({
+//                                   'moduleName': 'JournalVoucher',
+//                                   'id': data
+//                               });
+
+//                               if (upload == 'error' ) {
+//                                   alert('There is error uploading file!');
+//                               } 
                               
-                              if (upload == true || upload == false) {
-                                  // this.modalRef.hide();
-                                  this.formSubmitAttempt = false;
-                                  this.reset();
-                              }
-                              alert('Data saved successfully!');
-                              this.router.navigate(['Account/payment']);
-                              // this.modalRef.hide();
-                              // this.loadPaymentList(this.fromDate, this.toDate);
-                          } else {
-                              alert("There is some issue in saving records, please contact to system administrator!");
-                          }
-                      }
-                  );
-                  break;
-              case DBOperation.update:
-                  this._journalvoucherService.put(Global.BASE_JOURNALVOUCHER_ENDPOINT, payment.value.Id, paymentObj).subscribe(
-                      async (data) => {
-                          if (data > 0) {
-                              // file upload stuff goes here
-                              let upload = await fileUpload.handleFileUpload({
-                                  'moduleName': 'JournalVoucher',
-                                  'id': data
-                              });
+//                               if (upload == true || upload == false) {
+//                                   // this.modalRef.hide();
+//                                   this.formSubmitAttempt = false;
+//                                   this.reset();
+//                               }
+//                               alert('Data saved successfully!');
+//                               this.router.navigate(['Account/payment']);
+//                               // this.modalRef.hide();
+//                               // this.loadPaymentList(this.fromDate, this.toDate);
+//                           } else {
+//                               alert("There is some issue in saving records, please contact to system administrator!");
+//                           }
+//                       }
+//                   );
+//                   break;
+//               case DBOperation.update:
+//                   this._journalvoucherService.put(Global.BASE_JOURNALVOUCHER_ENDPOINT, payment.value.Id, paymentObj).subscribe(
+//                       async (data) => {
+//                           if (data > 0) {
+//                               // file upload stuff goes here
+//                               let upload = await fileUpload.handleFileUpload({
+//                                   'moduleName': 'JournalVoucher',
+//                                   'id': data
+//                               });
 
-                              if (upload == 'error' ) {
-                                  alert('There is error uploading file!');
-                              } 
+//                               if (upload == 'error' ) {
+//                                   alert('There is error uploading file!');
+//                               } 
                               
-                              if (upload == true || upload == false) {
-                                  // this.modalRef.hide();
-                                  this.formSubmitAttempt = false;
-                                  this.reset();
-                              }
-                              alert('Data updated successfully!');
-                              this.router.navigate(['Account/payment']);
-                              // this.modalRef.hide();
-                              // this.loadPaymentList(this.fromDate, this.toDate);
-                          } else {
-                              alert("There is some issue in saving records, please contact to system administrator!");
-                          }
-                      },
-                  );
-                  break;
-              case DBOperation.delete:
-                  this._journalvoucherService.delete(Global.BASE_JOURNALVOUCHER_ENDPOINT, paymentObj).subscribe(
-                      data => {
-                          if (data == 1) //Success
-                          {
-                              alert("Data successfully deleted.");
-                              this.loadPaymentList(this.fromDate, this.toDate);
-                          }
-                          else {
-                              alert("There is some issue in saving records, please contact to system administrator!");
-                          }
-                          this.modalRef.hide();
-                          this.formSubmitAttempt = false;
-                          this.reset();
-                      },
-                  );
-          }
-      }
-      else {
-          this.validateAllFields(payment);
-      }
-  }
+//                               if (upload == true || upload == false) {
+//                                   // this.modalRef.hide();
+//                                   this.formSubmitAttempt = false;
+//                                   this.reset();
+//                               }
+//                               alert('Data updated successfully!');
+//                               this.router.navigate(['Account/payment']);
+//                               // this.modalRef.hide();
+//                               // this.loadPaymentList(this.fromDate, this.toDate);
+//                           } else {
+//                               alert("There is some issue in saving records, please contact to system administrator!");
+//                           }
+//                       },
+//                   );
+//                   break;
+//               case DBOperation.delete:
+//                   this._journalvoucherService.delete(Global.BASE_JOURNALVOUCHER_ENDPOINT, paymentObj).subscribe(
+//                       data => {
+//                           if (data == 1) //Success
+//                           {
+//                               alert("Data successfully deleted.");
+//                               this.loadPaymentList(this.fromDate, this.toDate);
+//                           }
+//                           else {
+//                               alert("There is some issue in saving records, please contact to system administrator!");
+//                           }
+//                           this.modalRef.hide();
+//                           this.formSubmitAttempt = false;
+//                           this.reset();
+//                       },
+//                   );
+//           }
+//       }
+//       else {
+//           this.validateAllFields(payment);
+//       }
+//   }
 
   confirm(): void {
       this.modalRef2.hide();

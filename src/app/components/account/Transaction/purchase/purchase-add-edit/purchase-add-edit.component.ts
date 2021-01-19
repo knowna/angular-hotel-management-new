@@ -492,173 +492,324 @@ export class PurchaseAddEditComponent implements OnInit {
       this.modalRef2 = this.modalService.show(template, { class: 'modal-sm' });
   }
 
+  onSubmit(formData: any, fileUpload: any) {
+    this.msg = "";
+    this.formSubmitAttempt = true;
+    let purchase = this.purchaseFrm;
+
+    let currentdate = purchase.get('Date').value;
+
+    if(currentdate == "") {
+        alert("Please enter the voucher date");
+    }else{
+        let today = new Date;
+        this._purchaseService.get(Global.BASE_NEPALIMONTH_ENDPOINT + '?NDate=' + currentdate)
+            .subscribe(SB => {
+                this.vdate = SB;
+                if (this.vdate === "undefined") {
+                    alert("Please enter the voucher valid date");
+                }else{
+                    let voucherDate = new Date(this.vdate);
+                    let tomorrow = new Date(today.setDate(today.getDate() + 1));
+                    let currentYearStartDate = new Date(this.currentYear.StartDate);
+                    let currentYearEndDate = new Date(this.currentYear.EndDate);
+
+                    if ((voucherDate < currentYearStartDate) || (voucherDate > currentYearEndDate) || voucherDate >= tomorrow) {
+                        alert("Date should be within current financial year's start date and end date inclusive");
+                    }
+                    else {
+                        purchase.get('FinancialYear').setValue(this.currentYear['Name'] || '');
+                        purchase.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
+                        purchase.get('CompanyCode').setValue(this.currentUser && this.company['BranchCode'] || '');
+                        
+                        if (purchase.valid) {
+                            let totalDebit = this.sumDebit(this.journalDetailsFrm);
+                            let totalCredit = this.sumCredit(this.journalDetailsFrm);
+                    
+                            if (totalDebit != totalCredit || totalDebit == 0 || totalCredit == 0) {
+                                alert("Debit and Credit are not Equal | Value must be greater than Amount Zero.");
+                                return;
+                            }
+                    
+                            const control = this.purchaseFrm.controls['AccountTransactionValues'].value;
+                            const controls = <FormArray>this.purchaseFrm.controls['AccountTransactionValues'];
+                    
+                            let accountList = [];
+                            control.forEach(account => {
+                                let Id = account.AccountId.Id;
+                                account.AccountId  = Id;
+                    
+                                accountList.push(account);
+                            });
+                    
+                            const purchasecontrol = this.purchaseFrm.controls['PurchaseDetails'].value;
+                            const purchasecontrols = <FormArray>this.purchaseFrm.controls['PurchaseDetails'];
+                    
+                            console.log('the purchase details', purchasecontrol)
+                    
+                            let purchaseList = [];
+                            purchasecontrol.forEach(item => {
+                                let Id = item.InventoryItemId.Id;
+                                item.InventoryItemId  = Id;
+                    
+                                purchaseList.push(item);
+                            });
+                            
+                    
+                            let purchaseObject = {
+                                Id: this.purchaseFrm.controls['Id'].value,
+                                Date: this.purchaseFrm.controls['Date'].value,
+                                Name: this.purchaseFrm.controls['Name'].value,
+                                AccountTransactionDocumentId: this.purchaseFrm.controls['AccountTransactionDocumentId'].value,
+                                Description: this.purchaseFrm.controls['Description'].value,
+                                FinancialYear: this.purchaseFrm.controls['FinancialYear'].value,
+                                UserName: this.purchaseFrm.controls['UserName'].value,
+                                CompanyCode: this.purchaseFrm.controls['CompanyCode'].value,
+                                // PurchaseDetails: this.purchaseFrm.controls['PurchaseDetails'].value,
+                                PurchaseDetails: purchaseList,
+                                // AccountTransactionValues: this.purchaseFrm.controls['AccountTransactionValues'].value
+                                AccountTransactionValues: accountList
+                            }
+                    
+                            this.indLoading = true;
+                            switch (this.dbops) {
+                                case DBOperation.create:
+                                    this._purchaseService.post(Global.BASE_PURCHASE_ENDPOINT, purchaseObject).subscribe(
+                                        async data => {
+                                            if (data > 0) {
+                                                // file upload stuff goes here
+                                                await fileUpload.handleFileUpload({
+                                                    'moduleName': 'JournalVoucher',
+                                                    'id': data
+                                                });
+                                                alert("Data successfully added.");
+                                                this.router.navigate(['Account/purchase']);
+                                                // this.modalRef.hide();
+                                                // this.formSubmitAttempt = false;
+                                            } else {
+                                                alert("There is some issue in saving records, please contact to system administrator!");
+                                            }
+                                        }
+                                    );
+                                    break;
+                                case DBOperation.update:
+                                    this._purchaseService.put(Global.BASE_PURCHASE_ENDPOINT, purchase.value.Id, purchaseObject).subscribe(
+                                        async data => {
+                                            if (data > 0) {
+                                                // file upload stuff goes here
+                                                await fileUpload.handleFileUpload({
+                                                    'moduleName': 'JournalVoucher',
+                                                    'id': data
+                                                });
+                                                alert("Data successfully updated.");
+                                                this.router.navigate(['Account/purchase']);
+                                                // this.modalRef.hide();
+                                                // this.formSubmitAttempt = false;
+                                            } else {
+                                                alert("There is some issue in saving records, please contact to system administrator!");
+                                            }
+                                        },
+                                    );
+                                    break;
+                                case DBOperation.delete:
+                                    this._purchaseService.delete(Global.BASE_PURCHASE_ENDPOINT, purchaseObject).subscribe(
+                                        data => {
+                                            if (data == 1) {
+                                                alert("Data successfully deleted.");
+                                            } else {
+                                                alert("There is some issue in saving records, please contact to system administrator!");
+                                            }
+                                            this.modalRef.hide();
+                                            this.formSubmitAttempt = false;
+                                            this.reset();
+                                        }
+                                    );
+                            }
+                            this.indLoading = false;
+                        }
+                        else {
+                            this.validateAllFields(purchase);
+                        }
+                    }
+                }
+            },
+            error => {
+                this.msg = <any>error
+            });
+    }
+
+
+    
+}
+
+
   /**
    * Performs the form submit action for CRUD Operations
    * @param formData 
    */
-  onSubmit(formData: any, fileUpload: any) {
-      this.msg = "";
-      this.formSubmitAttempt = true;
-      let purchase = this.purchaseFrm;
+//   onSubmit(formData: any, fileUpload: any) {
+//       this.msg = "";
+//       this.formSubmitAttempt = true;
+//       let purchase = this.purchaseFrm;
 
-      if (!this.voucherDateValidator(purchase.get('Date').value)) {
-          return false;
-      }
+//       if (!this.voucherDateValidator(purchase.get('Date').value)) {
+//           return false;
+//       }
 
-      purchase.get('FinancialYear').setValue(this.currentYear['Name'] || '');
-      purchase.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
-      purchase.get('CompanyCode').setValue(this.currentUser && this.company['BranchCode'] || '');
+//       purchase.get('FinancialYear').setValue(this.currentYear['Name'] || '');
+//       purchase.get('UserName').setValue(this.currentUser && this.currentUser['UserName'] || '');
+//       purchase.get('CompanyCode').setValue(this.currentUser && this.company['BranchCode'] || '');
       
-      if (purchase.valid) {
-          let totalDebit = this.sumDebit(this.journalDetailsFrm);
-          let totalCredit = this.sumCredit(this.journalDetailsFrm);
+//       if (purchase.valid) {
+//           let totalDebit = this.sumDebit(this.journalDetailsFrm);
+//           let totalCredit = this.sumCredit(this.journalDetailsFrm);
 
-          if (totalDebit != totalCredit || totalDebit == 0 || totalCredit == 0) {
-              alert("Debit and Credit are not Equal | Value must be greater than Amount Zero.");
-              return;
-          }
+//           if (totalDebit != totalCredit || totalDebit == 0 || totalCredit == 0) {
+//               alert("Debit and Credit are not Equal | Value must be greater than Amount Zero.");
+//               return;
+//           }
 
-          const control = this.purchaseFrm.controls['AccountTransactionValues'].value;
-          const controls = <FormArray>this.purchaseFrm.controls['AccountTransactionValues'];
+//           const control = this.purchaseFrm.controls['AccountTransactionValues'].value;
+//           const controls = <FormArray>this.purchaseFrm.controls['AccountTransactionValues'];
 
-          let accountList = [];
-          control.forEach(account => {
-              let Id = account.AccountId.Id;
-              account.AccountId  = Id;
+//           let accountList = [];
+//           control.forEach(account => {
+//               let Id = account.AccountId.Id;
+//               account.AccountId  = Id;
 
-              accountList.push(account);
-          });
+//               accountList.push(account);
+//           });
 
 
-          // for (var i = 0; i < control.length; i++) {
-          //     let Id = control[i]['Id'];
-          //     if (Id > 0) {
-          //         let CurrentAccount = control[i]['AccountId'];
-          //         this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
-          //         let CurrentAccountId = this.currentaccount.Id;
-          //         let currentaccountvoucher = control[i];
-          //         let instance = this.fb.group(currentaccountvoucher);
-          //         instance.controls["AccountId"].setValue(CurrentAccountId);
-          //         controls.push(instance);
-          //     }
-          //     else {
-          //         let xcurrentaccountvoucher = control[i]['AccountId'];
-          //         let currentaccountvoucher = control[i];
-          //         let instance = this.fb.group(currentaccountvoucher);
-          //         this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
-          //         instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
-          //         controls.push(instance);
-          //     }
-          // }
+//           // for (var i = 0; i < control.length; i++) {
+//           //     let Id = control[i]['Id'];
+//           //     if (Id > 0) {
+//           //         let CurrentAccount = control[i]['AccountId'];
+//           //         this.currentaccount = this.account.filter(x => x.Name === CurrentAccount)[0];
+//           //         let CurrentAccountId = this.currentaccount.Id;
+//           //         let currentaccountvoucher = control[i];
+//           //         let instance = this.fb.group(currentaccountvoucher);
+//           //         instance.controls["AccountId"].setValue(CurrentAccountId);
+//           //         controls.push(instance);
+//           //     }
+//           //     else {
+//           //         let xcurrentaccountvoucher = control[i]['AccountId'];
+//           //         let currentaccountvoucher = control[i];
+//           //         let instance = this.fb.group(currentaccountvoucher);
+//           //         this.currentaccount = this.account.filter(x => x.Name === xcurrentaccountvoucher.Name)[0];
+//           //         instance.controls["AccountId"].setValue(this.currentaccount.Id.toString());
+//           //         controls.push(instance);
+//           //     }
+//           // }
 
-          const purchasecontrol = this.purchaseFrm.controls['PurchaseDetails'].value;
-          const purchasecontrols = <FormArray>this.purchaseFrm.controls['PurchaseDetails'];
+//           const purchasecontrol = this.purchaseFrm.controls['PurchaseDetails'].value;
+//           const purchasecontrols = <FormArray>this.purchaseFrm.controls['PurchaseDetails'];
 
-          console.log('the purchase details', purchasecontrol)
+//           console.log('the purchase details', purchasecontrol)
 
-          let purchaseList = [];
-          purchasecontrol.forEach(item => {
-              let Id = item.InventoryItemId.Id;
-              item.InventoryItemId  = Id;
+//           let purchaseList = [];
+//           purchasecontrol.forEach(item => {
+//               let Id = item.InventoryItemId.Id;
+//               item.InventoryItemId  = Id;
 
-              purchaseList.push(item);
-          });
-          // for (var i = 0; i < purchasecontrol.length; i++) {
-          //     let Id = purchasecontrol[i]['Id'];
-          //     if (Id > 0) {
-          //         let CurrentItemName = purchasecontrol[i]['InventoryItemId'];
-          //         this.inventoryItemName = this.inventoryItem.filter(x => x.Id === CurrentItemName.Name)[0];
-          //         let CurrentItemId = this.inventoryItemName.Id;
-          //         let currentinventoryItem = purchasecontrol[i];
-          //         let instance = this.fb.group(currentinventoryItem);
-          //         instance.controls["InventoryItemId"].setValue(CurrentItemId);
-          //         purchasecontrols.push(instance);
-          //     }
-          //     else {
-          //         let xcurrentCurrentItemName = purchasecontrol[i]['InventoryItemId'];
-          //         let currentinventoryItem = purchasecontrol[i];
-          //         let instance = this.fb.group(currentinventoryItem);
-          //         this.inventoryItemName = this.inventoryItem.filter(x => x.Name === xcurrentCurrentItemName.Name)[0];
-          //         instance.controls["InventoryItemId"].setValue(this.inventoryItemName.Id.toString());
-          //         purchasecontrols.push(instance);
-          //     }
-          // }
+//               purchaseList.push(item);
+//           });
+//           // for (var i = 0; i < purchasecontrol.length; i++) {
+//           //     let Id = purchasecontrol[i]['Id'];
+//           //     if (Id > 0) {
+//           //         let CurrentItemName = purchasecontrol[i]['InventoryItemId'];
+//           //         this.inventoryItemName = this.inventoryItem.filter(x => x.Id === CurrentItemName.Name)[0];
+//           //         let CurrentItemId = this.inventoryItemName.Id;
+//           //         let currentinventoryItem = purchasecontrol[i];
+//           //         let instance = this.fb.group(currentinventoryItem);
+//           //         instance.controls["InventoryItemId"].setValue(CurrentItemId);
+//           //         purchasecontrols.push(instance);
+//           //     }
+//           //     else {
+//           //         let xcurrentCurrentItemName = purchasecontrol[i]['InventoryItemId'];
+//           //         let currentinventoryItem = purchasecontrol[i];
+//           //         let instance = this.fb.group(currentinventoryItem);
+//           //         this.inventoryItemName = this.inventoryItem.filter(x => x.Name === xcurrentCurrentItemName.Name)[0];
+//           //         instance.controls["InventoryItemId"].setValue(this.inventoryItemName.Id.toString());
+//           //         purchasecontrols.push(instance);
+//           //     }
+//           // }
 
-          let purchaseObject = {
-              Id: this.purchaseFrm.controls['Id'].value,
-              Date: this.purchaseFrm.controls['Date'].value,
-              Name: this.purchaseFrm.controls['Name'].value,
-              AccountTransactionDocumentId: this.purchaseFrm.controls['AccountTransactionDocumentId'].value,
-              Description: this.purchaseFrm.controls['Description'].value,
-              FinancialYear: this.purchaseFrm.controls['FinancialYear'].value,
-              UserName: this.purchaseFrm.controls['UserName'].value,
-              CompanyCode: this.purchaseFrm.controls['CompanyCode'].value,
-              // PurchaseDetails: this.purchaseFrm.controls['PurchaseDetails'].value,
-              PurchaseDetails: purchaseList,
-              // AccountTransactionValues: this.purchaseFrm.controls['AccountTransactionValues'].value
-              AccountTransactionValues: accountList
-          }
+//           let purchaseObject = {
+//               Id: this.purchaseFrm.controls['Id'].value,
+//               Date: this.purchaseFrm.controls['Date'].value,
+//               Name: this.purchaseFrm.controls['Name'].value,
+//               AccountTransactionDocumentId: this.purchaseFrm.controls['AccountTransactionDocumentId'].value,
+//               Description: this.purchaseFrm.controls['Description'].value,
+//               FinancialYear: this.purchaseFrm.controls['FinancialYear'].value,
+//               UserName: this.purchaseFrm.controls['UserName'].value,
+//               CompanyCode: this.purchaseFrm.controls['CompanyCode'].value,
+//               // PurchaseDetails: this.purchaseFrm.controls['PurchaseDetails'].value,
+//               PurchaseDetails: purchaseList,
+//               // AccountTransactionValues: this.purchaseFrm.controls['AccountTransactionValues'].value
+//               AccountTransactionValues: accountList
+//           }
 
-          this.indLoading = true;
-          switch (this.dbops) {
-              case DBOperation.create:
-                  this._purchaseService.post(Global.BASE_PURCHASE_ENDPOINT, purchaseObject).subscribe(
-                      async data => {
-                          if (data > 0) {
-                              // file upload stuff goes here
-                              await fileUpload.handleFileUpload({
-                                  'moduleName': 'JournalVoucher',
-                                  'id': data
-                              });
-                              alert("Data successfully added.");
-                              this.router.navigate(['Account/purchase']);
-                              // this.modalRef.hide();
-                              // this.formSubmitAttempt = false;
-                          } else {
-                              alert("There is some issue in saving records, please contact to system administrator!");
-                          }
-                      }
-                  );
-                  break;
-              case DBOperation.update:
-                  this._purchaseService.put(Global.BASE_PURCHASE_ENDPOINT, purchase.value.Id, purchaseObject).subscribe(
-                      async data => {
-                          if (data > 0) {
-                              // file upload stuff goes here
-                              await fileUpload.handleFileUpload({
-                                  'moduleName': 'JournalVoucher',
-                                  'id': data
-                              });
-                              alert("Data successfully updated.");
-                              this.router.navigate(['Account/purchase']);
-                              // this.modalRef.hide();
-                              // this.formSubmitAttempt = false;
-                          } else {
-                              alert("There is some issue in saving records, please contact to system administrator!");
-                          }
-                      },
-                  );
-                  break;
-              case DBOperation.delete:
-                  this._purchaseService.delete(Global.BASE_PURCHASE_ENDPOINT, purchaseObject).subscribe(
-                      data => {
-                          if (data == 1) {
-                              alert("Data successfully deleted.");
-                          } else {
-                              alert("There is some issue in saving records, please contact to system administrator!");
-                          }
-                          this.modalRef.hide();
-                          this.formSubmitAttempt = false;
-                          this.reset();
-                      }
-                  );
-          }
-          this.indLoading = false;
-      }
-      else {
-          this.validateAllFields(purchase);
-      }
-  }
+//           this.indLoading = true;
+//           switch (this.dbops) {
+//               case DBOperation.create:
+//                   this._purchaseService.post(Global.BASE_PURCHASE_ENDPOINT, purchaseObject).subscribe(
+//                       async data => {
+//                           if (data > 0) {
+//                               // file upload stuff goes here
+//                               await fileUpload.handleFileUpload({
+//                                   'moduleName': 'JournalVoucher',
+//                                   'id': data
+//                               });
+//                               alert("Data successfully added.");
+//                               this.router.navigate(['Account/purchase']);
+//                               // this.modalRef.hide();
+//                               // this.formSubmitAttempt = false;
+//                           } else {
+//                               alert("There is some issue in saving records, please contact to system administrator!");
+//                           }
+//                       }
+//                   );
+//                   break;
+//               case DBOperation.update:
+//                   this._purchaseService.put(Global.BASE_PURCHASE_ENDPOINT, purchase.value.Id, purchaseObject).subscribe(
+//                       async data => {
+//                           if (data > 0) {
+//                               // file upload stuff goes here
+//                               await fileUpload.handleFileUpload({
+//                                   'moduleName': 'JournalVoucher',
+//                                   'id': data
+//                               });
+//                               alert("Data successfully updated.");
+//                               this.router.navigate(['Account/purchase']);
+//                               // this.modalRef.hide();
+//                               // this.formSubmitAttempt = false;
+//                           } else {
+//                               alert("There is some issue in saving records, please contact to system administrator!");
+//                           }
+//                       },
+//                   );
+//                   break;
+//               case DBOperation.delete:
+//                   this._purchaseService.delete(Global.BASE_PURCHASE_ENDPOINT, purchaseObject).subscribe(
+//                       data => {
+//                           if (data == 1) {
+//                               alert("Data successfully deleted.");
+//                           } else {
+//                               alert("There is some issue in saving records, please contact to system administrator!");
+//                           }
+//                           this.modalRef.hide();
+//                           this.formSubmitAttempt = false;
+//                           this.reset();
+//                       }
+//                   );
+//           }
+//           this.indLoading = false;
+//       }
+//       else {
+//           this.validateAllFields(purchase);
+//       }
+//   }
 
   /**
    * Hides the confirm modal
