@@ -19,6 +19,7 @@ import { ToastrService } from 'ngx-toastr';
 import * as jsPDF from 'jspdf'
 import 'jspdf-autotable';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DateFormatter } from 'angular-nepali-datepicker';
 
 type CSV = any[][];
 
@@ -57,8 +58,8 @@ export class PurchaseComponent implements OnInit {
     public Name: EntityMock[];
     public fromDate: any;
     public toDate: any;
-    public sfromDate: string;
-    public stoDate: string;
+    public sfromDate: any;
+    public stoDate: any;
     public currentYear: any = {};
     public currentUser: any = {};
     public company: any = {};
@@ -78,6 +79,14 @@ export class PurchaseComponent implements OnInit {
     toExportFileName: string = 'Purchase Report -' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
     toPdfFileName: string = 'Purchase Report -' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
 
+    startFormatter: DateFormatter = (sfromDate) => {
+        return `${ sfromDate.year }.${ (sfromDate.month*1 + 1) }.${ sfromDate.day }`;
+    }
+
+    endFormatter: DateFormatter = (stoDate) => {
+        return `${ stoDate.year }.${ (stoDate.month*1 + 1) }.${ stoDate.day }`;
+    }
+    
     constructor(
         private fb: FormBuilder, 
         private _purchaseService: PurchaseService, 
@@ -104,6 +113,24 @@ export class PurchaseComponent implements OnInit {
             { id: 0, name: 'Purchase Non Vat' },
             { id: 1, name: 'Purchase Vat' }
         ];
+
+        let fromDateArray = this.fromDate.split('.');
+        this.sfromDate = {
+            'day' : fromDateArray[2]*1,
+            'month': fromDateArray[1]*1 - 1,
+            'year': fromDateArray[0]*1
+        }
+
+        let toDateArray = this.toDate.split('.');
+        this.stoDate = {
+            'day' : toDateArray[2]*1,
+            'month': toDateArray[1]*1 - 1,
+            'year': toDateArray[0]*1
+        }
+
+        this.loadPurchaseList(this.sfromDate, this.stoDate);
+
+
     }
 
     // Overide init component life-cycle hook    
@@ -122,7 +149,7 @@ export class PurchaseComponent implements OnInit {
             CompanyCode: ['']
         });
         // Load purchases list
-        this.loadPurchaseList(this.fromDate, this.toDate);
+        // this.loadPurchaseList(this.fromDate, this.toDate);
 
         this._purchaseService.getInventoryItems().subscribe(data => {
             this.inventoryItemList = data ;
@@ -164,8 +191,12 @@ export class PurchaseComponent implements OnInit {
     /**
      * Load list of purchases form the server
      */
-    loadPurchaseList(sfromdate: string, stodate: string){
+    loadPurchaseList(sfromdate: any, stodate: any){
         this.indLoading = true;
+
+        sfromdate = sfromdate.year + '.' + (sfromdate.month*1 + 1) + '.' + sfromdate.day;
+        stodate = stodate.year + '.' + (stodate.month*1 + 1) + '.' + stodate.day;
+
         if (sfromdate == "undefined" || sfromdate == null) {
             alert("Enter Start Date");
             return false;
@@ -174,19 +205,19 @@ export class PurchaseComponent implements OnInit {
             alert("Enter End Date");
             return false;
         }
-        if (this.nepaliDateStringValidator(stodate) === false) {
-            alert("Enter Valid End Date");
-            return false;
-        }
-        if (this.nepaliDateStringValidator(sfromdate) === false) {
-            alert("Enter Valid Start Date");
-            return false;
-        }
+        // if (this.nepaliDateStringValidator(stodate) === false) {
+        //     alert("Enter Valid End Date");
+        //     return false;
+        // }
+        // if (this.nepaliDateStringValidator(sfromdate) === false) {
+        //     alert("Enter Valid Start Date");
+        //     return false;
+        // }
 
         this.fromDate = sfromdate;
         this.toDate = stodate;
-        this.sfromDate = sfromdate;
-        this.stoDate = stodate;
+        // this.sfromDate = sfromdate;
+        // this.stoDate = stodate;
         this.indLoading = true;
 
         this._purchaseService.get(Global.BASE_PURCHASE_ENDPOINT + '?fromDate=' + this.fromDate + '&toDate=' + this.toDate + '&TransactionTypeId=' + 9)

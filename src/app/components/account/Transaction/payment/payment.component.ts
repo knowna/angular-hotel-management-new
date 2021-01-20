@@ -18,6 +18,7 @@ import { ToastrService } from 'ngx-toastr';
 import * as jsPDF from 'jspdf'
 import 'jspdf-autotable';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DateFormatter } from 'angular-nepali-datepicker';
 
 type CSV = any[][];
 
@@ -56,8 +57,8 @@ export class PaymentComponent {
     };
     public fromDate: any;
     public toDate: any;
-    public sfromDate: string;
-    public stoDate: string;
+    public sfromDate: any;
+    public stoDate: any;
     public currentYear: any = {};
     public currentUser: any = {};
     public company: any = {};
@@ -69,6 +70,14 @@ export class PaymentComponent {
 
     toExportFileName: string = 'Payment Report -' + this.date.transform(new Date, "yyyy-MM-dd") + '.xlsx';
     toPdfFileName: string = 'Payment Report -' + this.date.transform(new Date, "yyyy-MM-dd") + '.pdf';
+
+    startFormatter: DateFormatter = (sfromDate) => {
+        return `${ sfromDate.year }.${ (sfromDate.month*1 + 1) }.${ sfromDate.day }`;
+    }
+
+    endFormatter: DateFormatter = (stoDate) => {
+        return `${ stoDate.year }.${ (stoDate.month*1 + 1) }.${ stoDate.day }`;
+    }
 
     constructor(
         private fb: FormBuilder,
@@ -86,6 +95,23 @@ export class PaymentComponent {
         this.company = JSON.parse(localStorage.getItem('company'));
         this.fromDate = this.currentYear['NepaliStartDate'];
         this.toDate = this.currentYear['NepaliEndDate'];
+
+        let fromDateArray = this.fromDate.split('.');
+        this.sfromDate = {
+            'day' : fromDateArray[2]*1,
+            'month': fromDateArray[1]*1 - 1,
+            'year': fromDateArray[0]*1
+        }
+
+        let toDateArray = this.toDate.split('.');
+        this.stoDate = {
+            'day' : toDateArray[2]*1,
+            'month': toDateArray[1]*1 - 1,
+            'year': toDateArray[0]*1
+        }
+
+        this.loadPaymentList(this.sfromDate, this.stoDate);
+
     }
 
     /**
@@ -107,7 +133,7 @@ export class PaymentComponent {
             UserName: [''],
             CompanyCode: ['']
         });
-        this.loadPaymentList(this.fromDate, this.toDate);
+        // this.loadPaymentList(this.fromDate, this.toDate);
     }
 
     viewFile(fileUrl, template: TemplateRef<any>) {
@@ -161,8 +187,12 @@ export class PaymentComponent {
     /**
      * Load Payment List
      */
-    loadPaymentList(sfromdate: string, stodate: string){
+    loadPaymentList(sfromdate: any, stodate: any){
         this.indLoading = true;
+
+        sfromdate = sfromdate.year + '.' + (sfromdate.month*1 + 1) + '.' + sfromdate.day;
+        stodate = stodate.year + '.' + (stodate.month*1 + 1) + '.' + stodate.day;
+
         if (sfromdate == "undefined" || sfromdate == null) {
             alert("Enter Start Date");
             return false;
@@ -171,19 +201,19 @@ export class PaymentComponent {
             alert("Enter End Date");
             return false;
         }
-        if (this.nepaliDateStringValidator(stodate) === false) {
-            alert("Enter Valid End Date");
-            return false;
-        }
-        if (this.nepaliDateStringValidator(sfromdate) === false) {
-            alert("Enter Valid Start Date");
-            return false;
-        }
+        // if (this.nepaliDateStringValidator(stodate) === false) {
+        //     alert("Enter Valid End Date");
+        //     return false;
+        // }
+        // if (this.nepaliDateStringValidator(sfromdate) === false) {
+        //     alert("Enter Valid Start Date");
+        //     return false;
+        // }
 
         this.fromDate = sfromdate;
         this.toDate = stodate;
-        this.sfromDate = sfromdate;
-        this.stoDate = stodate;
+        // this.sfromDate = sfromdate;
+        // this.stoDate = stodate;
         this._journalvoucherService.get(Global.BASE_ACCOUNT_ENDPOINT + '?AccountTypeId=AT&AccountGeneral=AG')
             .subscribe(at => {
                 this.account = at;
