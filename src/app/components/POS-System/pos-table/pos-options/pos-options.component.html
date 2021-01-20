@@ -23,13 +23,19 @@
 
 <div *ngIf="selectedItem">
     <div class="row m-0">
-        <button class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="incrementQty.emit(selectedItem)" style="cursor:pointer; width:18%;">
+        <button 
+            [disabled]="!permissionList.includes('POS:Order:IncrementQuantity')"
+            class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="incrementQty.emit(selectedItem)" style="cursor:pointer; width:18%;">
             <h4 class="text-center">+</h4>
         </button>
-        <button class="card-body border border-dark border-radius no-bottom-margin card-bag ml-2" (click)="decrementQty.emit(selectedItem)" style="cursor:pointer; width:18%;">
+        <button 
+            [disabled]="!permissionList.includes('POS:Order:DecrementQuantity')"
+            class="card-body border border-dark border-radius no-bottom-margin card-bag ml-2" (click)="decrementQty.emit(selectedItem)" style="cursor:pointer; width:18%;">
             <h4 class="text-center">-</h4>
         </button>
-        <button class="card-body border border-dark border-radius no-bottom-margin card-bag ml-2" (click)="voidItem.emit(selectedItem)" style="cursor:pointer; width:18%;">
+        <button 
+            [disabled]="!permissionList.includes('POS:Order:VoidItem')"   
+            class="card-body border border-dark border-radius no-bottom-margin card-bag ml-2" (click)="voidItem.emit(selectedItem)" style="cursor:pointer; width:18%;">
             <h4 class="text-center">Void</h4>
         </button>
         <!--<div class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="addTag(selectedItem, 'Gift')" style="cursor:pointer;">

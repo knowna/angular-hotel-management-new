@@ -243,6 +243,7 @@
             <div class="col-sm-6">
                 <button 
                     class="btn btn-block btn-success w-100 p-15"
+                    [disabled]="!permissionList.includes('POS:Order:SettleBill')"
                     (click)="settle()"
                     routerLink="/pos/settle">
                     Settle

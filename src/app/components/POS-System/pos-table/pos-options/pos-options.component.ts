@@ -27,6 +27,8 @@ export class PosOptionsComponent implements OnInit {
 
     selectedTicket: number;
 
+    permissionList : string;
+
     // Constructor
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -35,6 +37,8 @@ export class PosOptionsComponent implements OnInit {
 
      // Initialize data here
      ngOnInit() {
+
+        this.permissionList = localStorage.getItem('permissionList');
 
         this.activatedRoute.params.subscribe(params => {
             this.selectedTicket = (params['ticketId']) ? params['ticketId'] : 0;
