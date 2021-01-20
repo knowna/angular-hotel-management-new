@@ -53,6 +53,8 @@ export class PosOrdersComponent implements OnInit {
     
     selectedTicket: number;
 
+    permissionList : string;
+
     // Constructor
     constructor(
         private store: Store<any>,
@@ -72,6 +74,11 @@ export class PosOrdersComponent implements OnInit {
         console.log('the orders in pos orders are', this.orders);
         console.log('the customer us', this.selectedCustomerId)
         console.log('the table us', this.table)
+
+        this.permissionList = localStorage.getItem('permissionList');
+        console.log('the permission list in settle page is', this.permissionList);
+
+
         this.activatedRoute.params.subscribe(params => {
             this.selectedTicket = (params['ticketId']) ? params['ticketId'] : 0;
             this.selectedCustomerId = (params['customerId']) ? params['customerId'] : 0;

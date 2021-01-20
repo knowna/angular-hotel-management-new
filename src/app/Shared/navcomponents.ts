@@ -116,42 +116,77 @@ export const navcomponents=[
               img:'../../../assets/images/dish.png',
               link: 'pos-dashboard/tables',
               permission:'POS:Order:NewOrder',
+              display: true
             },
             {
               title: 'Order Ticket',
               img:'../../../assets/images/dish.png',
               link: 'order-ticket',
               permission:'POS:Order:OrderTicket',
+              display: true
             },
             {
               title: 'Void Order',
               img:'../../../assets/images/dish.png',
               link: 'void-order',
               permission:'POS:Order:VoidOrder',
+              display: true
             },
             {
               title: 'Table Move',
               img:'../../../assets/images/dish.png',
               link: 'table-move',
               permission:'POS:Order:TableMove',
+              display: true
             },
             {
               title: 'Full Merge',
               img:'../../../assets/images/category.png',
               link: 'full-merge',
               permission:'POS:Order:FullMerge',
+              display: true
             },
             {
               title: 'Partial Merge',
               img:'../../../assets/images/consumption.png',
               link: 'partial-merge',
               permission:'POS:Order:PartialMerge',
+              display: true
             },
             {
               title: 'Split Order',
               link: 'split-order',
               img:'../../../assets/images/menu.png',
               permission:'POS:Order:SplitOrder',
+              display: true
+            },
+            {
+              title: 'Settle Bill',
+              link: 'split-order',
+              img:'../../../assets/images/menu.png',
+              permission:'POS:Order:SettleBill',
+              display: false
+            },
+            {
+              title: 'Increment Quantity',
+              link: 'split-order',
+              img:'../../../assets/images/menu.png',
+              permission:'POS:Order:IncrementQuantity',
+              display: false
+            },
+            {
+              title: 'Decrement Quantity',
+              link: 'split-order',
+              img:'../../../assets/images/menu.png',
+              permission:'POS:Order:DecrementQuantity',
+              display: false
+            },
+            {
+              title: 'Void Item',
+              link: 'split-order',
+              img:'../../../assets/images/menu.png',
+              permission:'POS:Order:VoidItem',
+              display: false
             },
             
           ],
@@ -189,18 +224,21 @@ export const navcomponents=[
               img:'../../../assets/images/dish.png',
               link: 'pos-dashboard/table/menu-price',
               permission:'POS:MenuSetup:MenuPrice',
+              display: true
             },
             {
               title: 'Item',
               img:'../../../assets/images/dish.png',
               link: 'pos-dashboard/table/items',
               permission:'POS:MenuSetup:Item',
+              display: true
             },
             {
               title: 'Category',
               img:'../../../assets/images/category.png',
               link: 'pos-dashboard/table/category',
               permission:'POS:MenuSetup:Category',
+              display: true
             },
             {
               title: 'Consumption',
@@ -208,12 +246,14 @@ export const navcomponents=[
 
               link: 'pos-dashboard/table/menuconsumption',
               permission:'POS:MenuSetup:Consumption',
+              display: true
             },
             {
               title: 'Menu Configure',
               link: 'pos-dashboard/table/menu',
               img:'../../../assets/images/menu.png',
               permission:'POS:MenuSetup:MenuConfigure',
+              display: true
             },
             {
               title: 'Table/Room Setup',
@@ -221,6 +261,7 @@ export const navcomponents=[
               link: 'pos-dashboard/table/table',
               img:'../../../assets/images/table.png',
               permission:'POS:MenuSetup:TableRoomSetup',
+              display: true
             },
           ],
         },
@@ -241,41 +282,49 @@ export const navcomponents=[
               title: 'Journal',
               permission:'Account:Transaction:Journal',
               link: 'Account/journalVoucher',
+              display: true
             },
             {
               title: 'Purchase',
               permission:'Account:Transaction:Purchase',
               link: 'Account/purchase',
+              display: true
             },
             {
               title: 'Sales',
               permission:'Account:Transaction:Sales',
               link: 'Account/sales',
+              display: true
             },
             {
               title: 'Receipt',
               permission:'Account:Transaction:Receipt',
               link: 'Account/receipt',
+              display: true
             },
             {
               title: 'Payment',
               permission:'Account:Transaction:Payment',
               link: 'Account/payment',
+              display: true
             },
             {
               title: 'Bank/Cash',
               permission:'Account:Transaction:BankCash',
               link: 'Account/contra',
+              display: true
             },
             {
               title: 'Credit Note',
               permission:'Account:Transaction:CreditNote',
               link: 'Account/credit-note',
+              display: true
             },  
             {
               title: 'Debit Note',
               permission:'Account:Transaction:DebitNote',
               link: 'Account/debit-note',
+              display: true
             },
           ],
         },
@@ -288,72 +337,86 @@ export const navcomponents=[
             {
               title: 'Day Book',
               link: 'Account/journalVoucher',
-              permission:'Account:Report:DayBook'
+              permission:'Account:Report:DayBook',
+              display: true
             },
             {
               title: 'Ledger',
               link: 'Account/accountLedgerView',
-              permission:'Account:Report:Ledger'
+              permission:'Account:Report:Ledger',
+              display: true
             },
             {
               title: 'Trial Balance',
               link: 'Account/TrialBalance',
-              permission:'Account:Report:TrialBalance'
+              permission:'Account:Report:TrialBalance',
+              display: true
             },
             {
               title: 'Cash Flow',
               link: 'Account/SaleBook',
-              permission:'Account:Report:CashFlow'
+              permission:'Account:Report:CashFlow',
+              display: true
             },
             {
               title: 'Fund Flow',
               link: 'Account/SaleBook',
-              permission:'Account:Report:FundFlow'
+              permission:'Account:Report:FundFlow',
+              display: true
             },
             {
               title: 'Profit & Loss',
               link: 'Account/ProfitLoss',
-              permission:'Account:Report:ProfitLoss'
+              permission:'Account:Report:ProfitLoss',
+              display: true
             },
             {
               title: 'Balance Sheet',
               link: 'Account/BalanceSheet',
-              permission:'Account:Report:BalanceSheet'
+              permission:'Account:Report:BalanceSheet',
+              display: true
             },
             {
               title: 'Sales Book',
               link: 'Account/SaleBook',
-              permission:'Account:Report:SalesBook'
+              permission:'Account:Report:SalesBook',
+              display: true
             },
             {
               title: 'Sales Item Wise',
               link: 'Account/SaleItemWise',
-              permission:'Account:Report:SalesItemWise'
+              permission:'Account:Report:SalesItemWise',
+              display: true
             },
             {
               title: 'Sales Date Wise',
               link: 'Account/SaleDateWise',
-              permission:'Account:Report:SalesDateWise'
+              permission:'Account:Report:SalesDateWise',
+              display: true
             },
             {
               title: 'Sales Customer Wise',
               link: 'Account/SaleCustomerWise',
-              permission:'Account:Report:SalesCustomerWise'
+              permission:'Account:Report:SalesCustomerWise',
+              display: true
             },
             {
               title: 'Purchase Book',
               link: 'Account/PurchaseBook',
-              permission:'Account:Report:PurchaseBook'
+              permission:'Account:Report:PurchaseBook',
+              display: true
             },
             {
               title: 'Materialized View',
               link: 'Account/MaterializedView',
-              permission:'Account:Report:MaterializedView'
+              permission:'Account:Report:MaterializedView',
+              display: true
             },
             {
               title: 'Bill Return View',
               link: 'Account/BillReturnView',
-              permission:'Account:Report:BillReturnView'
+              permission:'Account:Report:BillReturnView',
+              display: true
             },     
           
           ],
@@ -369,18 +432,21 @@ export const navcomponents=[
               permission:'Account:Master:Ledger',
               link: 'Account/ledger',
               img:'../../../assets/images/ledger.png',
+              display: true
             },
             {
               title: 'Group Ledger',
               permission:'Account:Master:GroupLedger',
               link: 'Account/accountType',
               img:'../../../assets/images/group-ledger.png',
+              display: true
             },
             {
               title: 'Transaction Type',
               link: 'Account/accounttransType',
               permission:'Account:Master:TransactionType',
               img:'../../../assets/images/transaction.png',
+              display: true
             },
           ],
         }, 
@@ -402,17 +468,20 @@ export const navcomponents=[
             {
               title: 'Receipt',
               link: 'Inventory/inventory-receipt',
-              permission: 'Inventory:Transaction:Receipt'
+              permission: 'Inventory:Transaction:Receipt',
+              display: true
             },
             {
               title: 'Consumption',
               link: 'Inventory/consumption',
-              permission: 'Inventory:Transaction:Consumption'
+              permission: 'Inventory:Transaction:Consumption',
+              display: true
             },
             {
               title: 'Stock Damage',
               link: 'Inventory/stock-damage',
-              permission: 'Inventory:Transaction:StockDamage'
+              permission: 'Inventory:Transaction:StockDamage',
+              display: true
             },
           ],
         },
@@ -427,6 +496,7 @@ export const navcomponents=[
               link: 'Inventory/item',
               permission: 'Inventory:Master:Item',
               img:'../../../assets/images/item.png',
+              display: true
              
             },
             {
@@ -434,12 +504,14 @@ export const navcomponents=[
               link: 'Inventory/category',
               permission: 'Inventory:Master:Category',
               img:'../../../assets/images/category-inventory.png',
+              display: true
             },
             {
               title: 'Unit Type',
               link: 'Inventory/unittype',
               permission: 'Inventory:Master:UnitType',
               img:'../../../assets/images/unitType.png',
+              display: true
             },      
           ],
         },
@@ -451,7 +523,8 @@ export const navcomponents=[
             {
               title: 'Stock In Hand',
               link: 'Inventory/stockinhand',
-              permission: 'Inventory:Report:StockInHand'
+              permission: 'Inventory:Report:StockInHand',
+              display: true
             },
           ],
         },
@@ -466,12 +539,14 @@ export const navcomponents=[
               link: 'Inventory/WareHouse',
               permission: 'Inventory:Warehouses:Warehouse',
               img:'../../../assets/images/warehouse.png',
+              display: true
             },
             {
               title: 'Warehouse Type',
               link: 'Inventory/WareHouseType',
               img:'../../../assets/images/warehouseType.png',
-              permission: 'Inventory:Warehouses:WareHouseType'
+              permission: 'Inventory:Warehouses:WareHouseType',
+              display: true
             },
           ],
         },
@@ -508,18 +583,21 @@ export const navcomponents=[
               link: '/managedashboard/change-password',
               permission: 'Manage:User:ChangePassword',
               img:'../../../assets/images/roles.png',
+              display: true
             },
             {
               title: 'Users',
               link: '/user',
               permission:'Manage:User:Users',
               img:'../../../assets/images/group.png',
+              display: true
             },
             {
               title: 'Roles',
               link: '/managedashboard/role',
               permission: 'Manage:User:Roles',
               img:'../../../assets/images/roles.png',
+              display: true
             },
             
             // {
@@ -547,30 +625,35 @@ export const navcomponents=[
               link: '/managedashboard/department',
               permission: 'Manage:Management:Department',
               img:'../../../assets/images/department.png',
+              display: true
             },
             {
               title: 'Table/Room Type',
               link: '/managedashboard/table-room',
               permission: 'Manage:Management:TableRoomType',
               img:'../../../assets/images/manage-roomtype.png',
+              display: true
             },
             {
               title: 'Financial Year',
               link: '/managedashboard/financial',
               permission:'Manage:Management:FinancialYear',
               img:'../../../assets/images/financial-year.png',
+              display: true
             },
             {
               title: 'Company',
               link: '/managedashboard/company',
               permission: 'Manage:Management:Company',
               img:'../../../assets/images/company.png',
+              display: true
             },
             {
               title: 'Printer Setting',
               link: '/managedashboard/printer-setting',
               permission: 'Manage:Management:PrinterSetting',
               img:'../../../assets/images/company.png',
+              display: true
             }
           ],
         },      

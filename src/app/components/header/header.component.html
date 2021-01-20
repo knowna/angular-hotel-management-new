@@ -39,7 +39,7 @@
 
                         <ul *ngIf="child.show && !closeSidebar" class="sidebar-menu tree">
                             <li class="treeview mb-1 ml-4" *ngFor="let chil of (child.children | LinksFilter)">
-                                <a (click)=open(chil.link)>
+                                <a (click)=open(chil.link) *ngIf="chil.display">
                                     <!-- <img  [src]="chil.img" height="30px" width="30px" >  -->
                                     {{chil?.title}}
                                 </a>
