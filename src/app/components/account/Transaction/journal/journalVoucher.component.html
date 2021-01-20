@@ -157,13 +157,27 @@
             Filter By Date:
         </div>
         <div class="col-md-2">
-            <input type="text" class="form-control" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" value="" [(ngModel)]="fromDate" placeholder="yyyy.mm.dd">
+            <!-- <input type="text" class="form-control" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" value="" [(ngModel)]="fromDate" placeholder="yyyy.mm.dd"> -->
+            <np-datepicker
+                [(ngModel)]="sfromDate"
+                language="en"
+                [dateFormatter]="startFormatter"
+                class="form-group"
+                inputClass="form-control">
+            </np-datepicker>
         </div>
         <div class="col-md-2">
-            <input class="form-control" type="text" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" placeholder="yyyy.mm.dd" [(ngModel)]="toDate" />
+            <!-- <input class="form-control" type="text" required pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2]).(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2]).(?:32))|(?:(?:0[13578]|1[02])-32))" placeholder="yyyy.mm.dd" [(ngModel)]="toDate" /> -->
+            <np-datepicker
+                [(ngModel)]="stoDate"
+                language="en"
+                [dateFormatter]="endFormatter"
+                class="form-group"
+                inputClass="form-control">
+            </np-datepicker>
         </div>
         <div class="col-md-2">
-            <button class="btn btn-success" (click)="loadJournalVoucherList(fromDate,toDate)"> GO</button>
+            <button class="btn btn-success" (click)="loadJournalVoucherList(sfromDate,stoDate)"> GO</button>
         </div>
         <div class="col-md-1">
             <button class="btn btn-secondary pull-left" (click)="exportTableToPdf()" style="float: right;">Pdf</button>
@@ -185,7 +199,7 @@
                         <th colspan="8" class="text-center">
                             <strong>{{ company?.NameEnglish }}</strong>
                             <br/> Journal Voucher
-                            <br/> {{ sfromDate }} - {{ stoDate }}
+                            <br/> {{ fromDate }} - {{ toDate }}
                         </th>
                     </tr>
                     <tr style="background: #bcd1e2;">

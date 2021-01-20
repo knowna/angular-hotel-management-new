@@ -38,8 +38,8 @@ export class POSSaleBillingComponent implements OnInit {
     msg: string;
     public fromDate: any;
     public toDate: any;
-    public sfromDate: string;
-    public stoDate: string;
+    public sfromDate: any;
+    public stoDate: any;
     @Input('orders') orders: Order[];
     toExportFileName: string = 'pos sales billing of ' + this.date.transform(new Date, "dd-MM-yyyy") + '.xls';
     uploadUrl = Global.BASE_FILE_UPLOAD_ENDPOINT;
@@ -90,6 +90,23 @@ export class POSSaleBillingComponent implements OnInit {
         this.company = JSON.parse(localStorage.getItem('company'));
         this.fromDate = this.currentYear['NepaliStartDate'];
         this.toDate = this.currentYear['NepaliEndDate'];
+
+
+        let fromDateArray = this.fromDate.split('.');
+        this.sfromDate = {
+            'day' : fromDateArray[2]*1,
+            'month': fromDateArray[1]*1 - 1,
+            'year': fromDateArray[0]*1
+        }
+
+        let toDateArray = this.toDate.split('.');
+        this.stoDate = {
+            'day' : toDateArray[2]*1,
+            'month': toDateArray[1]*1 - 1,
+            'year': toDateArray[0]*1
+        }
+
+        this.filterJournalByDate(this.sfromDate, this.stoDate)
     }
 
     ngOnInit() {
@@ -99,6 +116,7 @@ export class POSSaleBillingComponent implements OnInit {
    *  Get the list of filtered journals by the form and to date
    */
     filterJournalByDate(sfromdate: any, stodate: any) {
+        console.log('the start date is', sfromdate);
         sfromdate = sfromdate.year + '.' + (sfromdate.month*1 + 1) + '.' + sfromdate.day;
         stodate = stodate.year + '.' + (stodate.month*1 + 1) + '.' + stodate.day;
         
