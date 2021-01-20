@@ -19,6 +19,7 @@ import { FileService } from 'src/app/Service/file.service';
 import { JournalVoucherService } from 'src/app/Service/journalVoucher.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
+import { DateFormatter } from 'angular-nepali-datepicker';
 
 // Accessing global variable
 type CSV = any[][];
@@ -67,8 +68,8 @@ export class JournalVouchercomponent implements OnInit {
     public entityLists: EntityMock[];
     public fromDate: any;
     public toDate: any;
-    public sfromDate: string;
-    public stoDate: string;
+    public sfromDate: any;
+    public stoDate: any;
     public currentYear: any = {};
     public currentUser: any = {};
     public company: any = {};
@@ -76,6 +77,15 @@ export class JournalVouchercomponent implements OnInit {
     public SourceAccountTypeId: string;
     public currentaccount: Account;
     public vdate: string;
+
+
+    startFormatter: DateFormatter = (sfromDate) => {
+        return `${ sfromDate.year }.${ (sfromDate.month*1 + 1) }.${ sfromDate.day }`;
+    }
+
+    endFormatter: DateFormatter = (stoDate) => {
+        return `${ stoDate.year }.${ (stoDate.month*1 + 1) }.${ stoDate.day }`;
+    }
 
     constructor(
         private fb: FormBuilder, private _journalvoucherService: JournalVoucherService,
@@ -95,6 +105,22 @@ export class JournalVouchercomponent implements OnInit {
             { id: 0, name: 'Dr' },
             { id: 1, name: 'Cr' }
         ];
+
+        let fromDateArray = this.fromDate.split('.');
+        this.sfromDate = {
+            'day' : fromDateArray[2]*1,
+            'month': fromDateArray[1]*1 - 1,
+            'year': fromDateArray[0]*1
+        }
+
+        let toDateArray = this.toDate.split('.');
+        this.stoDate = {
+            'day' : toDateArray[2]*1,
+            'month': toDateArray[1]*1 - 1,
+            'year': toDateArray[0]*1
+        }
+
+        this.loadJournalVoucherList(this.sfromDate, this.stoDate);
     }
 
     ngOnInit(): void {
@@ -115,7 +141,7 @@ export class JournalVouchercomponent implements OnInit {
         });
 
         // Load list of journal vouchers
-        this.loadJournalVoucherList(this.fromDate, this.toDate);
+        // this.loadJournalVoucherList(this.fromDate, this.toDate);
     }
 
     /**
@@ -399,8 +425,11 @@ export class JournalVouchercomponent implements OnInit {
     /**
      * Load list of journal vouchers form the server
      */
-    loadJournalVoucherList(sfromdate: string, stodate: string) {
-        this.indLoading = true;
+    loadJournalVoucherList(sfromdate: any, stodate: any) {
+       
+        sfromdate = sfromdate.year + '.' + (sfromdate.month*1 + 1) + '.' + sfromdate.day;
+        stodate = stodate.year + '.' + (stodate.month*1 + 1) + '.' + stodate.day;
+
         if (sfromdate == "undefined" || sfromdate == null) {
             alert("Enter Start Date");
             return false;
@@ -409,26 +438,29 @@ export class JournalVouchercomponent implements OnInit {
             alert("Enter End Date");
             return false;
         }
-        if (this.nepaliDateStringValidator(stodate) === false) {
-            alert("Enter Valid End Date");
-            return false;
-        }
-        if (this.nepaliDateStringValidator(sfromdate) === false) {
-            alert("Enter Valid Start Date");
-            return false;
-        }
+        // if (this.nepaliDateStringValidator(stodate) === false) {
+        //     alert("Enter Valid End Date");
+        //     return false;
+        // }
+        // if (this.nepaliDateStringValidator(sfromdate) === false) {
+        //     alert("Enter Valid Start Date");
+        //     return false;
+        // }
 
         this.fromDate = sfromdate;
         this.toDate = stodate;
-        this.sfromDate = sfromdate;
-        this.stoDate = stodate;
+        // this.sfromDate = sfromdate;
+        // this.stoDate = stodate;
 
+        
         this._journalvoucherService.get(Global.BASE_ACCOUNT_ENDPOINT + '?AccountTypeId=AT&AccountGeneral=AG')
             .subscribe(at => {
                 this.account = at;
+                
             },
                 error => this.msg = <any>error);
 
+        this.indLoading = true;
         this._journalvoucherService.get(Global.BASE_JOURNALVOUCHER_ENDPOINT + '?fromDate=' + this.fromDate + '&toDate=' + this.toDate + '&TransactionTypeId=' + 5)
             .subscribe(
                 journalVoucher => {
