@@ -23,6 +23,7 @@ import { OrderService } from 'src/app/Service/Billing/order.service';
 import { Order } from 'src/app/Model/order.model';
 import { TicketService } from 'src/app/Service/Billing/ticket.service';
 import { Ticket } from 'src/app/Model/ticket.model';
+import { DateFormatter } from 'angular-nepali-datepicker';
 
 @Component({
     templateUrl: './sales.component.html',
@@ -50,8 +51,8 @@ export class SalesComponent implements OnInit {
     public entityLists: EntityMock[];
     public fromDate: any;
     public toDate: any;
-    public sfromDate: string;
-    public stoDate: string;
+    public sfromDate: any;
+    public stoDate: any;
     public currentYear: any = {};
     public currentUser: any = {};
     public company: any = {};
@@ -65,6 +66,14 @@ export class SalesComponent implements OnInit {
     ordersNew : Order[] = [];
 
     ticket: Ticket;
+
+    startFormatter: DateFormatter = (sfromDate) => {
+        return `${ sfromDate.year }.${ (sfromDate.month*1 + 1) }.${ sfromDate.day }`;
+    }
+
+    endFormatter: DateFormatter = (stoDate) => {
+        return `${ stoDate.year }.${ (stoDate.month*1 + 1) }.${ stoDate.day }`;
+    }
     
 
     /**
@@ -98,6 +107,24 @@ export class SalesComponent implements OnInit {
             { id: 0, name: 'Dr' },
             { id: 1, name: 'Cr' }
         ];
+
+
+        let fromDateArray = this.fromDate.split('.');
+        this.sfromDate = {
+            'day' : fromDateArray[2]*1,
+            'month': fromDateArray[1]*1 - 1,
+            'year': fromDateArray[0]*1
+        }
+
+        let toDateArray = this.toDate.split('.');
+        this.stoDate = {
+            'day' : toDateArray[2]*1,
+            'month': toDateArray[1]*1 - 1,
+            'year': toDateArray[0]*1
+        }
+
+        this.loadSaleList(this.sfromDate, this.stoDate);
+
     }
 
     ngOnInit(): void {
@@ -114,7 +141,7 @@ export class SalesComponent implements OnInit {
             UserName: [''],
             CompanyCode: ['']
         });
-        this.loadSaleList(this.fromDate, this.toDate);
+        // this.loadSaleList(this.fromDate, this.toDate);
     }
 
     voucherDateValidator(control: any) {
@@ -290,8 +317,12 @@ export class SalesComponent implements OnInit {
         XLSX.writeFile(wb, this.toExportFileName);
     }
 
-    loadSaleList(sfromdate: string, stodate: string) {
+    loadSaleList(sfromdate: any, stodate: any) {
         this.indLoading = true;
+
+        sfromdate = sfromdate.year + '.' + (sfromdate.month*1 + 1) + '.' + sfromdate.day;
+        stodate = stodate.year + '.' + (stodate.month*1 + 1) + '.' + stodate.day;
+
         if (sfromdate == "undefined" || sfromdate == null) {
             alert("Enter Start Date");
             return false;
@@ -300,19 +331,19 @@ export class SalesComponent implements OnInit {
             alert("Enter End Date");
             return false;
         }
-        if (this.nepaliDateStringValidator(stodate) === false) {
-            alert("Enter Valid End Date");
-            return false;
-        }
-        if (this.nepaliDateStringValidator(sfromdate) === false) {
-            alert("Enter Valid Start Date");
-            return false;
-        }
+        // if (this.nepaliDateStringValidator(stodate) === false) {
+        //     alert("Enter Valid End Date");
+        //     return false;
+        // }
+        // if (this.nepaliDateStringValidator(sfromdate) === false) {
+        //     alert("Enter Valid Start Date");
+        //     return false;
+        // }
 
         this.fromDate = sfromdate;
         this.toDate = stodate;
-        this.sfromDate = sfromdate;
-        this.stoDate = stodate;
+        // this.sfromDate = sfromdate;
+        // this.stoDate = stodate;
         this._purchaseService.get(Global.BASE_SALES_ENDPOINT + '?fromDate=' + this.fromDate + '&toDate=' + this.toDate + '&TransactionTypeId=' + 3)
             .subscribe(
             sales => {
