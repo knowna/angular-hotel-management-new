@@ -3,7 +3,7 @@
         <input type="number" class="hidden" formControlName="Id"><input />
     </div> -->
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <label>Item Name</label>
             <select class="form-control" formControlName="InventoryItemId">
                 <option class="form-control" *ngFor="let inventoryitems of inventoryItem" [value]="inventoryitems.Id">{{inventoryitems.Name}}</option>
@@ -26,8 +26,8 @@
                 Rate is required
             </div>
         </div>
-        <div class="col-md-3">
-            <label>TotalAmount</label>
+        <div class="col-md-2">
+            <label>Amount</label>
             <input type="number" class="form-control" formControlName="TotalAmount" />
         </div>
     <!-- </div>
@@ -37,7 +37,7 @@
             <label>Batch No.</label>
             <input type="text" class="form-control" formControlName="BatchNo" />
             <div class="alert alert-danger" *ngIf="InventoryReceiptDetails.get('BatchNo').hasError('required') && formSubmitAttempt">
-                BatchNo is required
+                Batch No is required
             </div>
         </div>
 
