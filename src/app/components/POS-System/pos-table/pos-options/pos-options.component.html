@@ -47,7 +47,10 @@
         <div class="card-body border border-dark border-radius no-bottom-margin card-bag" (click)="moveItems.emit(selectedItem)" style="cursor:pointer;">
             <h4 class="text-center">Move</h4>
         </div>-->
-        <button class="card-body border border-dark border-radius no-bottom-margin card-bag ml-2" (click)="cancel(selectedItem)" style="cursor:pointer; width:18%;">
+        <button 
+            [disabled]="!permissionList.includes('POS:Order:CancelItem')" 
+            class="card-body border border-dark border-radius no-bottom-margin card-bag ml-2" 
+            (click)="cancel(selectedItem)" style="cursor:pointer; width:18%;">
             <h4 class="text-center">Cancel</h4>
         </button>
     </div>
