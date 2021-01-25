@@ -188,6 +188,13 @@ export const navcomponents=[
               permission:'POS:Order:VoidItem',
               display: false
             },
+            {
+              title: 'Cancel Item',
+              link: 'split-order',
+              img:'../../../assets/images/menu.png',
+              permission:'POS:Order:CancelItem',
+              display: false
+            },
             
           ],
         },
