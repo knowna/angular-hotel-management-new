@@ -733,7 +733,7 @@ export class PosTableComponent implements OnInit {
         ticketTotalWithoutVat += previousItemTotal;
 
         console.log('the toal amonut is', ticketTotalWithoutVat)
-        ServiceCharge = (10 * ticketTotalWithoutVat) / 100;
+        ServiceCharge = (ServiceChargePercent * ticketTotalWithoutVat) / 100;
 
         let totalWithServiceCharge = ticketTotalWithoutVat + ServiceCharge;
 
