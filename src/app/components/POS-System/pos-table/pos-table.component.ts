@@ -95,6 +95,7 @@ export class PosTableComponent implements OnInit {
 
     createOrderLoader : boolean = false;
     // dummyTable : Table = {"Id":1,"TableId":"1","Name":"101","Description":null,"OrderOpeningTime":"2020-10-26T02:51:50.3495623-07:00","TicketOpeningTime":"2020-10-26T02:51:50.3495623-07:00","LastOrderTime":"2020-10-26T02:51:50.3495623-07:00","TableStatus":"true"};
+    company:any;
 
     // Constructor
     constructor(
@@ -110,7 +111,7 @@ export class PosTableComponent implements OnInit {
         private ticketService: TicketService
 
     ) {
-       
+        this.company = JSON.parse(localStorage.getItem("company"));
 
         // Initialiazation;
         this.selectedTicket = 0;
@@ -683,108 +684,112 @@ export class PosTableComponent implements OnInit {
         let vatAmount =0;
         let grandTotal =0;
         let UnSubmittedOrder = this.getUnSubmittedOrder(this.ordersNew);
+        let ServiceChargePercent = this.company?.ServiceCharge;
+        let ServiceCharge = 0;
+
 
         products.forEach(product => {
             let total =0;
 
-        // let TempQty = this.qtyFromCalculator ? eval(this.qtyFromCalculator) : 1;
-        // let ProductTotal = eval((TempQty * product.UnitPrice / 1.13).toFixed(2)); //Add Function VAT Value Minues;
-        let unitprice = product.UnitPrice;
-        let VatPercent = 0.13; 
-        
-        total =total +(product.Qty*product.UnitPrice);
-        ticketTotalWithoutVat=ticketTotalWithoutVat+ total;
-
-        
-
-        
-        let OrderItem = {
-            "Id":0,
-            "UserId": this.currentUser.UserName,
-            "FinancialYear": this.currentYear.Name,
-            "OrderNumber": 0,
-            "OrderDescription":product.OrderDescription,
-            "OrderId": 0,
-            "ItemId": product.Id,
-            "Qty": product.Qty,
-            "UnitPrice": unitprice,
-            "TotalAmount": total,
-            "Tags": "New Order",
-            "IsSelected": false,
-            "IsVoid": false,
-            "DepartmentId": product.DepartmentId
-        };
-        ListOrderItem.push(OrderItem);
-    });
-    
-
-    let previousItemTotal = 0;
-    this.ordersNew.forEach(order => {
-        order.OrderItems.forEach(item => {
-            previousItemTotal += item.TotalAmount; 
-        });
-    });
-
-    console.log('the toal amonut of prev', previousItemTotal)
-    
-    ticketTotalWithoutVat += previousItemTotal;
-
-    vatAmount =(0.13*ticketTotalWithoutVat);
-    grandTotal = vatAmount+ticketTotalWithoutVat;
-
-
-    let orderRequest={
-       
-        "TicketId":this.selectedTicket?this.selectedTicket:0,
-        "TableId":this.selectedTable?this.selectedTable:0,
-        "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
-        "OrderId": 0,
-        "TicketTotal":ticketTotalWithoutVat,
-        "Discount":0,
-        "ServiceCharge":0,
-        "VatAmount": vatAmount,
-        "GrandTotal":grandTotal,
-        "Balance":grandTotal,
-        "UserId":this.currentUser.UserName,
-        "FinancialYear":this.currentYear.Name,
-        "ListOrderItem":ListOrderItem
-
-
-    }
-
-    console.log('the order request us', orderRequest);
-    console.log('the previous orders are', this.ordersNew)
+            // let TempQty = this.qtyFromCalculator ? eval(this.qtyFromCalculator) : 1;
+            // let ProductTotal = eval((TempQty * product.UnitPrice / 1.13).toFixed(2)); //Add Function VAT Value Minues;
+            let unitprice = product.UnitPrice;
+            let VatPercent = 0.13; 
             
-    this.createOrderLoader = true;
-    this.orderApi.addOrderProductList(orderRequest).subscribe(
-        data =>{
-            console.log('the response is', data);
-            this.createOrderLoader = false;
-            this.toastrService.success('Order created successfully!')
-            if(this.ordersNew.length) {
-                this.ordersNew.push(data.ListOrder[0]);
-                // data.ListOrder[0].OrderItems.forEach(o => {
-                //     this.ordersNew[0].OrderItems.push(o);
-                // });
-                this.buildForm();
-                console.log('the orders new are', this.ordersNew)
-               
-            }else{
-                if(this.selectedCustomerId != 0) {
-                    this.router.navigate(['customer/' + this.selectedCustomerId + '/ticket/'+ data.TicketId]);
-                }else{
-                    this.router.navigate(['table/' + data.TableId + '/ticket/'+ data.TicketId]);
-                }
-            }
-        },
-        error => {
-            this.createOrderLoader = false;
-            this.toastrService.error('Error creating orders!');
-        }
-    )
+            total =total +(product.Qty*product.UnitPrice);
+            ticketTotalWithoutVat=ticketTotalWithoutVat+ total;
+
+        
+
+        
+            let OrderItem = {
+                "Id":0,
+                "UserId": this.currentUser.UserName,
+                "FinancialYear": this.currentYear.Name,
+                "OrderNumber": 0,
+                "OrderDescription":product.OrderDescription,
+                "OrderId": 0,
+                "ItemId": product.Id,
+                "Qty": product.Qty,
+                "UnitPrice": unitprice,
+                "TotalAmount": total,
+                "Tags": "New Order",
+                "IsSelected": false,
+                "IsVoid": false,
+                "DepartmentId": product.DepartmentId
+            };
+            ListOrderItem.push(OrderItem);
+        });
     
-        // this.orderStoreApi.addOrderItem(this.prepareOrderItemRequest(UnSubmittedOrder ? UnSubmittedOrder.OrderNumber : 0, ListOrderItem, this.parsedOrders, false, true, true));
-        // this.updateQty('1');
+
+        let previousItemTotal = 0;
+        this.ordersNew.forEach(order => {
+            order.OrderItems.forEach(item => {
+                previousItemTotal += item.TotalAmount; 
+            });
+        });
+
+        
+        ticketTotalWithoutVat += previousItemTotal;
+
+        console.log('the toal amonut is', ticketTotalWithoutVat)
+        ServiceCharge = (10 * ticketTotalWithoutVat) / 100;
+
+        let totalWithServiceCharge = ticketTotalWithoutVat + ServiceCharge;
+
+        vatAmount =(0.13*totalWithServiceCharge);
+        grandTotal = vatAmount+totalWithServiceCharge;
+
+
+        let orderRequest={
+        
+            "TicketId":this.selectedTicket?this.selectedTicket:0,
+            "TableId":this.selectedTable?this.selectedTable:0,
+            "CustomerId":this.selectedCustomerId?this.selectedCustomerId:0,
+            "OrderId": 0,
+            "TicketTotal":ticketTotalWithoutVat,
+            "Discount":0,
+            "ServiceCharge":ServiceCharge,
+            "VatAmount": vatAmount,
+            "GrandTotal":grandTotal,
+            "Balance":grandTotal,
+            "UserId":this.currentUser.UserName,
+            "FinancialYear":this.currentYear.Name,
+            "ListOrderItem":ListOrderItem
+
+
+        }
+
+        console.log('the order request us', orderRequest);
+        console.log('the previous orders are', this.ordersNew)
+                
+        this.createOrderLoader = true;
+        this.orderApi.addOrderProductList(orderRequest).subscribe(
+            data =>{
+                console.log('the response is', data);
+                this.createOrderLoader = false;
+                this.toastrService.success('Order created successfully!')
+                if(this.ordersNew.length) {
+                    this.ordersNew.push(data.ListOrder[0]);
+                    this.buildForm();
+                    console.log('the orders new are', this.ordersNew)
+                
+                }else{
+                    if(this.selectedCustomerId != 0) {
+                        this.router.navigate(['customer/' + this.selectedCustomerId + '/ticket/'+ data.TicketId]);
+                    }else{
+                        this.router.navigate(['table/' + data.TableId + '/ticket/'+ data.TicketId]);
+                    }
+                }
+            },
+            error => {
+                this.createOrderLoader = false;
+                this.toastrService.error('Error creating orders!');
+            }
+        )
+        
+            // this.orderStoreApi.addOrderItem(this.prepareOrderItemRequest(UnSubmittedOrder ? UnSubmittedOrder.OrderNumber : 0, ListOrderItem, this.parsedOrders, false, true, true));
+            // this.updateQty('1');
     }
 
 

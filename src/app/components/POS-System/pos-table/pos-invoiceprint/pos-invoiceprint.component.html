@@ -74,7 +74,10 @@
                                             
                                             <td colspan="5" align="right">Discount : {{ calculateDiscount()}}</td>
                                         </tr>
-                                      
+                                        <tr>
+                                            
+                                            <td colspan="5" align="right">Service Charge : {{ calculateServiceCharge()}}</td>
+                                        </tr>
                                         <tr>
                                             
                                             <td colspan="5" align="right">VAT % : {{ calculateVat() }}</td>
@@ -164,6 +167,9 @@
             </tr>
             <tr>
                 <td colspan="5" class="text-right">Discount : {{ calculateDiscount()}}</td>
+            </tr>
+            <tr>
+                <td colspan="5" class="text-right">Service Charge : {{ calculateServiceCharge()}}</td>
             </tr>
             <tr>
                 <td colspan="5" class="text-right">VAT % : {{ calculateVat() }}</td>
