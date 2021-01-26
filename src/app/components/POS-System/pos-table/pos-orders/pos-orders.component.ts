@@ -55,6 +55,8 @@ export class PosOrdersComponent implements OnInit {
 
     permissionList : string;
 
+    company:any;
+
     // Constructor
     constructor(
         private store: Store<any>,
@@ -71,6 +73,8 @@ export class PosOrdersComponent implements OnInit {
 
     // On component Init
     ngOnInit() {
+        this.company = JSON.parse(localStorage.getItem("company"));
+
         console.log('the orders in pos orders are', this.orders);
         console.log('the customer us', this.selectedCustomerId)
         console.log('the table us', this.table)
@@ -221,11 +225,11 @@ export class PosOrdersComponent implements OnInit {
      * Calculates the Total Service Charge
      */
     calculateServiceCharge() {
-        //let totalSum = this.calculateSum();
-        //let discountAmount = this.calculateDiscount();
-        //let ticketTotalAfterDiscount = totalSum - eval(discountAmount);
-        //return (ticketTotalAfterDiscount * 10/100).toFixed(2);
-        return (0).toFixed(2);
+        let totalSum = this.calculateSum();
+        let discountAmount = this.calculateDiscount();
+        let ticketTotalAfterDiscount = totalSum - eval(discountAmount);
+        return (ticketTotalAfterDiscount * this.company?.ServiceCharge/100).toFixed(2);
+        // return (0).toFixed(2);
     }
 
     // Calculates VAT amount

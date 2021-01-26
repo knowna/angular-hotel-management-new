@@ -81,6 +81,8 @@ export class PosSettleComponent implements OnInit {
     itemList:any[] = [];
     mergedItemList: any[] = [];
 
+    company:any;
+
     // Constructor
     constructor(
         private store: Store<any>,
@@ -118,6 +120,9 @@ export class PosSettleComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        this.company = JSON.parse(localStorage.getItem("company"));
+
         this.billService.loadProducts()
             .subscribe(data => { 
                 this.productList = data;
@@ -657,13 +662,13 @@ export class PosSettleComponent implements OnInit {
      * Calculates the Total Service Charge
      */
     calculateServiceCharge() {
-        //let totalSum = this.calculateSum();
-        //let discountAmount = this.calculateDiscount();
-        //let ticketTotalAfterDiscount = totalSum - eval(discountAmount);
+        let totalSum = this.calculateSum();
+        let discountAmount = this.calculateDiscount();
+        let ticketTotalAfterDiscount = totalSum - eval(discountAmount);
 
-        //return (ticketTotalAfterDiscount * 0.1).toFixed(2);
-        let servicecharge=0;
-        return servicecharge.toFixed(2);
+        return (ticketTotalAfterDiscount * this.company?.ServiceCharge/100).toFixed(2);
+        // let servicecharge=0;
+        // return servicecharge.toFixed(2);
     }
 
     // Call to make the ticket round offed

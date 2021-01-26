@@ -49,6 +49,7 @@ export class PosInvoicePrintComponent implements OnInit {
     OrderItems:any[] = [];
 
     mergedItemList: any[] = [];
+    
 
     // Constructor
     constructor(
@@ -292,13 +293,13 @@ export class PosInvoicePrintComponent implements OnInit {
      * Calculates the Total Service Charge
      */
     calculateServiceCharge() {
-        //let totalSum = this.calculateSum();
-        //let discountAmount = this.calculateDiscount();
-        //let ticketTotalAfterDiscount = totalSum - eval(discountAmount);
+        let totalSum = this.calculateSum();
+        let discountAmount = this.calculateDiscount();
+        let ticketTotalAfterDiscount = totalSum - eval(discountAmount);
 
-        //return (ticketTotalAfterDiscount * 0.1).toFixed(2);
-        let servicecharge = 0;
-        return servicecharge.toFixed(2);
+        return (ticketTotalAfterDiscount * this.company?.ServiceCharge/100).toFixed(2);
+        // let servicecharge = 0;
+        // return servicecharge.toFixed(2);
     }
 
     // Go back to last page
